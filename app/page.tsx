@@ -316,10 +316,10 @@ export default function HomePage() {
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
             {[
-              portfolioItems.find((i) => i.id === 'summit-roofing')!,
-              portfolioItems.find((i) => i.id === 'lumina-glow')!,
-              portfolioItems.find((i) => i.id === 'meridian-luxury')!,
-              portfolioItems.find((i) => i.id === 'vega-law')!,
+              portfolioItems.find((i) => i.id === 'vanguard-roofing')!,
+              portfolioItems.find((i) => i.id === 'velvet-petal')!,
+              portfolioItems.find((i) => i.id === 'meridian-luxury-realty')!,
+              portfolioItems.find((i) => i.id === 'ashford-drake')!,
             ].map((item) => (
               <PortfolioCard key={item.id} item={item} />
             ))}
