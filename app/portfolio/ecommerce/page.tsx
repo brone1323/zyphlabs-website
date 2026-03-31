@@ -82,7 +82,7 @@ export default function EcommercePortfolioPage() {
               { icon: '💳', title: 'Checkout Optimization', desc: 'Reduced friction checkout flow built to maximize completed purchases.' },
               { icon: '📧', title: 'Email Capture', desc: 'Pop-ups and landing pages that grow your list from day one.' },
               { icon: '📱', title: 'Mobile-First Design', desc: 'Most shoppers are on mobile. Your store is built for that first.' },
-              { icon: '🔒', title: 'SSL & Hosting Included', desc: 'Fully managed on Shopify's infrastructure. Always fast, always secure.' },
+              { icon: '🔒', title: 'SSL & Hosting Included', desc: "Fully managed on Shopify's infrastructure. Always fast, always secure." },
             ].map((item) => (
               <div key={item.title} className="glass p-6 flex gap-4">
                 <div className="text-2xl flex-shrink-0">{item.icon}</div>
