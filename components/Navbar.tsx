@@ -10,6 +10,7 @@ const navLinks = [
   { href: '/services/law-firms', label: 'Law Firms' },
   { href: '/how-it-works', label: 'How It Works' },
   { href: '/hosting', label: 'Hosting' },
+  { href: '/portfolio', label: 'Portfolio' },
 ]
 
 export default function Navbar() {

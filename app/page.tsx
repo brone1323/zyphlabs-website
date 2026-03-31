@@ -1,5 +1,7 @@
 import Link from 'next/link'
 import Hero from '@/components/Hero'
+import PortfolioCard from '@/components/PortfolioCard'
+import { portfolioItems } from '@/lib/portfolioData'
 
 const niches = [
   {
@@ -285,6 +287,47 @@ export default function HomePage() {
           <div className="text-center mt-10">
             <Link href="/how-it-works" className="btn-secondary inline-block px-8 py-3">
               Learn more about the process →
+            </Link>
+          </div>
+        </div>
+      </section>
+
+      <div className="section-divider" />
+
+      {/* See Our Work */}
+      <section className="py-24 px-4 sm:px-6">
+        <div className="max-w-7xl mx-auto">
+          <div className="text-center mb-16">
+            <p className="text-[#6c5ce7] text-sm font-semibold uppercase tracking-widest mb-3">
+              Our Work
+            </p>
+            <h2
+              className="text-4xl md:text-5xl font-bold text-white mb-4"
+              style={{ fontFamily: 'Space Grotesk, sans-serif' }}
+            >
+              Example sites<br />
+              <span className="gradient-text">we've built.</span>
+            </h2>
+            <p className="text-[#8888aa] max-w-xl mx-auto">
+              Every site is custom-designed for its niche, fully deployed, and maintained by our team.
+              No templates. No abandoned freelancers.
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+            {[
+              portfolioItems.find((i) => i.id === 'summit-roofing')!,
+              portfolioItems.find((i) => i.id === 'lumina-glow')!,
+              portfolioItems.find((i) => i.id === 'meridian-luxury')!,
+              portfolioItems.find((i) => i.id === 'vega-law')!,
+            ].map((item) => (
+              <PortfolioCard key={item.id} item={item} />
+            ))}
+          </div>
+
+          <div className="text-center mt-12">
+            <Link href="/portfolio" className="btn-primary inline-block px-10 py-4 text-base">
+              Browse All Example Sites →
             </Link>
           </div>
         </div>

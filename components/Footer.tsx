@@ -10,7 +10,8 @@ const services = [
 const company = [
   { href: '/how-it-works', label: 'How It Works' },
   { href: '/hosting', label: 'Managed Hosting' },
-  { href: '/checkout/cancel', label: 'Contact Us' },
+  { href: '/portfolio', label: 'Portfolio' },
+  { href: 'mailto:hello@zyphlabs.com', label: 'Contact Us' },
 ]
 
 export default function Footer() {
