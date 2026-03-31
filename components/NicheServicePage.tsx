@@ -88,6 +88,41 @@ export default function NicheServicePage({ nicheKey }: NicheServicePageProps) {
         </div>
       </section>
 
+      {/* See Examples */}
+      <section className="py-12 px-4 sm:px-6">
+        <div className="max-w-5xl mx-auto">
+          <div
+            className="glass rounded-2xl p-8 flex flex-col sm:flex-row items-center justify-between gap-6"
+            style={{ borderColor: `${niche.color}30`, borderWidth: '1px' }}
+          >
+            <div>
+              <p
+                className="text-xs font-semibold uppercase tracking-widest mb-2"
+                style={{ color: niche.color }}
+              >
+                See It In Action
+              </p>
+              <h3
+                className="text-xl font-bold text-white mb-1"
+                style={{ fontFamily: 'Space Grotesk, sans-serif' }}
+              >
+                Browse example {niche.name.toLowerCase()} sites we've built
+              </h3>
+              <p className="text-sm text-[#8888aa]">
+                See realistic mockups of the exact type of site you'd get — before you buy.
+              </p>
+            </div>
+            <Link
+              href={`/portfolio/${niche.slug}`}
+              className="btn-secondary text-sm px-7 py-3 whitespace-nowrap flex-shrink-0 inline-block"
+              style={{ borderColor: `${niche.color}50`, color: niche.color }}
+            >
+              View Example Sites →
+            </Link>
+          </div>
+        </div>
+      </section>
+
       {/* Pricing */}
       <section id="pricing" className="py-24 px-4 sm:px-6">
         <div className="max-w-7xl mx-auto">
