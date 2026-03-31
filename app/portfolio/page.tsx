@@ -157,8 +157,8 @@ export default function PortfolioPage() {
           </div>
           <p className="text-[#444466] text-sm">
             Questions?{' '}
-            <a href="mailto:hello@zyphlabs.com" className="text-[#a29bfe] hover:underline">
-              Email hello@zyphlabs.com
+            <a href="mailto:contact@zyphlabs.com" className="text-[#a29bfe] hover:underline">
+              Email contact@zyphlabs.com
             </a>
           </p>
         </div>

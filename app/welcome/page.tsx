@@ -144,7 +144,7 @@ export default function WelcomePage({
               </h3>
               <p className="text-xs text-[#8888aa]">
                 Email us anytime at{' '}
-                <span className="text-[#a29bfe]">hello@zyphlabs.com</span>. We respond within 24 hours,
+                <span className="text-[#a29bfe]">contact@zyphlabs.com</span>. We respond within 24 hours,
                 faster on Professional and Business plans.
               </p>
             </div>

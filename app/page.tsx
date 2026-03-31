@@ -434,7 +434,7 @@ export default function HomePage() {
           </div>
           <p className="text-[#444466] text-sm mt-8">
             Questions? Email us at{' '}
-            <span className="text-[#a29bfe]">hello@zyphlabs.com</span>
+            <span className="text-[#a29bfe]">contact@zyphlabs.com</span>
           </p>
         </div>
       </section>

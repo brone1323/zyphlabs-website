@@ -69,10 +69,10 @@ export default function CancelPage() {
               We're happy to answer any questions about our packages, process, or hosting before you check out.
             </p>
             <a
-              href="mailto:hello@zyphlabs.com"
+              href="mailto:contact@zyphlabs.com"
               className="btn-secondary text-sm inline-block px-6 py-2.5"
             >
-              Email hello@zyphlabs.com
+              Email contact@zyphlabs.com
             </a>
           </div>
 

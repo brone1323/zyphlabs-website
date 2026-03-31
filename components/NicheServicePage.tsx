@@ -288,7 +288,7 @@ export default function NicheServicePage({ nicheKey }: NicheServicePageProps) {
           </div>
           <p className="text-[#444466] text-sm mt-8">
             Need something custom?{' '}
-            <span className="text-[#a29bfe]">Email hello@zyphlabs.com</span>
+            <span className="text-[#a29bfe]">Email contact@zyphlabs.com</span>
           </p>
         </div>
       </section>
