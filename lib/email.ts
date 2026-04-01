@@ -1,6 +1,10 @@
 import { Resend } from 'resend'
 
-const resend = new Resend(process.env.RESEND_API_KEY)
+function getResend(): Resend {
+  const key = process.env.RESEND_API_KEY
+  if (!key) throw new Error('RESEND_API_KEY is not set')
+  return new Resend(key)
+}
 
 const FROM = 'notifications@zyphlabs.com'
 const BRIAN = 'brian@solardev.ca'
@@ -21,7 +25,7 @@ export async function sendNewSaleAlert(params: {
 }) {
   const { customerEmail, niche, tier, hostingPlan, amountTotal } = params
 
-  await resend.emails.send({
+  await getResend().emails.send({
     from: FROM,
     to: BRIAN,
     subject: `New Sale! ${niche ?? 'Unknown'} — ${tier ?? ''} (${formatAmount(amountTotal)})`,
@@ -49,7 +53,7 @@ export async function sendPaymentFailedAlert(params: {
 }) {
   const { customerEmail, customerId, invoiceId, attemptCount } = params
 
-  await resend.emails.send({
+  await getResend().emails.send({
     from: FROM,
     to: BRIAN,
     subject: `Payment Failed — ${customerEmail ?? customerId ?? invoiceId}`,
@@ -76,7 +80,7 @@ export async function sendCancellationAlert(params: {
 }) {
   const { customerId, subscriptionId, niche, customerEmail } = params
 
-  await resend.emails.send({
+  await getResend().emails.send({
     from: FROM,
     to: BRIAN,
     subject: `Customer Cancelled — ${customerEmail ?? customerId ?? subscriptionId}`,
@@ -106,7 +110,7 @@ export async function sendQuestionnaireAlert(params: {
 }) {
   const { businessName, contactEmail, brandColors, serviceDescriptions, targetArea, requirements, attachmentNames } = params
 
-  await resend.emails.send({
+  await getResend().emails.send({
     from: FROM,
     to: BRIAN,
     subject: `New Onboarding Questionnaire — ${businessName}`,
@@ -143,7 +147,7 @@ export async function sendWelcomeEmail(params: {
 }) {
   const { to, niche, tier, hostingPlan } = params
 
-  await resend.emails.send({
+  await getResend().emails.send({
     from: FROM,
     to,
     subject: `Welcome to Zyph Labs — your website is on its way!`,
