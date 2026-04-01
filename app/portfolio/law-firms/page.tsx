@@ -1,5 +1,6 @@
 import Link from 'next/link'
 import PortfolioCard from '@/components/PortfolioCard'
+import LawFirmDemo from '@/components/demos/LawFirmDemo'
 import { portfolioByNiche, nichePortfolioMeta } from '@/lib/portfolioData'
 
 export const metadata = {
@@ -15,14 +16,17 @@ export default function LawFirmsPortfolioPage() {
   return (
     <div className="min-h-screen">
       {/* Hero */}
-      <section className="relative pt-28 pb-20 px-4 sm:px-6 overflow-hidden">
+      <section className="relative pt-28 pb-24 px-4 sm:px-6 overflow-hidden">
         <div className="absolute inset-0 grid-bg opacity-20" />
+        {/* Blue authority gradient */}
         <div
           className="absolute inset-0"
           style={{
-            background: `radial-gradient(ellipse at 30% 50%, ${meta.color}18 0%, transparent 65%)`,
+            background: `radial-gradient(ellipse at 20% 40%, ${meta.color}20 0%, transparent 55%),
+                         radial-gradient(ellipse at 80% 70%, #6c5ce718 0%, transparent 50%)`,
           }}
         />
+
         <div className="max-w-5xl mx-auto relative z-10">
           <div className="mb-6 flex items-center gap-2 text-sm text-[#8888aa]">
             <Link href="/portfolio" className="hover:text-white transition-colors">
@@ -31,29 +35,82 @@ export default function LawFirmsPortfolioPage() {
             <span>/</span>
             <span style={{ color: meta.color }}>Law Firms</span>
           </div>
-          <p className="text-sm font-semibold uppercase tracking-widest mb-3" style={{ color: meta.color }}>
-            Law Firm Websites
-          </p>
-          <h1
-            className="text-4xl sm:text-5xl md:text-6xl font-bold text-white mb-6 leading-tight"
-            style={{ fontFamily: 'Space Grotesk, sans-serif' }}
-          >
-            Websites that build authority<br />
-            <span className="gradient-text">and fill consultations.</span>
-          </h1>
-          <p className="text-lg text-[#8888aa] max-w-2xl mb-10 leading-relaxed">
-            Authoritative, trust-first law firm websites designed to establish credibility,
-            showcase your practice areas, and convert visitors into consultation requests.
-          </p>
-          <Link href="/services/law-firms#pricing" className="btn-primary inline-block text-base px-8 py-4">
-            Get a Law Firm Site →
-          </Link>
+
+          <div className="flex items-start gap-8 flex-col lg:flex-row">
+            <div className="flex-1">
+              <p className="text-sm font-semibold uppercase tracking-widest mb-3" style={{ color: meta.color }}>
+                Law Firm Websites
+              </p>
+              <h1
+                className="text-4xl sm:text-5xl md:text-6xl font-bold text-white mb-6 leading-tight"
+                style={{ fontFamily: 'Space Grotesk, sans-serif' }}
+              >
+                Websites that build authority<br />
+                <span className="gradient-text">and fill consultations.</span>
+              </h1>
+              <p className="text-lg text-[#8888aa] max-w-2xl mb-10 leading-relaxed">
+                Authoritative, trust-first law firm websites designed to establish credibility,
+                showcase your practice areas, and convert visitors into consultation requests.
+              </p>
+              <Link href="/services/law-firms#pricing" className="btn-primary inline-block text-base px-8 py-4">
+                Get a Law Firm Site →
+              </Link>
+            </div>
+
+            {/* Chat preview teaser */}
+            <div
+              className="flex-shrink-0 w-full lg:w-80 glass rounded-2xl overflow-hidden border"
+              style={{ borderColor: `${meta.color}20` }}
+            >
+              <div className="px-4 py-3 border-b flex items-center gap-2.5" style={{ borderColor: `${meta.color}15` }}>
+                <div className="w-7 h-7 rounded-full bg-gradient-to-br from-[#0984e3] to-[#6c5ce7] flex items-center justify-center text-xs font-bold text-white">
+                  AI
+                </div>
+                <div>
+                  <div className="text-xs font-semibold text-white">Vega Law AI Assistant</div>
+                  <div className="flex items-center gap-1">
+                    <div className="w-1.5 h-1.5 rounded-full bg-[#4ade80]" />
+                    <span className="text-xs text-[#8888aa]">Online 24/7</span>
+                  </div>
+                </div>
+              </div>
+              <div className="p-4 space-y-3">
+                <div className="bg-[#14142a] border border-[#0984e3]/20 rounded-xl rounded-bl-sm px-3 py-2.5 text-xs text-[#e8e8ff]">
+                  Hi! I can help qualify your case and schedule a free consultation. What brings you in today?
+                </div>
+                <div className="flex justify-end">
+                  <div className="bg-[#0984e3] rounded-xl rounded-br-sm px-3 py-2.5 text-xs text-white max-w-48">
+                    I was in a car accident last week...
+                  </div>
+                </div>
+                <div className="bg-[#14142a] border border-[#0984e3]/20 rounded-xl rounded-bl-sm px-3 py-2.5 text-xs text-[#e8e8ff]">
+                  I'm sorry to hear that. Were you injured?
+                </div>
+              </div>
+              <div className="px-4 pb-4 pt-1">
+                <div className="text-xs text-[#444466] text-center">↓ Scroll to see the full AI intake demo</div>
+              </div>
+            </div>
+          </div>
         </div>
       </section>
 
-      {/* Grid */}
+      {/* AI Chat Demo */}
+      <LawFirmDemo />
+
+      <div className="section-divider" />
+
+      {/* Portfolio Grid */}
       <section className="py-20 px-4 sm:px-6">
         <div className="max-w-7xl mx-auto">
+          <div className="text-center mb-12">
+            <p className="text-sm font-semibold uppercase tracking-widest mb-2" style={{ color: meta.color }}>
+              Real Client Examples
+            </p>
+            <h2 className="text-3xl font-bold text-white" style={{ fontFamily: 'Space Grotesk, sans-serif' }}>
+              Authority sites built for attorneys
+            </h2>
+          </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
             {items.map((item) => (
               <PortfolioCard key={item.id} item={item} />
