@@ -27,7 +27,7 @@ export default function NicheServicePage({ nicheKey }: NicheServicePageProps) {
 
   const processSteps = [
     { icon: '🛒', title: 'You Order', desc: 'Pick your tier and hosting plan. One checkout — secure Stripe payment.' },
-    { icon: '📋', title: 'Onboarding Call', desc: 'We gather your brand, content, and goals in a quick 30-min session.' },
+    { icon: '📋', title: 'Onboarding Questionnaire', desc: 'Fill out a short form with your brand, content, and goals. No calls — just a quick questionnaire.' },
     { icon: '⚙️', title: 'We Build & Review', desc: 'Custom design built for your niche. You approve a preview before launch.' },
     { icon: '🚀', title: 'Go Live', desc: 'We deploy to your domain, configure SSL, and your site is live.' },
   ]

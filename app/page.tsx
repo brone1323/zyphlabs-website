@@ -48,7 +48,7 @@ const steps = [
   {
     num: '02',
     title: 'We Onboard You',
-    desc: 'Quick 30-min call or questionnaire to gather your brand assets, content, and goals.',
+    desc: 'Fill out a short questionnaire to share your brand assets, content, and goals — takes about 15 minutes.',
     icon: '📋',
   },
   {
