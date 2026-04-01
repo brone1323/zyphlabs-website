@@ -1,5 +1,6 @@
 import Link from 'next/link'
 import PortfolioCard from '@/components/PortfolioCard'
+import RealEstateDemo from '@/components/demos/RealEstateDemo'
 import { portfolioByNiche, nichePortfolioMeta } from '@/lib/portfolioData'
 
 export const metadata = {
@@ -15,14 +16,25 @@ export default function RealEstatePortfolioPage() {
   return (
     <div className="min-h-screen">
       {/* Hero */}
-      <section className="relative pt-28 pb-20 px-4 sm:px-6 overflow-hidden">
+      <section className="relative pt-28 pb-24 px-4 sm:px-6 overflow-hidden">
         <div className="absolute inset-0 grid-bg opacity-20" />
+        {/* Purple tone gradient */}
         <div
           className="absolute inset-0"
           style={{
-            background: `radial-gradient(ellipse at 30% 50%, ${meta.color}18 0%, transparent 65%)`,
+            background: `radial-gradient(ellipse at 60% 30%, ${meta.color}22 0%, transparent 55%),
+                         radial-gradient(ellipse at 10% 70%, #0984e318 0%, transparent 50%)`,
           }}
         />
+
+        {/* Subtle horizontal data lines */}
+        <div
+          className="absolute inset-0 pointer-events-none opacity-5"
+          style={{
+            backgroundImage: `repeating-linear-gradient(0deg, ${meta.color} 0px, ${meta.color} 1px, transparent 1px, transparent 40px)`,
+          }}
+        />
+
         <div className="max-w-5xl mx-auto relative z-10">
           <div className="mb-6 flex items-center gap-2 text-sm text-[#8888aa]">
             <Link href="/portfolio" className="hover:text-white transition-colors">
@@ -31,29 +43,71 @@ export default function RealEstatePortfolioPage() {
             <span>/</span>
             <span style={{ color: meta.color }}>Real Estate</span>
           </div>
-          <p className="text-sm font-semibold uppercase tracking-widest mb-3" style={{ color: meta.color }}>
-            Real Estate Websites
-          </p>
-          <h1
-            className="text-4xl sm:text-5xl md:text-6xl font-bold text-white mb-6 leading-tight"
-            style={{ fontFamily: 'Space Grotesk, sans-serif' }}
-          >
-            Sites that capture buyers<br />
-            <span className="gradient-text">and sellers on autopilot.</span>
-          </h1>
-          <p className="text-lg text-[#8888aa] max-w-2xl mb-10 leading-relaxed">
-            Professional real estate sites that build trust, showcase listings, and convert
-            visitors into qualified leads — while you're out closing deals.
-          </p>
-          <Link href="/services/real-estate#pricing" className="btn-primary inline-block text-base px-8 py-4">
-            Get a Real Estate Site →
-          </Link>
+
+          <div className="flex items-start gap-8 flex-col lg:flex-row">
+            <div className="flex-1">
+              <p className="text-sm font-semibold uppercase tracking-widest mb-3" style={{ color: meta.color }}>
+                Real Estate Websites
+              </p>
+              <h1
+                className="text-4xl sm:text-5xl md:text-6xl font-bold text-white mb-6 leading-tight"
+                style={{ fontFamily: 'Space Grotesk, sans-serif' }}
+              >
+                Sites that capture buyers<br />
+                <span className="gradient-text">and sellers on autopilot.</span>
+              </h1>
+              <p className="text-lg text-[#8888aa] max-w-2xl mb-10 leading-relaxed">
+                Professional real estate sites that build trust, showcase listings, and convert
+                visitors into qualified leads — while you're out closing deals.
+              </p>
+              <Link href="/services/real-estate#pricing" className="btn-primary inline-block text-base px-8 py-4">
+                Get a Real Estate Site →
+              </Link>
+            </div>
+
+            {/* Mini market teaser */}
+            <div
+              className="flex-shrink-0 w-full lg:w-72 glass rounded-2xl p-5 border"
+              style={{ borderColor: `${meta.color}20` }}
+            >
+              <div className="flex items-center justify-between mb-4">
+                <span className="text-xs text-[#8888aa] font-mono">Market Snapshot</span>
+                <span className="text-xs font-semibold text-[#4ade80]">↑ +32% YoY</span>
+              </div>
+              {[
+                { label: 'Avg Sale Price', value: '$487K' },
+                { label: 'Days on Market', value: '18d' },
+                { label: 'Active Listings', value: '143' },
+              ].map(stat => (
+                <div key={stat.label} className="flex items-center justify-between py-2 border-b border-[#a29bfe]/10 last:border-b-0">
+                  <span className="text-xs text-[#8888aa]">{stat.label}</span>
+                  <span className="text-sm font-bold" style={{ color: meta.color, fontFamily: 'Space Grotesk, sans-serif' }}>
+                    {stat.value}
+                  </span>
+                </div>
+              ))}
+              <div className="mt-4 text-xs text-[#444466] text-center">Live in your client dashboard</div>
+            </div>
+          </div>
         </div>
       </section>
 
-      {/* Grid */}
+      {/* Market Dashboard Demo */}
+      <RealEstateDemo />
+
+      <div className="section-divider" />
+
+      {/* Portfolio Grid */}
       <section className="py-20 px-4 sm:px-6">
         <div className="max-w-7xl mx-auto">
+          <div className="text-center mb-12">
+            <p className="text-sm font-semibold uppercase tracking-widest mb-2" style={{ color: meta.color }}>
+              Real Client Examples
+            </p>
+            <h2 className="text-3xl font-bold text-white" style={{ fontFamily: 'Space Grotesk, sans-serif' }}>
+              Sites built for realtors and brokers
+            </h2>
+          </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
             {items.map((item) => (
               <PortfolioCard key={item.id} item={item} />

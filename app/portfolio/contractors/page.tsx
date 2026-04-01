@@ -1,5 +1,6 @@
 import Link from 'next/link'
 import PortfolioCard from '@/components/PortfolioCard'
+import ContractorDemo from '@/components/demos/ContractorDemo'
 import { portfolioByNiche, nichePortfolioMeta } from '@/lib/portfolioData'
 
 export const metadata = {
@@ -23,6 +24,14 @@ export default function ContractorsPortfolioPage() {
             background: `radial-gradient(ellipse at 30% 50%, ${meta.color}18 0%, transparent 65%)`,
           }}
         />
+        {/* Decorative grid lines — construction aesthetic */}
+        <div
+          className="absolute right-0 top-0 w-1/2 h-full opacity-10 pointer-events-none"
+          style={{
+            backgroundImage: `repeating-linear-gradient(0deg, ${meta.color} 0px, ${meta.color} 1px, transparent 1px, transparent 60px),
+                              repeating-linear-gradient(90deg, ${meta.color} 0px, ${meta.color} 1px, transparent 1px, transparent 60px)`,
+          }}
+        />
         <div className="max-w-5xl mx-auto relative z-10">
           <div className="mb-6 flex items-center gap-2 text-sm text-[#8888aa]">
             <Link href="/portfolio" className="hover:text-white transition-colors">
@@ -31,29 +40,75 @@ export default function ContractorsPortfolioPage() {
             <span>/</span>
             <span style={{ color: meta.color }}>Contractors</span>
           </div>
-          <p className="text-sm font-semibold uppercase tracking-widest mb-3" style={{ color: meta.color }}>
-            Contractor & Trades Websites
-          </p>
-          <h1
-            className="text-4xl sm:text-5xl md:text-6xl font-bold text-white mb-6 leading-tight"
-            style={{ fontFamily: 'Space Grotesk, sans-serif' }}
-          >
-            Websites that generate<br />
-            <span className="gradient-text">contractor leads.</span>
-          </h1>
-          <p className="text-lg text-[#8888aa] max-w-2xl mb-10 leading-relaxed">
-            Every site is purpose-built for your trade — with lead forms, service area pages, and
-            trust signals that convert visitors into phone calls.
-          </p>
-          <Link href="/services/contractors#pricing" className="btn-primary inline-block text-base px-8 py-4">
-            Get One For Your Business →
-          </Link>
+
+          <div className="flex items-start gap-6 flex-col sm:flex-row">
+            <div className="flex-1">
+              <p className="text-sm font-semibold uppercase tracking-widest mb-3" style={{ color: meta.color }}>
+                Contractor & Trades Websites
+              </p>
+              <h1
+                className="text-4xl sm:text-5xl md:text-6xl font-bold text-white mb-6 leading-tight"
+                style={{ fontFamily: 'Space Grotesk, sans-serif' }}
+              >
+                Websites that generate<br />
+                <span className="gradient-text">contractor leads.</span>
+              </h1>
+              <p className="text-lg text-[#8888aa] max-w-2xl mb-10 leading-relaxed">
+                Every site is purpose-built for your trade — with lead forms, service area pages,
+                and trust signals that convert visitors into phone calls.
+              </p>
+              <div className="flex flex-col sm:flex-row gap-4">
+                <Link href="/services/contractors#pricing" className="btn-primary inline-block text-base px-8 py-4">
+                  Get One For Your Business →
+                </Link>
+                <div className="flex items-center gap-3 text-sm text-[#8888aa]">
+                  <span style={{ color: meta.color }}>✓</span> 7-day delivery
+                  <span style={{ color: meta.color }}>✓</span> Fully managed
+                  <span style={{ color: meta.color }}>✓</span> SSL included
+                </div>
+              </div>
+            </div>
+
+            {/* Hero stat block */}
+            <div className="flex-shrink-0 hidden lg:grid grid-cols-2 gap-3 w-64">
+              {[
+                { n: '847+', l: 'Leads generated' },
+                { n: '4.9★', l: 'Average rating' },
+                { n: '< 2hr', l: 'Response time' },
+                { n: '$149', l: 'Starting price' },
+              ].map(s => (
+                <div
+                  key={s.l}
+                  className="glass rounded-xl p-4 text-center border"
+                  style={{ borderColor: `${meta.color}20` }}
+                >
+                  <div className="text-lg font-bold" style={{ color: meta.color, fontFamily: 'Space Grotesk, sans-serif' }}>
+                    {s.n}
+                  </div>
+                  <div className="text-xs text-[#8888aa] mt-0.5">{s.l}</div>
+                </div>
+              ))}
+            </div>
+          </div>
         </div>
       </section>
 
-      {/* Grid */}
+      {/* 3D Demo Section */}
+      <ContractorDemo />
+
+      <div className="section-divider" />
+
+      {/* Portfolio Grid */}
       <section className="py-20 px-4 sm:px-6">
         <div className="max-w-7xl mx-auto">
+          <div className="text-center mb-12">
+            <p className="text-sm font-semibold uppercase tracking-widest mb-2" style={{ color: meta.color }}>
+              Real Client Examples
+            </p>
+            <h2 className="text-3xl font-bold text-white" style={{ fontFamily: 'Space Grotesk, sans-serif' }}>
+              Sites built for trades businesses like yours
+            </h2>
+          </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
             {items.map((item) => (
               <PortfolioCard key={item.id} item={item} />
