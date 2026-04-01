@@ -20,8 +20,8 @@ const steps = [
     num: '02',
     icon: '📋',
     title: 'We Onboard You',
-    headline: 'A quick call or questionnaire — we gather everything we need.',
-    body: `Within 24 hours of your order, we send you a simple onboarding questionnaire (or schedule a 30-minute call if you prefer). We collect your logo, brand colors, photos, service descriptions, target area, and any specific requirements. You don't need to write copy — we handle that too.`,
+    headline: 'A simple questionnaire — we gather everything we need.',
+    body: `Within 24 hours of your order, you'll receive a link to your onboarding questionnaire. We collect your logo, brand colors, photos, service descriptions, target area, and any specific requirements. You don't need to write copy — we handle that too.`,
     note: 'Most clients complete onboarding in under an hour. No technical knowledge needed.',
   },
   {
@@ -52,7 +52,7 @@ const steps = [
 
 const comparisonRows = [
   ['You Order', '1 checkout', 'Fiverr gig', 'Research, message, negotiate'],
-  ['Onboarding', 'Questionnaire or call', 'Freelancer', 'Email back-and-forth, unclear scope'],
+  ['Onboarding', 'Simple questionnaire', 'Freelancer', 'Email back-and-forth, unclear scope'],
   ['Build time', '7–14 days', 'Fiverr/freelancer', '2–8 weeks with revisions'],
   ['Hosting setup', 'We do it', 'You', 'Find a host, buy plan, configure DNS...'],
   ['Going live', 'We handle it', 'You', 'Troubleshoot deployment yourself'],

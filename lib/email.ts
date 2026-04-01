@@ -93,6 +93,46 @@ export async function sendCancellationAlert(params: {
   })
 }
 
+// ── Brian alert: onboarding questionnaire submitted ──────────────────────────
+
+export async function sendQuestionnaireAlert(params: {
+  businessName: string
+  contactEmail: string
+  brandColors: string
+  serviceDescriptions: string
+  targetArea: string
+  requirements: string
+  attachmentNames: string[]
+}) {
+  const { businessName, contactEmail, brandColors, serviceDescriptions, targetArea, requirements, attachmentNames } = params
+
+  await resend.emails.send({
+    from: FROM,
+    to: BRIAN,
+    subject: `New Onboarding Questionnaire — ${businessName}`,
+    html: `
+      <div style="font-family:sans-serif;max-width:600px;margin:0 auto">
+        <h2 style="color:#2563eb">New Onboarding Questionnaire 📋</h2>
+        <table style="border-collapse:collapse;width:100%;max-width:560px">
+          <tr><td style="padding:8px 12px;font-weight:600;background:#f1f5f9;width:180px">Business Name</td><td style="padding:8px 12px">${businessName}</td></tr>
+          <tr><td style="padding:8px 12px;font-weight:600;background:#f1f5f9">Contact Email</td><td style="padding:8px 12px"><a href="mailto:${contactEmail}">${contactEmail}</a></td></tr>
+          <tr><td style="padding:8px 12px;font-weight:600;background:#f1f5f9">Brand Colors</td><td style="padding:8px 12px">${brandColors || '(not provided)'}</td></tr>
+          <tr><td style="padding:8px 12px;font-weight:600;background:#f1f5f9">Target Area</td><td style="padding:8px 12px">${targetArea}</td></tr>
+        </table>
+        <h3 style="margin-top:24px;color:#374151">Services Offered</h3>
+        <p style="background:#f9fafb;padding:12px;border-radius:6px;white-space:pre-wrap;margin:0">${serviceDescriptions}</p>
+        <h3 style="margin-top:24px;color:#374151">Specific Requirements / Notes</h3>
+        <p style="background:#f9fafb;padding:12px;border-radius:6px;white-space:pre-wrap;margin:0">${requirements || '(none provided)'}</p>
+        <p style="margin-top:16px;color:#6b7280;font-size:13px">
+          ${attachmentNames.length > 0
+            ? `${attachmentNames.length} file(s) attached: ${attachmentNames.join(', ')}`
+            : 'No files uploaded.'}
+        </p>
+      </div>
+    `,
+  })
+}
+
 // ── Customer: welcome email ──────────────────────────────────────────────────
 
 export async function sendWelcomeEmail(params: {
@@ -120,8 +160,8 @@ export async function sendWelcomeEmail(params: {
         </table>
         <h3 style="margin-top:24px">What happens next?</h3>
         <ol style="padding-left:20px;line-height:1.8">
-          <li>Brian will reach out within <strong>1 business day</strong> to kick off onboarding.</li>
-          <li>We'll collect your branding, content, and preferences.</li>
+          <li><strong>Complete your onboarding questionnaire</strong> — <a href="https://zyphlabs.com/questionnaire">zyphlabs.com/questionnaire</a>. Takes about 15 minutes.</li>
+          <li>We'll review your questionnaire and get started on your site.</li>
           <li>Your site will be live within the agreed turnaround window.</li>
         </ol>
         <p style="margin-top:24px">Questions? Reply to this email or reach us at <a href="mailto:contact@zyphlabs.com">contact@zyphlabs.com</a>.</p>
