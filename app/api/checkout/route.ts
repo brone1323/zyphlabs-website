@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { stripe } from '@/lib/stripe'
+import { getStripe } from '@/lib/stripe'
 
 export async function POST(req: NextRequest) {
   try {
@@ -21,7 +21,7 @@ export async function POST(req: NextRequest) {
     // - The recurring hosting subscription starts with a 30-day trial
     // NOTE: In your Stripe dashboard, buildPriceId must be a one-time price and
     //       hostingPriceId must be a recurring (monthly) price.
-    const session = await stripe.checkout.sessions.create({
+    const session = await getStripe().checkout.sessions.create({
       mode: 'subscription',
       line_items: [
         {
