@@ -1,5 +1,11 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { stripe } from '@/lib/stripe'
+import {
+  sendNewSaleAlert,
+  sendPaymentFailedAlert,
+  sendCancellationAlert,
+  sendWelcomeEmail,
+} from '@/lib/email'
 import type Stripe from 'stripe'
 
 // App Router route handlers receive raw body via req.text() — no config needed
@@ -45,11 +51,12 @@ export async function POST(req: NextRequest) {
         amountTotal: session.amount_total,
       })
 
-      // TODO: Send onboarding email to client (via Resend or SendGrid)
-      // await sendWelcomeEmail({ to: customerEmail, niche, tier, hostingPlan })
-
-      // TODO: Send notification to Brian
-      // await sendNewOrderAlert({ niche, tier, hostingPlan, customerEmail })
+      await Promise.allSettled([
+        sendNewSaleAlert({ customerEmail, niche, tier, hostingPlan, amountTotal: session.amount_total }),
+        customerEmail
+          ? sendWelcomeEmail({ to: customerEmail, niche, tier, hostingPlan })
+          : Promise.resolve(),
+      ])
 
       // TODO: Create client record (Airtable, Notion, or DB)
       break
@@ -75,9 +82,12 @@ export async function POST(req: NextRequest) {
         attemptCount: invoice.attempt_count,
       })
 
-      // TODO: Send payment failure notification
-      // Stripe's dunning management handles automatic retries, but you can send
-      // a custom email with a link to update payment info
+      await sendPaymentFailedAlert({
+        customerEmail: invoice.customer_email,
+        customerId: typeof invoice.customer === 'string' ? invoice.customer : null,
+        invoiceId: invoice.id,
+        attemptCount: invoice.attempt_count,
+      })
       break
     }
 
@@ -89,8 +99,27 @@ export async function POST(req: NextRequest) {
         niche: subscription.metadata?.niche,
       })
 
+      // Fetch customer email from Stripe since it's not on the subscription object
+      let customerEmail: string | null = null
+      try {
+        if (typeof subscription.customer === 'string') {
+          const customer = await stripe.customers.retrieve(subscription.customer)
+          if (!customer.deleted) {
+            customerEmail = customer.email
+          }
+        }
+      } catch (err) {
+        console.error('Failed to fetch customer for cancellation alert:', err)
+      }
+
+      await sendCancellationAlert({
+        customerId: typeof subscription.customer === 'string' ? subscription.customer : null,
+        subscriptionId: subscription.id,
+        niche: subscription.metadata?.niche,
+        customerEmail,
+      })
+
       // TODO: Trigger offboarding flow
-      // - Send 30-day notice email
       // - Schedule site file delivery
       // - Update client record
       break
