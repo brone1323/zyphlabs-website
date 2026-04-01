@@ -1,7 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { Resend } from 'resend'
 
-const resend = new Resend(process.env.RESEND_API_KEY)
 const FROM = 'notifications@zyphlabs.com'
 const BRIAN = 'brian@solardev.ca'
 
@@ -47,6 +46,22 @@ export async function POST(req: NextRequest) {
 
     const attachmentNames = attachments.map((a) => a.filename)
 
+    const apiKey = process.env.RESEND_API_KEY
+    if (!apiKey) {
+      console.log('[questionnaire] RESEND_API_KEY not set — logging submission instead of sending email')
+      console.log('[questionnaire] Submission:', {
+        businessName,
+        contactEmail,
+        brandColors,
+        serviceDescriptions,
+        targetArea,
+        requirements,
+        attachments: attachmentNames,
+      })
+      return NextResponse.json({ ok: true })
+    }
+
+    const resend = new Resend(apiKey)
     await resend.emails.send({
       from: FROM,
       to: BRIAN,
