@@ -2,6 +2,7 @@ import type { Metadata } from 'next'
 import './globals.css'
 import Navbar from '@/components/Navbar'
 import Footer from '@/components/Footer'
+import SaleBanner from '@/components/SaleBanner'
 
 export const metadata: Metadata = {
   title: 'Zyph Labs — Professional Websites, Built & Hosted For You',
@@ -34,6 +35,7 @@ export default function RootLayout({
       </head>
       <body>
         <div className="noise-overlay" aria-hidden="true" />
+        <SaleBanner />
         <Navbar />
         <main>{children}</main>
         <Footer />
