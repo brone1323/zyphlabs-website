@@ -94,7 +94,7 @@ export default function PortfolioPage() {
                 </div>
 
                 {/* Portfolio grid */}
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+                <div className="flex justify-center gap-8">
                   {items.map((item) => (
                     <PortfolioCard key={item.id} item={item} />
                   ))}
