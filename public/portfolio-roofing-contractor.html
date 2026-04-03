@@ -1,0 +1,493 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Summit Roofing Co. | See the Transformation</title>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700;800;900&family=Libre+Franklin:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+:root {
+  --slate: #1e293b;
+  --slate-700: #334155;
+  --slate-500: #64748b;
+  --slate-300: #cbd5e1;
+  --slate-100: #f1f5f9;
+  --white: #ffffff;
+  --amber: #f59e0b;
+  --amber-dark: #d97706;
+  --amber-light: #fffbeb;
+  --sky: #0ea5e9;
+}
+
+body { font-family: 'Libre Franklin', sans-serif; color: var(--slate); background: var(--white); overflow-x: hidden; }
+h1,h2,h3,h4 { font-family: 'Archivo', sans-serif; }
+
+/* ======== NAV ======== */
+.nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+  background: rgba(255,255,255,0.95); backdrop-filter: blur(10px);
+  border-bottom: 1px solid var(--slate-100);
+  padding: 0.75rem 3rem;
+  display: flex; justify-content: space-between; align-items: center;
+}
+.nav-brand { font-family: 'Archivo', sans-serif; font-weight: 900; font-size: 1.15rem; color: var(--slate); display: flex; align-items: center; gap: 0.5rem; }
+.nav-brand span { color: var(--amber); }
+.nav-links { display: flex; gap: 2rem; list-style: none; }
+.nav-links a { text-decoration: none; font-size: 0.85rem; color: var(--slate-500); font-weight: 500; transition: color 0.2s; }
+.nav-links a:hover { color: var(--slate); }
+.nav-phone {
+  font-family: 'Archivo', sans-serif; font-weight: 700; font-size: 0.9rem;
+  color: var(--white); background: var(--amber); padding: 0.5rem 1.25rem;
+  border-radius: 8px; text-decoration: none; transition: background 0.2s;
+}
+.nav-phone:hover { background: var(--amber-dark); }
+
+/* ======== HERO: Split diagonal ======== */
+.hero {
+  margin-top: 52px; height: 85vh; display: grid; grid-template-columns: 1fr 1fr;
+  position: relative; overflow: hidden;
+}
+.hero-left {
+  background: var(--slate); display: flex; flex-direction: column;
+  justify-content: center; padding: 4rem 5rem;
+  clip-path: polygon(0 0, 100% 0, 85% 100%, 0 100%);
+  position: relative; z-index: 2;
+}
+.hero-badge {
+  display: inline-flex; align-items: center; gap: 0.4rem;
+  background: rgba(245,158,11,0.15); color: var(--amber);
+  padding: 0.35rem 0.9rem; border-radius: 6px; font-size: 0.7rem;
+  font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em;
+  margin-bottom: 1.5rem; width: fit-content;
+}
+.hero-left h1 {
+  font-size: clamp(2.5rem, 4.5vw, 3.8rem); font-weight: 900;
+  line-height: 1.05; color: var(--white); margin-bottom: 1.25rem;
+}
+.hero-left h1 em { font-style: normal; color: var(--amber); }
+.hero-left p {
+  font-size: 1.05rem; color: var(--slate-300); font-weight: 300;
+  line-height: 1.7; max-width: 440px; margin-bottom: 2rem;
+}
+.hero-ctas { display: flex; gap: 1rem; }
+.btn-primary {
+  background: var(--amber); color: var(--white); padding: 0.85rem 2rem;
+  border-radius: 8px; text-decoration: none; font-family: 'Archivo', sans-serif;
+  font-weight: 700; font-size: 0.9rem; transition: all 0.2s; border: none; cursor: pointer;
+}
+.btn-primary:hover { background: var(--amber-dark); transform: translateY(-2px); }
+.btn-outline {
+  background: transparent; color: var(--white); padding: 0.85rem 2rem;
+  border: 1px solid var(--slate-500); border-radius: 8px; text-decoration: none;
+  font-family: 'Archivo', sans-serif; font-weight: 700; font-size: 0.9rem;
+  transition: all 0.2s; cursor: pointer;
+}
+.btn-outline:hover { border-color: var(--white); }
+
+.hero-right {
+  background: linear-gradient(135deg, var(--slate-300) 0%, var(--slate-100) 100%);
+  display: flex; align-items: center; justify-content: center;
+  position: relative;
+}
+.hero-right-content {
+  text-align: center; position: relative; z-index: 2;
+}
+.hero-stat {
+  font-family: 'Archivo', sans-serif; font-size: 5rem;
+  font-weight: 900; color: var(--slate); line-height: 1;
+}
+.hero-stat-label { font-size: 1rem; color: var(--slate-500); font-weight: 500; margin-top: 0.25rem; }
+.hero-right::before {
+  content: ''; position: absolute; top: -20%; left: -20%;
+  width: 60%; height: 60%; background: var(--amber); opacity: 0.06;
+  border-radius: 50%; filter: blur(60px);
+}
+
+/* ======== BEFORE/AFTER SLIDER ======== */
+.ba-section { padding: 5rem 3rem; background: var(--slate-100); }
+.ba-section .section-header { text-align: center; margin-bottom: 3rem; }
+.ba-section .section-header h2 {
+  font-size: 2.2rem; font-weight: 900; margin-bottom: 0.5rem;
+}
+.ba-section .section-header p { color: var(--slate-500); font-size: 1rem; max-width: 500px; margin: 0 auto; }
+
+.ba-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; max-width: 1100px; margin: 0 auto; }
+
+.ba-card {
+  background: var(--white); border-radius: 16px; overflow: hidden;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.06);
+}
+.ba-slider {
+  position: relative; height: 300px; overflow: hidden; cursor: ew-resize;
+  user-select: none; -webkit-user-select: none;
+}
+.ba-before, .ba-after {
+  position: absolute; inset: 0;
+  display: flex; align-items: center; justify-content: center;
+  font-family: 'Archivo', sans-serif; font-weight: 800; font-size: 1.5rem;
+}
+.ba-before { background: linear-gradient(135deg, #78716c, #57534e); color: rgba(255,255,255,0.6); }
+.ba-after { background: linear-gradient(135deg, var(--sky), #0284c7); color: rgba(255,255,255,0.9); clip-path: inset(0 50% 0 0); }
+.ba-handle {
+  position: absolute; top: 0; bottom: 0; left: 50%; width: 4px;
+  background: var(--white); z-index: 10; transform: translateX(-50%);
+  box-shadow: 0 0 10px rgba(0,0,0,0.3);
+}
+.ba-handle::before {
+  content: '⟨ ⟩'; position: absolute; top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  background: var(--white); width: 36px; height: 36px;
+  border-radius: 50%; display: flex; align-items: center; justify-content: center;
+  font-size: 0.7rem; color: var(--slate); box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+  letter-spacing: 0.15em;
+}
+.ba-label-before, .ba-label-after {
+  position: absolute; bottom: 12px; font-size: 0.65rem;
+  font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em;
+  background: rgba(0,0,0,0.4); color: white; padding: 0.25rem 0.6rem;
+  border-radius: 4px; z-index: 5;
+}
+.ba-label-before { left: 12px; }
+.ba-label-after { right: 12px; }
+.ba-info { padding: 1.25rem 1.5rem; }
+.ba-info h3 { font-size: 1rem; font-weight: 700; margin-bottom: 0.25rem; }
+.ba-info p { font-size: 0.85rem; color: var(--slate-500); }
+.ba-tags { display: flex; gap: 0.5rem; margin-top: 0.75rem; }
+.ba-tag {
+  font-size: 0.7rem; font-weight: 600; padding: 0.2rem 0.6rem;
+  border-radius: 4px; background: var(--amber-light); color: var(--amber-dark);
+}
+
+/* ======== SERVICES: Horizontal cards ======== */
+.services { padding: 5rem 3rem; max-width: 1100px; margin: 0 auto; }
+.services .section-header { margin-bottom: 3rem; }
+.services .section-header h2 { font-size: 2.2rem; font-weight: 900; margin-bottom: 0.5rem; }
+.services .section-header p { color: var(--slate-500); font-size: 1rem; }
+
+.services-strip { display: flex; gap: 1.5rem; overflow-x: auto; padding-bottom: 1rem; scroll-snap-type: x mandatory; }
+.services-strip::-webkit-scrollbar { height: 4px; }
+.services-strip::-webkit-scrollbar-thumb { background: var(--slate-300); border-radius: 2px; }
+
+.svc-card {
+  flex: 0 0 260px; background: var(--white); border: 1px solid var(--slate-100);
+  border-radius: 12px; padding: 1.75rem; scroll-snap-align: start;
+  transition: all 0.3s;
+}
+.svc-card:hover { border-color: var(--amber); box-shadow: 0 4px 16px rgba(245,158,11,0.1); transform: translateY(-4px); }
+.svc-icon {
+  width: 44px; height: 44px; background: var(--amber-light);
+  border-radius: 10px; display: flex; align-items: center; justify-content: center;
+  margin-bottom: 1.25rem; font-size: 1.2rem;
+}
+.svc-card h3 { font-size: 1rem; font-weight: 700; margin-bottom: 0.5rem; }
+.svc-card p { font-size: 0.85rem; color: var(--slate-500); line-height: 1.6; }
+
+/* ======== TIMELINE ======== */
+.timeline-section { padding: 5rem 3rem; background: var(--slate); }
+.timeline-section .section-header { text-align: center; margin-bottom: 3rem; }
+.timeline-section .section-header h2 { font-size: 2.2rem; font-weight: 900; color: var(--white); margin-bottom: 0.5rem; }
+.timeline-section .section-header p { color: var(--slate-300); font-size: 1rem; }
+
+.timeline {
+  max-width: 800px; margin: 0 auto; position: relative;
+  padding-left: 50px;
+}
+.timeline::before {
+  content: ''; position: absolute; left: 20px; top: 0; bottom: 0;
+  width: 2px; background: var(--slate-700);
+}
+.timeline-item { position: relative; padding: 0 0 3rem 2rem; }
+.timeline-item::before {
+  content: ''; position: absolute; left: -38px; top: 6px;
+  width: 16px; height: 16px; border-radius: 50%;
+  background: var(--amber); border: 3px solid var(--slate);
+}
+.timeline-item h3 { font-size: 1.05rem; font-weight: 700; color: var(--white); margin-bottom: 0.25rem; }
+.timeline-item .tl-day { font-size: 0.7rem; color: var(--amber); font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 0.5rem; }
+.timeline-item p { font-size: 0.9rem; color: var(--slate-300); line-height: 1.6; font-weight: 300; }
+
+/* ======== STATS BAR ======== */
+.stats-bar {
+  background: var(--amber); padding: 3rem; display: flex;
+  justify-content: center; gap: 5rem;
+}
+.stat-block { text-align: center; }
+.stat-num { font-family: 'Archivo', sans-serif; font-size: 2.5rem; font-weight: 900; color: var(--white); line-height: 1; }
+.stat-label { font-size: 0.75rem; color: rgba(255,255,255,0.8); font-weight: 500; margin-top: 0.25rem; text-transform: uppercase; letter-spacing: 0.08em; }
+
+/* ======== REVIEWS ======== */
+.reviews { padding: 5rem 3rem; max-width: 1100px; margin: 0 auto; }
+.reviews .section-header { margin-bottom: 3rem; }
+.reviews .section-header h2 { font-size: 2.2rem; font-weight: 900; margin-bottom: 0.5rem; }
+.reviews-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; }
+.review-card {
+  background: var(--slate-100); border-radius: 12px; padding: 1.5rem;
+}
+.review-stars { color: var(--amber); font-size: 0.9rem; margin-bottom: 0.75rem; letter-spacing: 0.1em; }
+.review-text { font-size: 0.9rem; color: var(--slate-700); line-height: 1.6; margin-bottom: 1rem; font-style: italic; }
+.review-author { font-weight: 700; font-size: 0.85rem; }
+.review-date { font-size: 0.75rem; color: var(--slate-500); }
+
+/* ======== CTA ======== */
+.cta-section {
+  padding: 5rem 3rem; text-align: center;
+  background: linear-gradient(135deg, var(--slate) 0%, #0f172a 100%);
+}
+.cta-section h2 { font-size: 2.5rem; font-weight: 900; color: var(--white); margin-bottom: 1rem; }
+.cta-section p { color: var(--slate-300); font-size: 1.05rem; margin-bottom: 2rem; max-width: 500px; margin-left: auto; margin-right: auto; }
+.cta-actions { display: flex; justify-content: center; gap: 1rem; }
+
+/* ======== FOOTER ======== */
+footer {
+  background: #0f172a; color: var(--slate-300);
+  padding: 2rem 3rem; display: flex; justify-content: space-between;
+  align-items: center; font-size: 0.8rem;
+}
+footer a { color: var(--slate-300); text-decoration: none; }
+footer a:hover { color: var(--white); }
+
+/* ======== RESPONSIVE ======== */
+@media (max-width: 800px) {
+  .nav { padding: 0.75rem 1.5rem; }
+  .nav-links { display: none; }
+  .hero { grid-template-columns: 1fr; }
+  .hero-left { clip-path: none; padding: 3rem 2rem; }
+  .hero-right { display: none; }
+  .ba-grid { grid-template-columns: 1fr; }
+  .reviews-grid { grid-template-columns: 1fr; }
+  .stats-bar { flex-wrap: wrap; gap: 2rem; }
+  .cta-actions { flex-direction: column; align-items: center; }
+}
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <div class="nav-brand">SUMMIT<span>.</span>ROOFING</div>
+  <ul class="nav-links">
+    <li><a href="#transformations">Transformations</a></li>
+    <li><a href="#services">Services</a></li>
+    <li><a href="#process">Process</a></li>
+    <li><a href="#reviews">Reviews</a></li>
+  </ul>
+  <a href="tel:+15557890123" class="nav-phone">📞 (555) 789-0123</a>
+</nav>
+
+<!-- HERO: Diagonal split -->
+<section class="hero">
+  <div class="hero-left">
+    <div class="hero-badge">⭐ #1 Rated Roofing in the Pacific Northwest</div>
+    <h1>Your Roof,<br><em>Transformed.</em></h1>
+    <p>Drag the slider. See the difference. Summit Roofing delivers visible transformations backed by a 25-year warranty.</p>
+    <div class="hero-ctas">
+      <a href="#" class="btn-primary">Get Free Estimate</a>
+      <a href="#transformations" class="btn-outline">See Our Work ↓</a>
+    </div>
+  </div>
+  <div class="hero-right">
+    <div class="hero-right-content">
+      <div class="hero-stat">2,400+</div>
+      <div class="hero-stat-label">Roofs Completed Since 2008</div>
+    </div>
+  </div>
+</section>
+
+<!-- BEFORE / AFTER SLIDER -->
+<section class="ba-section" id="transformations">
+  <div class="section-header">
+    <h2>Drag to See the Difference</h2>
+    <p>Real projects. Real transformations. Grab the slider and see what we can do.</p>
+  </div>
+  <div class="ba-grid">
+
+    <div class="ba-card">
+      <div class="ba-slider" data-slider>
+        <div class="ba-before">BEFORE</div>
+        <div class="ba-after">AFTER</div>
+        <div class="ba-handle"></div>
+        <span class="ba-label-before">Before</span>
+        <span class="ba-label-after">After</span>
+      </div>
+      <div class="ba-info">
+        <h3>Cedar Heights Residence</h3>
+        <p>Complete tear-off & replacement — 30-year architectural shingles</p>
+        <div class="ba-tags"><span class="ba-tag">Asphalt</span><span class="ba-tag">3,200 sq ft</span><span class="ba-tag">5 Days</span></div>
+      </div>
+    </div>
+
+    <div class="ba-card">
+      <div class="ba-slider" data-slider>
+        <div class="ba-before">BEFORE</div>
+        <div class="ba-after">AFTER</div>
+        <div class="ba-handle"></div>
+        <span class="ba-label-before">Before</span>
+        <span class="ba-label-after">After</span>
+      </div>
+      <div class="ba-info">
+        <h3>Maple Street Duplex</h3>
+        <p>Storm damage repair with insurance claim coordination</p>
+        <div class="ba-tags"><span class="ba-tag">Metal</span><span class="ba-tag">2,100 sq ft</span><span class="ba-tag">3 Days</span></div>
+      </div>
+    </div>
+
+    <div class="ba-card">
+      <div class="ba-slider" data-slider>
+        <div class="ba-before">BEFORE</div>
+        <div class="ba-after">AFTER</div>
+        <div class="ba-handle"></div>
+        <span class="ba-label-before">Before</span>
+        <span class="ba-label-after">After</span>
+      </div>
+      <div class="ba-info">
+        <h3>Parkview Commercial</h3>
+        <p>Flat roof replacement — TPO membrane with 20-year warranty</p>
+        <div class="ba-tags"><span class="ba-tag">Commercial</span><span class="ba-tag">8,500 sq ft</span><span class="ba-tag">8 Days</span></div>
+      </div>
+    </div>
+
+    <div class="ba-card">
+      <div class="ba-slider" data-slider>
+        <div class="ba-before">BEFORE</div>
+        <div class="ba-after">AFTER</div>
+        <div class="ba-handle"></div>
+        <span class="ba-label-before">Before</span>
+        <span class="ba-label-after">After</span>
+      </div>
+      <div class="ba-info">
+        <h3>Willowbrook Colonial</h3>
+        <p>Historic home restoration with period-accurate slate tiles</p>
+        <div class="ba-tags"><span class="ba-tag">Slate</span><span class="ba-tag">4,100 sq ft</span><span class="ba-tag">12 Days</span></div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- STATS BAR -->
+<div class="stats-bar">
+  <div class="stat-block"><div class="stat-num">2,400+</div><div class="stat-label">Roofs Completed</div></div>
+  <div class="stat-block"><div class="stat-num">25 yr</div><div class="stat-label">Warranty</div></div>
+  <div class="stat-block"><div class="stat-num">4.9★</div><div class="stat-label">Avg Rating</div></div>
+  <div class="stat-block"><div class="stat-num">$0</div><div class="stat-label">Down Payment</div></div>
+</div>
+
+<!-- SERVICES -->
+<section class="services" id="services">
+  <div class="section-header">
+    <h2>What We Do</h2>
+    <p>Scroll through our services — residential, commercial, and everything in between.</p>
+  </div>
+  <div class="services-strip">
+    <div class="svc-card"><div class="svc-icon">🏠</div><h3>Roof Replacement</h3><p>Full tear-off and replacement with premium materials. From asphalt to metal to tile.</p></div>
+    <div class="svc-card"><div class="svc-icon">🔧</div><h3>Roof Repair</h3><p>Leak detection, shingle replacement, flashing repair. Fast turnaround, lasting fix.</p></div>
+    <div class="svc-card"><div class="svc-icon">⛈️</div><h3>Storm Damage</h3><p>Emergency tarping within 4 hours. Full insurance claim coordination included.</p></div>
+    <div class="svc-card"><div class="svc-icon">🏢</div><h3>Commercial</h3><p>TPO, EPDM, and modified bitumen for flat and low-slope commercial roofs.</p></div>
+    <div class="svc-card"><div class="svc-icon">🪟</div><h3>Gutters & Siding</h3><p>Seamless aluminum gutters and fiber cement siding. Installed by roofing pros who understand water flow.</p></div>
+    <div class="svc-card"><div class="svc-icon">🔍</div><h3>Free Inspection</h3><p>Drone-assisted roof inspection with a detailed report. No cost, no obligation.</p></div>
+  </div>
+</section>
+
+<!-- PROCESS TIMELINE -->
+<section class="timeline-section" id="process">
+  <div class="section-header">
+    <h2>How a Roof Gets Done</h2>
+    <p>From first call to final walkthrough — here's exactly what happens.</p>
+  </div>
+  <div class="timeline">
+    <div class="timeline-item">
+      <div class="tl-day">Day 1</div>
+      <h3>Free Inspection & Estimate</h3>
+      <p>We come out, inspect with drone footage, and hand you a written estimate on the spot. No pressure, no sales games.</p>
+    </div>
+    <div class="timeline-item">
+      <div class="tl-day">Day 2-3</div>
+      <h3>Material Selection</h3>
+      <p>Pick your shingles, metal panels, or tile from our showroom samples. We'll match your home's style and your budget.</p>
+    </div>
+    <div class="timeline-item">
+      <div class="tl-day">Day 7</div>
+      <h3>Permits & Scheduling</h3>
+      <p>We pull all permits and lock in your install date. Materials are ordered and staged.</p>
+    </div>
+    <div class="timeline-item">
+      <div class="tl-day">Day 10-14</div>
+      <h3>Installation</h3>
+      <p>Our crew arrives at 7am sharp. Full tear-off, inspection, underlayment, and new roof — typically complete in 1-3 days.</p>
+    </div>
+    <div class="timeline-item">
+      <div class="tl-day">Final Day</div>
+      <h3>Walkthrough & Warranty</h3>
+      <p>We walk the job together, clean every nail from your yard with a magnetic sweeper, and hand you your 25-year warranty docs.</p>
+    </div>
+  </div>
+</section>
+
+<!-- REVIEWS -->
+<section class="reviews" id="reviews">
+  <div class="section-header">
+    <h2>What Homeowners Say</h2>
+  </div>
+  <div class="reviews-grid">
+    <div class="review-card">
+      <div class="review-stars">★★★★★</div>
+      <div class="review-text">"They finished our roof in two days and the cleanup was immaculate. Found a nail? Zero. Looked like they were never here — except for the gorgeous new roof."</div>
+      <div class="review-author">Mark & Julie Peterson</div>
+      <div class="review-date">Verified · 3 weeks ago</div>
+    </div>
+    <div class="review-card">
+      <div class="review-stars">★★★★★</div>
+      <div class="review-text">"After the hailstorm, Summit handled our entire insurance claim. We didn't pay a dime out of pocket and got a better roof than we started with."</div>
+      <div class="review-author">Sandra Chen</div>
+      <div class="review-date">Verified · 1 month ago</div>
+    </div>
+    <div class="review-card">
+      <div class="review-stars">★★★★★</div>
+      <div class="review-text">"Three other companies quoted us $5k more. Summit matched the quality of every sample I compared and came in under budget. No brainer."</div>
+      <div class="review-author">David Okafor</div>
+      <div class="review-date">Verified · 2 months ago</div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta-section">
+  <h2>Ready for a New Roof?</h2>
+  <p>Free inspection. Free estimate. No-pressure consultation. Just honest roofing.</p>
+  <div class="cta-actions">
+    <a href="#" class="btn-primary">Schedule Free Inspection</a>
+    <a href="tel:+15557890123" class="btn-outline">Call (555) 789-0123</a>
+  </div>
+</section>
+
+<footer>
+  <span>&copy; 2024 Summit Roofing Co. · License #RCE-39281 · Bonded & Insured</span>
+  <span><a href="#">Privacy</a> · <a href="#">Terms</a></span>
+</footer>
+
+<script>
+// Before/After Sliders
+document.querySelectorAll('[data-slider]').forEach(slider => {
+  const afterLayer = slider.querySelector('.ba-after');
+  const handle = slider.querySelector('.ba-handle');
+  let dragging = false;
+
+  function updatePos(x) {
+    const rect = slider.getBoundingClientRect();
+    let pct = ((x - rect.left) / rect.width) * 100;
+    pct = Math.max(5, Math.min(95, pct));
+    afterLayer.style.clipPath = `inset(0 ${100 - pct}% 0 0)`;
+    handle.style.left = pct + '%';
+  }
+
+  slider.addEventListener('mousedown', e => { dragging = true; updatePos(e.clientX); });
+  slider.addEventListener('touchstart', e => { dragging = true; updatePos(e.touches[0].clientX); }, { passive: true });
+  window.addEventListener('mousemove', e => { if (dragging) updatePos(e.clientX); });
+  window.addEventListener('touchmove', e => { if (dragging) updatePos(e.touches[0].clientX); }, { passive: true });
+  window.addEventListener('mouseup', () => dragging = false);
+  window.addEventListener('touchend', () => dragging = false);
+});
+</script>
+</body>
+</html>

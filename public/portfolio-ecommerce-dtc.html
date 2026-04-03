@@ -1,0 +1,462 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lumina Glow | Radiance Revival Serum</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=Manrope:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+:root {
+  --bg: #fffaf5;
+  --peach: #f5e6d8;
+  --blush: #e8c4b0;
+  --rose: #c4887a;
+  --deep: #6b3a2a;
+  --ink: #2a1f1a;
+  --text: #5a4a42;
+  --gold: #c5975a;
+  --white: #ffffff;
+  --border: #ece4dc;
+}
+
+body {
+  font-family: 'Manrope', sans-serif; color: var(--ink); background: var(--bg);
+  -webkit-font-smoothing: antialiased; overflow-x: hidden;
+}
+
+/* ======== FLOATING CART BAR ======== */
+.cart-bar {
+  position: fixed; bottom: 0; left: 0; right: 0; z-index: 100;
+  background: rgba(255,250,245,0.95); backdrop-filter: blur(12px);
+  border-top: 1px solid var(--border); padding: 0.75rem 3rem;
+  display: flex; justify-content: space-between; align-items: center;
+  transform: translateY(100%); transition: transform 0.4s cubic-bezier(0.16,1,0.3,1);
+}
+.cart-bar.visible { transform: translateY(0); }
+.cart-bar-left { display: flex; align-items: center; gap: 1rem; }
+.cart-bar-product { font-weight: 700; font-size: 0.9rem; }
+.cart-bar-price { font-size: 0.9rem; color: var(--deep); }
+.cart-bar-price s { color: var(--text); opacity: 0.4; font-size: 0.8rem; margin-right: 0.3rem; }
+.cart-bar-btn {
+  background: var(--ink); color: var(--white); padding: 0.7rem 2rem;
+  border: none; border-radius: 50px; font-family: inherit; font-size: 0.85rem;
+  font-weight: 700; cursor: pointer; transition: all 0.2s;
+}
+.cart-bar-btn:hover { background: var(--deep); transform: translateY(-1px); }
+
+/* ======== MINIMAL NAV ======== */
+.nav {
+  padding: 1rem 3rem; display: flex; justify-content: space-between;
+  align-items: center; position: absolute; top: 0; left: 0; right: 0; z-index: 50;
+}
+.nav-brand {
+  font-family: 'Cormorant Garamond', serif; font-size: 1.5rem;
+  font-weight: 700; color: var(--ink); letter-spacing: 0.08em;
+}
+.nav-links { display: flex; gap: 2rem; list-style: none; }
+.nav-links a {
+  color: var(--text); text-decoration: none; font-size: 0.8rem;
+  font-weight: 500; text-transform: uppercase; letter-spacing: 0.08em;
+  transition: color 0.2s;
+}
+.nav-links a:hover { color: var(--rose); }
+.nav-cart {
+  font-size: 0.8rem; font-weight: 600; color: var(--ink);
+  display: flex; align-items: center; gap: 0.4rem; cursor: pointer;
+}
+
+/* ======== HERO: Product immersion ======== */
+.hero {
+  min-height: 100vh; display: grid; grid-template-columns: 1fr 1fr;
+  position: relative;
+}
+.hero-product {
+  background: linear-gradient(135deg, var(--peach) 0%, var(--blush) 100%);
+  display: flex; align-items: center; justify-content: center;
+  position: relative; overflow: hidden;
+}
+.product-glow {
+  width: 350px; height: 350px; background: radial-gradient(circle, rgba(197,151,90,0.15) 0%, transparent 70%);
+  position: absolute; border-radius: 50%;
+}
+.product-bottle {
+  position: relative; z-index: 2; text-align: center;
+}
+.bottle-placeholder {
+  width: 180px; height: 320px;
+  background: linear-gradient(180deg, var(--gold) 0%, #a07840 100%);
+  border-radius: 12px 12px 8px 8px; margin: 0 auto;
+  box-shadow: 0 20px 60px rgba(107,58,42,0.2);
+  display: flex; align-items: center; justify-content: center;
+  position: relative;
+}
+.bottle-placeholder::before {
+  content: ''; position: absolute; top: -12px; left: 50%; transform: translateX(-50%);
+  width: 50px; height: 20px; background: #8a6535; border-radius: 4px 4px 0 0;
+}
+.bottle-label {
+  font-family: 'Cormorant Garamond', serif; color: var(--white);
+  font-size: 0.7rem; letter-spacing: 0.15em; text-transform: uppercase;
+  writing-mode: vertical-rl; text-orientation: mixed;
+}
+
+.hero-info {
+  display: flex; flex-direction: column; justify-content: center;
+  padding: 6rem 4rem;
+}
+.hero-badge {
+  display: inline-flex; align-items: center; gap: 0.4rem;
+  background: var(--peach); padding: 0.4rem 1rem; border-radius: 50px;
+  font-size: 0.7rem; font-weight: 700; color: var(--deep);
+  margin-bottom: 1.5rem; width: fit-content;
+}
+.hero-info h1 {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(2.5rem, 4vw, 3.5rem);
+  font-weight: 700; line-height: 1.1; margin-bottom: 1rem;
+}
+.hero-info h1 em { font-style: italic; color: var(--rose); }
+.hero-desc {
+  font-size: 1rem; color: var(--text); line-height: 1.8;
+  font-weight: 300; max-width: 420px; margin-bottom: 1.5rem;
+}
+.hero-price { display: flex; align-items: baseline; gap: 0.75rem; margin-bottom: 0.5rem; }
+.price-current { font-size: 2rem; font-weight: 800; color: var(--ink); }
+.price-original { font-size: 1rem; color: var(--text); opacity: 0.4; text-decoration: line-through; }
+.price-save {
+  font-size: 0.7rem; font-weight: 700; background: #fef2f2; color: #dc2626;
+  padding: 0.2rem 0.6rem; border-radius: 4px;
+}
+.hero-reviews {
+  display: flex; align-items: center; gap: 0.5rem; margin-bottom: 2rem;
+  font-size: 0.85rem; color: var(--text);
+}
+.stars { color: var(--gold); letter-spacing: 0.1em; }
+
+.add-to-cart {
+  display: flex; gap: 0.75rem; margin-bottom: 1.5rem;
+}
+.qty-selector {
+  display: flex; align-items: center; border: 1px solid var(--border);
+  border-radius: 50px; overflow: hidden;
+}
+.qty-btn {
+  width: 40px; height: 44px; background: transparent; border: none;
+  font-size: 1.1rem; cursor: pointer; color: var(--ink); font-weight: 600;
+}
+.qty-val { width: 35px; text-align: center; font-weight: 700; font-size: 0.9rem; }
+.atc-btn {
+  flex: 1; background: var(--ink); color: var(--white); border: none;
+  border-radius: 50px; font-family: inherit; font-size: 0.9rem;
+  font-weight: 700; cursor: pointer; transition: all 0.2s;
+}
+.atc-btn:hover { background: var(--deep); transform: translateY(-1px); }
+
+.hero-trust { display: flex; gap: 1.5rem; font-size: 0.75rem; color: var(--text); opacity: 0.6; }
+
+/* ======== INGREDIENTS: Scroll reveal ======== */
+.ingredients { padding: 6rem 3rem; }
+.ing-header { text-align: center; margin-bottom: 4rem; }
+.ing-header h2 {
+  font-family: 'Cormorant Garamond', serif; font-size: 2.5rem;
+  font-weight: 700; margin-bottom: 0.5rem;
+}
+.ing-header p { color: var(--text); font-size: 1rem; max-width: 500px; margin: 0 auto; }
+
+.ing-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2rem; max-width: 1000px; margin: 0 auto; }
+.ing-card {
+  background: var(--white); border: 1px solid var(--border);
+  border-radius: 20px; padding: 2.5rem 2rem; text-align: center;
+  opacity: 0; transform: translateY(30px);
+  transition: all 0.7s cubic-bezier(0.16,1,0.3,1);
+}
+.ing-card.visible { opacity: 1; transform: translateY(0); }
+.ing-card:nth-child(2) { transition-delay: 0.15s; }
+.ing-card:nth-child(3) { transition-delay: 0.3s; }
+.ing-emoji { font-size: 3rem; margin-bottom: 1rem; }
+.ing-card h3 {
+  font-family: 'Cormorant Garamond', serif; font-size: 1.3rem;
+  font-weight: 700; margin-bottom: 0.5rem;
+}
+.ing-card p { font-size: 0.85rem; color: var(--text); line-height: 1.7; }
+.ing-pct {
+  display: inline-block; margin-top: 1rem; font-size: 0.7rem; font-weight: 700;
+  color: var(--rose); background: rgba(196,136,122,0.1);
+  padding: 0.25rem 0.75rem; border-radius: 50px;
+}
+
+/* ======== ROUTINE: Visual steps ======== */
+.routine { padding: 6rem 3rem; background: var(--peach); }
+.routine-header { text-align: center; margin-bottom: 3rem; }
+.routine-header h2 {
+  font-family: 'Cormorant Garamond', serif; font-size: 2.5rem;
+  font-weight: 700; margin-bottom: 0.5rem;
+}
+.routine-steps { display: flex; gap: 2rem; justify-content: center; max-width: 900px; margin: 0 auto; }
+.routine-step { text-align: center; flex: 1; }
+.rs-num {
+  width: 56px; height: 56px; border-radius: 50%;
+  background: var(--white); display: flex; align-items: center;
+  justify-content: center; margin: 0 auto 1rem;
+  font-family: 'Cormorant Garamond', serif; font-size: 1.3rem;
+  font-weight: 700; color: var(--deep);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+}
+.routine-step h3 { font-size: 0.95rem; font-weight: 700; margin-bottom: 0.35rem; }
+.routine-step p { font-size: 0.8rem; color: var(--text); line-height: 1.6; }
+
+/* ======== REVIEWS ======== */
+.reviews { padding: 6rem 3rem; max-width: 1000px; margin: 0 auto; }
+.reviews-header { text-align: center; margin-bottom: 3rem; }
+.reviews-header h2 {
+  font-family: 'Cormorant Garamond', serif; font-size: 2.5rem;
+  font-weight: 700; margin-bottom: 0.5rem;
+}
+.review-highlight { display: flex; gap: 0.5rem; justify-content: center; margin-bottom: 0.5rem; }
+.rh-star { color: var(--gold); font-size: 1.2rem; }
+.reviews-header .rh-count { font-size: 0.9rem; color: var(--text); }
+
+.reviews-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; }
+.review-card {
+  background: var(--white); border: 1px solid var(--border);
+  border-radius: 16px; padding: 1.75rem;
+}
+.review-stars { color: var(--gold); font-size: 0.85rem; margin-bottom: 0.75rem; letter-spacing: 0.1em; }
+.review-text { font-size: 0.9rem; color: var(--text); line-height: 1.7; margin-bottom: 1rem; }
+.review-author { font-weight: 700; font-size: 0.85rem; }
+.review-verified { font-size: 0.7rem; color: var(--rose); font-weight: 600; }
+
+/* ======== PROMISE ======== */
+.promise {
+  padding: 4rem 3rem; background: var(--ink); color: var(--white);
+  text-align: center;
+}
+.promise h2 {
+  font-family: 'Cormorant Garamond', serif; font-size: 2rem;
+  font-weight: 700; margin-bottom: 2rem;
+}
+.promise-grid { display: flex; gap: 3rem; justify-content: center; }
+.promise-item { text-align: center; }
+.promise-icon { font-size: 2rem; margin-bottom: 0.5rem; }
+.promise-item h4 { font-size: 0.85rem; font-weight: 700; margin-bottom: 0.25rem; }
+.promise-item p { font-size: 0.75rem; opacity: 0.6; }
+
+/* ======== FOOTER ======== */
+footer {
+  padding: 2rem 3rem; border-top: 1px solid var(--border);
+  display: flex; justify-content: space-between; align-items: center;
+  font-size: 0.75rem; color: var(--text);
+}
+footer a { color: var(--text); text-decoration: none; }
+footer a:hover { color: var(--rose); }
+
+/* ======== RESPONSIVE ======== */
+@media (max-width: 900px) {
+  .nav { padding: 1rem 1.5rem; }
+  .nav-links { display: none; }
+  .hero { grid-template-columns: 1fr; }
+  .hero-product { min-height: 50vh; }
+  .hero-info { padding: 3rem 1.5rem; }
+  .ing-grid { grid-template-columns: 1fr; }
+  .routine-steps { flex-direction: column; }
+  .reviews-grid { grid-template-columns: 1fr; }
+  .promise-grid { flex-direction: column; gap: 1.5rem; }
+  .cart-bar { padding: 0.75rem 1.5rem; }
+}
+</style>
+</head>
+<body>
+
+<!-- FLOATING CART BAR -->
+<div class="cart-bar" id="cartBar">
+  <div class="cart-bar-left">
+    <span class="cart-bar-product">Radiance Revival Serum</span>
+    <span class="cart-bar-price"><s>$89</s> $64</span>
+  </div>
+  <button class="cart-bar-btn">Add to Cart — $64</button>
+</div>
+
+<!-- NAV -->
+<div class="nav">
+  <div class="nav-brand">LUMINA GLOW</div>
+  <ul class="nav-links">
+    <li><a href="#">Shop</a></li>
+    <li><a href="#ingredients">Ingredients</a></li>
+    <li><a href="#routine">Routine</a></li>
+    <li><a href="#reviews">Reviews</a></li>
+  </ul>
+  <div class="nav-cart">Bag (0)</div>
+</div>
+
+<!-- HERO: Product immersion -->
+<section class="hero">
+  <div class="hero-product">
+    <div class="product-glow"></div>
+    <div class="product-bottle">
+      <div class="bottle-placeholder"><span class="bottle-label">LUMINA GLOW</span></div>
+    </div>
+  </div>
+  <div class="hero-info" id="heroInfo">
+    <div class="hero-badge">✨ Best Seller — 15,000+ sold</div>
+    <h1>Radiance Revival<br><em>Serum</em></h1>
+    <p class="hero-desc">A lightweight, fast-absorbing serum with 20% Vitamin C, Hyaluronic Acid, and Niacinamide. Clinically shown to reduce dark spots by 47% in 8 weeks.</p>
+    <div class="hero-price">
+      <span class="price-current">$64</span>
+      <span class="price-original">$89</span>
+      <span class="price-save">Save 28%</span>
+    </div>
+    <div class="hero-reviews">
+      <span class="stars">★★★★★</span>
+      <span>4.8 (2,340 reviews)</span>
+    </div>
+    <div class="add-to-cart">
+      <div class="qty-selector">
+        <button class="qty-btn" onclick="changeQty(-1)">−</button>
+        <span class="qty-val" id="qtyVal">1</span>
+        <button class="qty-btn" onclick="changeQty(1)">+</button>
+      </div>
+      <button class="atc-btn">Add to Cart — $64</button>
+    </div>
+    <div class="hero-trust">
+      <span>🌿 Clean Ingredients</span>
+      <span>🐰 Cruelty Free</span>
+      <span>📦 Free Shipping</span>
+    </div>
+  </div>
+</section>
+
+<!-- INGREDIENTS -->
+<section class="ingredients" id="ingredients">
+  <div class="ing-header">
+    <h2>What's Inside</h2>
+    <p>Three powerhouse ingredients, each clinically dosed. No fillers, no fragrance, no compromises.</p>
+  </div>
+  <div class="ing-grid">
+    <div class="ing-card">
+      <div class="ing-emoji">🍊</div>
+      <h3>Vitamin C (L-Ascorbic)</h3>
+      <p>The gold standard for brightening. Neutralizes free radicals, boosts collagen, and fades hyperpigmentation with consistent use.</p>
+      <span class="ing-pct">20% concentration</span>
+    </div>
+    <div class="ing-card">
+      <div class="ing-emoji">💧</div>
+      <h3>Hyaluronic Acid</h3>
+      <p>Holds 1,000x its weight in moisture. Multi-weight formula penetrates deep and sits on the surface for all-day hydration.</p>
+      <span class="ing-pct">2% multi-weight</span>
+    </div>
+    <div class="ing-card">
+      <div class="ing-emoji">🧬</div>
+      <h3>Niacinamide (B3)</h3>
+      <p>Minimizes pores, strengthens skin barrier, and evens skin tone. Works synergistically with Vitamin C for amplified results.</p>
+      <span class="ing-pct">5% concentration</span>
+    </div>
+  </div>
+</section>
+
+<!-- ROUTINE -->
+<section class="routine" id="routine">
+  <div class="routine-header">
+    <h2>Your 60-Second Routine</h2>
+    <p style="color:var(--text);font-size:1rem;max-width:450px;margin:0 auto;">Simplicity is the ultimate sophistication. Three steps, morning and night.</p>
+  </div>
+  <div class="routine-steps">
+    <div class="routine-step">
+      <div class="rs-num">1</div>
+      <h3>Cleanse</h3>
+      <p>Start with a clean canvas. Gentle cleanser, lukewarm water, pat dry.</p>
+    </div>
+    <div class="routine-step">
+      <div class="rs-num">2</div>
+      <h3>Apply Serum</h3>
+      <p>3-4 drops to fingertips. Press gently into face and neck. Let absorb 30 seconds.</p>
+    </div>
+    <div class="routine-step">
+      <div class="rs-num">3</div>
+      <h3>Moisturize + SPF</h3>
+      <p>Lock it in with moisturizer. AM: add SPF 30+. That's it — you're done.</p>
+    </div>
+  </div>
+</section>
+
+<!-- REVIEWS -->
+<section class="reviews" id="reviews">
+  <div class="reviews-header">
+    <h2>Real Results, Real People</h2>
+    <div class="review-highlight">
+      <span class="rh-star">★</span><span class="rh-star">★</span><span class="rh-star">★</span><span class="rh-star">★</span><span class="rh-star">★</span>
+    </div>
+    <div class="rh-count">4.8 average from 2,340 verified reviews</div>
+  </div>
+  <div class="reviews-grid">
+    <div class="review-card">
+      <div class="review-stars">★★★★★</div>
+      <div class="review-text">"I've tried every Vitamin C serum on the market. This is the first one that didn't pill under makeup and actually delivered visible results in 3 weeks."</div>
+      <div class="review-author">Jessica T.</div>
+      <div class="review-verified">Verified Purchase</div>
+    </div>
+    <div class="review-card">
+      <div class="review-stars">★★★★★</div>
+      <div class="review-text">"My melasma from pregnancy has been a years-long battle. Two bottles in and the dark patches on my cheeks have faded significantly. My dermatologist noticed too."</div>
+      <div class="review-author">Priya M.</div>
+      <div class="review-verified">Verified Purchase</div>
+    </div>
+    <div class="review-card">
+      <div class="review-stars">★★★★★</div>
+      <div class="review-text">"Clean, simple formula. No fragrance, no irritation. I have rosacea-prone skin and this is one of the few serums I can use daily without flare-ups."</div>
+      <div class="review-author">Karen L.</div>
+      <div class="review-verified">Verified Purchase</div>
+    </div>
+    <div class="review-card">
+      <div class="review-stars">★★★★☆</div>
+      <div class="review-text">"Great serum, gorgeous packaging. Only reason for 4 stars is I wish the bottle was bigger — I go through it fast because I use it AM and PM."</div>
+      <div class="review-author">Taylor R.</div>
+      <div class="review-verified">Verified Purchase</div>
+    </div>
+  </div>
+</section>
+
+<!-- PROMISE -->
+<section class="promise">
+  <h2>The Lumina Promise</h2>
+  <div class="promise-grid">
+    <div class="promise-item"><div class="promise-icon">🌿</div><h4>Clean Formula</h4><p>No parabens, sulfates, or phthalates</p></div>
+    <div class="promise-item"><div class="promise-icon">🐰</div><h4>Cruelty Free</h4><p>Never tested on animals</p></div>
+    <div class="promise-item"><div class="promise-icon">📦</div><h4>Free Shipping</h4><p>On all U.S. orders</p></div>
+    <div class="promise-item"><div class="promise-icon">↩️</div><h4>60-Day Returns</h4><p>Love it or send it back</p></div>
+  </div>
+</section>
+
+<footer>
+  <span>&copy; 2024 Lumina Glow. All rights reserved.</span>
+  <span><a href="#">Privacy</a> · <a href="#">Shipping</a> · <a href="#">Returns</a> · <a href="#">Contact</a></span>
+</footer>
+
+<script>
+// Floating cart bar appears after scrolling past hero
+const cartBar = document.getElementById('cartBar');
+const heroInfo = document.getElementById('heroInfo');
+
+window.addEventListener('scroll', () => {
+  if (!heroInfo) return;
+  const heroBottom = heroInfo.getBoundingClientRect().bottom;
+  cartBar.classList.toggle('visible', heroBottom < 0);
+});
+
+// Quantity selector
+let qty = 1;
+function changeQty(delta) {
+  qty = Math.max(1, qty + delta);
+  document.getElementById('qtyVal').textContent = qty;
+}
+
+// Ingredient cards scroll reveal
+const ingCards = document.querySelectorAll('.ing-card');
+const ingObs = new IntersectionObserver(entries => {
+  entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+}, { threshold: 0.2 });
+ingCards.forEach(c => ingObs.observe(c));
+</script>
+</body>
+</html>

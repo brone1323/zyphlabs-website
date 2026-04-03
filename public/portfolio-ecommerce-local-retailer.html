@@ -1,0 +1,1246 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Meadow & Stone - Handcrafted Home Goods & Artisan Pottery</title>
+    <link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:wght@400;700&family=Nunito:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --sage: #5a7a5a;
+            --cream: #f5f3f0;
+            --terracotta: #c4704b;
+            --dark-text: #2c2c2c;
+            --light-gray: #e8e6e3;
+            --accent-gold: #c9a876;
+            --white: #ffffff;
+        }
+
+        body {
+            font-family: 'Nunito', sans-serif;
+            line-height: 1.6;
+            color: var(--dark-text);
+            background-color: var(--white);
+        }
+
+        h1, h2, h3, h4, h5, h6 {
+            font-family: 'Libre Baskerville', serif;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+        }
+
+        /* Header & Navigation */
+        header {
+            background-color: var(--white);
+            border-bottom: 1px solid var(--light-gray);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            padding: 1rem 0;
+        }
+
+        nav {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 1.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-family: 'Libre Baskerville', serif;
+            color: var(--sage);
+            font-weight: 700;
+            letter-spacing: 1px;
+        }
+
+        nav ul {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+        }
+
+        nav a {
+            text-decoration: none;
+            color: var(--dark-text);
+            font-size: 0.95rem;
+            font-weight: 500;
+            transition: color 0.3s ease;
+            position: relative;
+        }
+
+        nav a:hover {
+            color: var(--terracotta);
+        }
+
+        nav a::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: -4px;
+            left: 0;
+            background-color: var(--terracotta);
+            transition: width 0.3s ease;
+        }
+
+        nav a:hover::after {
+            width: 100%;
+        }
+
+        .nav-icons {
+            display: flex;
+            gap: 1.5rem;
+            font-size: 1.2rem;
+            cursor: pointer;
+        }
+
+        .nav-icons span {
+            transition: color 0.3s ease;
+        }
+
+        .nav-icons span:hover {
+            color: var(--terracotta);
+        }
+
+        .hamburger {
+            display: none;
+            flex-direction: column;
+            cursor: pointer;
+            gap: 5px;
+        }
+
+        .hamburger span {
+            width: 25px;
+            height: 3px;
+            background-color: var(--sage);
+            border-radius: 2px;
+            transition: all 0.3s ease;
+        }
+
+        /* Hero Banner */
+        .hero {
+            background: linear-gradient(135deg, rgba(90, 122, 90, 0.85) 0%, rgba(196, 112, 75, 0.8) 100%),
+                        url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 600"><rect fill="%23f5f3f0" width="1200" height="600"/><circle cx="150" cy="100" r="40" fill="%235a7a5a" opacity="0.1"/><circle cx="1050" cy="500" r="60" fill="%23c4704b" opacity="0.1"/></svg>');
+            background-size: cover;
+            background-position: center;
+            color: var(--white);
+            padding: 6rem 1.5rem;
+            text-align: center;
+            min-height: 500px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .hero h1 {
+            font-size: 3.5rem;
+            margin-bottom: 1rem;
+            letter-spacing: 2px;
+            font-weight: 400;
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            margin-bottom: 2rem;
+            opacity: 0.95;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .cta-group {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 0.875rem 2rem;
+            font-size: 0.95rem;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+        }
+
+        .btn-primary {
+            background-color: var(--white);
+            color: var(--sage);
+        }
+
+        .btn-primary:hover {
+            background-color: var(--cream);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
+        }
+
+        .btn-secondary {
+            background-color: transparent;
+            color: var(--white);
+            border: 2px solid var(--white);
+        }
+
+        .btn-secondary:hover {
+            background-color: var(--white);
+            color: var(--sage);
+            transform: translateY(-2px);
+        }
+
+        /* Collections Section */
+        .collections-section {
+            padding: 5rem 1.5rem;
+            background-color: var(--cream);
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .section-header h2 {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+            color: var(--sage);
+        }
+
+        .section-header p {
+            font-size: 1rem;
+            color: #666;
+            max-width: 400px;
+            margin: 0 auto;
+        }
+
+        .collections-grid {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+        }
+
+        .collection-card {
+            background-color: var(--white);
+            border-radius: 6px;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .collection-card:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 12px 24px rgba(0, 0, 0, 0.15);
+        }
+
+        .collection-image {
+            width: 100%;
+            aspect-ratio: 1;
+            background: linear-gradient(135deg, #d4c5b9 0%, #b8a895 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3rem;
+            color: rgba(90, 122, 90, 0.2);
+            overflow: hidden;
+            position: relative;
+        }
+
+        .collection-image::after {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><circle cx="25" cy="25" r="8" fill="%235a7a5a" opacity="0.1"/><rect x="40" y="40" width="30" height="30" fill="%23c4704b" opacity="0.05" rx="2"/></svg>');
+            background-size: 200px;
+        }
+
+        .collection-info {
+            padding: 1.5rem;
+        }
+
+        .collection-info h3 {
+            font-size: 1.3rem;
+            margin-bottom: 0.5rem;
+            color: var(--sage);
+        }
+
+        .collection-count {
+            font-size: 0.85rem;
+            color: #999;
+            margin-bottom: 1rem;
+        }
+
+        .collection-link {
+            color: var(--terracotta);
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.9rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: gap 0.3s ease;
+        }
+
+        .collection-link:hover {
+            gap: 0.8rem;
+        }
+
+        /* Featured Products Section */
+        .products-section {
+            padding: 5rem 1.5rem;
+            background-color: var(--white);
+        }
+
+        .products-grid {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .product-card {
+            background-color: var(--cream);
+            border-radius: 6px;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .product-card:hover {
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
+        }
+
+        .product-image {
+            width: 100%;
+            aspect-ratio: 1;
+            background: linear-gradient(135deg, #e8dfd5 0%, #d9cec0 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 4rem;
+            color: rgba(90, 122, 90, 0.15);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .product-image::before {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><line x1="10" y1="50" x2="90" y2="50" stroke="%235a7a5a" stroke-width="0.5" opacity="0.1"/><line x1="50" y1="10" x2="50" y2="90" stroke="%235a7a5a" stroke-width="0.5" opacity="0.1"/></svg>');
+        }
+
+        .quick-view-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(90, 122, 90, 0.9);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            gap: 1rem;
+        }
+
+        .product-card:hover .quick-view-overlay {
+            opacity: 1;
+        }
+
+        .quick-view-btn {
+            background-color: var(--white);
+            color: var(--sage);
+            padding: 0.7rem 1.5rem;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 0.85rem;
+            transition: all 0.3s ease;
+        }
+
+        .quick-view-btn:hover {
+            background-color: var(--cream);
+            transform: scale(1.05);
+        }
+
+        .product-info {
+            padding: 1.5rem;
+        }
+
+        .product-name {
+            font-size: 1.1rem;
+            margin-bottom: 0.5rem;
+            color: var(--dark-text);
+        }
+
+        .product-price {
+            font-size: 1.25rem;
+            color: var(--terracotta);
+            font-weight: 700;
+            margin-bottom: 1rem;
+        }
+
+        .add-to-cart-btn {
+            width: 100%;
+            padding: 0.8rem;
+            background-color: var(--sage);
+            color: var(--white);
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .add-to-cart-btn:hover {
+            background-color: var(--terracotta);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(196, 112, 75, 0.3);
+        }
+
+        .add-to-cart-btn:active {
+            transform: translateY(0);
+            box-shadow: 0 2px 6px rgba(196, 112, 75, 0.2);
+        }
+
+        /* Local Pickup Section */
+        .local-pickup-section {
+            padding: 5rem 1.5rem;
+            background: linear-gradient(135deg, rgba(90, 122, 90, 0.05) 0%, rgba(196, 112, 75, 0.05) 100%);
+            border-top: 2px solid var(--light-gray);
+            border-bottom: 2px solid var(--light-gray);
+        }
+
+        .local-pickup-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 3rem;
+            align-items: center;
+        }
+
+        .local-pickup-content h2 {
+            font-size: 2.2rem;
+            color: var(--sage);
+            margin-bottom: 1.5rem;
+        }
+
+        .local-pickup-content p {
+            font-size: 1rem;
+            color: #666;
+            margin-bottom: 1.5rem;
+            line-height: 1.8;
+        }
+
+        .store-details {
+            background-color: var(--white);
+            padding: 1.5rem;
+            border-radius: 6px;
+            border-left: 4px solid var(--terracotta);
+            margin-bottom: 1.5rem;
+        }
+
+        .store-details h4 {
+            color: var(--sage);
+            margin-bottom: 0.75rem;
+            font-size: 0.95rem;
+        }
+
+        .store-details p {
+            margin: 0.25rem 0;
+            font-size: 0.9rem;
+            color: var(--dark-text);
+        }
+
+        .badge-group {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.6rem 1rem;
+            background-color: var(--white);
+            border-radius: 4px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--sage);
+            border: 1px solid var(--light-gray);
+        }
+
+        .badge::before {
+            content: '✓';
+            color: var(--terracotta);
+            font-weight: 700;
+        }
+
+        .map-placeholder {
+            width: 100%;
+            height: 300px;
+            background: linear-gradient(135deg, #d4c5b9 0%, #b8a895 100%);
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: rgba(90, 122, 90, 0.3);
+            font-size: 3rem;
+        }
+
+        /* Our Story Section */
+        .story-section {
+            padding: 5rem 1.5rem;
+            background-color: var(--cream);
+        }
+
+        .story-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 3rem;
+            align-items: center;
+        }
+
+        .story-image {
+            width: 100%;
+            aspect-ratio: 1;
+            background: linear-gradient(135deg, #c4a894 0%, #9d8676 100%);
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: rgba(255, 255, 255, 0.3);
+            font-size: 4rem;
+        }
+
+        .story-content h2 {
+            font-size: 2.2rem;
+            color: var(--sage);
+            margin-bottom: 1.5rem;
+        }
+
+        .story-content p {
+            font-size: 1rem;
+            color: #666;
+            margin-bottom: 1.5rem;
+            line-height: 1.8;
+        }
+
+        /* Instagram Feed Section */
+        .instagram-section {
+            padding: 5rem 1.5rem;
+            background-color: var(--white);
+        }
+
+        .instagram-header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .instagram-header h2 {
+            font-size: 2rem;
+            color: var(--sage);
+            margin-bottom: 0.5rem;
+        }
+
+        .instagram-header p {
+            color: #999;
+            font-size: 0.95rem;
+        }
+
+        .instagram-feed {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .instagram-post {
+            aspect-ratio: 1;
+            background: linear-gradient(135deg, #e8dfd5 0%, #d9cec0 100%);
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: rgba(90, 122, 90, 0.2);
+            font-size: 2.5rem;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .instagram-post:hover {
+            transform: scale(1.02);
+        }
+
+        .instagram-post::after {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><circle cx="50" cy="50" r="20" fill="%235a7a5a" opacity="0.05"/></svg>');
+            background-size: 150px;
+        }
+
+        /* Newsletter Section */
+        .newsletter-section {
+            padding: 4rem 1.5rem;
+            background: linear-gradient(135deg, rgba(90, 122, 90, 0.95) 0%, rgba(196, 112, 75, 0.9) 100%);
+            color: var(--white);
+            text-align: center;
+        }
+
+        .newsletter-container {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .newsletter-section h2 {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .newsletter-section p {
+            font-size: 1rem;
+            margin-bottom: 2rem;
+            opacity: 0.95;
+        }
+
+        .newsletter-form {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .newsletter-form input {
+            flex: 1;
+            padding: 0.875rem 1rem;
+            border: none;
+            border-radius: 4px;
+            font-size: 0.95rem;
+            font-family: 'Nunito', sans-serif;
+        }
+
+        .newsletter-form button {
+            padding: 0.875rem 2rem;
+            background-color: var(--terracotta);
+            color: var(--white);
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .newsletter-form button:hover {
+            background-color: #a85a3a;
+            transform: translateY(-2px);
+        }
+
+        /* Footer */
+        footer {
+            background-color: var(--dark-text);
+            color: var(--white);
+            padding: 3rem 1.5rem 2rem;
+        }
+
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .footer-section h4 {
+            font-family: 'Libre Baskerville', serif;
+            font-size: 1rem;
+            margin-bottom: 1rem;
+            color: var(--accent-gold);
+        }
+
+        .footer-section ul {
+            list-style: none;
+        }
+
+        .footer-section li {
+            margin-bottom: 0.5rem;
+        }
+
+        .footer-section a {
+            color: #ddd;
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: color 0.3s ease;
+        }
+
+        .footer-section a:hover {
+            color: var(--accent-gold);
+        }
+
+        .footer-section p {
+            font-size: 0.9rem;
+            line-height: 1.6;
+            color: #ddd;
+        }
+
+        .social-links {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .social-links a {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background-color: rgba(255, 255, 255, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+        }
+
+        .social-links a:hover {
+            background-color: var(--terracotta);
+            transform: translateY(-3px);
+        }
+
+        .payment-icons {
+            display: flex;
+            gap: 0.75rem;
+            margin-top: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .payment-icon {
+            width: 40px;
+            height: 24px;
+            background-color: rgba(255, 255, 255, 0.1);
+            border-radius: 3px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.7rem;
+            color: #999;
+        }
+
+        .footer-bottom {
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            padding-top: 1.5rem;
+            text-align: center;
+            font-size: 0.85rem;
+            color: #999;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            nav ul {
+                display: none;
+            }
+
+            .hamburger {
+                display: flex;
+            }
+
+            .hero h1 {
+                font-size: 2rem;
+            }
+
+            .hero p {
+                font-size: 1rem;
+            }
+
+            .cta-group {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .btn {
+                width: 100%;
+                max-width: 300px;
+            }
+
+            .collections-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .products-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .local-pickup-container {
+                grid-template-columns: 1fr;
+            }
+
+            .story-container {
+                grid-template-columns: 1fr;
+            }
+
+            .section-header h2 {
+                font-size: 1.8rem;
+            }
+
+            .newsletter-form {
+                flex-direction: column;
+            }
+
+            .newsletter-form input,
+            .newsletter-form button {
+                width: 100%;
+            }
+
+            .footer-content {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .logo {
+                font-size: 1.2rem;
+            }
+
+            .hero {
+                padding: 3rem 1rem;
+                min-height: 350px;
+            }
+
+            .hero h1 {
+                font-size: 1.5rem;
+            }
+
+            .section-header h2 {
+                font-size: 1.5rem;
+            }
+
+            .local-pickup-content h2 {
+                font-size: 1.5rem;
+            }
+
+            .story-content h2 {
+                font-size: 1.5rem;
+            }
+
+            .newsletter-section h2 {
+                font-size: 1.5rem;
+            }
+
+            .product-card,
+            .collection-card {
+                border-radius: 4px;
+            }
+        }
+
+        /* Animations */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .fade-in {
+            animation: fadeIn 0.6s ease-out;
+        }
+
+        /* Cart animation */
+        .add-to-cart-btn.added {
+            background-color: #4a6a4a;
+        }
+
+        .add-to-cart-btn.added::after {
+            content: ' ✓ Added!';
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <nav>
+            <div class="logo">Meadow & Stone</div>
+            <ul>
+                <li><a href="#shop">Shop</a></li>
+                <li><a href="#collections">Collections</a></li>
+                <li><a href="#about">About</a></li>
+                <li><a href="#visit">Visit Us</a></li>
+            </ul>
+            <div class="nav-icons">
+                <span>🔍</span>
+                <span>🛒</span>
+            </div>
+            <div class="hamburger">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Hero Banner -->
+    <section class="hero">
+        <h1>Handcrafted for Your Home</h1>
+        <p>Discover artisan pottery, candles, and home goods curated from local makers</p>
+        <div class="cta-group">
+            <button class="btn btn-primary">Shop New Arrivals</button>
+            <button class="btn btn-secondary">Visit Our Store</button>
+        </div>
+    </section>
+
+    <!-- Collections Grid (Primary Navigation) -->
+    <section id="collections" class="collections-section">
+        <div class="section-header">
+            <h2>Shop by Collection</h2>
+            <p>Explore our curated collections of handmade and artisan goods</p>
+        </div>
+        <div class="collections-grid">
+            <div class="collection-card fade-in">
+                <div class="collection-image">🏺</div>
+                <div class="collection-info">
+                    <h3>Artisan Pottery</h3>
+                    <div class="collection-count">24 items</div>
+                    <a href="#" class="collection-link">Browse Collection →</a>
+                </div>
+            </div>
+            <div class="collection-card fade-in">
+                <div class="collection-image">🕯️</div>
+                <div class="collection-info">
+                    <h3>Hand-Poured Candles</h3>
+                    <div class="collection-count">18 items</div>
+                    <a href="#" class="collection-link">Browse Collection →</a>
+                </div>
+            </div>
+            <div class="collection-card fade-in">
+                <div class="collection-image">🧵</div>
+                <div class="collection-info">
+                    <h3>Linen & Textiles</h3>
+                    <div class="collection-count">32 items</div>
+                    <a href="#" class="collection-link">Browse Collection →</a>
+                </div>
+            </div>
+            <div class="collection-card fade-in">
+                <div class="collection-image">🍽️</div>
+                <div class="collection-info">
+                    <h3>Kitchen & Dining</h3>
+                    <div class="collection-count">28 items</div>
+                    <a href="#" class="collection-link">Browse Collection →</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Featured Products -->
+    <section id="shop" class="products-section">
+        <div class="section-header">
+            <h2>Featured Products</h2>
+            <p>New arrivals and customer favorites</p>
+        </div>
+        <div class="products-grid">
+            <div class="product-card">
+                <div class="product-image">
+                    🏺
+                    <div class="quick-view-overlay">
+                        <button class="quick-view-btn">Quick View</button>
+                    </div>
+                </div>
+                <div class="product-info">
+                    <h3 class="product-name">Terracotta Vase</h3>
+                    <div class="product-price">$48.00</div>
+                    <button class="add-to-cart-btn">Add to Cart</button>
+                </div>
+            </div>
+
+            <div class="product-card">
+                <div class="product-image">
+                    🕯️
+                    <div class="quick-view-overlay">
+                        <button class="quick-view-btn">Quick View</button>
+                    </div>
+                </div>
+                <div class="product-info">
+                    <h3 class="product-name">Cedar & Sage Candle</h3>
+                    <div class="product-price">$32.00</div>
+                    <button class="add-to-cart-btn">Add to Cart</button>
+                </div>
+            </div>
+
+            <div class="product-card">
+                <div class="product-image">
+                    🧵
+                    <div class="quick-view-overlay">
+                        <button class="quick-view-btn">Quick View</button>
+                    </div>
+                </div>
+                <div class="product-info">
+                    <h3 class="product-name">Organic Linen Throw</h3>
+                    <div class="product-price">$75.00</div>
+                    <button class="add-to-cart-btn">Add to Cart</button>
+                </div>
+            </div>
+
+            <div class="product-card">
+                <div class="product-image">
+                    🍶
+                    <div class="quick-view-overlay">
+                        <button class="quick-view-btn">Quick View</button>
+                    </div>
+                </div>
+                <div class="product-info">
+                    <h3 class="product-name">Handmade Ceramic Bowl</h3>
+                    <div class="product-price">$56.00</div>
+                    <button class="add-to-cart-btn">Add to Cart</button>
+                </div>
+            </div>
+
+            <div class="product-card">
+                <div class="product-image">
+                    🌿
+                    <div class="quick-view-overlay">
+                        <button class="quick-view-btn">Quick View</button>
+                    </div>
+                </div>
+                <div class="product-info">
+                    <h3 class="product-name">Lavender Soap Bar</h3>
+                    <div class="product-price">$14.00</div>
+                    <button class="add-to-cart-btn">Add to Cart</button>
+                </div>
+            </div>
+
+            <div class="product-card">
+                <div class="product-image">
+                    🕯️
+                    <div class="quick-view-overlay">
+                        <button class="quick-view-btn">Quick View</button>
+                    </div>
+                </div>
+                <div class="product-info">
+                    <h3 class="product-name">Beeswax Pillar Candle</h3>
+                    <div class="product-price">$38.00</div>
+                    <button class="add-to-cart-btn">Add to Cart</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Local Pickup Callout -->
+    <section id="visit" class="local-pickup-section">
+        <div class="local-pickup-container">
+            <div class="local-pickup-content">
+                <h2>Shop Online, Pick Up Today</h2>
+                <p>No shipping delays — order online and pick up at our Portland location the same day. We're open Tuesday through Sunday for your convenience.</p>
+
+                <div class="store-details">
+                    <h4>📍 Our Store</h4>
+                    <p>1247 NW 23rd Ave</p>
+                    <p>Portland, OR 97209</p>
+                </div>
+
+                <div class="store-details">
+                    <h4>🕐 Store Hours</h4>
+                    <p>Tuesday – Friday: 10am – 6pm</p>
+                    <p>Saturday – Sunday: 11am – 5pm</p>
+                    <p>Closed Mondays</p>
+                </div>
+
+                <div class="badge-group">
+                    <div class="badge">Local Pickup</div>
+                    <div class="badge">Standard Shipping</div>
+                    <div class="badge">Gift Wrapping</div>
+                </div>
+            </div>
+            <div class="map-placeholder">📍 Map View</div>
+        </div>
+    </section>
+
+    <!-- Our Story Section -->
+    <section id="about" class="story-section">
+        <div class="story-container">
+            <div class="story-image">🏪</div>
+            <div class="story-content">
+                <h2>Our Story</h2>
+                <p>Born in Portland in 2019, Meadow & Stone started with a simple mission: to celebrate the incredible artisans and makers in our community.</p>
+                <p>We carefully curate every piece—from hand-thrown pottery to soy-wax candles—ensuring that each item tells a story. Our physical shop on NW 23rd Avenue has become a gathering place for lovers of handcrafted goods, and we're thrilled to bring our selection online to reach even more homes.</p>
+                <p>Every purchase supports local makers and sustainable practices. When you shop with us, you're investing in artistry and community.</p>
+                <button class="btn btn-primary" style="margin-top: 1rem;">Learn More About Our Mission</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Instagram Feed -->
+    <section class="instagram-section">
+        <div class="instagram-header">
+            <h2>Follow Our Journey</h2>
+            <p>@meadowandstone on Instagram — daily inspiration from our community</p>
+        </div>
+        <div class="instagram-feed">
+            <div class="instagram-post">📷</div>
+            <div class="instagram-post">🌿</div>
+            <div class="instagram-post">🏺</div>
+            <div class="instagram-post">✨</div>
+        </div>
+    </section>
+
+    <!-- Newsletter -->
+    <section class="newsletter-section">
+        <div class="newsletter-container">
+            <h2>Join Our Community</h2>
+            <p>Get early access to new arrivals, exclusive member discounts, and stories from our makers.</p>
+            <form class="newsletter-form" onsubmit="event.preventDefault(); alert('Thank you for subscribing!');">
+                <input type="email" placeholder="Enter your email" required>
+                <button type="submit">Subscribe</button>
+            </form>
+            <p style="font-size: 0.8rem; opacity: 0.8;">We respect your privacy. Unsubscribe anytime.</p>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-content">
+            <div class="footer-section">
+                <h4>About Meadow & Stone</h4>
+                <p>A Portland-based home goods and artisan pottery retailer celebrating local makers and sustainable design.</p>
+                <div class="social-links">
+                    <a href="#" title="Instagram">📷</a>
+                    <a href="#" title="Pinterest">📌</a>
+                    <a href="#" title="Facebook">f</a>
+                </div>
+            </div>
+
+            <div class="footer-section">
+                <h4>Store Info</h4>
+                <p><strong>Address:</strong><br>1247 NW 23rd Ave<br>Portland, OR 97209</p>
+                <p><strong>Phone:</strong><br>(503) 555-0147</p>
+                <p><strong>Email:</strong><br>hello@store.local</p>
+            </div>
+
+            <div class="footer-section">
+                <h4>Shipping & Returns</h4>
+                <ul>
+                    <li><a href="#">Shipping Policy</a></li>
+                    <li><a href="#">Return & Exchange</a></li>
+                    <li><a href="#">Track Order</a></li>
+                    <li><a href="#">FAQs</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-section">
+                <h4>Customer Care</h4>
+                <ul>
+                    <li><a href="#">Contact Us</a></li>
+                    <li><a href="#">Terms of Service</a></li>
+                    <li><a href="#">Privacy Policy</a></li>
+                    <li><a href="#">Accessibility</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-section">
+                <h4>Payment Methods</h4>
+                <div class="payment-icons">
+                    <div class="payment-icon">Visa</div>
+                    <div class="payment-icon">MC</div>
+                    <div class="payment-icon">Amex</div>
+                    <div class="payment-icon">PayPal</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="footer-bottom">
+            <p>&copy; 2026 Meadow & Stone. All rights reserved. | <strong>Portfolio piece by Zyph Labs</strong></p>
+        </div>
+    </footer>
+
+    <script>
+        // Add to Cart Button Interaction
+        document.querySelectorAll('.add-to-cart-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                const originalText = this.textContent;
+                this.classList.add('added');
+                this.textContent = '✓ Added to Cart!';
+
+                setTimeout(() => {
+                    this.classList.remove('added');
+                    this.textContent = originalText;
+                }, 2000);
+            });
+        });
+
+        // Smooth scroll for navigation links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                const href = this.getAttribute('href');
+                if (href !== '#') {
+                    e.preventDefault();
+                    const target = document.querySelector(href);
+                    if (target) {
+                        target.scrollIntoView({
+                            behavior: 'smooth',
+                            block: 'start'
+                        });
+                    }
+                }
+            });
+        });
+
+        // Hamburger Menu Toggle
+        const hamburger = document.querySelector('.hamburger');
+        const navMenu = document.querySelector('nav ul');
+
+        hamburger.addEventListener('click', function() {
+            navMenu.style.display = navMenu.style.display === 'flex' ? 'none' : 'flex';
+        });
+
+        // Fade in elements on scroll
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -100px 0px'
+        };
+
+        const observer = new IntersectionObserver(function(entries) {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('fade-in');
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.collection-card, .product-card').forEach(el => {
+            observer.observe(el);
+        });
+    </script>
+</body>
+</html>

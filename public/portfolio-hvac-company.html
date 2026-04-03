@@ -1,0 +1,547 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Arctic Breeze HVAC | 24/7 Heating & Cooling</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+:root {
+  --bg: #f7f8fa;
+  --white: #ffffff;
+  --dark: #111827;
+  --gray-600: #4b5563;
+  --gray-400: #9ca3af;
+  --gray-200: #e5e7eb;
+  --gray-100: #f3f4f6;
+  --blue: #2563eb;
+  --blue-dark: #1d4ed8;
+  --blue-light: #eff6ff;
+  --red: #dc2626;
+  --red-light: #fef2f2;
+  --green: #16a34a;
+  --green-light: #f0fdf4;
+  --orange: #ea580c;
+  --radius: 12px;
+}
+
+body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--dark); }
+
+/* ======== EMERGENCY BAR ======== */
+.emergency-bar {
+  background: var(--red); color: white;
+  padding: 0.75rem 1rem; text-align: center;
+  font-size: 0.85rem; font-weight: 700;
+  display: flex; align-items: center; justify-content: center; gap: 0.75rem;
+  position: sticky; top: 0; z-index: 100;
+}
+.emergency-bar a {
+  color: white; text-decoration: none;
+  background: rgba(255,255,255,0.2); padding: 0.35rem 1rem;
+  border-radius: 6px; font-size: 0.8rem; font-weight: 500;
+  transition: background 0.2s;
+}
+.emergency-bar a:hover { background: rgba(255,255,255,0.35); }
+.pulse-dot {
+  width: 8px; height: 8px; background: white; border-radius: 50%;
+  animation: blink 1.5s infinite;
+}
+@keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.3} }
+
+/* ======== HEADER ======== */
+header {
+  background: var(--white); border-bottom: 1px solid var(--gray-200);
+  padding: 1rem 2rem; display: flex; justify-content: space-between; align-items: center;
+}
+.logo { font-weight: 700; font-size: 1.1rem; color: var(--dark); display: flex; align-items: center; gap: 0.5rem; }
+.logo-icon { width: 28px; height: 28px; background: var(--blue); border-radius: 6px; display: flex; align-items: center; justify-content: center; }
+.logo-icon svg { width: 16px; height: 16px; fill: white; }
+.header-right { display: flex; align-items: center; gap: 1.5rem; }
+.header-phone { font-family: 'DM Mono', monospace; font-weight: 500; font-size: 0.9rem; color: var(--dark); text-decoration: none; }
+.header-cta {
+  background: var(--blue); color: white; padding: 0.6rem 1.2rem;
+  border-radius: 8px; text-decoration: none; font-weight: 500; font-size: 0.85rem;
+  transition: background 0.2s;
+}
+.header-cta:hover { background: var(--blue-dark); }
+
+/* ======== MAIN LAYOUT: No hero. Straight to business. ======== */
+.main-grid {
+  max-width: 1100px; margin: 2rem auto; padding: 0 1.5rem;
+  display: grid; grid-template-columns: 1fr 380px; gap: 2rem; align-items: start;
+}
+
+/* ======== SERVICES PANEL ======== */
+.services-panel { display: flex; flex-direction: column; gap: 1.5rem; }
+
+.service-card {
+  background: var(--white); border: 1px solid var(--gray-200);
+  border-radius: var(--radius); padding: 1.5rem; cursor: pointer;
+  transition: all 0.2s; position: relative; overflow: hidden;
+}
+.service-card:hover { border-color: var(--blue); box-shadow: 0 4px 12px rgba(37,99,235,0.08); }
+.service-card.urgent { border-left: 4px solid var(--red); }
+.service-card.popular { border-left: 4px solid var(--blue); }
+.service-card.seasonal { border-left: 4px solid var(--orange); }
+
+.service-badge {
+  display: inline-block; font-size: 0.65rem; font-weight: 700;
+  text-transform: uppercase; letter-spacing: 0.08em; padding: 0.2rem 0.6rem;
+  border-radius: 4px; margin-bottom: 0.75rem;
+}
+.badge-urgent { background: var(--red-light); color: var(--red); }
+.badge-popular { background: var(--blue-light); color: var(--blue); }
+.badge-seasonal { background: #fff7ed; color: var(--orange); }
+
+.service-card h3 { font-size: 1.05rem; font-weight: 700; margin-bottom: 0.35rem; }
+.service-card p { font-size: 0.85rem; color: var(--gray-600); line-height: 1.5; margin-bottom: 1rem; }
+.service-meta { display: flex; gap: 1.5rem; font-size: 0.8rem; color: var(--gray-400); }
+.service-meta strong { color: var(--dark); }
+
+.service-expand {
+  display: none; margin-top: 1rem; padding-top: 1rem;
+  border-top: 1px solid var(--gray-200);
+}
+.service-card.open .service-expand { display: block; }
+.expand-list { list-style: none; display: flex; flex-direction: column; gap: 0.5rem; }
+.expand-list li {
+  font-size: 0.85rem; color: var(--gray-600);
+  padding-left: 1.2rem; position: relative;
+}
+.expand-list li::before {
+  content: '✓'; position: absolute; left: 0; color: var(--green); font-weight: 700;
+}
+.service-toggle {
+  display: flex; align-items: center; gap: 0.3rem;
+  font-size: 0.8rem; color: var(--blue); font-weight: 500;
+  background: none; border: none; cursor: pointer; padding: 0;
+}
+.service-toggle svg {
+  width: 14px; height: 14px; stroke: var(--blue); fill: none; stroke-width: 2;
+  transition: transform 0.2s;
+}
+.service-card.open .service-toggle svg { transform: rotate(180deg); }
+
+/* ======== BOOKING SIDEBAR ======== */
+.booking-sidebar {
+  position: sticky; top: 70px;
+  background: var(--white); border: 1px solid var(--gray-200);
+  border-radius: var(--radius); overflow: hidden;
+}
+.sidebar-header {
+  background: var(--dark); color: white; padding: 1.25rem 1.5rem;
+}
+.sidebar-header h2 { font-size: 1rem; font-weight: 700; margin-bottom: 0.25rem; }
+.sidebar-header p { font-size: 0.8rem; opacity: 0.7; }
+.sidebar-body { padding: 1.5rem; }
+
+.form-group { margin-bottom: 1.25rem; }
+.form-group label {
+  display: block; font-size: 0.75rem; font-weight: 700;
+  text-transform: uppercase; letter-spacing: 0.05em;
+  color: var(--gray-600); margin-bottom: 0.4rem;
+}
+.form-group select, .form-group input, .form-group textarea {
+  width: 100%; padding: 0.7rem 0.9rem; border: 1px solid var(--gray-200);
+  border-radius: 8px; font-family: inherit; font-size: 0.9rem;
+  background: var(--bg); color: var(--dark); transition: border 0.2s;
+}
+.form-group select:focus, .form-group input:focus, .form-group textarea:focus {
+  outline: none; border-color: var(--blue);
+}
+.form-group textarea { resize: vertical; min-height: 70px; }
+
+.book-btn {
+  width: 100%; padding: 0.85rem; background: var(--blue); color: white;
+  border: none; border-radius: 8px; font-family: inherit; font-size: 0.95rem;
+  font-weight: 700; cursor: pointer; transition: background 0.2s;
+  margin-bottom: 0.75rem;
+}
+.book-btn:hover { background: var(--blue-dark); }
+
+.emergency-book {
+  width: 100%; padding: 0.85rem; background: var(--red); color: white;
+  border: none; border-radius: 8px; font-family: inherit; font-size: 0.95rem;
+  font-weight: 700; cursor: pointer; transition: background 0.2s;
+}
+.emergency-book:hover { background: #b91c1c; }
+
+.sidebar-trust {
+  padding: 1rem 1.5rem; border-top: 1px solid var(--gray-200);
+  display: flex; flex-direction: column; gap: 0.5rem;
+}
+.trust-item { display: flex; align-items: center; gap: 0.5rem; font-size: 0.8rem; color: var(--gray-600); }
+.trust-check { color: var(--green); font-weight: 700; }
+
+/* ======== PRICING CALCULATOR ======== */
+.calculator {
+  max-width: 1100px; margin: 3rem auto; padding: 0 1.5rem;
+}
+.calc-card {
+  background: var(--white); border: 1px solid var(--gray-200);
+  border-radius: var(--radius); padding: 2rem;
+}
+.calc-card h2 { font-size: 1.2rem; font-weight: 700; margin-bottom: 0.35rem; }
+.calc-card .calc-sub { font-size: 0.85rem; color: var(--gray-600); margin-bottom: 1.5rem; }
+.calc-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1.5rem; margin-bottom: 1.5rem; }
+.calc-field label {
+  display: block; font-size: 0.75rem; font-weight: 700;
+  text-transform: uppercase; letter-spacing: 0.05em;
+  color: var(--gray-600); margin-bottom: 0.4rem;
+}
+.calc-field select, .calc-field input {
+  width: 100%; padding: 0.7rem 0.9rem; border: 1px solid var(--gray-200);
+  border-radius: 8px; font-family: inherit; font-size: 0.9rem;
+  background: var(--bg); color: var(--dark);
+}
+.calc-result {
+  background: var(--green-light); border: 1px solid #bbf7d0;
+  border-radius: 8px; padding: 1.25rem 1.5rem;
+  display: flex; justify-content: space-between; align-items: center;
+}
+.calc-result-label { font-size: 0.9rem; color: var(--gray-600); }
+.calc-result-price { font-family: 'DM Mono', monospace; font-size: 1.5rem; font-weight: 700; color: var(--dark); }
+.calc-result-note { font-size: 0.75rem; color: var(--gray-400); }
+
+/* ======== FAQ ACCORDION ======== */
+.faq { max-width: 1100px; margin: 3rem auto; padding: 0 1.5rem 4rem; }
+.faq h2 { font-size: 1.2rem; font-weight: 700; margin-bottom: 1.5rem; }
+.faq-item {
+  border: 1px solid var(--gray-200); border-radius: var(--radius);
+  margin-bottom: 0.75rem; background: var(--white); overflow: hidden;
+}
+.faq-q {
+  padding: 1rem 1.5rem; font-size: 0.95rem; font-weight: 500;
+  cursor: pointer; display: flex; justify-content: space-between; align-items: center;
+  background: none; border: none; width: 100%; text-align: left;
+  font-family: inherit; color: var(--dark);
+}
+.faq-q svg { width: 18px; height: 18px; stroke: var(--gray-400); fill: none; stroke-width: 2; transition: transform 0.2s; flex-shrink: 0; }
+.faq-item.open .faq-q svg { transform: rotate(180deg); }
+.faq-a {
+  max-height: 0; overflow: hidden; transition: max-height 0.3s ease;
+}
+.faq-a-inner { padding: 0 1.5rem 1rem; font-size: 0.85rem; color: var(--gray-600); line-height: 1.7; }
+.faq-item.open .faq-a { max-height: 300px; }
+
+/* ======== FOOTER ======== */
+footer {
+  background: var(--dark); color: white; padding: 3rem 2rem;
+  text-align: center;
+}
+footer .f-logo { font-weight: 700; font-size: 1.1rem; margin-bottom: 0.5rem; }
+footer .f-license { font-size: 0.8rem; opacity: 0.5; margin-bottom: 1.5rem; }
+footer .f-links { display: flex; justify-content: center; gap: 2rem; margin-bottom: 1.5rem; }
+footer .f-links a { color: white; opacity: 0.6; text-decoration: none; font-size: 0.85rem; transition: opacity 0.2s; }
+footer .f-links a:hover { opacity: 1; }
+footer .f-copy { font-size: 0.75rem; opacity: 0.3; }
+
+/* ======== RESPONSIVE ======== */
+@media (max-width: 800px) {
+  .main-grid { grid-template-columns: 1fr; }
+  .booking-sidebar { position: static; }
+  .calc-grid { grid-template-columns: 1fr; }
+  .header-phone { display: none; }
+}
+</style>
+</head>
+<body>
+
+<!-- EMERGENCY BAR -->
+<div class="emergency-bar">
+  <span class="pulse-dot"></span>
+  HVAC Emergency? We respond in under 60 minutes, 24/7
+  <a href="tel:+15559112345">Call Now: (555) 911-2345</a>
+</div>
+
+<!-- HEADER -->
+<header>
+  <div class="logo">
+    <div class="logo-icon"><svg viewBox="0 0 24 24"><path d="M12 3v18M3 12h18M7.5 7.5l9 9M16.5 7.5l-9 9"/></svg></div>
+    Arctic Breeze HVAC
+  </div>
+  <div class="header-right">
+    <a href="tel:+15559112345" class="header-phone">(555) 911-2345</a>
+    <a href="#book" class="header-cta">Book Service</a>
+  </div>
+</header>
+
+<!-- MAIN: Services + Booking sidebar -->
+<div class="main-grid">
+  <div class="services-panel">
+
+    <div class="service-card urgent">
+      <span class="service-badge badge-urgent">Emergency</span>
+      <h3>Emergency Repair</h3>
+      <p>No heat? No AC? Unusual noises or smells? Our emergency techs arrive within 60 minutes, any time of day or night.</p>
+      <div class="service-meta">
+        <span>From <strong>$89</strong> service call</span>
+        <span>Response: <strong>&lt; 60 min</strong></span>
+      </div>
+      <button class="service-toggle" onclick="this.closest('.service-card').classList.toggle('open')">
+        What's included <svg viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg>
+      </button>
+      <div class="service-expand">
+        <ul class="expand-list">
+          <li>24/7 dispatch availability</li>
+          <li>Full diagnostic on arrival</li>
+          <li>Common parts stocked on truck</li>
+          <li>Same-visit repair when possible</li>
+          <li>No overtime surcharge before 10pm</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="service-card popular">
+      <span class="service-badge badge-popular">Most Booked</span>
+      <h3>AC Installation & Replacement</h3>
+      <p>High-efficiency central AC, mini-splits, and heat pumps. We size your system correctly the first time so you're never overpaying on energy bills.</p>
+      <div class="service-meta">
+        <span>From <strong>$3,200</strong> installed</span>
+        <span>Warranty: <strong>10 years</strong></span>
+      </div>
+      <button class="service-toggle" onclick="this.closest('.service-card').classList.toggle('open')">
+        What's included <svg viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg>
+      </button>
+      <div class="service-expand">
+        <ul class="expand-list">
+          <li>Free in-home load calculation</li>
+          <li>Carrier, Trane & Lennox certified</li>
+          <li>Old unit removal & recycling</li>
+          <li>Permit filing & inspection scheduling</li>
+          <li>Financing from $89/mo</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="service-card">
+      <h3>Furnace Installation & Replacement</h3>
+      <p>Gas and electric furnace installations with proper ductwork assessment. We don't upsell — we right-size.</p>
+      <div class="service-meta">
+        <span>From <strong>$2,800</strong> installed</span>
+        <span>Warranty: <strong>10 years</strong></span>
+      </div>
+      <button class="service-toggle" onclick="this.closest('.service-card').classList.toggle('open')">
+        What's included <svg viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg>
+      </button>
+      <div class="service-expand">
+        <ul class="expand-list">
+          <li>Combustion safety testing</li>
+          <li>Ductwork inspection & sealing</li>
+          <li>Smart thermostat setup</li>
+          <li>Same-week installation available</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="service-card seasonal">
+      <span class="service-badge badge-seasonal">Seasonal</span>
+      <h3>Maintenance Plans</h3>
+      <p>Bi-annual tune-ups that catch small problems before they become expensive emergencies. Members save 15% on all repairs.</p>
+      <div class="service-meta">
+        <span>From <strong>$14.99</strong>/mo</span>
+        <span>Includes: <strong>2 tune-ups/yr</strong></span>
+      </div>
+      <button class="service-toggle" onclick="this.closest('.service-card').classList.toggle('open')">
+        What's included <svg viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg>
+      </button>
+      <div class="service-expand">
+        <ul class="expand-list">
+          <li>Spring AC tune-up + fall furnace tune-up</li>
+          <li>Priority scheduling (no wait lists)</li>
+          <li>15% off all repair labor</li>
+          <li>No diagnostic fee ($89 value)</li>
+          <li>Filter reminders & delivery</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="service-card">
+      <h3>Duct Cleaning & Sealing</h3>
+      <p>Improve air quality and efficiency. Our NADCA-certified technicians use truck-mounted vacuum systems for a deep clean.</p>
+      <div class="service-meta">
+        <span>From <strong>$299</strong></span>
+        <span>Duration: <strong>3-4 hours</strong></span>
+      </div>
+      <button class="service-toggle" onclick="this.closest('.service-card').classList.toggle('open')">
+        What's included <svg viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg>
+      </button>
+      <div class="service-expand">
+        <ul class="expand-list">
+          <li>All supply and return ducts</li>
+          <li>Before/after photography</li>
+          <li>Sanitization treatment</li>
+          <li>Seal assessment & repair</li>
+        </ul>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- BOOKING SIDEBAR -->
+  <div class="booking-sidebar" id="book">
+    <div class="sidebar-header">
+      <h2>Book a Service</h2>
+      <p>Most appointments available within 48 hours</p>
+    </div>
+    <div class="sidebar-body">
+      <div class="form-group">
+        <label>Service Type</label>
+        <select>
+          <option>Select a service...</option>
+          <option>Emergency Repair</option>
+          <option>AC Install / Replace</option>
+          <option>Furnace Install / Replace</option>
+          <option>Maintenance Plan</option>
+          <option>Duct Cleaning</option>
+          <option>Other / Not Sure</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Preferred Date</label>
+        <input type="date">
+      </div>
+      <div class="form-group">
+        <label>Your Name</label>
+        <input type="text" placeholder="Full name">
+      </div>
+      <div class="form-group">
+        <label>Phone Number</label>
+        <input type="tel" placeholder="(555) 000-0000">
+      </div>
+      <div class="form-group">
+        <label>Issue Description</label>
+        <textarea placeholder="Brief description of the problem or service needed..."></textarea>
+      </div>
+      <button class="book-btn">Request Appointment</button>
+      <button class="emergency-book" onclick="window.location.href='tel:+15559112345'">🚨 Emergency? Call Now</button>
+    </div>
+    <div class="sidebar-trust">
+      <div class="trust-item"><span class="trust-check">✓</span> Licensed & Insured (LIC #HC-48291)</div>
+      <div class="trust-item"><span class="trust-check">✓</span> EPA 608 Certified Technicians</div>
+      <div class="trust-item"><span class="trust-check">✓</span> Satisfaction Guaranteed</div>
+      <div class="trust-item"><span class="trust-check">✓</span> 4.9★ across 1,200+ reviews</div>
+    </div>
+  </div>
+</div>
+
+<!-- PRICING CALCULATOR -->
+<div class="calculator">
+  <div class="calc-card">
+    <h2>Estimate Your Cost</h2>
+    <p class="calc-sub">Get a ballpark estimate in seconds. Final pricing provided after in-home assessment.</p>
+    <div class="calc-grid">
+      <div class="calc-field">
+        <label>Service</label>
+        <select id="calcService" onchange="updateCalc()">
+          <option value="0">Select...</option>
+          <option value="89">Emergency Repair</option>
+          <option value="3200">AC Installation</option>
+          <option value="2800">Furnace Installation</option>
+          <option value="180">Maintenance (annual)</option>
+          <option value="299">Duct Cleaning</option>
+        </select>
+      </div>
+      <div class="calc-field">
+        <label>Home Size</label>
+        <select id="calcSize" onchange="updateCalc()">
+          <option value="1">Under 1,500 sq ft</option>
+          <option value="1.15">1,500 – 2,500 sq ft</option>
+          <option value="1.35">2,500 – 3,500 sq ft</option>
+          <option value="1.6">Over 3,500 sq ft</option>
+        </select>
+      </div>
+      <div class="calc-field">
+        <label>System Age</label>
+        <select id="calcAge" onchange="updateCalc()">
+          <option value="1">Under 5 years</option>
+          <option value="1">5 – 10 years</option>
+          <option value="1.1">10 – 15 years</option>
+          <option value="1.2">Over 15 years</option>
+        </select>
+      </div>
+    </div>
+    <div class="calc-result">
+      <div>
+        <div class="calc-result-label">Estimated Range</div>
+        <div class="calc-result-note">Based on your selections</div>
+      </div>
+      <div class="calc-result-price" id="calcPrice">$0 – $0</div>
+    </div>
+  </div>
+</div>
+
+<!-- FAQ -->
+<div class="faq">
+  <h2>Common Questions</h2>
+
+  <div class="faq-item">
+    <button class="faq-q" onclick="this.parentElement.classList.toggle('open')">
+      How quickly can you get a technician to my home?
+      <svg viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg>
+    </button>
+    <div class="faq-a"><div class="faq-a-inner">For emergencies, our average response time is 47 minutes. For scheduled appointments, we typically have availability within 24-48 hours. Maintenance plan members get priority scheduling and are usually seen same-day.</div></div>
+  </div>
+
+  <div class="faq-item">
+    <button class="faq-q" onclick="this.parentElement.classList.toggle('open')">
+      Do you charge a diagnostic fee?
+      <svg viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg>
+    </button>
+    <div class="faq-a"><div class="faq-a-inner">Our standard diagnostic fee is $89, which is waived if you proceed with the repair. Maintenance plan members never pay a diagnostic fee — it's included in your plan.</div></div>
+  </div>
+
+  <div class="faq-item">
+    <button class="faq-q" onclick="this.parentElement.classList.toggle('open')">
+      What brands do you install?
+      <svg viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg>
+    </button>
+    <div class="faq-a"><div class="faq-a-inner">We're factory-authorized dealers for Carrier, Trane, Lennox, and Daikin. We recommend systems based on your home's needs and your budget — not brand kickbacks. Every install comes with a 10-year parts and labor warranty.</div></div>
+  </div>
+
+  <div class="faq-item">
+    <button class="faq-q" onclick="this.parentElement.classList.toggle('open')">
+      Do you offer financing?
+      <svg viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg>
+    </button>
+    <div class="faq-a"><div class="faq-a-inner">Yes. We offer 0% APR for 12 months on installations over $2,000, and extended plans up to 72 months through GreenSky. Most homeowners qualify, and approval takes about 2 minutes during your consultation.</div></div>
+  </div>
+
+  <div class="faq-item">
+    <button class="faq-q" onclick="this.parentElement.classList.toggle('open')">
+      How often should I service my HVAC system?
+      <svg viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg>
+    </button>
+    <div class="faq-a"><div class="faq-a-inner">Twice a year — a cooling tune-up in spring and a heating tune-up in fall. Regular maintenance extends your system's life by 5-7 years and keeps your energy bills 15-25% lower than unmaintained systems. Our maintenance plans automate this for you.</div></div>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <div class="f-logo">Arctic Breeze HVAC</div>
+  <div class="f-license">License #HC-48291 · Bonded & Insured · EPA 608 Certified</div>
+  <div class="f-links">
+    <a href="#">Services</a>
+    <a href="#">Financing</a>
+    <a href="#">Reviews</a>
+    <a href="#">About</a>
+    <a href="#">Contact</a>
+  </div>
+  <div class="f-copy">&copy; 2024 Arctic Breeze HVAC. All rights reserved.</div>
+</footer>
+
+<script>
+function updateCalc() {
+  const base = parseFloat(document.getElementById('calcService').value) || 0;
+  const size = parseFloat(document.getElementById('calcSize').value) || 1;
+  const age = parseFloat(document.getElementById('calcAge').value) || 1;
+  const est = Math.round(base * size * age);
+  const low = Math.round(est * 0.85);
+  const high = Math.round(est * 1.2);
+  document.getElementById('calcPrice').textContent = est > 0 ? `$${low.toLocaleString()} – $${high.toLocaleString()}` : '$0 – $0';
+}
+</script>
+</body>
+</html>

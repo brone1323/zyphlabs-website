@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sarah Mitchell | Austin Luxury Real Estate</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+:root {
+  --ink: #1a1a1a;
+  --paper: #faf9f7;
+  --warm: #f0ebe4;
+  --olive: #5c6b54;
+  --gold: #b89b6a;
+  --gray: #888;
+  --light-gray: #ddd;
+}
+
+body {
+  font-family: 'Outfit', sans-serif; color: var(--ink); background: var(--paper);
+  overflow-x: hidden; -webkit-font-smoothing: antialiased;
+}
+
+/* ======== EDITORIAL NAV ======== */
+.topbar {
+  padding: 1rem 3rem; display: flex; justify-content: space-between;
+  align-items: center; border-bottom: 1px solid var(--light-gray);
+  position: sticky; top: 0; background: var(--paper); z-index: 100;
+}
+.topbar-left { font-size: 0.7rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--gray); font-weight: 500; }
+.topbar-logo {
+  font-family: 'Playfair Display', serif; font-size: 1.5rem; font-weight: 900;
+  text-align: center; color: var(--ink);
+}
+.topbar-logo em { font-weight: 400; font-style: italic; color: var(--olive); }
+.topbar-right { display: flex; gap: 2rem; align-items: center; }
+.topbar-right a {
+  font-size: 0.7rem; letter-spacing: 0.15em; text-transform: uppercase;
+  color: var(--gray); text-decoration: none; font-weight: 500; transition: color 0.2s;
+}
+.topbar-right a:hover { color: var(--ink); }
+.topbar-cta {
+  background: var(--ink); color: var(--paper); padding: 0.5rem 1.2rem;
+  font-size: 0.7rem; letter-spacing: 0.12em; text-transform: uppercase;
+  text-decoration: none; font-weight: 500; transition: background 0.2s;
+}
+.topbar-cta:hover { background: var(--olive); }
+
+/* ======== MAGAZINE HERO: Asymmetric layout ======== */
+.mag-hero {
+  display: grid; grid-template-columns: 1.3fr 1fr; min-height: 90vh;
+  border-bottom: 1px solid var(--light-gray);
+}
+.mag-hero-visual {
+  background: var(--warm); position: relative; overflow: hidden;
+  display: flex; align-items: center; justify-content: center;
+}
+.mag-hero-visual::before {
+  content: ''; position: absolute; inset: 2rem;
+  border: 1px solid rgba(0,0,0,0.06);
+}
+.hero-address {
+  position: absolute; bottom: 2.5rem; left: 2.5rem;
+  font-family: 'Playfair Display', serif; font-size: 1.2rem;
+  color: var(--ink); opacity: 0.6;
+}
+.hero-price {
+  font-family: 'Playfair Display', serif; font-size: 3.5rem;
+  font-weight: 900; color: var(--ink); opacity: 0.08;
+}
+
+.mag-hero-content {
+  display: flex; flex-direction: column; justify-content: center;
+  padding: 4rem 4rem 4rem 3rem;
+}
+.hero-eyebrow {
+  font-size: 0.65rem; letter-spacing: 0.3em; text-transform: uppercase;
+  color: var(--olive); font-weight: 600; margin-bottom: 2rem;
+}
+.mag-hero-content h1 {
+  font-family: 'Playfair Display', serif; font-size: clamp(2.5rem, 4vw, 3.5rem);
+  font-weight: 900; line-height: 1.1; margin-bottom: 1.5rem;
+}
+.mag-hero-content h1 em { font-weight: 400; font-style: italic; color: var(--olive); }
+.hero-blurb {
+  font-size: 1rem; color: var(--gray); line-height: 1.8; font-weight: 300;
+  max-width: 400px; margin-bottom: 2.5rem;
+}
+.hero-search {
+  display: flex; border: 1px solid var(--light-gray); overflow: hidden;
+}
+.hero-search input {
+  flex: 1; padding: 0.9rem 1.2rem; border: none; font-family: inherit;
+  font-size: 0.9rem; background: transparent; color: var(--ink);
+}
+.hero-search input::placeholder { color: var(--gray); }
+.hero-search input:focus { outline: none; }
+.hero-search button {
+  padding: 0.9rem 1.8rem; background: var(--ink); color: var(--paper);
+  border: none; font-family: inherit; font-size: 0.75rem; font-weight: 600;
+  letter-spacing: 0.1em; text-transform: uppercase; cursor: pointer;
+  transition: background 0.2s;
+}
+.hero-search button:hover { background: var(--olive); }
+
+/* ======== FEATURED LISTINGS: Magazine grid ======== */
+.listings { padding: 4rem 3rem; }
+.section-rule {
+  display: flex; align-items: center; gap: 1.5rem;
+  margin-bottom: 3rem; padding-bottom: 1rem; border-bottom: 1px solid var(--light-gray);
+}
+.section-rule h2 {
+  font-family: 'Playfair Display', serif; font-size: 1.5rem; font-weight: 700;
+  white-space: nowrap;
+}
+.section-rule .rule-line { flex: 1; height: 1px; background: var(--light-gray); }
+.section-rule .rule-note { font-size: 0.7rem; color: var(--gray); white-space: nowrap; letter-spacing: 0.1em; text-transform: uppercase; }
+
+.magazine-grid {
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  grid-template-rows: auto auto;
+  gap: 1.5rem;
+}
+.listing-feature {
+  grid-column: span 7; grid-row: span 2;
+  background: var(--warm); position: relative; overflow: hidden;
+  min-height: 500px; display: flex; flex-direction: column; justify-content: flex-end;
+  padding: 2.5rem; cursor: pointer; transition: all 0.4s;
+}
+.listing-feature:hover { box-shadow: 0 12px 40px rgba(0,0,0,0.08); }
+.listing-feature .listing-tag {
+  position: absolute; top: 1.5rem; left: 1.5rem;
+  background: var(--olive); color: var(--paper); font-size: 0.6rem;
+  font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase;
+  padding: 0.3rem 0.8rem;
+}
+.listing-card {
+  grid-column: span 5;
+  background: var(--white, #fff); border: 1px solid var(--light-gray);
+  overflow: hidden; cursor: pointer; transition: all 0.3s;
+  display: flex; flex-direction: column;
+}
+.listing-card:hover { box-shadow: 0 8px 24px rgba(0,0,0,0.06); transform: translateY(-4px); }
+.listing-thumb {
+  height: 200px; background: var(--warm); position: relative;
+  display: flex; align-items: center; justify-content: center;
+}
+.listing-thumb-text {
+  font-family: 'Playfair Display', serif; font-size: 1.5rem;
+  color: var(--ink); opacity: 0.06; font-weight: 900;
+}
+.listing-body { padding: 1.5rem; flex: 1; display: flex; flex-direction: column; }
+.listing-price {
+  font-family: 'Playfair Display', serif; font-size: 1.3rem;
+  font-weight: 700; margin-bottom: 0.25rem;
+}
+.listing-address { font-size: 0.85rem; color: var(--gray); margin-bottom: 0.75rem; }
+.listing-specs { display: flex; gap: 1rem; font-size: 0.75rem; color: var(--gray); font-weight: 500; }
+.listing-spec { display: flex; align-items: center; gap: 0.3rem; }
+
+.feature-price {
+  font-family: 'Playfair Display', serif; font-size: 2rem;
+  font-weight: 900; color: var(--ink); margin-bottom: 0.25rem;
+}
+.feature-address { font-size: 1rem; color: var(--ink); opacity: 0.6; margin-bottom: 0.5rem; }
+.feature-specs { display: flex; gap: 1.5rem; font-size: 0.8rem; color: var(--ink); opacity: 0.5; }
+
+/* ======== ABOUT SECTION: Editorial spread ======== */
+.about-spread {
+  display: grid; grid-template-columns: 1fr 1fr;
+  border-top: 1px solid var(--light-gray); border-bottom: 1px solid var(--light-gray);
+}
+.about-portrait {
+  background: linear-gradient(135deg, var(--warm) 0%, #e6ddd2 100%);
+  min-height: 500px; display: flex; align-items: center; justify-content: center;
+  position: relative;
+}
+.portrait-frame {
+  width: 220px; height: 280px; border: 1px solid rgba(0,0,0,0.08);
+  display: flex; align-items: center; justify-content: center;
+  font-family: 'Playfair Display', serif; font-size: 3rem;
+  font-weight: 900; color: var(--ink); opacity: 0.04;
+}
+.about-text {
+  padding: 4rem; display: flex; flex-direction: column; justify-content: center;
+}
+.about-text .hero-eyebrow { margin-bottom: 1.5rem; }
+.about-text h2 {
+  font-family: 'Playfair Display', serif; font-size: 2rem;
+  font-weight: 900; line-height: 1.2; margin-bottom: 1.5rem;
+}
+.about-text h2 em { font-weight: 400; font-style: italic; color: var(--olive); }
+.about-body {
+  font-size: 0.95rem; color: var(--gray); line-height: 1.9; font-weight: 300;
+  margin-bottom: 2rem; max-width: 450px;
+}
+.about-stats { display: flex; gap: 2.5rem; }
+.about-stat-num {
+  font-family: 'Playfair Display', serif; font-size: 2rem;
+  font-weight: 900; color: var(--ink); line-height: 1;
+}
+.about-stat-label { font-size: 0.65rem; color: var(--gray); text-transform: uppercase; letter-spacing: 0.12em; margin-top: 0.25rem; }
+
+/* ======== MARKET INSIGHTS ======== */
+.insights { padding: 4rem 3rem; }
+.insights-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; }
+.insight-card {
+  border: 1px solid var(--light-gray); padding: 2rem;
+  transition: all 0.3s; cursor: pointer;
+}
+.insight-card:hover { border-color: var(--ink); }
+.insight-eyebrow { font-size: 0.6rem; color: var(--olive); letter-spacing: 0.2em; text-transform: uppercase; font-weight: 600; margin-bottom: 0.75rem; }
+.insight-card h3 {
+  font-family: 'Playfair Display', serif; font-size: 1.2rem;
+  font-weight: 700; line-height: 1.3; margin-bottom: 0.75rem;
+}
+.insight-card p { font-size: 0.85rem; color: var(--gray); line-height: 1.6; }
+.insight-date { font-size: 0.7rem; color: var(--gray); margin-top: 1rem; opacity: 0.6; }
+
+/* ======== TESTIMONIAL STRIP ======== */
+.test-strip {
+  background: var(--ink); padding: 4rem 3rem;
+  display: flex; align-items: center; gap: 4rem;
+}
+.test-quote {
+  font-family: 'Playfair Display', serif; font-size: 1.6rem;
+  font-style: italic; color: var(--paper); line-height: 1.5;
+  flex: 1; max-width: 600px;
+}
+.test-attr { color: var(--paper); }
+.test-name { font-weight: 600; font-size: 0.9rem; }
+.test-detail { font-size: 0.8rem; opacity: 0.5; margin-top: 0.2rem; }
+
+/* ======== CONTACT CTA ======== */
+.contact-cta {
+  padding: 5rem 3rem; text-align: center;
+  border-top: 1px solid var(--light-gray);
+}
+.contact-cta h2 {
+  font-family: 'Playfair Display', serif; font-size: 2.5rem;
+  font-weight: 900; margin-bottom: 0.75rem;
+}
+.contact-cta h2 em { font-weight: 400; font-style: italic; color: var(--olive); }
+.contact-cta p { color: var(--gray); font-size: 1rem; margin-bottom: 2.5rem; max-width: 450px; margin-left: auto; margin-right: auto; }
+.contact-actions { display: flex; justify-content: center; gap: 1rem; }
+.cta-dark {
+  background: var(--ink); color: var(--paper); padding: 0.9rem 2rem;
+  text-decoration: none; font-size: 0.75rem; font-weight: 600;
+  letter-spacing: 0.1em; text-transform: uppercase; transition: background 0.2s;
+}
+.cta-dark:hover { background: var(--olive); }
+.cta-ghost {
+  border: 1px solid var(--ink); color: var(--ink); padding: 0.9rem 2rem;
+  text-decoration: none; font-size: 0.75rem; font-weight: 600;
+  letter-spacing: 0.1em; text-transform: uppercase; transition: all 0.2s;
+}
+.cta-ghost:hover { background: var(--ink); color: var(--paper); }
+
+/* ======== FOOTER ======== */
+footer {
+  border-top: 1px solid var(--light-gray); padding: 2rem 3rem;
+  display: flex; justify-content: space-between; align-items: center;
+}
+footer span { font-size: 0.7rem; color: var(--gray); }
+.footer-social { display: flex; gap: 1.5rem; }
+.footer-social a { font-size: 0.7rem; color: var(--gray); text-decoration: none; text-transform: uppercase; letter-spacing: 0.1em; }
+.footer-social a:hover { color: var(--ink); }
+
+/* ======== RESPONSIVE ======== */
+@media (max-width: 900px) {
+  .topbar { padding: 0.75rem 1.5rem; }
+  .topbar-right a:not(.topbar-cta) { display: none; }
+  .mag-hero { grid-template-columns: 1fr; }
+  .mag-hero-visual { min-height: 40vh; }
+  .mag-hero-content { padding: 2.5rem 1.5rem; }
+  .magazine-grid { grid-template-columns: 1fr; }
+  .listing-feature { grid-column: span 1; grid-row: span 1; min-height: 300px; }
+  .listing-card { grid-column: span 1; }
+  .about-spread { grid-template-columns: 1fr; }
+  .about-portrait { min-height: 300px; }
+  .about-text { padding: 2.5rem 1.5rem; }
+  .insights-grid { grid-template-columns: 1fr; }
+  .test-strip { flex-direction: column; gap: 2rem; text-align: center; }
+}
+</style>
+</head>
+<body>
+
+<!-- EDITORIAL NAV -->
+<div class="topbar">
+  <div class="topbar-left">Austin, TX</div>
+  <div class="topbar-logo">Sarah <em>Mitchell</em></div>
+  <div class="topbar-right">
+    <a href="#listings">Listings</a>
+    <a href="#about">About</a>
+    <a href="#insights">Journal</a>
+    <a href="#contact" class="topbar-cta">Contact</a>
+  </div>
+</div>
+
+<!-- MAGAZINE HERO -->
+<section class="mag-hero">
+  <div class="mag-hero-visual">
+    <div class="hero-price">$2.4M</div>
+    <div class="hero-address">2847 Barton Creek Blvd, Austin</div>
+  </div>
+  <div class="mag-hero-content">
+    <div class="hero-eyebrow">Featured Listing · Just Listed</div>
+    <h1>Where Austin's<br>Story Meets <em>Home</em></h1>
+    <p class="hero-blurb">Luxury real estate with a personal touch. Over $450M in career sales and a deep knowledge of every neighborhood from Tarrytown to Dripping Springs.</p>
+    <div class="hero-search">
+      <input type="text" placeholder="Search by address, neighborhood, or MLS #">
+      <button>Search</button>
+    </div>
+  </div>
+</section>
+
+<!-- FEATURED LISTINGS -->
+<section class="listings" id="listings">
+  <div class="section-rule">
+    <h2>Featured Listings</h2>
+    <div class="rule-line"></div>
+    <div class="rule-note">6 Active · Spring 2024</div>
+  </div>
+  <div class="magazine-grid">
+    <div class="listing-feature">
+      <div class="listing-tag">Just Listed</div>
+      <div class="feature-price">$2,450,000</div>
+      <div class="feature-address">2847 Barton Creek Blvd, Austin</div>
+      <div class="feature-specs">
+        <span>5 Bed</span><span>4.5 Bath</span><span>4,800 sq ft</span><span>0.8 Acre</span>
+      </div>
+    </div>
+    <div class="listing-card">
+      <div class="listing-thumb"><span class="listing-thumb-text">$1.85M</span></div>
+      <div class="listing-body">
+        <div class="listing-price">$1,850,000</div>
+        <div class="listing-address">1422 Westlake Dr, Austin</div>
+        <div class="listing-specs">
+          <span class="listing-spec">4 Bed</span>
+          <span class="listing-spec">3 Bath</span>
+          <span class="listing-spec">3,600 sq ft</span>
+        </div>
+      </div>
+    </div>
+    <div class="listing-card">
+      <div class="listing-thumb"><span class="listing-thumb-text">$975K</span></div>
+      <div class="listing-body">
+        <div class="listing-price">$975,000</div>
+        <div class="listing-address">508 E Monroe St, South Congress</div>
+        <div class="listing-specs">
+          <span class="listing-spec">3 Bed</span>
+          <span class="listing-spec">2 Bath</span>
+          <span class="listing-spec">2,200 sq ft</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ABOUT: Editorial spread -->
+<section class="about-spread" id="about">
+  <div class="about-portrait">
+    <div class="portrait-frame">SM</div>
+  </div>
+  <div class="about-text">
+    <div class="hero-eyebrow">About Sarah</div>
+    <h2>15 Years of Turning<br>Keys Into <em>Chapters</em></h2>
+    <p class="about-body">I didn't get into real estate to sell houses. I got into it because I saw how the right home could change someone's entire trajectory — the neighborhood their kids grow up in, the commute that gives them back an hour a day, the backyard where twenty years of Thanksgivings happen.</p>
+    <div class="about-stats">
+      <div><div class="about-stat-num">$450M+</div><div class="about-stat-label">Career Sales</div></div>
+      <div><div class="about-stat-num">320+</div><div class="about-stat-label">Families Helped</div></div>
+      <div><div class="about-stat-num">15</div><div class="about-stat-label">Years Active</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- MARKET INSIGHTS -->
+<section class="insights" id="insights">
+  <div class="section-rule">
+    <h2>Market Journal</h2>
+    <div class="rule-line"></div>
+    <div class="rule-note">Latest Insights</div>
+  </div>
+  <div class="insights-grid">
+    <div class="insight-card">
+      <div class="insight-eyebrow">Market Update</div>
+      <h3>Austin's Spring Market: What the Numbers Are Actually Saying</h3>
+      <p>Inventory is up 18% year-over-year, but well-priced homes in 78703 and 78746 are still seeing multiple offers. Here's what that means for buyers and sellers.</p>
+      <div class="insight-date">March 12, 2024</div>
+    </div>
+    <div class="insight-card">
+      <div class="insight-eyebrow">Neighborhood Guide</div>
+      <h3>Tarrytown vs. Zilker: A Street-by-Street Comparison</h3>
+      <p>Both neighborhoods are "central Austin," but they're remarkably different in character, price trajectory, and lifestyle. A deep dive for relocators.</p>
+      <div class="insight-date">February 28, 2024</div>
+    </div>
+    <div class="insight-card">
+      <div class="insight-eyebrow">Buyer Strategy</div>
+      <h3>The 3 Things Every Austin Buyer Overpays For (And How to Avoid Them)</h3>
+      <p>Pool premium, school district hype, and "recently renovated" markup. Real data on when these actually add value and when they don't.</p>
+      <div class="insight-date">February 15, 2024</div>
+    </div>
+  </div>
+</section>
+
+<!-- TESTIMONIAL -->
+<section class="test-strip">
+  <div class="test-quote">"Sarah didn't just find us a house — she found us the neighborhood we didn't know we needed. Our kids ride bikes to school now. That was her idea, not ours."</div>
+  <div class="test-attr">
+    <div class="test-name">The Ramirez Family</div>
+    <div class="test-detail">Bought in Tarrytown, 2023</div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section class="contact-cta" id="contact">
+  <h2>Let's Find Your <em>Next Chapter</em></h2>
+  <p>Whether you're buying, selling, or just exploring what's possible — I'd love to have a conversation.</p>
+  <div class="contact-actions">
+    <a href="#" class="cta-dark">Schedule a Consultation</a>
+    <a href="tel:+15124567890" class="cta-ghost">Call (512) 456-7890</a>
+  </div>
+</section>
+
+<footer>
+  <span>&copy; 2024 Sarah Mitchell Realty · License #0658291</span>
+  <div class="footer-social">
+    <a href="#">Instagram</a>
+    <a href="#">LinkedIn</a>
+    <a href="#">Zillow</a>
+  </div>
+</footer>
+</body>
+</html>

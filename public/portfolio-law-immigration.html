@@ -1,0 +1,459 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Rivera & Associates | Immigration Law</title>
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;0,700;1,400&family=Nunito+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+:root {
+  --bg: #fefdfb;
+  --warm: #f9f5ef;
+  --sage: #6b8f71;
+  --sage-light: #e8f0e9;
+  --sage-dark: #4a7050;
+  --terra: #c4785c;
+  --cream: #f5efe6;
+  --ink: #2d3436;
+  --text: #4a4a4a;
+  --gray: #8a8a8a;
+  --border: #e8e4de;
+  --radius: 16px;
+}
+
+body {
+  font-family: 'Nunito Sans', sans-serif; color: var(--text); background: var(--bg);
+  -webkit-font-smoothing: antialiased; font-size: 16px; line-height: 1.7;
+}
+
+/* ======== ACCESSIBILITY: Large touch targets, focus rings ======== */
+a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible {
+  outline: 3px solid var(--sage); outline-offset: 2px;
+}
+
+/* ======== LANGUAGE BAR ======== */
+.lang-bar {
+  background: var(--warm); border-bottom: 1px solid var(--border);
+  padding: 0.5rem 3rem; display: flex; justify-content: space-between;
+  align-items: center; font-size: 0.8rem;
+}
+.lang-bar-left { color: var(--gray); }
+.lang-bar-left a { color: var(--sage-dark); text-decoration: none; font-weight: 600; }
+.lang-toggle { display: flex; gap: 0.25rem; }
+.lang-btn {
+  padding: 0.3rem 0.75rem; border: 1px solid var(--border); border-radius: 6px;
+  background: transparent; font-family: inherit; font-size: 0.75rem;
+  cursor: pointer; color: var(--text); transition: all 0.2s; font-weight: 600;
+}
+.lang-btn.active { background: var(--sage); color: white; border-color: var(--sage); }
+
+/* ======== NAV ======== */
+nav {
+  padding: 1rem 3rem; display: flex; justify-content: space-between;
+  align-items: center; border-bottom: 1px solid var(--border);
+  background: var(--bg); position: sticky; top: 0; z-index: 100;
+}
+.nav-brand {
+  font-family: 'Source Serif 4', serif; font-size: 1.2rem; font-weight: 700;
+  color: var(--ink); display: flex; align-items: center; gap: 0.6rem;
+}
+.nav-icon {
+  width: 36px; height: 36px; background: var(--sage); border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  color: white; font-size: 1rem;
+}
+.nav-links { display: flex; gap: 2rem; list-style: none; }
+.nav-links a {
+  text-decoration: none; color: var(--text); font-size: 0.9rem; font-weight: 500;
+  transition: color 0.2s;
+}
+.nav-links a:hover { color: var(--sage-dark); }
+.nav-cta {
+  background: var(--sage); color: white; padding: 0.65rem 1.5rem;
+  border-radius: 50px; text-decoration: none; font-size: 0.85rem;
+  font-weight: 700; transition: background 0.2s;
+}
+.nav-cta:hover { background: var(--sage-dark); }
+
+/* ======== HERO: Warm, human ======== */
+.hero {
+  padding: 5rem 3rem 4rem; display: grid;
+  grid-template-columns: 1fr 1fr; gap: 4rem; align-items: center;
+  max-width: 1200px; margin: 0 auto;
+}
+.hero-text h1 {
+  font-family: 'Source Serif 4', serif; font-size: clamp(2.2rem, 3.5vw, 3rem);
+  font-weight: 700; color: var(--ink); line-height: 1.2; margin-bottom: 1.25rem;
+}
+.hero-text h1 span { color: var(--sage); }
+.hero-text p {
+  font-size: 1.05rem; color: var(--text); line-height: 1.8;
+  font-weight: 300; margin-bottom: 2rem; max-width: 480px;
+}
+.hero-btns { display: flex; gap: 1rem; flex-wrap: wrap; }
+.btn-sage {
+  background: var(--sage); color: white; padding: 0.85rem 2rem;
+  border-radius: 50px; text-decoration: none; font-weight: 700;
+  font-size: 0.9rem; transition: all 0.2s; border: none; cursor: pointer;
+  display: inline-flex; align-items: center; gap: 0.5rem;
+}
+.btn-sage:hover { background: var(--sage-dark); transform: translateY(-2px); }
+.btn-warm {
+  background: var(--cream); color: var(--ink); padding: 0.85rem 2rem;
+  border-radius: 50px; text-decoration: none; font-weight: 700;
+  font-size: 0.9rem; transition: all 0.2s; border: 1px solid var(--border);
+}
+.btn-warm:hover { background: var(--warm); }
+
+.hero-visual {
+  background: linear-gradient(135deg, var(--sage-light) 0%, var(--cream) 100%);
+  border-radius: 24px; padding: 3rem; min-height: 380px;
+  display: flex; flex-direction: column; justify-content: center;
+  position: relative;
+}
+.hero-visual-icon { font-size: 4rem; margin-bottom: 1.5rem; }
+.hero-visual h3 {
+  font-family: 'Source Serif 4', serif; font-size: 1.3rem;
+  color: var(--ink); margin-bottom: 0.5rem;
+}
+.hero-visual p { font-size: 0.9rem; color: var(--text); max-width: 300px; }
+.hero-badge {
+  position: absolute; top: 1.5rem; right: 1.5rem;
+  background: white; padding: 0.5rem 1rem; border-radius: 50px;
+  font-size: 0.75rem; font-weight: 700; color: var(--sage-dark);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+}
+
+/* ======== TRUST STRIP ======== */
+.trust-strip {
+  background: var(--warm); border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border); padding: 2rem 3rem;
+  display: flex; justify-content: center; gap: 4rem; flex-wrap: wrap;
+}
+.trust-item { text-align: center; }
+.trust-num {
+  font-family: 'Source Serif 4', serif; font-size: 2rem;
+  font-weight: 700; color: var(--sage-dark); line-height: 1;
+}
+.trust-label { font-size: 0.75rem; color: var(--gray); margin-top: 0.25rem; font-weight: 500; }
+
+/* ======== SERVICES: Gentle cards ======== */
+.services { padding: 5rem 3rem; max-width: 1100px; margin: 0 auto; }
+.section-head { text-align: center; margin-bottom: 3rem; }
+.section-head h2 {
+  font-family: 'Source Serif 4', serif; font-size: 2rem;
+  font-weight: 700; color: var(--ink); margin-bottom: 0.5rem;
+}
+.section-head p { color: var(--gray); font-size: 1rem; max-width: 500px; margin: 0 auto; }
+
+.svc-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; }
+.svc-card {
+  background: var(--bg); border: 1px solid var(--border); border-radius: var(--radius);
+  padding: 2rem; transition: all 0.3s; text-align: center;
+}
+.svc-card:hover { border-color: var(--sage); box-shadow: 0 8px 24px rgba(107,143,113,0.08); transform: translateY(-4px); }
+.svc-emoji { font-size: 2.5rem; margin-bottom: 1rem; }
+.svc-card h3 {
+  font-family: 'Source Serif 4', serif; font-size: 1.1rem; font-weight: 700;
+  color: var(--ink); margin-bottom: 0.5rem;
+}
+.svc-card p { font-size: 0.85rem; color: var(--gray); line-height: 1.7; }
+
+/* ======== PROCESS: Gentle steps ======== */
+.process { padding: 5rem 3rem; background: var(--warm); }
+.process-steps { display: grid; grid-template-columns: repeat(4, 1fr); gap: 2rem; max-width: 1100px; margin: 0 auto; }
+.process-step { text-align: center; }
+.ps-num {
+  width: 48px; height: 48px; background: var(--sage-light);
+  border-radius: 50%; display: flex; align-items: center; justify-content: center;
+  font-family: 'Source Serif 4', serif; font-size: 1.1rem; font-weight: 700;
+  color: var(--sage-dark); margin: 0 auto 1rem;
+}
+.process-step h3 {
+  font-family: 'Source Serif 4', serif; font-size: 1rem; font-weight: 700;
+  color: var(--ink); margin-bottom: 0.5rem;
+}
+.process-step p { font-size: 0.85rem; color: var(--gray); line-height: 1.6; }
+
+/* ======== TESTIMONIALS ======== */
+.testimonials { padding: 5rem 3rem; max-width: 1100px; margin: 0 auto; }
+.test-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; }
+.test-card {
+  background: var(--cream); border-radius: var(--radius); padding: 2rem;
+  position: relative;
+}
+.test-quote-mark {
+  font-family: 'Source Serif 4', serif; font-size: 3rem;
+  color: var(--sage); line-height: 0.5; margin-bottom: 1rem; opacity: 0.4;
+}
+.test-text {
+  font-family: 'Source Serif 4', serif; font-style: italic;
+  font-size: 1rem; color: var(--ink); line-height: 1.7; margin-bottom: 1.5rem;
+}
+.test-author { font-weight: 700; font-size: 0.9rem; color: var(--ink); }
+.test-detail { font-size: 0.8rem; color: var(--gray); margin-top: 0.15rem; }
+
+/* ======== CONSULTATION CTA ======== */
+.consult {
+  padding: 5rem 3rem; background: var(--sage); text-align: center;
+  border-radius: 0; position: relative;
+}
+.consult h2 {
+  font-family: 'Source Serif 4', serif; font-size: 2rem;
+  font-weight: 700; color: white; margin-bottom: 0.75rem;
+}
+.consult p { color: rgba(255,255,255,0.8); font-size: 1rem; max-width: 500px; margin: 0 auto 2rem; }
+.consult-form {
+  display: flex; gap: 0.75rem; justify-content: center;
+  max-width: 550px; margin: 0 auto; flex-wrap: wrap;
+}
+.consult-form input {
+  flex: 1; min-width: 180px; padding: 0.85rem 1.2rem; border: none;
+  border-radius: 50px; font-family: inherit; font-size: 0.9rem;
+  background: rgba(255,255,255,0.95);
+}
+.consult-form input:focus { outline: 3px solid rgba(255,255,255,0.5); }
+.consult-form button {
+  padding: 0.85rem 2rem; background: var(--ink); color: white;
+  border: none; border-radius: 50px; font-family: inherit; font-size: 0.9rem;
+  font-weight: 700; cursor: pointer; transition: background 0.2s;
+}
+.consult-form button:hover { background: #1a1a1a; }
+.consult-note { font-size: 0.75rem; color: rgba(255,255,255,0.6); margin-top: 1rem; }
+
+/* ======== FOOTER ======== */
+footer {
+  padding: 3rem; border-top: 1px solid var(--border);
+  display: grid; grid-template-columns: 2fr 1fr 1fr 1fr;
+  gap: 2rem; max-width: 1200px; margin: 0 auto;
+}
+.footer-brand h3 {
+  font-family: 'Source Serif 4', serif; font-size: 1.1rem;
+  font-weight: 700; color: var(--ink); margin-bottom: 0.5rem;
+}
+.footer-brand p { font-size: 0.85rem; color: var(--gray); line-height: 1.6; max-width: 280px; }
+.footer-col h4 { font-size: 0.7rem; font-weight: 700; color: var(--gray); text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 0.75rem; }
+.footer-col a { display: block; font-size: 0.85rem; color: var(--text); text-decoration: none; margin-bottom: 0.5rem; transition: color 0.2s; }
+.footer-col a:hover { color: var(--sage-dark); }
+.footer-bottom {
+  padding: 1.5rem 3rem; border-top: 1px solid var(--border);
+  text-align: center; font-size: 0.75rem; color: var(--gray);
+}
+
+/* ======== RESPONSIVE ======== */
+@media (max-width: 900px) {
+  .lang-bar { padding: 0.5rem 1.5rem; }
+  nav { padding: 1rem 1.5rem; }
+  .nav-links { display: none; }
+  .hero { grid-template-columns: 1fr; padding: 3rem 1.5rem; gap: 2rem; }
+  .svc-grid { grid-template-columns: 1fr; }
+  .process-steps { grid-template-columns: 1fr 1fr; }
+  .test-grid { grid-template-columns: 1fr; }
+  .trust-strip { gap: 2rem; }
+  footer { grid-template-columns: 1fr 1fr; }
+}
+</style>
+</head>
+<body>
+
+<!-- LANGUAGE BAR -->
+<div class="lang-bar">
+  <div class="lang-bar-left">Free consultation: <a href="tel:+15553456789">(555) 345-6789</a></div>
+  <div class="lang-toggle">
+    <button class="lang-btn active">English</button>
+    <button class="lang-btn">Español</button>
+    <button class="lang-btn">Português</button>
+  </div>
+</div>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-brand">
+    <div class="nav-icon">⚖️</div>
+    Rivera & Associates
+  </div>
+  <ul class="nav-links">
+    <li><a href="#services">Practice Areas</a></li>
+    <li><a href="#process">How We Help</a></li>
+    <li><a href="#stories">Client Stories</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+  <a href="#contact" class="nav-cta">Free Consultation</a>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-text">
+    <h1>Your Immigration<br>Journey Deserves<br><span>Compassionate Counsel</span></h1>
+    <p>For over 20 years, Rivera & Associates has guided families, workers, and dreamers through every step of the U.S. immigration process — with clarity, empathy, and results.</p>
+    <div class="hero-btns">
+      <a href="#contact" class="btn-sage">Schedule Free Consultation →</a>
+      <a href="#services" class="btn-warm">Explore Our Services</a>
+    </div>
+  </div>
+  <div class="hero-visual">
+    <div class="hero-badge">✓ 5,000+ cases handled</div>
+    <div class="hero-visual-icon">🌎</div>
+    <h3>We speak your language.</h3>
+    <p>Our team serves clients in English, Spanish, and Portuguese — ensuring nothing is lost in translation when it matters most.</p>
+  </div>
+</section>
+
+<!-- TRUST STRIP -->
+<div class="trust-strip">
+  <div class="trust-item"><div class="trust-num">20+</div><div class="trust-label">Years of Practice</div></div>
+  <div class="trust-item"><div class="trust-num">5,000+</div><div class="trust-label">Families Helped</div></div>
+  <div class="trust-item"><div class="trust-num">98%</div><div class="trust-label">Case Approval Rate</div></div>
+  <div class="trust-item"><div class="trust-num">3</div><div class="trust-label">Languages</div></div>
+</div>
+
+<!-- SERVICES -->
+<section class="services" id="services">
+  <div class="section-head">
+    <h2>How We Can Help You</h2>
+    <p>Every immigration situation is unique. We tailor our approach to your specific circumstances and goals.</p>
+  </div>
+  <div class="svc-grid">
+    <div class="svc-card">
+      <div class="svc-emoji">👨‍👩‍👧‍👦</div>
+      <h3>Family-Based Immigration</h3>
+      <p>Spousal visas, parent petitions, sibling sponsorship, and fiancé(e) visas. Keeping families together is our core mission.</p>
+    </div>
+    <div class="svc-card">
+      <div class="svc-emoji">💼</div>
+      <h3>Employment Visas</h3>
+      <p>H-1B, L-1, O-1, and PERM labor certification. We partner with employers to secure the talent they need.</p>
+    </div>
+    <div class="svc-card">
+      <div class="svc-emoji">🏛️</div>
+      <h3>Citizenship & Naturalization</h3>
+      <p>N-400 applications, interview preparation, and civics test coaching. The final step in your American journey.</p>
+    </div>
+    <div class="svc-card">
+      <div class="svc-emoji">🛡️</div>
+      <h3>Asylum & Refugee</h3>
+      <p>Affirmative and defensive asylum applications. We advocate for those fleeing persecution with urgency and care.</p>
+    </div>
+    <div class="svc-card">
+      <div class="svc-emoji">📋</div>
+      <h3>Green Card Renewals</h3>
+      <p>Conditional residence removal, green card renewals, and replacement cards. Keep your status current and protected.</p>
+    </div>
+    <div class="svc-card">
+      <div class="svc-emoji">⚠️</div>
+      <h3>Deportation Defense</h3>
+      <p>Removal proceedings, cancellation of removal, and appeals. We fight for your right to remain in the country you call home.</p>
+    </div>
+  </div>
+</section>
+
+<!-- PROCESS -->
+<section class="process" id="process">
+  <div class="section-head" style="margin-bottom:3rem;">
+    <h2>Your Path Forward</h2>
+    <p>We make the immigration process feel human — not bureaucratic.</p>
+  </div>
+  <div class="process-steps">
+    <div class="process-step">
+      <div class="ps-num">1</div>
+      <h3>Free Consultation</h3>
+      <p>Tell us your story. We'll listen, evaluate your options, and give you honest guidance — no cost, no pressure.</p>
+    </div>
+    <div class="process-step">
+      <div class="ps-num">2</div>
+      <h3>Strategy & Filing</h3>
+      <p>We build your case with meticulous documentation, ensuring every form is accurate and every deadline is met.</p>
+    </div>
+    <div class="process-step">
+      <div class="ps-num">3</div>
+      <h3>Updates & Support</h3>
+      <p>You'll never wonder what's happening. Regular updates, direct access to your attorney, and same-day response.</p>
+    </div>
+    <div class="process-step">
+      <div class="ps-num">4</div>
+      <h3>Resolution</h3>
+      <p>Whether it's an approved visa, a green card, or citizenship — we walk with you to the finish line and beyond.</p>
+    </div>
+  </div>
+</section>
+
+<!-- TESTIMONIALS -->
+<section class="testimonials" id="stories">
+  <div class="section-head" style="margin-bottom:3rem;">
+    <h2>Stories from Our Clients</h2>
+    <p>Real families. Real outcomes. Names changed for privacy.</p>
+  </div>
+  <div class="test-grid">
+    <div class="test-card">
+      <div class="test-quote-mark">"</div>
+      <div class="test-text">After two other lawyers told us our case was hopeless, Rivera & Associates found a path we didn't know existed. Our family is together today because of their persistence.</div>
+      <div class="test-author">Maria G.</div>
+      <div class="test-detail">Family-Based Visa · Reunited after 3 years</div>
+    </div>
+    <div class="test-card">
+      <div class="test-quote-mark">"</div>
+      <div class="test-text">They explained every step in Spanish so my parents understood exactly what was happening. That respect meant everything to us. The legal work was flawless — approved on first filing.</div>
+      <div class="test-author">Carlos R.</div>
+      <div class="test-detail">Naturalization · Now a U.S. Citizen</div>
+    </div>
+    <div class="test-card">
+      <div class="test-quote-mark">"</div>
+      <div class="test-text">My employer's HR department had no idea how to navigate the H-1B process. Attorney Rivera handled everything — the employer barely had to lift a finger, and I got approved.</div>
+      <div class="test-author">Priya K.</div>
+      <div class="test-detail">H-1B Visa · Tech Industry</div>
+    </div>
+    <div class="test-card">
+      <div class="test-quote-mark">"</div>
+      <div class="test-text">I was in removal proceedings and terrified. They took my case pro bono and won. I don't have words for what that meant to me and my children.</div>
+      <div class="test-author">Ana L.</div>
+      <div class="test-detail">Deportation Defense · Case Dismissed</div>
+    </div>
+  </div>
+</section>
+
+<!-- CONSULTATION CTA -->
+<section class="consult" id="contact">
+  <h2>Let's Start Your Journey</h2>
+  <p>Your first consultation is always free and confidential. Tell us a little about yourself and we'll reach out within one business day.</p>
+  <div class="consult-form">
+    <input type="text" placeholder="Your full name">
+    <input type="tel" placeholder="Phone number">
+    <input type="email" placeholder="Email address">
+    <button>Request Consultation</button>
+  </div>
+  <div class="consult-note">🔒 Your information is confidential and protected by attorney-client privilege.</div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-brand">
+    <h3>Rivera & Associates</h3>
+    <p>Immigration law with compassion. Serving families in English, Spanish, and Portuguese for over two decades.</p>
+  </div>
+  <div class="footer-col">
+    <h4>Practice Areas</h4>
+    <a href="#">Family Immigration</a>
+    <a href="#">Employment Visas</a>
+    <a href="#">Citizenship</a>
+    <a href="#">Asylum</a>
+    <a href="#">Deportation Defense</a>
+  </div>
+  <div class="footer-col">
+    <h4>Resources</h4>
+    <a href="#">Visa FAQ</a>
+    <a href="#">Processing Times</a>
+    <a href="#">Client Portal</a>
+    <a href="#">Blog</a>
+  </div>
+  <div class="footer-col">
+    <h4>Contact</h4>
+    <a href="#">(555) 345-6789</a>
+    <a href="#">info@riveralaw.com</a>
+    <a href="#">450 Congress Ave, Austin, TX</a>
+  </div>
+</footer>
+<div class="footer-bottom">&copy; 2024 Rivera & Associates Immigration Law. All rights reserved. · Licensed in Texas and New York.</div>
+</body>
+</html>

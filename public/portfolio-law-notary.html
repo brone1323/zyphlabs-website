@@ -1,0 +1,1245 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ClearPath Legal Services - Notary & Legal Documents</title>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary-blue: #3b6fa0;
+            --accent-green: #2d8a4e;
+            --warm-gray: #f5f3f0;
+            --dark-gray: #4a4a4a;
+            --light-gray: #e8e8e8;
+            --white: #ffffff;
+        }
+
+        body {
+            font-family: 'Nunito', sans-serif;
+            line-height: 1.6;
+            color: var(--dark-gray);
+            background-color: var(--white);
+        }
+
+        /* HEADER & NAVIGATION */
+        header {
+            background-color: var(--white);
+            padding: 1rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+
+        .header-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 1rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary-blue);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .logo::before {
+            content: "✓";
+            font-size: 1.8rem;
+            color: var(--accent-green);
+        }
+
+        nav {
+            display: none;
+            flex-direction: column;
+            position: absolute;
+            top: 70px;
+            right: 0;
+            background-color: var(--white);
+            width: 100%;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+        }
+
+        nav.active {
+            display: flex;
+        }
+
+        nav a {
+            padding: 1rem;
+            color: var(--dark-gray);
+            text-decoration: none;
+            font-weight: 500;
+            border-bottom: 1px solid var(--light-gray);
+            transition: background-color 0.3s ease;
+        }
+
+        nav a:hover {
+            background-color: var(--warm-gray);
+            color: var(--primary-blue);
+        }
+
+        .header-cta {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+
+        .phone-header {
+            display: none;
+            color: var(--primary-blue);
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+
+        .cta-btn {
+            background-color: var(--accent-green);
+            color: var(--white);
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 5px;
+            font-weight: 600;
+            cursor: pointer;
+            text-decoration: none;
+            transition: background-color 0.3s ease;
+            font-family: 'Nunito', sans-serif;
+            font-size: 0.95rem;
+        }
+
+        .cta-btn:hover {
+            background-color: #236538;
+        }
+
+        .hamburger {
+            display: flex;
+            flex-direction: column;
+            cursor: pointer;
+            gap: 0.35rem;
+        }
+
+        .hamburger span {
+            width: 25px;
+            height: 3px;
+            background-color: var(--primary-blue);
+            transition: all 0.3s ease;
+        }
+
+        /* HERO SECTION */
+        .hero {
+            background: linear-gradient(135deg, var(--warm-gray) 0%, #f0ebe7 100%);
+            padding: 4rem 1rem;
+            text-align: center;
+            position: relative;
+        }
+
+        .hero-content {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .hero h1 {
+            font-size: 2.5rem;
+            color: var(--primary-blue);
+            margin-bottom: 1rem;
+            line-height: 1.2;
+        }
+
+        .hero p {
+            font-size: 1.1rem;
+            color: var(--dark-gray);
+            margin-bottom: 1.5rem;
+            font-weight: 300;
+        }
+
+        .hero-cta-group {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .cta-primary {
+            background-color: var(--accent-green);
+            color: var(--white);
+            padding: 1rem 2rem;
+            border: none;
+            border-radius: 5px;
+            font-weight: 600;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            font-family: 'Nunito', sans-serif;
+        }
+
+        .cta-primary:hover {
+            background-color: #236538;
+        }
+
+        .badge {
+            display: inline-block;
+            background-color: var(--white);
+            color: var(--accent-green);
+            padding: 0.6rem 1.2rem;
+            border-radius: 25px;
+            font-weight: 600;
+            font-size: 0.85rem;
+            border: 2px solid var(--accent-green);
+            margin-top: 1rem;
+        }
+
+        /* SERVICES SECTION */
+        .services {
+            padding: 4rem 1rem;
+            background-color: var(--white);
+        }
+
+        .section-container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .section-title {
+            font-size: 2rem;
+            color: var(--primary-blue);
+            text-align: center;
+            margin-bottom: 0.5rem;
+        }
+
+        .section-subtitle {
+            text-align: center;
+            color: var(--dark-gray);
+            margin-bottom: 3rem;
+            font-weight: 300;
+        }
+
+        .services-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 2rem;
+        }
+
+        .service-card {
+            background-color: var(--warm-gray);
+            padding: 2rem;
+            border-radius: 10px;
+            text-align: center;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            animation: fadeInUp 0.6s ease forwards;
+            opacity: 0;
+        }
+
+        @keyframes fadeInUp {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+        }
+
+        .service-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+
+        .service-icon {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .service-card h3 {
+            color: var(--primary-blue);
+            margin-bottom: 0.5rem;
+            font-size: 1.3rem;
+        }
+
+        .service-card p {
+            color: var(--dark-gray);
+            margin-bottom: 1rem;
+            font-weight: 300;
+        }
+
+        .service-price {
+            color: var(--accent-green);
+            font-weight: 700;
+            font-size: 1.1rem;
+        }
+
+        /* HOW IT WORKS */
+        .how-it-works {
+            padding: 4rem 1rem;
+            background-color: var(--warm-gray);
+        }
+
+        .steps-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .step {
+            text-align: center;
+            padding: 2rem;
+        }
+
+        .step-number {
+            background-color: var(--primary-blue);
+            color: var(--white);
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin: 0 auto 1rem;
+        }
+
+        .step h3 {
+            color: var(--primary-blue);
+            margin-bottom: 0.5rem;
+        }
+
+        .step p {
+            color: var(--dark-gray);
+            font-weight: 300;
+        }
+
+        /* LOCATIONS */
+        .locations {
+            padding: 4rem 1rem;
+            background-color: var(--white);
+        }
+
+        .locations-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .location-card {
+            border: 2px solid var(--light-gray);
+            border-radius: 10px;
+            padding: 2rem;
+            text-align: center;
+            transition: border-color 0.3s ease;
+        }
+
+        .location-card:hover {
+            border-color: var(--primary-blue);
+        }
+
+        .location-name {
+            font-size: 1.2rem;
+            color: var(--primary-blue);
+            font-weight: 700;
+            margin-bottom: 1rem;
+        }
+
+        .location-info {
+            margin-bottom: 1rem;
+            line-height: 1.8;
+        }
+
+        .location-info p {
+            color: var(--dark-gray);
+            font-weight: 300;
+        }
+
+        .location-info strong {
+            display: block;
+            color: var(--primary-blue);
+            margin-top: 0.5rem;
+            font-weight: 600;
+        }
+
+        .map-placeholder {
+            width: 100%;
+            height: 200px;
+            background-color: var(--light-gray);
+            border-radius: 5px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--dark-gray);
+            margin-bottom: 1rem;
+            font-weight: 300;
+        }
+
+        .directions-btn {
+            background-color: var(--primary-blue);
+            color: var(--white);
+            padding: 0.7rem 1.5rem;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: background-color 0.3s ease;
+            font-family: 'Nunito', sans-serif;
+        }
+
+        .directions-btn:hover {
+            background-color: #2d4f73;
+        }
+
+        /* PRICING TABLE */
+        .pricing {
+            padding: 4rem 1rem;
+            background-color: var(--warm-gray);
+        }
+
+        .pricing-table {
+            background-color: var(--white);
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+        }
+
+        .pricing-table table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .pricing-table th {
+            background-color: var(--primary-blue);
+            color: var(--white);
+            padding: 1.5rem 1rem;
+            text-align: left;
+            font-weight: 600;
+        }
+
+        .pricing-table td {
+            padding: 1.2rem 1rem;
+            border-bottom: 1px solid var(--light-gray);
+        }
+
+        .pricing-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        .pricing-table tr:nth-child(even) {
+            background-color: var(--warm-gray);
+        }
+
+        .service-name {
+            color: var(--primary-blue);
+            font-weight: 600;
+        }
+
+        .price {
+            color: var(--accent-green);
+            font-weight: 700;
+            font-size: 1.1rem;
+        }
+
+        /* ABOUT */
+        .about {
+            padding: 4rem 1rem;
+            background-color: var(--white);
+        }
+
+        .about-content {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 2rem;
+            align-items: center;
+        }
+
+        .about-text h2 {
+            color: var(--primary-blue);
+            margin-bottom: 1rem;
+        }
+
+        .about-text p {
+            color: var(--dark-gray);
+            margin-bottom: 1rem;
+            font-weight: 300;
+            line-height: 1.8;
+        }
+
+        .about-image {
+            width: 100%;
+            height: 300px;
+            background-color: var(--light-gray);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--dark-gray);
+            font-weight: 300;
+        }
+
+        /* TESTIMONIALS */
+        .testimonials {
+            padding: 4rem 1rem;
+            background-color: var(--warm-gray);
+        }
+
+        .testimonials-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .testimonial {
+            background-color: var(--white);
+            padding: 2rem;
+            border-radius: 10px;
+            border-left: 4px solid var(--accent-green);
+        }
+
+        .testimonial-text {
+            color: var(--dark-gray);
+            margin-bottom: 1rem;
+            font-weight: 300;
+            line-height: 1.8;
+            font-style: italic;
+        }
+
+        .testimonial-author {
+            color: var(--primary-blue);
+            font-weight: 600;
+        }
+
+        .stars {
+            color: #ffc107;
+            margin-bottom: 0.5rem;
+        }
+
+        /* FAQ */
+        .faq {
+            padding: 4rem 1rem;
+            background-color: var(--white);
+        }
+
+        .faq-container {
+            max-width: 700px;
+            margin: 2rem auto 0;
+        }
+
+        .faq-item {
+            border: 1px solid var(--light-gray);
+            border-radius: 5px;
+            margin-bottom: 1rem;
+            overflow: hidden;
+        }
+
+        .faq-question {
+            background-color: var(--warm-gray);
+            padding: 1.5rem;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-weight: 600;
+            color: var(--primary-blue);
+            user-select: none;
+            transition: background-color 0.3s ease;
+        }
+
+        .faq-question:hover {
+            background-color: #eae5e2;
+        }
+
+        .faq-toggle {
+            font-size: 1.5rem;
+            transition: transform 0.3s ease;
+        }
+
+        .faq-answer {
+            max-height: 0;
+            overflow: hidden;
+            background-color: var(--white);
+            transition: max-height 0.3s ease;
+            color: var(--dark-gray);
+        }
+
+        .faq-answer.active {
+            max-height: 500px;
+            padding: 1.5rem;
+        }
+
+        /* BOOKING SECTION */
+        .booking {
+            padding: 4rem 1rem;
+            background-color: var(--warm-gray);
+        }
+
+        .booking-form {
+            max-width: 600px;
+            margin: 2rem auto 0;
+            background-color: var(--white);
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            color: var(--primary-blue);
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 0.8rem;
+            border: 1px solid var(--light-gray);
+            border-radius: 5px;
+            font-family: 'Nunito', sans-serif;
+            font-size: 0.95rem;
+            color: var(--dark-gray);
+        }
+
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: var(--primary-blue);
+            box-shadow: 0 0 0 3px rgba(59, 111, 160, 0.1);
+        }
+
+        .form-group textarea {
+            resize: vertical;
+            min-height: 80px;
+        }
+
+        .form-submit {
+            width: 100%;
+            background-color: var(--accent-green);
+            color: var(--white);
+            padding: 1rem;
+            border: none;
+            border-radius: 5px;
+            font-weight: 600;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            font-family: 'Nunito', sans-serif;
+        }
+
+        .form-submit:hover {
+            background-color: #236538;
+        }
+
+        /* FOOTER */
+        footer {
+            background-color: var(--primary-blue);
+            color: var(--white);
+            padding: 3rem 1rem 1rem;
+        }
+
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .footer-section h3 {
+            margin-bottom: 1rem;
+            font-size: 1rem;
+        }
+
+        .footer-section p {
+            font-size: 0.9rem;
+            opacity: 0.9;
+            line-height: 1.8;
+        }
+
+        .footer-section a {
+            color: var(--white);
+            text-decoration: none;
+            font-size: 0.9rem;
+            opacity: 0.9;
+            transition: opacity 0.3s ease;
+        }
+
+        .footer-section a:hover {
+            opacity: 1;
+        }
+
+        .social-links {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .social-links a {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 35px;
+            height: 35px;
+            background-color: rgba(255,255,255,0.2);
+            border-radius: 50%;
+            transition: background-color 0.3s ease;
+        }
+
+        .social-links a:hover {
+            background-color: rgba(255,255,255,0.4);
+        }
+
+        .footer-bottom {
+            border-top: 1px solid rgba(255,255,255,0.2);
+            padding-top: 1rem;
+            text-align: center;
+            font-size: 0.85rem;
+            opacity: 0.8;
+        }
+
+        /* RESPONSIVE DESIGN */
+        @media (min-width: 768px) {
+            .hero h1 {
+                font-size: 3rem;
+            }
+
+            nav {
+                display: flex !important;
+                flex-direction: row;
+                position: static;
+                background-color: transparent;
+                width: auto;
+                box-shadow: none;
+            }
+
+            nav a {
+                padding: 0 1.5rem;
+                border-bottom: none;
+                font-size: 0.95rem;
+            }
+
+            nav a:hover {
+                background-color: transparent;
+                border-bottom: 3px solid var(--accent-green);
+            }
+
+            .hamburger {
+                display: none;
+            }
+
+            .phone-header {
+                display: block;
+            }
+
+            .hero-cta-group {
+                flex-direction: row;
+                justify-content: center;
+            }
+
+            .services-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .steps-grid {
+                grid-template-columns: repeat(3, 1fr);
+                gap: 1rem;
+            }
+
+            .locations-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .testimonials-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+
+            .about-content {
+                grid-template-columns: 1fr 1fr;
+            }
+
+            .footer-content {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+
+        @media (min-width: 1024px) {
+            .services-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- HEADER -->
+    <header>
+        <div class="header-container">
+            <a href="#" class="logo">ClearPath Legal Services</a>
+            <nav id="nav">
+                <a href="#services">Services</a>
+                <a href="#about">About</a>
+                <a href="#locations">Locations</a>
+                <a href="#faq">FAQ</a>
+                <a href="#contact">Contact</a>
+            </nav>
+            <div class="header-cta">
+                <span class="phone-header">(555) 287-4129</span>
+                <a href="#booking" class="cta-btn">Book Now</a>
+                <div class="hamburger" id="hamburger">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- HERO -->
+    <section class="hero">
+        <div class="hero-content">
+            <h1>Legal Services Made Simple</h1>
+            <p>Professional notary, document preparation, and legal support services. No complicated jargon. No long waits. Just straightforward help when you need it.</p>
+            <div class="hero-cta-group">
+                <button class="cta-primary" onclick="document.getElementById('booking').scrollIntoView({behavior: 'smooth'})">Book Your Appointment</button>
+                <div class="badge">Walk-Ins Welcome</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SERVICES -->
+    <section class="services" id="services">
+        <div class="section-container">
+            <h2 class="section-title">Our Services</h2>
+            <p class="section-subtitle">Everything you need for your legal documents</p>
+            <div class="services-grid">
+                <div class="service-card">
+                    <div class="service-icon">🔏</div>
+                    <h3>Notary Public Services</h3>
+                    <p>Certified notarization for documents, signatures, and affidavits. Same-day service available.</p>
+                    <div class="service-price">From $25</div>
+                </div>
+                <div class="service-card">
+                    <div class="service-icon">📋</div>
+                    <h3>Document Preparation</h3>
+                    <p>Professional assistance preparing legal documents. We make sure everything is complete and correct.</p>
+                    <div class="service-price">$75 - $150</div>
+                </div>
+                <div class="service-card">
+                    <div class="service-icon">🏠</div>
+                    <h3>Real Estate Closings</h3>
+                    <p>Notary services for real estate transactions, title transfers, and closing documents.</p>
+                    <div class="service-price">From $150</div>
+                </div>
+                <div class="service-card">
+                    <div class="service-icon">✍️</div>
+                    <h3>Power of Attorney</h3>
+                    <p>Legal documents for healthcare, financial, and general power of attorney. We help with preparation and notarization.</p>
+                    <div class="service-price">From $100</div>
+                </div>
+                <div class="service-card">
+                    <div class="service-icon">⚡</div>
+                    <h3>Apostille Services</h3>
+                    <p>International document certification for use abroad. Fast processing for time-sensitive needs.</p>
+                    <div class="service-price">From $50</div>
+                </div>
+                <div class="service-card">
+                    <div class="service-icon">🚗</div>
+                    <h3>Mobile Notary</h3>
+                    <p>We come to you. Notary services at your home, office, or hospital. Travel fees apply.</p>
+                    <div class="service-price">From $75</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- HOW IT WORKS -->
+    <section class="how-it-works">
+        <div class="section-container">
+            <h2 class="section-title">How It Works</h2>
+            <p class="section-subtitle">Three simple steps to get your documents done</p>
+            <div class="steps-grid">
+                <div class="step">
+                    <div class="step-number">1</div>
+                    <h3>Book Online or Walk In</h3>
+                    <p>Schedule an appointment online or just stop by. No long wait times.</p>
+                </div>
+                <div class="step">
+                    <div class="step-number">2</div>
+                    <h3>Bring Your Documents</h3>
+                    <p>Bring the documents you need. Our team reviews everything with you.</p>
+                </div>
+                <div class="step">
+                    <div class="step-number">3</div>
+                    <h3>Done in Minutes</h3>
+                    <p>Most services completed while you wait. Leave with your notarized documents.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- LOCATIONS -->
+    <section class="locations" id="locations">
+        <div class="section-container">
+            <h2 class="section-title">Our Locations</h2>
+            <p class="section-subtitle">Serving our community since 2015</p>
+            <div class="locations-grid">
+                <div class="location-card">
+                    <div class="location-name">Downtown Office</div>
+                    <div class="map-placeholder">📍 Downtown Location Map</div>
+                    <div class="location-info">
+                        <p>245 Main Street<br>Suite 120</p>
+                        <strong>(555) 287-4129</strong>
+                        <p>Mon - Fri: 9am - 6pm<br>Sat: 10am - 3pm<br>Sun: Closed</p>
+                    </div>
+                    <button class="directions-btn">Get Directions</button>
+                </div>
+                <div class="location-card">
+                    <div class="location-name">Westside Office</div>
+                    <div class="map-placeholder">📍 Westside Location Map</div>
+                    <div class="location-info">
+                        <p>892 Oak Avenue<br>Suite 50</p>
+                        <strong>(555) 287-4130</strong>
+                        <p>Mon - Fri: 9am - 5pm<br>Sat: 10am - 2pm<br>Sun: Closed</p>
+                    </div>
+                    <button class="directions-btn">Get Directions</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- PRICING TABLE -->
+    <section class="pricing">
+        <div class="section-container">
+            <h2 class="section-title">Transparent Pricing</h2>
+            <p class="section-subtitle">No hidden fees. No surprises.</p>
+            <div class="pricing-table">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Service</th>
+                            <th>Price</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="service-name">Notary Public (Single)</td>
+                            <td class="price">$25</td>
+                        </tr>
+                        <tr>
+                            <td class="service-name">Notary Public (Multiple Pages)</td>
+                            <td class="price">$25 + $5 per page</td>
+                        </tr>
+                        <tr>
+                            <td class="service-name">Document Preparation - Simple</td>
+                            <td class="price">$75</td>
+                        </tr>
+                        <tr>
+                            <td class="service-name">Document Preparation - Complex</td>
+                            <td class="price">$150</td>
+                        </tr>
+                        <tr>
+                            <td class="service-name">Apostille Service</td>
+                            <td class="price">$50</td>
+                        </tr>
+                        <tr>
+                            <td class="service-name">Power of Attorney Document</td>
+                            <td class="price">$100</td>
+                        </tr>
+                        <tr>
+                            <td class="service-name">Mobile Notary</td>
+                            <td class="price">$75 + travel</td>
+                        </tr>
+                        <tr>
+                            <td class="service-name">Real Estate Closing</td>
+                            <td class="price">$150 - $300</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </section>
+
+    <!-- ABOUT -->
+    <section class="about" id="about">
+        <div class="section-container">
+            <div class="about-content">
+                <div class="about-text">
+                    <h2>About ClearPath Legal Services</h2>
+                    <p>Founded in 2015, ClearPath Legal Services is committed to making legal services accessible and stress-free. We believe that everyone deserves clear, straightforward help with their legal documents without the intimidation of a traditional law firm.</p>
+                    <p>Our team of experienced notaries and legal specialists has helped thousands of community members with their notarization, document preparation, and legal needs. We pride ourselves on transparency, accuracy, and genuine care for our clients.</p>
+                    <p>Whether you're a first-time homebuyer, planning your healthcare wishes, or need a simple document notarized, we're here to help. No question is too small.</p>
+                </div>
+                <div class="about-image">📸 Team Photo</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- TESTIMONIALS -->
+    <section class="testimonials">
+        <div class="section-container">
+            <h2 class="section-title">What Clients Say</h2>
+            <p class="section-subtitle">Real feedback from people we've helped</p>
+            <div class="testimonials-grid">
+                <div class="testimonial">
+                    <div class="stars">★★★★★</div>
+                    <div class="testimonial-text">"I was so nervous about getting documents notarized for my house closing. The team at ClearPath made it incredibly easy and answered all my questions. Highly recommend!"</div>
+                    <div class="testimonial-author">— Sarah Martinez</div>
+                </div>
+                <div class="testimonial">
+                    <div class="stars">★★★★★</div>
+                    <div class="testimonial-text">"Fast, friendly, and professional. I walked in without an appointment and they still helped me right away. This is customer service done right."</div>
+                    <div class="testimonial-author">— James Chen</div>
+                </div>
+                <div class="testimonial">
+                    <div class="stars">★★★★★</div>
+                    <div class="testimonial-text">"Used their mobile notary service when I was recovering and couldn't leave home. They came right to me. Couldn't have been easier. Thank you!"</div>
+                    <div class="testimonial-author">— Patricia Williams</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FAQ -->
+    <section class="faq" id="faq">
+        <div class="section-container">
+            <h2 class="section-title">Frequently Asked Questions</h2>
+            <p class="section-subtitle">Find answers to common questions</p>
+            <div class="faq-container">
+                <div class="faq-item">
+                    <div class="faq-question">
+                        <span>What do I need to bring to my appointment?</span>
+                        <span class="faq-toggle">+</span>
+                    </div>
+                    <div class="faq-answer">
+                        <p>Please bring a valid government-issued photo ID (driver's license, passport, etc.) and the documents you need notarized. For some services like power of attorney, we may provide sample documents for you to review.</p>
+                    </div>
+                </div>
+                <div class="faq-item">
+                    <div class="faq-question">
+                        <span>Do I need an appointment, or can I just walk in?</span>
+                        <span class="faq-toggle">+</span>
+                    </div>
+                    <div class="faq-answer">
+                        <p>Both! You can schedule an appointment online for convenience, or simply walk in. Walk-ins are always welcome, though appointment times may have shorter wait times, especially during busy hours.</p>
+                    </div>
+                </div>
+                <div class="faq-item">
+                    <div class="faq-question">
+                        <span>How long does it take?</span>
+                        <span class="faq-toggle">+</span>
+                    </div>
+                    <div class="faq-answer">
+                        <p>Most notary services take 5-15 minutes. Document preparation services typically take 15-45 minutes depending on complexity. Real estate closings may take 30-60 minutes. We'll give you an estimate when you call or arrive.</p>
+                    </div>
+                </div>
+                <div class="faq-item">
+                    <div class="faq-question">
+                        <span>Do you offer mobile notary services?</span>
+                        <span class="faq-toggle">+</span>
+                    </div>
+                    <div class="faq-answer">
+                        <p>Yes! We offer mobile notary services if you can't come to our offices. Travel fees apply based on distance. Call either location to schedule a mobile notary appointment.</p>
+                    </div>
+                </div>
+                <div class="faq-item">
+                    <div class="faq-question">
+                        <span>What forms of payment do you accept?</span>
+                        <span class="faq-toggle">+</span>
+                    </div>
+                    <div class="faq-answer">
+                        <p>We accept cash, credit cards (Visa, Mastercard, American Express), debit cards, and digital payment options like Venmo and PayPal for your convenience.</p>
+                    </div>
+                </div>
+                <div class="faq-item">
+                    <div class="faq-question">
+                        <span>Can you help with documents in other languages?</span>
+                        <span class="faq-toggle">+</span>
+                    </div>
+                    <div class="faq-answer">
+                        <p>We can notarize documents in other languages. However, for document preparation services, we primarily work in English. For complex multilingual documents, we can refer you to specialized services.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- BOOKING -->
+    <section class="booking" id="booking">
+        <div class="section-container">
+            <h2 class="section-title">Book Your Appointment</h2>
+            <p class="section-subtitle">Quick, easy scheduling</p>
+            <form class="booking-form" onsubmit="handleBooking(event)">
+                <div class="form-group">
+                    <label for="name">Full Name *</label>
+                    <input type="text" id="name" name="name" required>
+                </div>
+                <div class="form-group">
+                    <label for="email">Email Address *</label>
+                    <input type="email" id="email" name="email" required>
+                </div>
+                <div class="form-group">
+                    <label for="phone">Phone Number *</label>
+                    <input type="tel" id="phone" name="phone" required>
+                </div>
+                <div class="form-group">
+                    <label for="service">Service Needed *</label>
+                    <select id="service" name="service" required>
+                        <option value="">Select a service</option>
+                        <option value="notary">Notary Public Services</option>
+                        <option value="document">Document Preparation</option>
+                        <option value="closing">Real Estate Closing</option>
+                        <option value="poa">Power of Attorney</option>
+                        <option value="apostille">Apostille Services</option>
+                        <option value="mobile">Mobile Notary</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="location">Preferred Location *</label>
+                    <select id="location" name="location" required>
+                        <option value="">Select a location</option>
+                        <option value="downtown">Downtown Office - Main Street</option>
+                        <option value="westside">Westside Office - Oak Avenue</option>
+                        <option value="mobile">Mobile (at your location)</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="date">Preferred Date & Time *</label>
+                    <input type="datetime-local" id="date" name="date" required>
+                </div>
+                <div class="form-group">
+                    <label for="notes">Additional Notes</label>
+                    <textarea id="notes" name="notes" placeholder="Tell us about your needs (optional)"></textarea>
+                </div>
+                <button type="submit" class="form-submit">Book My Appointment</button>
+            </form>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer>
+        <div class="footer-content">
+            <div class="footer-section">
+                <h3>Downtown Office</h3>
+                <p>245 Main Street<br>Suite 120</p>
+                <p><strong>(555) 287-4129</strong></p>
+                <p>Mon - Fri: 9am - 6pm<br>Sat: 10am - 3pm</p>
+            </div>
+            <div class="footer-section">
+                <h3>Westside Office</h3>
+                <p>892 Oak Avenue<br>Suite 50</p>
+                <p><strong>(555) 287-4130</strong></p>
+                <p>Mon - Fri: 9am - 5pm<br>Sat: 10am - 2pm</p>
+            </div>
+            <div class="footer-section">
+                <h3>Connect With Us</h3>
+                <p>Follow us on social media</p>
+                <div class="social-links">
+                    <a href="#" title="Facebook">f</a>
+                    <a href="#" title="Google">G</a>
+                    <a href="#" title="Instagram">📷</a>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2024 ClearPath Legal Services. Serving our community since 2015. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script>
+        // Mobile Menu Toggle
+        const hamburger = document.getElementById('hamburger');
+        const nav = document.getElementById('nav');
+
+        hamburger.addEventListener('click', () => {
+            nav.classList.toggle('active');
+        });
+
+        // Close menu when link is clicked
+        document.querySelectorAll('nav a').forEach(link => {
+            link.addEventListener('click', () => {
+                nav.classList.remove('active');
+            });
+        });
+
+        // FAQ Accordion
+        const faqItems = document.querySelectorAll('.faq-item');
+        faqItems.forEach(item => {
+            const question = item.querySelector('.faq-question');
+            const answer = item.querySelector('.faq-answer');
+            const toggle = item.querySelector('.faq-toggle');
+
+            question.addEventListener('click', () => {
+                answer.classList.toggle('active');
+                toggle.textContent = answer.classList.contains('active') ? '−' : '+';
+            });
+        });
+
+        // Scroll Animation for Service Cards
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -100px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.service-card').forEach(card => {
+            observer.observe(card);
+        });
+
+        // Form Submission Handler
+        function handleBooking(e) {
+            e.preventDefault();
+            const name = document.getElementById('name').value;
+            const email = document.getElementById('email').value;
+            const phone = document.getElementById('phone').value;
+            const service = document.getElementById('service').value;
+            const location = document.getElementById('location').value;
+            const date = document.getElementById('date').value;
+
+            // In a real application, this would send data to a backend
+            alert(`Thank you, ${name}! Your appointment request has been received.\n\nService: ${service}\nLocation: ${location}\nDate: ${date}\n\nWe'll confirm your appointment via email at ${email}.`);
+
+            // Reset form
+            document.querySelector('.booking-form').reset();
+        }
+
+        // Smooth scroll for CTA buttons
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+    </script>
+</body>
+</html>

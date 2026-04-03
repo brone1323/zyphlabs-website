@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Blackwell & Hart | We Fight. You Win.</title>
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+:root {
+  --black: #000000;
+  --white: #ffffff;
+  --off-white: #f5f5f5;
+  --gray: #888888;
+  --red: #e11d48;
+  --red-dark: #be123c;
+}
+
+body {
+  font-family: 'Space Grotesk', sans-serif; background: var(--black);
+  color: var(--white); overflow-x: hidden; -webkit-font-smoothing: antialiased;
+}
+
+/* ======== NAV: Stark, minimal ======== */
+.nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+  padding: 1.25rem 3rem; display: flex; justify-content: space-between;
+  align-items: center; background: rgba(0,0,0,0.85); backdrop-filter: blur(10px);
+  border-bottom: 1px solid rgba(255,255,255,0.05);
+}
+.nav-brand { font-family: 'Anton', sans-serif; font-size: 1.3rem; letter-spacing: 0.08em; text-transform: uppercase; }
+.nav-brand span { color: var(--red); }
+.nav-right { display: flex; align-items: center; gap: 2rem; }
+.nav-right a {
+  color: var(--gray); text-decoration: none; font-size: 0.8rem;
+  font-weight: 500; letter-spacing: 0.05em; text-transform: uppercase;
+  transition: color 0.2s;
+}
+.nav-right a:hover { color: var(--white); }
+.nav-phone {
+  color: var(--white); background: var(--red); padding: 0.6rem 1.5rem;
+  text-decoration: none; font-weight: 700; font-size: 0.8rem;
+  letter-spacing: 0.05em; text-transform: uppercase; transition: background 0.2s;
+}
+.nav-phone:hover { background: var(--red-dark); }
+
+/* ======== HERO: Brutalist type ======== */
+.hero {
+  min-height: 100vh; display: flex; flex-direction: column;
+  justify-content: center; padding: 8rem 3rem 4rem;
+  position: relative; overflow: hidden;
+}
+.hero-bg-num {
+  position: absolute; top: 50%; right: -5%; transform: translateY(-50%);
+  font-family: 'Anton', sans-serif; font-size: clamp(20rem, 35vw, 45rem);
+  color: rgba(255,255,255,0.02); line-height: 0.85;
+  pointer-events: none; white-space: nowrap;
+}
+.hero h1 {
+  font-family: 'Anton', sans-serif; font-size: clamp(4rem, 10vw, 9rem);
+  line-height: 0.9; text-transform: uppercase; letter-spacing: -0.02em;
+  position: relative; z-index: 2; max-width: 900px;
+}
+.hero h1 .line-red { color: var(--red); }
+.hero h1 .line-outline {
+  -webkit-text-stroke: 2px var(--white); color: transparent;
+}
+.hero-sub {
+  font-size: 1.1rem; color: var(--gray); font-weight: 400;
+  margin-top: 2rem; max-width: 480px; line-height: 1.7;
+  position: relative; z-index: 2;
+}
+.hero-cta {
+  display: inline-flex; align-items: center; gap: 0.75rem;
+  margin-top: 2.5rem; position: relative; z-index: 2;
+}
+.hero-cta a {
+  background: var(--red); color: var(--white); padding: 1rem 2.5rem;
+  text-decoration: none; font-weight: 700; font-size: 0.85rem;
+  text-transform: uppercase; letter-spacing: 0.08em;
+  transition: all 0.2s;
+}
+.hero-cta a:hover { background: var(--red-dark); transform: translateY(-2px); }
+.hero-cta .or { color: var(--gray); font-size: 0.8rem; }
+.hero-cta .phone-link { color: var(--white); text-decoration: none; font-weight: 700; font-size: 1rem; transition: color 0.2s; }
+.hero-cta .phone-link:hover { color: var(--red); }
+
+/* ======== RESULTS: Giant numbers ======== */
+.results { padding: 6rem 3rem; border-top: 1px solid rgba(255,255,255,0.05); }
+.results-label {
+  font-size: 0.7rem; color: var(--red); font-weight: 700;
+  letter-spacing: 0.2em; text-transform: uppercase; margin-bottom: 3rem;
+}
+.results-grid {
+  display: grid; grid-template-columns: repeat(3, 1fr); gap: 0;
+}
+.result-item {
+  padding: 3rem 2rem; border-right: 1px solid rgba(255,255,255,0.05);
+  position: relative;
+}
+.result-item:last-child { border-right: none; }
+.result-amount {
+  font-family: 'Anton', sans-serif; font-size: clamp(3rem, 5vw, 4.5rem);
+  line-height: 1; margin-bottom: 0.5rem; letter-spacing: -0.02em;
+}
+.result-amount .currency { font-size: 0.5em; color: var(--red); vertical-align: super; }
+.result-type { font-size: 0.85rem; color: var(--gray); font-weight: 500; margin-bottom: 0.25rem; }
+.result-case { font-size: 0.75rem; color: rgba(255,255,255,0.25); }
+
+/* ======== PRACTICE AREAS: Stark list ======== */
+.areas {
+  padding: 6rem 3rem; background: var(--white); color: var(--black);
+}
+.areas-header {
+  display: flex; justify-content: space-between; align-items: flex-end;
+  margin-bottom: 3rem; padding-bottom: 1rem;
+  border-bottom: 3px solid var(--black);
+}
+.areas-header h2 {
+  font-family: 'Anton', sans-serif; font-size: 3rem;
+  text-transform: uppercase; line-height: 1;
+}
+.areas-header p { color: var(--gray); font-size: 0.9rem; max-width: 300px; text-align: right; }
+
+.area-row {
+  padding: 1.5rem 0; border-bottom: 1px solid #e0e0e0;
+  display: flex; justify-content: space-between; align-items: center;
+  cursor: pointer; transition: all 0.2s;
+}
+.area-row:hover { padding-left: 1rem; }
+.area-row:hover .area-name { color: var(--red); }
+.area-num { font-family: 'Anton', sans-serif; font-size: 1rem; color: #ccc; width: 40px; }
+.area-name { font-size: 1.2rem; font-weight: 700; flex: 1; transition: color 0.2s; }
+.area-arrow { font-size: 1.2rem; color: #ccc; transition: all 0.2s; }
+.area-row:hover .area-arrow { color: var(--red); transform: translateX(5px); }
+
+/* ======== WHY US: Overlapping layout ======== */
+.why-us { padding: 6rem 3rem; position: relative; }
+.why-us-bg {
+  position: absolute; top: 3rem; left: 3rem;
+  font-family: 'Anton', sans-serif; font-size: clamp(6rem, 12vw, 12rem);
+  text-transform: uppercase; color: rgba(255,255,255,0.03);
+  pointer-events: none; line-height: 1;
+}
+.why-grid {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 3rem;
+  position: relative; z-index: 2; max-width: 900px;
+}
+.why-item { padding: 2rem 0; border-top: 1px solid rgba(255,255,255,0.08); }
+.why-num { font-family: 'Anton', sans-serif; font-size: 3rem; color: var(--red); line-height: 1; margin-bottom: 0.5rem; }
+.why-item h3 { font-size: 1.1rem; font-weight: 700; margin-bottom: 0.5rem; }
+.why-item p { font-size: 0.85rem; color: var(--gray); line-height: 1.6; }
+
+/* ======== TESTIMONIAL: Full-width ======== */
+.test-section {
+  border-top: 1px solid rgba(255,255,255,0.05);
+  border-bottom: 1px solid rgba(255,255,255,0.05);
+  padding: 5rem 3rem;
+  display: grid; grid-template-columns: 200px 1fr; gap: 3rem;
+  align-items: center;
+}
+.test-label {
+  font-family: 'Anton', sans-serif; font-size: 1rem;
+  text-transform: uppercase; color: var(--red);
+  writing-mode: vertical-rl; text-orientation: mixed;
+  letter-spacing: 0.15em;
+}
+.test-content blockquote {
+  font-size: 1.5rem; font-weight: 500; line-height: 1.5;
+  margin-bottom: 1.5rem; max-width: 700px;
+}
+.test-content blockquote span { color: var(--red); }
+.test-author { font-weight: 700; font-size: 0.9rem; }
+.test-detail { color: var(--gray); font-size: 0.8rem; margin-top: 0.15rem; }
+
+/* ======== CTA ======== */
+.cta {
+  padding: 6rem 3rem; background: var(--red);
+  display: flex; align-items: center; justify-content: space-between;
+}
+.cta h2 {
+  font-family: 'Anton', sans-serif; font-size: clamp(2.5rem, 5vw, 4rem);
+  text-transform: uppercase; line-height: 1;
+}
+.cta-right { display: flex; flex-direction: column; align-items: flex-end; gap: 1rem; }
+.cta-phone {
+  font-family: 'Anton', sans-serif; font-size: 2rem; color: var(--white);
+  text-decoration: none; letter-spacing: 0.05em;
+}
+.cta-btn {
+  background: var(--black); color: var(--white); padding: 1rem 2.5rem;
+  text-decoration: none; font-weight: 700; font-size: 0.85rem;
+  text-transform: uppercase; letter-spacing: 0.08em; transition: all 0.2s;
+}
+.cta-btn:hover { background: var(--white); color: var(--black); }
+
+/* ======== FOOTER ======== */
+footer {
+  padding: 2rem 3rem; border-top: 1px solid rgba(255,255,255,0.05);
+  display: flex; justify-content: space-between; align-items: center;
+  font-size: 0.75rem; color: var(--gray);
+}
+footer a { color: var(--gray); text-decoration: none; }
+footer a:hover { color: var(--white); }
+
+/* ======== RESPONSIVE ======== */
+@media (max-width: 900px) {
+  .nav { padding: 1rem 1.5rem; }
+  .nav-right a:not(.nav-phone) { display: none; }
+  .hero { padding: 7rem 1.5rem 3rem; }
+  .results-grid { grid-template-columns: 1fr; }
+  .result-item { border-right: none; border-bottom: 1px solid rgba(255,255,255,0.05); }
+  .areas { padding: 4rem 1.5rem; }
+  .why-grid { grid-template-columns: 1fr; }
+  .test-section { grid-template-columns: 1fr; }
+  .test-label { writing-mode: horizontal-tb; }
+  .cta { flex-direction: column; gap: 2rem; text-align: center; }
+  .cta-right { align-items: center; }
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<div class="nav">
+  <div class="nav-brand">BLACKWELL <span>&</span> HART</div>
+  <div class="nav-right">
+    <a href="#results">Results</a>
+    <a href="#areas">Practice</a>
+    <a href="#why">Why Us</a>
+    <a href="tel:+15559876543" class="nav-phone">Call Now</a>
+  </div>
+</div>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-bg-num">$50M</div>
+  <h1>
+    <span class="line-red">We Fight.</span><br>
+    <span class="line-outline">You Win.</span>
+  </h1>
+  <p class="hero-sub">Blackwell & Hart has recovered over $50 million for injury victims across Texas. No fees unless we win your case. Period.</p>
+  <div class="hero-cta">
+    <a href="#">Free Case Review</a>
+    <span class="or">or</span>
+    <a href="tel:+15559876543" class="phone-link">(555) 987-6543</a>
+  </div>
+</section>
+
+<!-- RESULTS -->
+<section class="results" id="results">
+  <div class="results-label">Case Results</div>
+  <div class="results-grid">
+    <div class="result-item">
+      <div class="result-amount"><span class="currency">$</span>12.5M</div>
+      <div class="result-type">Trucking Accident</div>
+      <div class="result-case">Jury verdict · Harris County, 2024</div>
+    </div>
+    <div class="result-item">
+      <div class="result-amount"><span class="currency">$</span>8.2M</div>
+      <div class="result-type">Medical Malpractice</div>
+      <div class="result-case">Settlement · Surgical error, 2023</div>
+    </div>
+    <div class="result-item">
+      <div class="result-amount"><span class="currency">$</span>6.7M</div>
+      <div class="result-type">Workplace Injury</div>
+      <div class="result-case">Settlement · Construction site, 2023</div>
+    </div>
+    <div class="result-item">
+      <div class="result-amount"><span class="currency">$</span>4.1M</div>
+      <div class="result-type">Product Liability</div>
+      <div class="result-case">Verdict · Defective equipment, 2023</div>
+    </div>
+    <div class="result-item">
+      <div class="result-amount"><span class="currency">$</span>3.8M</div>
+      <div class="result-type">Motorcycle Accident</div>
+      <div class="result-case">Settlement · Drunk driver, 2022</div>
+    </div>
+    <div class="result-item">
+      <div class="result-amount"><span class="currency">$</span>2.9M</div>
+      <div class="result-type">Slip & Fall</div>
+      <div class="result-case">Settlement · Commercial property, 2022</div>
+    </div>
+  </div>
+</section>
+
+<!-- PRACTICE AREAS -->
+<section class="areas" id="areas">
+  <div class="areas-header">
+    <h2>Practice<br>Areas</h2>
+    <p>We handle the cases other firms won't touch — the complex, high-stakes injuries that demand aggressive representation.</p>
+  </div>
+  <div class="area-row"><span class="area-num">01</span><span class="area-name">Trucking & 18-Wheeler Accidents</span><span class="area-arrow">→</span></div>
+  <div class="area-row"><span class="area-num">02</span><span class="area-name">Medical Malpractice</span><span class="area-arrow">→</span></div>
+  <div class="area-row"><span class="area-num">03</span><span class="area-name">Workplace & Construction Injuries</span><span class="area-arrow">→</span></div>
+  <div class="area-row"><span class="area-num">04</span><span class="area-name">Product Liability</span><span class="area-arrow">→</span></div>
+  <div class="area-row"><span class="area-num">05</span><span class="area-name">Car & Motorcycle Accidents</span><span class="area-arrow">→</span></div>
+  <div class="area-row"><span class="area-num">06</span><span class="area-name">Wrongful Death</span><span class="area-arrow">→</span></div>
+  <div class="area-row"><span class="area-num">07</span><span class="area-name">Premises Liability</span><span class="area-arrow">→</span></div>
+  <div class="area-row"><span class="area-num">08</span><span class="area-name">Catastrophic Brain & Spinal Injuries</span><span class="area-arrow">→</span></div>
+</section>
+
+<!-- WHY US -->
+<section class="why-us" id="why">
+  <div class="why-us-bg">WHY US</div>
+  <div class="why-grid">
+    <div class="why-item">
+      <div class="why-num">01</div>
+      <h3>Zero Fees Unless We Win</h3>
+      <p>Contingency-only. We front all costs and only get paid when you get paid. If we lose, you owe us nothing.</p>
+    </div>
+    <div class="why-item">
+      <div class="why-num">02</div>
+      <h3>Trial-Ready, Not Settlement-Hungry</h3>
+      <p>Insurance companies know which firms actually go to trial. We do. That's why our settlements are higher.</p>
+    </div>
+    <div class="why-item">
+      <div class="why-num">03</div>
+      <h3>$50M+ Recovered</h3>
+      <p>A track record of multi-million dollar verdicts and settlements across Texas courts.</p>
+    </div>
+    <div class="why-item">
+      <div class="why-num">04</div>
+      <h3>You Talk to Lawyers, Not Staff</h3>
+      <p>Direct access to your attorney. Same-day callbacks. You're never just a file number here.</p>
+    </div>
+  </div>
+</section>
+
+<!-- TESTIMONIAL -->
+<section class="test-section">
+  <div class="test-label">Client Story</div>
+  <div class="test-content">
+    <blockquote>"After my accident, three firms told me my case was worth $200K. Blackwell & Hart took it to trial and the jury awarded <span>$4.1 million</span>. They didn't just represent me — they believed me."</blockquote>
+    <div class="test-author">Former Client</div>
+    <div class="test-detail">Workplace Injury · Verdict 2023</div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta">
+  <h2>Injured?<br>Call Now.</h2>
+  <div class="cta-right">
+    <a href="tel:+15559876543" class="cta-phone">(555) 987-6543</a>
+    <a href="#" class="cta-btn">Free Case Review →</a>
+  </div>
+</section>
+
+<footer>
+  <span>&copy; 2024 Blackwell & Hart Trial Attorneys. Licensed in Texas.</span>
+  <span><a href="#">Privacy</a> · <a href="#">Disclaimer</a> · Prior results do not guarantee future outcomes.</span>
+</footer>
+</body>
+</html>

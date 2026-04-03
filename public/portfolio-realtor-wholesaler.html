@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Apex Property Solutions | Get Your Cash Offer</title>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+:root {
+  --bg: #0f1117;
+  --surface: #1a1d27;
+  --surface-2: #242836;
+  --border: #2e3345;
+  --text: #e4e5ea;
+  --muted: #7a7f94;
+  --green: #22c55e;
+  --green-bg: rgba(34,197,94,0.08);
+  --green-border: rgba(34,197,94,0.2);
+  --blue: #3b82f6;
+  --blue-bg: rgba(59,130,246,0.08);
+  --purple: #8b5cf6;
+  --white: #ffffff;
+  --radius: 14px;
+}
+
+body {
+  font-family: 'Plus Jakarta Sans', sans-serif; background: var(--bg);
+  color: var(--text); height: 100vh; overflow: hidden;
+  display: flex; align-items: center; justify-content: center;
+}
+
+/* ======== FULL-SCREEN APP CONTAINER ======== */
+.app {
+  width: 100vw; height: 100vh;
+  display: grid; grid-template-columns: 380px 1fr;
+}
+
+/* ======== LEFT PANEL: Trust & Info ======== */
+.left-panel {
+  background: var(--surface); border-right: 1px solid var(--border);
+  display: flex; flex-direction: column; padding: 2.5rem;
+}
+.lp-logo { font-size: 1.1rem; font-weight: 800; color: var(--text); margin-bottom: 3rem; }
+.lp-logo span { color: var(--green); }
+.lp-headline {
+  font-size: 1.8rem; font-weight: 800; line-height: 1.2; margin-bottom: 1rem;
+}
+.lp-sub { color: var(--muted); font-size: 0.9rem; line-height: 1.7; margin-bottom: 2.5rem; }
+
+.lp-steps { display: flex; flex-direction: column; gap: 1.25rem; margin-bottom: auto; }
+.lp-step {
+  display: flex; gap: 1rem; align-items: flex-start;
+  opacity: 0.35; transition: all 0.4s;
+}
+.lp-step.active { opacity: 1; }
+.lp-step-num {
+  width: 32px; height: 32px; border-radius: 8px;
+  background: var(--surface-2); border: 1px solid var(--border);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 0.75rem; font-weight: 700; flex-shrink: 0;
+  transition: all 0.4s;
+}
+.lp-step.active .lp-step-num { background: var(--green-bg); border-color: var(--green-border); color: var(--green); }
+.lp-step.done .lp-step-num { background: var(--green); color: var(--bg); border-color: var(--green); }
+.lp-step.done { opacity: 0.6; }
+.lp-step-text h4 { font-size: 0.85rem; font-weight: 700; margin-bottom: 0.1rem; }
+.lp-step-text p { font-size: 0.75rem; color: var(--muted); }
+
+.lp-trust { padding-top: 2rem; border-top: 1px solid var(--border); }
+.trust-row { display: flex; align-items: center; gap: 0.6rem; margin-bottom: 0.75rem; font-size: 0.8rem; color: var(--muted); }
+.trust-icon { color: var(--green); font-weight: 700; }
+
+/* ======== RIGHT PANEL: Form wizard ======== */
+.right-panel {
+  display: flex; align-items: center; justify-content: center;
+  position: relative; overflow: hidden;
+}
+
+.form-step {
+  position: absolute; width: 100%; max-width: 520px;
+  padding: 2rem; opacity: 0; transform: translateX(60px);
+  transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+  pointer-events: none;
+}
+.form-step.active { opacity: 1; transform: translateX(0); pointer-events: all; }
+.form-step.exit { opacity: 0; transform: translateX(-60px); }
+
+.step-label {
+  font-size: 0.65rem; color: var(--green); font-weight: 700;
+  letter-spacing: 0.15em; text-transform: uppercase; margin-bottom: 0.75rem;
+}
+.step-title { font-size: 1.5rem; font-weight: 800; margin-bottom: 0.5rem; }
+.step-desc { font-size: 0.9rem; color: var(--muted); margin-bottom: 2rem; line-height: 1.6; }
+
+.field { margin-bottom: 1.25rem; }
+.field label {
+  display: block; font-size: 0.75rem; font-weight: 700; color: var(--muted);
+  margin-bottom: 0.4rem; text-transform: uppercase; letter-spacing: 0.05em;
+}
+.field input, .field select, .field textarea {
+  width: 100%; padding: 0.85rem 1rem; border: 1px solid var(--border);
+  border-radius: 10px; font-family: inherit; font-size: 0.95rem;
+  background: var(--surface); color: var(--text); transition: border 0.2s;
+}
+.field input:focus, .field select:focus, .field textarea:focus {
+  outline: none; border-color: var(--green);
+}
+.field textarea { resize: vertical; min-height: 80px; }
+.field input::placeholder, .field textarea::placeholder { color: var(--muted); }
+.field select { cursor: pointer; }
+.field select option { background: var(--surface); }
+
+.option-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; margin-bottom: 1.25rem; }
+.option-btn {
+  padding: 1rem; border: 1px solid var(--border); border-radius: 10px;
+  background: var(--surface); text-align: center; cursor: pointer;
+  transition: all 0.2s; font-family: inherit;
+  color: var(--text);
+}
+.option-btn:hover { border-color: var(--green); }
+.option-btn.selected { border-color: var(--green); background: var(--green-bg); }
+.option-btn .opt-icon { font-size: 1.5rem; margin-bottom: 0.4rem; }
+.option-btn .opt-label { font-size: 0.85rem; font-weight: 600; }
+.option-btn .opt-desc { font-size: 0.7rem; color: var(--muted); margin-top: 0.15rem; }
+
+.form-nav { display: flex; gap: 0.75rem; margin-top: 1.5rem; }
+.btn-next {
+  flex: 1; padding: 0.9rem; background: var(--green); color: var(--bg);
+  border: none; border-radius: 10px; font-family: inherit; font-size: 0.9rem;
+  font-weight: 700; cursor: pointer; transition: all 0.2s;
+}
+.btn-next:hover { background: #16a34a; transform: translateY(-1px); }
+.btn-back {
+  padding: 0.9rem 1.5rem; background: var(--surface-2); color: var(--muted);
+  border: 1px solid var(--border); border-radius: 10px; font-family: inherit;
+  font-size: 0.9rem; font-weight: 600; cursor: pointer; transition: all 0.2s;
+}
+.btn-back:hover { border-color: var(--muted); color: var(--text); }
+
+/* ======== RESULT STEP ======== */
+.result-card {
+  background: var(--surface); border: 1px solid var(--green-border);
+  border-radius: var(--radius); padding: 2rem; text-align: center;
+  margin-bottom: 1.5rem;
+}
+.result-label { font-size: 0.7rem; color: var(--green); font-weight: 700; letter-spacing: 0.15em; text-transform: uppercase; margin-bottom: 0.5rem; }
+.result-amount { font-size: 3rem; font-weight: 800; color: var(--green); line-height: 1; margin-bottom: 0.25rem; }
+.result-sub { font-size: 0.85rem; color: var(--muted); }
+.result-details {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem;
+  margin-top: 1.5rem; text-align: left;
+}
+.rd-item { background: var(--surface-2); padding: 0.75rem 1rem; border-radius: 8px; }
+.rd-label { font-size: 0.65rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.05em; }
+.rd-value { font-size: 0.95rem; font-weight: 700; margin-top: 0.15rem; }
+
+/* ======== PROGRESS DOTS ======== */
+.progress-dots {
+  position: absolute; bottom: 2rem; left: 50%; transform: translateX(-50%);
+  display: flex; gap: 0.5rem;
+}
+.pdot {
+  width: 8px; height: 8px; border-radius: 50%;
+  background: var(--border); transition: all 0.3s;
+}
+.pdot.active { background: var(--green); width: 24px; border-radius: 4px; }
+.pdot.done { background: var(--green); opacity: 0.4; }
+
+/* ======== RESPONSIVE ======== */
+@media (max-width: 800px) {
+  .app { grid-template-columns: 1fr; }
+  .left-panel { display: none; }
+  body { overflow-y: auto; }
+  .right-panel { min-height: 100vh; }
+}
+</style>
+</head>
+<body>
+
+<div class="app">
+  <!-- LEFT PANEL -->
+  <div class="left-panel">
+    <div class="lp-logo">APEX<span>.</span></div>
+    <div class="lp-headline">Get a Fair Cash<br>Offer in Minutes</div>
+    <div class="lp-sub">No agents, no fees, no repairs. Tell us about your property and get a no-obligation cash offer — close in as little as 7 days.</div>
+
+    <div class="lp-steps">
+      <div class="lp-step active" data-step-indicator="0">
+        <div class="lp-step-num">1</div>
+        <div class="lp-step-text"><h4>Property Details</h4><p>Address, type & condition</p></div>
+      </div>
+      <div class="lp-step" data-step-indicator="1">
+        <div class="lp-step-num">2</div>
+        <div class="lp-step-text"><h4>Your Situation</h4><p>Timeline & motivation</p></div>
+      </div>
+      <div class="lp-step" data-step-indicator="2">
+        <div class="lp-step-num">3</div>
+        <div class="lp-step-text"><h4>Contact Info</h4><p>How to reach you</p></div>
+      </div>
+      <div class="lp-step" data-step-indicator="3">
+        <div class="lp-step-num">4</div>
+        <div class="lp-step-text"><h4>Your Offer</h4><p>Instant cash estimate</p></div>
+      </div>
+    </div>
+
+    <div class="lp-trust">
+      <div class="trust-row"><span class="trust-icon">✓</span> 500+ homes purchased since 2016</div>
+      <div class="trust-row"><span class="trust-icon">✓</span> BBB A+ rated</div>
+      <div class="trust-row"><span class="trust-icon">✓</span> Close in 7-14 days</div>
+      <div class="trust-row"><span class="trust-icon">✓</span> Zero fees, zero commissions</div>
+    </div>
+  </div>
+
+  <!-- RIGHT PANEL: Form wizard -->
+  <div class="right-panel">
+
+    <!-- STEP 1: Property -->
+    <div class="form-step active" data-step="0">
+      <div class="step-label">Step 1 of 3</div>
+      <div class="step-title">Where's the property?</div>
+      <div class="step-desc">We'll use this to pull public records and generate your estimated offer.</div>
+      <div class="field">
+        <label>Property Address</label>
+        <input type="text" placeholder="123 Main St, City, State ZIP" id="address">
+      </div>
+      <div class="field">
+        <label>Property Type</label>
+        <div class="option-grid">
+          <button class="option-btn" onclick="selectOpt(this)"><div class="opt-icon">🏠</div><div class="opt-label">Single Family</div></button>
+          <button class="option-btn" onclick="selectOpt(this)"><div class="opt-icon">🏢</div><div class="opt-label">Multi-Family</div></button>
+          <button class="option-btn" onclick="selectOpt(this)"><div class="opt-icon">🏘️</div><div class="opt-label">Townhouse</div></button>
+          <button class="option-btn" onclick="selectOpt(this)"><div class="opt-icon">📦</div><div class="opt-label">Mobile Home</div></button>
+        </div>
+      </div>
+      <div class="field">
+        <label>Condition</label>
+        <select>
+          <option>Select condition...</option>
+          <option>Excellent — Move-in ready</option>
+          <option>Good — Minor cosmetic updates</option>
+          <option>Fair — Needs some work</option>
+          <option>Poor — Major repairs needed</option>
+          <option>Vacant / Distressed</option>
+        </select>
+      </div>
+      <div class="form-nav">
+        <button class="btn-next" onclick="goStep(1)">Continue →</button>
+      </div>
+    </div>
+
+    <!-- STEP 2: Situation -->
+    <div class="form-step" data-step="1">
+      <div class="step-label">Step 2 of 3</div>
+      <div class="step-title">What's your timeline?</div>
+      <div class="step-desc">This helps us tailor the offer. No wrong answers — every situation is different.</div>
+      <div class="field">
+        <label>How soon do you need to sell?</label>
+        <div class="option-grid">
+          <button class="option-btn" onclick="selectOpt(this)"><div class="opt-label">ASAP</div><div class="opt-desc">Within 7 days</div></button>
+          <button class="option-btn" onclick="selectOpt(this)"><div class="opt-label">This Month</div><div class="opt-desc">2-4 weeks</div></button>
+          <button class="option-btn" onclick="selectOpt(this)"><div class="opt-label">Flexible</div><div class="opt-desc">1-3 months</div></button>
+          <button class="option-btn" onclick="selectOpt(this)"><div class="opt-label">Just Exploring</div><div class="opt-desc">No rush</div></button>
+        </div>
+      </div>
+      <div class="field">
+        <label>Reason for Selling (optional)</label>
+        <select>
+          <option>Prefer not to say</option>
+          <option>Relocating</option>
+          <option>Inherited property</option>
+          <option>Foreclosure / Pre-foreclosure</option>
+          <option>Divorce</option>
+          <option>Downsizing</option>
+          <option>Tired landlord</option>
+          <option>Other</option>
+        </select>
+      </div>
+      <div class="form-nav">
+        <button class="btn-back" onclick="goStep(0)">← Back</button>
+        <button class="btn-next" onclick="goStep(2)">Continue →</button>
+      </div>
+    </div>
+
+    <!-- STEP 3: Contact -->
+    <div class="form-step" data-step="2">
+      <div class="step-label">Step 3 of 3</div>
+      <div class="step-title">Where should we send your offer?</div>
+      <div class="step-desc">We'll text or email your estimated offer within minutes. A team member will follow up within 24 hours with a firm number.</div>
+      <div class="field">
+        <label>Full Name</label>
+        <input type="text" placeholder="Your full name">
+      </div>
+      <div class="field">
+        <label>Phone Number</label>
+        <input type="tel" placeholder="(555) 000-0000">
+      </div>
+      <div class="field">
+        <label>Email</label>
+        <input type="email" placeholder="you@email.com">
+      </div>
+      <div class="form-nav">
+        <button class="btn-back" onclick="goStep(1)">← Back</button>
+        <button class="btn-next" onclick="goStep(3)">Get My Cash Offer →</button>
+      </div>
+    </div>
+
+    <!-- STEP 4: Result -->
+    <div class="form-step" data-step="3">
+      <div class="step-label">Estimated Offer</div>
+      <div class="step-title">Here's your cash offer range</div>
+      <div class="result-card">
+        <div class="result-label">Estimated Cash Offer</div>
+        <div class="result-amount">$185,000 – $210,000</div>
+        <div class="result-sub">Based on property details and market data</div>
+        <div class="result-details">
+          <div class="rd-item"><div class="rd-label">Closing</div><div class="rd-value">7-14 days</div></div>
+          <div class="rd-item"><div class="rd-label">Your Fees</div><div class="rd-value">$0</div></div>
+          <div class="rd-item"><div class="rd-label">Repairs</div><div class="rd-value">None required</div></div>
+          <div class="rd-item"><div class="rd-label">Next Step</div><div class="rd-value">Call within 24h</div></div>
+        </div>
+      </div>
+      <div class="step-desc" style="text-align:center;">A member of our acquisitions team will contact you within 24 hours to discuss a firm offer. No obligation.</div>
+      <div class="form-nav">
+        <button class="btn-next" onclick="goStep(0)">Start Over</button>
+      </div>
+    </div>
+
+    <div class="progress-dots">
+      <div class="pdot active" data-dot="0"></div>
+      <div class="pdot" data-dot="1"></div>
+      <div class="pdot" data-dot="2"></div>
+      <div class="pdot" data-dot="3"></div>
+    </div>
+  </div>
+</div>
+
+<script>
+let currentStep = 0;
+
+function goStep(n) {
+  const steps = document.querySelectorAll('.form-step');
+  const indicators = document.querySelectorAll('[data-step-indicator]');
+  const dots = document.querySelectorAll('.pdot');
+
+  // Exit current
+  steps[currentStep].classList.remove('active');
+  steps[currentStep].classList.add('exit');
+  setTimeout(() => steps[currentStep].classList.remove('exit'), 500);
+
+  // Enter new
+  currentStep = n;
+  setTimeout(() => steps[currentStep].classList.add('active'), 50);
+
+  // Update sidebar indicators
+  indicators.forEach((ind, i) => {
+    ind.classList.remove('active', 'done');
+    if (i < n) ind.classList.add('done');
+    else if (i === n) ind.classList.add('active');
+  });
+
+  // Update dots
+  dots.forEach((d, i) => {
+    d.classList.remove('active', 'done');
+    if (i < n) d.classList.add('done');
+    else if (i === n) d.classList.add('active');
+  });
+}
+
+function selectOpt(btn) {
+  const siblings = btn.parentElement.querySelectorAll('.option-btn');
+  siblings.forEach(s => s.classList.remove('selected'));
+  btn.classList.add('selected');
+}
+</script>
+</body>
+</html>

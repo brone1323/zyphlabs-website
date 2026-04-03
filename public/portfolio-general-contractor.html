@@ -1,0 +1,598 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cornerstone Builders | Premium General Contractor</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+:root {
+  --stone: #2c2825;
+  --sand: #d4c5a9;
+  --cream: #f5f0e8;
+  --charcoal: #1a1714;
+  --rust: #b85c38;
+  --white: #ffffff;
+  --text: #3a3530;
+}
+
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: 'Inter', sans-serif;
+  color: var(--text);
+  background: var(--charcoal);
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ---- PROGRESS BAR ---- */
+.progress-bar {
+  position: fixed; top: 0; left: 0; height: 3px;
+  background: var(--rust); z-index: 200; width: 0%;
+}
+
+/* ---- NAV ---- */
+nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+  padding: 1.5rem 3rem;
+  display: flex; justify-content: space-between; align-items: center;
+  mix-blend-mode: difference;
+}
+.nav-logo {
+  font-family: 'Bebas Neue', sans-serif; font-size: 1.4rem;
+  letter-spacing: 0.15em; color: var(--white); text-decoration: none;
+}
+.nav-links { display: flex; gap: 2.5rem; list-style: none; }
+.nav-links a {
+  color: var(--white); text-decoration: none; font-size: 0.75rem;
+  letter-spacing: 0.12em; text-transform: uppercase; font-weight: 500;
+  opacity: 0.7; transition: opacity 0.3s;
+}
+.nav-links a:hover { opacity: 1; }
+.nav-cta {
+  color: var(--white); text-decoration: none; font-size: 0.75rem;
+  letter-spacing: 0.12em; text-transform: uppercase; font-weight: 500;
+  border: 1px solid rgba(255,255,255,0.3); padding: 0.6rem 1.5rem;
+  transition: all 0.3s;
+}
+.nav-cta:hover { background: var(--white); color: var(--charcoal); }
+
+/* ---- HERO: Cinematic fullscreen ---- */
+.hero {
+  height: 100vh; display: flex; align-items: flex-end;
+  padding: 4rem; position: relative; overflow: hidden;
+}
+.hero-bg {
+  position: absolute; inset: 0;
+  background: linear-gradient(180deg, transparent 0%, transparent 40%, rgba(26,23,20,0.95) 100%),
+    linear-gradient(135deg, #3a3530 0%, #1a1714 50%, #2c2825 100%);
+}
+.hero-grid {
+  position: absolute; inset: 0;
+  background-image:
+    linear-gradient(rgba(212,197,169,0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(212,197,169,0.03) 1px, transparent 1px);
+  background-size: 80px 80px;
+}
+.hero-watermark {
+  position: absolute; top: 50%; right: 5%; transform: translateY(-50%);
+  font-family: 'Bebas Neue', sans-serif; font-size: clamp(15rem, 25vw, 30rem);
+  color: rgba(212,197,169,0.04); line-height: 0.85; pointer-events: none;
+}
+.hero-content { position: relative; z-index: 2; max-width: 800px; }
+.hero-tag {
+  font-size: 0.7rem; letter-spacing: 0.25em; text-transform: uppercase;
+  color: var(--rust); margin-bottom: 1.5rem; font-weight: 500;
+}
+.hero h1 {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: clamp(3.5rem, 8vw, 7rem);
+  line-height: 0.95; color: var(--cream); letter-spacing: 0.02em; margin-bottom: 1.5rem;
+}
+.hero-sub {
+  font-size: 1.05rem; color: var(--sand); opacity: 0.7; font-weight: 300;
+  line-height: 1.7; max-width: 500px; margin-bottom: 2rem;
+}
+.hero-scroll {
+  display: flex; align-items: center; gap: 1rem; color: var(--sand);
+  font-size: 0.7rem; letter-spacing: 0.15em; text-transform: uppercase;
+  animation: pulse 2s ease-in-out infinite;
+}
+.hero-scroll-line { width: 40px; height: 1px; background: var(--sand); }
+@keyframes pulse { 0%, 100% { opacity: 0.3; } 50% { opacity: 0.7; } }
+
+/* ---- PHILOSOPHY: Sticky split ---- */
+.philosophy { background: var(--cream); min-height: 200vh; position: relative; }
+.philosophy-sticky {
+  position: sticky; top: 0; height: 100vh;
+  display: grid; grid-template-columns: 1fr 1fr; overflow: hidden;
+}
+.philosophy-left {
+  display: flex; flex-direction: column; justify-content: center; padding: 4rem 5rem;
+}
+.chapter-label {
+  font-size: 0.65rem; letter-spacing: 0.3em; text-transform: uppercase;
+  color: var(--rust); margin-bottom: 2rem; font-weight: 600;
+}
+.philosophy-left h2 {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: clamp(3rem, 5vw, 4.5rem);
+  line-height: 1; color: var(--stone); margin-bottom: 2rem;
+}
+.philosophy-left p {
+  font-size: 1rem; line-height: 1.8; color: var(--text); opacity: 0.7;
+  font-weight: 300; max-width: 450px;
+}
+.philosophy-right { position: relative; overflow: hidden; }
+.philosophy-image {
+  position: absolute; inset: 0;
+  background: linear-gradient(135deg, var(--stone) 0%, var(--charcoal) 100%);
+  display: flex; align-items: center; justify-content: center;
+}
+.abstract {
+  width: 60%; height: 60%; border: 1px solid var(--sand);
+  opacity: 0.2; transform: rotate(45deg); position: relative;
+}
+.abstract::before {
+  content: ''; position: absolute; inset: 15%;
+  border: 1px solid var(--rust); opacity: 0.5;
+}
+
+/* ---- METRICS: Full-width counters ---- */
+.metrics {
+  background: var(--charcoal); height: 100vh;
+  display: flex; align-items: center; overflow: hidden;
+}
+.metrics-inner { width: 100%; display: flex; align-items: center; padding: 0 5rem; }
+.metric-item { flex: 1; text-align: center; padding: 3rem 2rem; position: relative; }
+.metric-item::after {
+  content: ''; position: absolute; right: 0; top: 20%; height: 60%;
+  width: 1px; background: rgba(212,197,169,0.1);
+}
+.metric-item:last-child::after { display: none; }
+.metric-number {
+  font-family: 'Bebas Neue', sans-serif; font-size: clamp(4rem, 7vw, 6rem);
+  color: var(--cream); line-height: 1; margin-bottom: 0.5rem;
+  opacity: 0; transform: translateY(30px);
+  transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.metric-number.visible { opacity: 1; transform: translateY(0); }
+.metric-label {
+  font-size: 0.65rem; letter-spacing: 0.25em; text-transform: uppercase;
+  color: var(--sand); opacity: 0.4; font-weight: 500;
+}
+.metric-sub { font-size: 0.85rem; color: var(--rust); margin-top: 0.5rem; font-weight: 300; }
+
+/* ---- PROJECTS: Horizontal scroll ---- */
+.projects-section { background: var(--cream); position: relative; }
+.projects-header { padding: 6rem 5rem 3rem; }
+.projects-header h2 {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: clamp(3rem, 5vw, 4.5rem);
+  line-height: 1; color: var(--stone);
+}
+.projects-scroll-container {
+  height: 100vh; position: sticky; top: 0; overflow: hidden;
+}
+.projects-track {
+  display: flex; gap: 2rem; padding: 3rem 5rem;
+  height: 100%; align-items: center;
+  will-change: transform;
+}
+.project-card {
+  flex: 0 0 550px; height: 70vh; position: relative; overflow: hidden; cursor: pointer;
+}
+.project-image {
+  position: absolute; inset: 0;
+  transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.project-card:hover .project-image { transform: scale(1.05); }
+.project-card:nth-child(1) .project-image { background: linear-gradient(135deg, #4a3728 0%, #2c2118 100%); }
+.project-card:nth-child(2) .project-image { background: linear-gradient(135deg, #28352c 0%, #1a2820 100%); }
+.project-card:nth-child(3) .project-image { background: linear-gradient(135deg, #353040 0%, #1e1a28 100%); }
+.project-card:nth-child(4) .project-image { background: linear-gradient(135deg, #3a3530 0%, #201c18 100%); }
+.project-overlay {
+  position: absolute; inset: 0;
+  background: linear-gradient(180deg, transparent 50%, rgba(26,23,20,0.9) 100%);
+  display: flex; flex-direction: column; justify-content: flex-end; padding: 2.5rem;
+}
+.project-year {
+  font-size: 0.65rem; letter-spacing: 0.2em; color: var(--rust);
+  text-transform: uppercase; margin-bottom: 0.75rem;
+}
+.project-title {
+  font-family: 'Bebas Neue', sans-serif; font-size: 2rem; color: var(--cream);
+  letter-spacing: 0.05em; margin-bottom: 0.5rem;
+}
+.project-type { font-size: 0.8rem; color: var(--sand); opacity: 0.6; font-weight: 300; }
+.project-arrow {
+  position: absolute; top: 2rem; right: 2rem; width: 40px; height: 40px;
+  border: 1px solid rgba(212,197,169,0.3);
+  display: flex; align-items: center; justify-content: center;
+  opacity: 0; transform: translateX(-10px); transition: all 0.4s;
+}
+.project-card:hover .project-arrow { opacity: 1; transform: translateX(0); }
+.project-arrow svg { width: 16px; height: 16px; stroke: var(--cream); fill: none; stroke-width: 1.5; }
+.projects-spacer { height: 200vh; }
+
+/* ---- PROCESS: Vertical timeline ---- */
+.process { background: var(--stone); padding: 8rem 5rem; position: relative; overflow: hidden; }
+.process h2 {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: clamp(3rem, 5vw, 4.5rem);
+  line-height: 1; color: var(--cream); margin-bottom: 5rem;
+}
+.process-timeline { display: grid; grid-template-columns: 80px 1fr; max-width: 800px; }
+.process-line { position: relative; display: flex; justify-content: center; }
+.process-line::before {
+  content: ''; position: absolute; top: 0; bottom: 0; width: 1px;
+  background: rgba(212,197,169,0.15);
+}
+.process-step { padding: 3rem 0; }
+.process-dot { position: relative; display: flex; align-items: center; justify-content: center; padding-top: 3.3rem; }
+.process-dot::before {
+  content: ''; width: 10px; height: 10px; background: var(--rust);
+  border-radius: 50%; position: relative; z-index: 2;
+}
+.step-number {
+  font-family: 'Bebas Neue', sans-serif; font-size: 0.75rem;
+  letter-spacing: 0.2em; color: var(--rust); margin-bottom: 0.75rem;
+}
+.step-title {
+  font-family: 'Bebas Neue', sans-serif; font-size: 1.8rem; color: var(--cream);
+  letter-spacing: 0.03em; margin-bottom: 1rem;
+}
+.step-desc {
+  font-size: 0.9rem; line-height: 1.7; color: var(--sand); opacity: 0.5;
+  font-weight: 300; max-width: 500px;
+}
+
+/* ---- TESTIMONIAL: Full-screen quote ---- */
+.testimonial {
+  height: 100vh; display: flex; align-items: center; justify-content: center;
+  background: var(--cream); position: relative; text-align: center; padding: 4rem;
+}
+.testimonial-bg-text {
+  position: absolute; font-family: 'Bebas Neue', sans-serif;
+  font-size: clamp(10rem, 20vw, 25rem); color: rgba(44,40,37,0.03);
+  pointer-events: none; top: 50%; left: 50%; transform: translate(-50%, -50%);
+  white-space: nowrap;
+}
+.testimonial-content { position: relative; z-index: 2; max-width: 700px; }
+.testimonial-mark { font-size: 4rem; color: var(--rust); line-height: 0.5; display: block; margin-bottom: 1.5rem; }
+.testimonial-quote {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: clamp(2rem, 4vw, 3.2rem);
+  line-height: 1.2; color: var(--stone); margin-bottom: 2.5rem; letter-spacing: 0.02em;
+}
+.testimonial-author { font-size: 0.9rem; color: var(--text); font-weight: 500; }
+.testimonial-role { font-size: 0.75rem; color: var(--text); opacity: 0.4; margin-top: 0.25rem; font-weight: 300; }
+
+/* ---- CONTACT: Minimal CTA ---- */
+.contact {
+  background: var(--charcoal); padding: 10rem 5rem;
+  display: flex; justify-content: space-between; align-items: center; min-height: 80vh;
+}
+.contact-left { max-width: 600px; }
+.contact-left h2 {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: clamp(3.5rem, 6vw, 5.5rem);
+  line-height: 0.95; color: var(--cream); margin-bottom: 2rem;
+}
+.contact-left p {
+  font-size: 1rem; line-height: 1.8; color: var(--sand); opacity: 0.5;
+  font-weight: 300; max-width: 400px; margin-bottom: 3rem;
+}
+.contact-btn {
+  display: inline-flex; align-items: center; gap: 1rem;
+  padding: 1.2rem 2.5rem; background: var(--rust); color: var(--cream);
+  text-decoration: none; font-size: 0.75rem; letter-spacing: 0.15em;
+  text-transform: uppercase; font-weight: 500; transition: all 0.4s;
+}
+.contact-btn:hover { background: #c96b45; transform: translateX(5px); }
+.contact-btn svg { width: 16px; height: 16px; stroke: currentColor; fill: none; stroke-width: 1.5; transition: transform 0.3s; }
+.contact-btn:hover svg { transform: translateX(4px); }
+.contact-right { text-align: right; }
+.contact-detail { margin-bottom: 2.5rem; }
+.contact-detail-label {
+  font-size: 0.6rem; letter-spacing: 0.25em; text-transform: uppercase;
+  color: var(--sand); opacity: 0.3; margin-bottom: 0.5rem;
+}
+.contact-detail a, .contact-detail span {
+  color: var(--cream); font-size: 1rem; text-decoration: none; font-weight: 300;
+}
+.contact-detail a:hover { color: var(--rust); }
+
+/* ---- FOOTER ---- */
+footer {
+  background: var(--charcoal); border-top: 1px solid rgba(212,197,169,0.06);
+  padding: 2rem 5rem; display: flex; justify-content: space-between; align-items: center;
+}
+footer span { font-size: 0.7rem; color: var(--sand); opacity: 0.3; letter-spacing: 0.1em; }
+
+/* ---- SCROLL REVEAL ---- */
+.reveal {
+  opacity: 0; transform: translateY(40px);
+  transition: all 0.9s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.reveal.visible { opacity: 1; transform: translateY(0); }
+.reveal-d1 { transition-delay: 0.1s; }
+.reveal-d2 { transition-delay: 0.2s; }
+.reveal-d3 { transition-delay: 0.3s; }
+
+/* ---- RESPONSIVE ---- */
+@media (max-width: 900px) {
+  nav { padding: 1rem 1.5rem; }
+  .nav-links { display: none; }
+  .hero { padding: 2rem; }
+  .philosophy-sticky { grid-template-columns: 1fr; }
+  .philosophy-right { display: none; }
+  .philosophy-left { padding: 3rem 2rem; }
+  .metrics-inner { flex-direction: column; padding: 4rem 2rem; }
+  .metric-item::after { display: none; }
+  .projects-header { padding: 4rem 2rem 2rem; }
+  .projects-track { padding: 2rem; }
+  .project-card { flex: 0 0 85vw; }
+  .process { padding: 5rem 2rem; }
+  .contact { flex-direction: column; padding: 5rem 2rem; text-align: left; }
+  .contact-right { text-align: left; margin-top: 3rem; }
+  footer { padding: 2rem; flex-direction: column; gap: 1rem; }
+}
+</style>
+</head>
+<body>
+
+<div class="progress-bar" id="progressBar"></div>
+
+<nav>
+  <a href="#" class="nav-logo">CORNERSTONE</a>
+  <ul class="nav-links">
+    <li><a href="#philosophy">Philosophy</a></li>
+    <li><a href="#projects">Projects</a></li>
+    <li><a href="#process">Process</a></li>
+  </ul>
+  <a href="#contact" class="nav-cta">Start a Project</a>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-grid"></div>
+  <div class="hero-watermark">CB</div>
+  <div class="hero-content">
+    <div class="hero-tag">Premium General Contractor &mdash; Est. 2009</div>
+    <h1>We Build<br>What Lasts</h1>
+    <p class="hero-sub">Cornerstone Builders brings 15 years of precision craftsmanship to every residential and commercial project. From foundation to finish, built without compromise.</p>
+    <div class="hero-scroll"><div class="hero-scroll-line"></div><span>Scroll to explore</span></div>
+  </div>
+</section>
+
+<!-- PHILOSOPHY: Sticky split -->
+<section class="philosophy" id="philosophy">
+  <div class="philosophy-sticky">
+    <div class="philosophy-left">
+      <div class="chapter-label">01 &mdash; Philosophy</div>
+      <h2 class="reveal">Every Structure<br>Tells a Story</h2>
+      <p class="reveal reveal-d1">We don't build houses. We build the backdrop to your life — the kitchen where your family gathers, the office where ideas take shape, the entrance that makes you feel like you've arrived.</p>
+      <br>
+      <p class="reveal reveal-d2">Our approach begins with listening. Before a single nail is driven, we understand your vision, your constraints, and the legacy you want to leave in concrete and steel.</p>
+    </div>
+    <div class="philosophy-right">
+      <div class="philosophy-image"><div class="abstract"></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- METRICS -->
+<section class="metrics">
+  <div class="metrics-inner">
+    <div class="metric-item">
+      <div class="metric-number" data-target="247">0</div>
+      <div class="metric-label">Projects Completed</div>
+      <div class="metric-sub">Residential & Commercial</div>
+    </div>
+    <div class="metric-item">
+      <div class="metric-number" data-target="15">0</div>
+      <div class="metric-label">Years in Business</div>
+      <div class="metric-sub">Since 2009</div>
+    </div>
+    <div class="metric-item">
+      <div class="metric-number" data-target="98">0</div>
+      <div class="metric-label">Client Satisfaction</div>
+      <div class="metric-sub">Percent Rating</div>
+    </div>
+    <div class="metric-item">
+      <div class="metric-number" data-target="12">0</div>
+      <div class="metric-label">Industry Awards</div>
+      <div class="metric-sub">Regional & National</div>
+    </div>
+  </div>
+</section>
+
+<!-- PROJECTS: Horizontal scroll -->
+<section class="projects-section" id="projects">
+  <div class="projects-header">
+    <div class="chapter-label">02 &mdash; Selected Work</div>
+    <h2 class="reveal">Built Portfolio</h2>
+  </div>
+  <div class="projects-scroll-container" id="projectsContainer">
+    <div class="projects-track" id="projectsTrack">
+      <div class="project-card">
+        <div class="project-image"></div>
+        <div class="project-overlay">
+          <div class="project-year">2024</div>
+          <div class="project-title">The Harrington Estate</div>
+          <div class="project-type">Full Custom Home &mdash; 6,200 sq ft</div>
+        </div>
+        <div class="project-arrow"><svg viewBox="0 0 24 24"><path d="M7 17L17 7M17 7H7M17 7V17"/></svg></div>
+      </div>
+      <div class="project-card">
+        <div class="project-image"></div>
+        <div class="project-overlay">
+          <div class="project-year">2023</div>
+          <div class="project-title">Meridian Office Complex</div>
+          <div class="project-type">Commercial Build &mdash; 22,000 sq ft</div>
+        </div>
+        <div class="project-arrow"><svg viewBox="0 0 24 24"><path d="M7 17L17 7M17 7H7M17 7V17"/></svg></div>
+      </div>
+      <div class="project-card">
+        <div class="project-image"></div>
+        <div class="project-overlay">
+          <div class="project-year">2023</div>
+          <div class="project-title">Lakewood Kitchen & Bath</div>
+          <div class="project-type">Full Renovation &mdash; Heritage Home</div>
+        </div>
+        <div class="project-arrow"><svg viewBox="0 0 24 24"><path d="M7 17L17 7M17 7H7M17 7V17"/></svg></div>
+      </div>
+      <div class="project-card">
+        <div class="project-image"></div>
+        <div class="project-overlay">
+          <div class="project-year">2022</div>
+          <div class="project-title">Westbrook Mixed-Use</div>
+          <div class="project-type">Retail + Residential &mdash; 3 Stories</div>
+        </div>
+        <div class="project-arrow"><svg viewBox="0 0 24 24"><path d="M7 17L17 7M17 7H7M17 7V17"/></svg></div>
+      </div>
+    </div>
+  </div>
+  <div class="projects-spacer"></div>
+</section>
+
+<!-- PROCESS: Timeline -->
+<section class="process" id="process">
+  <div class="chapter-label">03 &mdash; How We Work</div>
+  <h2 class="reveal">The Cornerstone<br>Process</h2>
+  <div class="process-timeline">
+    <div class="process-dot"></div>
+    <div class="process-step reveal">
+      <div class="step-number">Step 01</div>
+      <div class="step-title">Discovery & Vision</div>
+      <div class="step-desc">We start every engagement with deep listening. Site visits, inspiration sessions, and detailed requirement mapping before any design work begins.</div>
+    </div>
+    <div class="process-dot"></div>
+    <div class="process-step reveal">
+      <div class="step-number">Step 02</div>
+      <div class="step-title">Design & Engineering</div>
+      <div class="step-desc">Architectural plans, structural engineering, and 3D walkthroughs. You see your project come to life before we break ground.</div>
+    </div>
+    <div class="process-dot"></div>
+    <div class="process-step reveal">
+      <div class="step-number">Step 03</div>
+      <div class="step-title">Precision Build</div>
+      <div class="step-desc">Our in-house crews execute with master-level craftsmanship. Weekly video updates, transparent budgets, and zero surprises.</div>
+    </div>
+    <div class="process-dot"></div>
+    <div class="process-step reveal">
+      <div class="step-number">Step 04</div>
+      <div class="step-title">Handover & Beyond</div>
+      <div class="step-desc">Detailed walkthrough, full documentation, and our 5-year structural warranty. We stay with you long after the keys are in your hand.</div>
+    </div>
+  </div>
+</section>
+
+<!-- TESTIMONIAL -->
+<section class="testimonial">
+  <div class="testimonial-bg-text">TRUST</div>
+  <div class="testimonial-content reveal">
+    <span class="testimonial-mark">&ldquo;</span>
+    <div class="testimonial-quote">Cornerstone didn't just build our home. They understood what home meant to us and translated that into every beam, every finish, every detail.</div>
+    <div class="testimonial-author">James & Catherine Harrington</div>
+    <div class="testimonial-role">The Harrington Estate, 2024</div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section class="contact" id="contact">
+  <div class="contact-left">
+    <div class="chapter-label">04 &mdash; Let's Build</div>
+    <h2 class="reveal">Your Vision.<br>Our Craft.</h2>
+    <p class="reveal reveal-d1">Ready to start something extraordinary? We take on a limited number of projects each year to ensure every client gets our full attention.</p>
+    <a href="#" class="contact-btn reveal reveal-d2">
+      Start the conversation
+      <svg viewBox="0 0 24 24"><path d="M5 12H19M19 12L12 5M19 12L12 19"/></svg>
+    </a>
+  </div>
+  <div class="contact-right reveal">
+    <div class="contact-detail">
+      <div class="contact-detail-label">Email</div>
+      <a href="mailto:hello@cornerstonebuilders.com">hello@cornerstonebuilders.com</a>
+    </div>
+    <div class="contact-detail">
+      <div class="contact-detail-label">Phone</div>
+      <a href="tel:+15551234567">(555) 123-4567</a>
+    </div>
+    <div class="contact-detail">
+      <div class="contact-detail-label">Location</div>
+      <span>Portland, Oregon</span>
+    </div>
+    <div class="contact-detail">
+      <div class="contact-detail-label">License</div>
+      <span>CCB #198234</span>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <span>&copy; 2024 Cornerstone Builders. All Rights Reserved.</span>
+  <span>CCB #198234 &middot; Bonded & Insured</span>
+</footer>
+
+<script>
+// Progress bar
+window.addEventListener('scroll', () => {
+  const p = (window.scrollY / (document.documentElement.scrollHeight - window.innerHeight)) * 100;
+  document.getElementById('progressBar').style.width = p + '%';
+});
+
+// Scroll reveal
+const revealObs = new IntersectionObserver(entries => {
+  entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+}, { threshold: 0.15 });
+document.querySelectorAll('.reveal').forEach(el => revealObs.observe(el));
+
+// Metric counters
+const metricObs = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (!e.isIntersecting) return;
+    const el = e.target; el.classList.add('visible');
+    const target = parseInt(el.dataset.target);
+    let cur = 0; const inc = target / 60;
+    const t = setInterval(() => {
+      cur += inc;
+      if (cur >= target) { el.textContent = target + (target === 98 ? '%' : '+'); clearInterval(t); }
+      else el.textContent = Math.floor(cur);
+    }, 25);
+    metricObs.unobserve(el);
+  });
+}, { threshold: 0.5 });
+document.querySelectorAll('.metric-number').forEach(el => metricObs.observe(el));
+
+// Horizontal scroll for projects
+const projSection = document.getElementById('projects');
+const projTrack = document.getElementById('projectsTrack');
+if (projSection && projTrack) {
+  window.addEventListener('scroll', () => {
+    const header = projSection.querySelector('.projects-header');
+    const scrollStart = projSection.offsetTop + header.offsetHeight;
+    const progress = window.scrollY - scrollStart;
+    const maxScroll = projTrack.scrollWidth - window.innerWidth;
+    if (progress > 0 && progress < maxScroll + window.innerHeight) {
+      projTrack.style.transform = `translateX(-${Math.min(progress, maxScroll)}px)`;
+    }
+  });
+}
+
+// Smooth anchors
+document.querySelectorAll('a[href^="#"]').forEach(a => {
+  a.addEventListener('click', e => {
+    e.preventDefault();
+    const t = document.querySelector(a.getAttribute('href'));
+    if (t) t.scrollIntoView({ behavior: 'smooth' });
+  });
+});
+</script>
+</body>
+</html>
