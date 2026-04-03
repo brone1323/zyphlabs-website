@@ -262,7 +262,7 @@ export const NICHE_PRICES = {
     icon: '🎨',
     color: '#6c5ce7',
     tiers: {
-      starter: {
+      basic: {
         name: 'Starter Package',
         price: 2249,
         priceId: process.env.STRIPE_PRICE_WEB_STARTER || 'price_placeholder',
@@ -275,7 +275,7 @@ export const NICHE_PRICES = {
           '+ Monthly hosting below',
         ],
       },
-      professional: {
+      standard: {
         name: 'Professional Package',
         price: 5999,
         priceId: process.env.STRIPE_PRICE_WEB_PRO || 'price_placeholder',
