@@ -7,7 +7,7 @@ import {
   usePayPalScriptReducer,
 } from '@paypal/react-paypal-js'
 
-const clientId = process.env.NEXT_PUBLIC_PAYPAL_CLIENT_ID || ''
+const clientId = (process.env.NEXT_PUBLIC_PAYPAL_CLIENT_ID || '').trim()
 
 class PayPalErrorBoundary extends Component<
   { children: ReactNode },
