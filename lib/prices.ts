@@ -252,6 +252,47 @@ export const NICHE_PRICES = {
       { q: 'How quickly can we launch?', a: 'Credibility pages in 5–7 days. Standard firm sites in 10–14 days. Premium builds 14–21 days after onboarding.' },
     ],
   },
+  'web-design': {
+    id: 'web-design',
+    name: 'Custom Web Design',
+    slug: 'web-design',
+    headline: 'A premium custom website built for your brand.',
+    subheadline: 'Full custom design, development, and launch — handled entirely by us.',
+    problem: "Your website is your first impression. We build custom sites that convert.",
+    icon: '🎨',
+    color: '#6c5ce7',
+    tiers: {
+      starter: {
+        name: 'Starter Package',
+        price: 2249,
+        priceId: process.env.STRIPE_PRICE_WEB_STARTER || 'price_placeholder',
+        features: [
+          '5-page custom website',
+          'Responsive design',
+          'Basic SEO setup',
+          'Contact form',
+          '30 days support',
+          '+ Monthly hosting below',
+        ],
+      },
+      professional: {
+        name: 'Professional Package',
+        price: 5999,
+        priceId: process.env.STRIPE_PRICE_WEB_PRO || 'price_placeholder',
+        features: [
+          'Up to 20 pages',
+          'E-commerce ready',
+          'Advanced SEO',
+          'AI chatbot integration',
+          '3 months support',
+          'Analytics setup',
+          '+ Monthly hosting below',
+        ],
+        popular: true,
+      },
+    },
+    faq: [],
+  },
 } as const
 
 export type NicheKey = keyof typeof NICHE_PRICES
