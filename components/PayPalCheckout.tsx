@@ -1,5 +1,6 @@
 'use client'
 
+import { Component, type ReactNode } from 'react'
 import {
   PayPalScriptProvider,
   PayPalButtons,
@@ -7,6 +8,41 @@ import {
 } from '@paypal/react-paypal-js'
 
 const clientId = process.env.NEXT_PUBLIC_PAYPAL_CLIENT_ID || ''
+
+class PayPalErrorBoundary extends Component<
+  { children: ReactNode },
+  { hasError: boolean }
+> {
+  constructor(props: { children: ReactNode }) {
+    super(props)
+    this.state = { hasError: false }
+  }
+
+  static getDerivedStateFromError() {
+    return { hasError: true }
+  }
+
+  render() {
+    if (this.state.hasError) {
+      return (
+        <div className="min-h-[120px] flex flex-col items-center justify-center rounded-xl bg-amber-500/20 border border-amber-500/50 p-4 gap-2">
+          <p className="text-amber-200 text-sm font-medium">PayPal could not load</p>
+          <p className="text-amber-200/80 text-xs text-center">
+            Check your connection or try again. You can also contact us to complete
+            your order.
+          </p>
+          <a
+            href="mailto:contact@zyphlabs.com"
+            className="text-[#00cec9] hover:underline text-sm mt-1"
+          >
+            Email contact@zyphlabs.com
+          </a>
+        </div>
+      )
+    }
+    return this.props.children
+  }
+}
 
 interface PayPalCheckoutProps {
   buildFee: number
@@ -105,15 +141,17 @@ export function PayPalCheckout(props: PayPalCheckoutProps) {
   }
 
   return (
-    <PayPalScriptProvider
-      options={{
-        clientId,
-        currency: 'USD',
-        intent: 'capture',
-        components: 'buttons',
-      }}
-    >
-      <PayPalButtonsWrapper {...props} />
-    </PayPalScriptProvider>
+    <PayPalErrorBoundary>
+      <PayPalScriptProvider
+        options={{
+          clientId,
+          currency: 'USD',
+          intent: 'capture',
+          components: 'buttons',
+        }}
+      >
+        <PayPalButtonsWrapper {...props} />
+      </PayPalScriptProvider>
+    </PayPalErrorBoundary>
   )
 }
