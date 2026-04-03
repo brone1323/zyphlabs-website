@@ -158,7 +158,7 @@ export default function NicheServicePage({ nicheKey }: NicheServicePageProps) {
           </div>
 
           <p className="text-center text-[#555577] text-sm mt-8">
-            All prices in USD. Build fees are one-time. Hosting is month-to-month, cancel anytime.
+            All prices in CAD. Build fees are one-time. Hosting is month-to-month, cancel anytime.
           </p>
         </div>
       </section>

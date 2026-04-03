@@ -145,7 +145,7 @@ export function PayPalCheckout(props: PayPalCheckoutProps) {
       <PayPalScriptProvider
         options={{
           clientId,
-          currency: 'USD',
+          currency: 'CAD',
           intent: 'capture',
           components: 'buttons',
         }}

@@ -60,22 +60,22 @@ export async function POST(request: NextRequest) {
           custom_id: JSON.stringify({ niche, tier, hostingPlan }),
           description: `Zyph Labs – ${tier} build (${niche}) + ${hostingPlan} hosting`,
           amount: {
-            currency_code: 'USD',
+            currency_code: 'CAD',
             value: total,
             breakdown: {
-              item_total: { currency_code: 'USD', value: total },
+              item_total: { currency_code: 'CAD', value: total },
             },
           },
           items: [
             {
               name: `Website Build — ${tier} (${niche})`,
               quantity: '1',
-              unit_amount: { currency_code: 'USD', value: buildAmount },
+              unit_amount: { currency_code: 'CAD', value: buildAmount },
             },
             {
               name: `Hosting — ${hostingPlan} (first month)`,
               quantity: '1',
-              unit_amount: { currency_code: 'USD', value: hostingAmount },
+              unit_amount: { currency_code: 'CAD', value: hostingAmount },
             },
           ],
         },

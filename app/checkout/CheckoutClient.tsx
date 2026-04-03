@@ -104,7 +104,7 @@ export default function CheckoutClient({
                 </span>
               </div>
               <p className="text-xs text-[#555577] mt-2">
-                Includes build fee + first month hosting. Hosting renews monthly at ${hostingFee}/mo.
+                All prices in CAD. Includes build fee + first month hosting. Hosting renews monthly at ${hostingFee}/mo.
               </p>
             </div>
 
