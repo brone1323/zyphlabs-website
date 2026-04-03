@@ -167,21 +167,25 @@ export default function WelcomePage({
       <section className="py-16 px-4 sm:px-6 text-center">
         <div className="max-w-xl mx-auto glass p-8 rounded-2xl">
           <p className="text-[#6c5ce7] text-sm font-semibold uppercase tracking-widest mb-3">
-            Ready to get started?
+            Next step
           </p>
           <h2
             className="text-2xl font-bold text-white mb-3"
             style={{ fontFamily: 'Space Grotesk, sans-serif' }}
           >
-            Complete your onboarding questionnaire
+            Check your inbox
           </h2>
           <p className="text-sm text-[#8888aa] mb-6">
-            Takes about 15 minutes. Share your logo, brand colors, photos, services, and goals —
-            and we'll take it from there.
+            We're sending your onboarding questionnaire to your email now. It takes about 15 minutes
+            to complete — logo, brand colors, photos, services, and goals — and we'll take it from there.
+            Can't find it? Reach us directly below.
           </p>
-          <Link href="/questionnaire" className="btn-primary inline-block px-10 py-4 text-base">
-            Start Questionnaire →
-          </Link>
+          <a
+            href="mailto:contact@zyphlabs.com?subject=Onboarding%20Questionnaire%20Help"
+            className="btn-primary inline-block px-10 py-4 text-base"
+          >
+            Email Us →
+          </a>
         </div>
         <div className="mt-8">
           <Link href="/" className="text-sm text-[#444466] hover:text-[#8888aa] transition-colors">
