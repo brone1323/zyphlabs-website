@@ -1,23 +1,20 @@
 import type { Metadata } from 'next'
-import CheckoutClient from '../CheckoutClient'
+import dynamic from 'next/dynamic'
 
 export const metadata: Metadata = {
   title: 'Test Checkout | Zyph Labs',
   robots: { index: false, follow: false },
 }
 
+const TestCheckoutClient = dynamic(() => import('./TestCheckoutClient'), {
+  ssr: false,
+  loading: () => (
+    <div className="min-h-screen flex items-center justify-center">
+      <p className="text-[#8888aa]">Loading…</p>
+    </div>
+  ),
+})
+
 export default function TestCheckoutPage() {
-  return (
-    <CheckoutClient
-      niche="contractors"
-      nicheName="$1 Test Order"
-      tier="test"
-      tierName="PayPal Integration Test"
-      buildFee={0.5}
-      hostingPlan="starter"
-      hostingName="Test"
-      hostingFee={0.5}
-      serviceHref="/checkout"
-    />
-  )
+  return <TestCheckoutClient />
 }
