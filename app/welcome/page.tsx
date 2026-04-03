@@ -11,7 +11,7 @@ const nextSteps = [
     step: '01',
     icon: '📧',
     title: 'Check your email',
-    desc: "You'll receive an order confirmation from Stripe and a welcome email from us within the next hour. Check your spam folder if you don't see it.",
+    desc: "You'll receive an order confirmation from PayPal and a welcome email from us within the next hour. Check your spam folder if you don't see it.",
     time: 'Within 1 hour',
   },
   {
@@ -40,7 +40,7 @@ const nextSteps = [
 export default function WelcomePage({
   searchParams,
 }: {
-  searchParams: { session_id?: string }
+  searchParams: { order_id?: string }
 }) {
   return (
     <div className="min-h-screen">
@@ -73,9 +73,9 @@ export default function WelcomePage({
             no guessing, no waiting in the dark.
           </p>
 
-          {searchParams.session_id && (
+          {searchParams.order_id && (
             <p className="text-xs text-[#444466] mt-4">
-              Reference: {searchParams.session_id.slice(0, 24)}...
+              PayPal Order: {searchParams.order_id}
             </p>
           )}
         </div>
@@ -127,11 +127,10 @@ export default function WelcomePage({
                 className="text-sm font-semibold text-white mb-2"
                 style={{ fontFamily: 'Space Grotesk, sans-serif' }}
               >
-                30-Day Hosting Trial
+                First Month Included
               </h3>
               <p className="text-xs text-[#8888aa]">
-                Your hosting subscription starts today but the first charge is 30 days away — giving us time
-                to build and launch your site first.
+                Your first month of hosting was included in your payment today. Hosting renews monthly — cancel anytime, no contracts.
               </p>
             </div>
             <div className="glass p-6 text-center">
@@ -157,8 +156,7 @@ export default function WelcomePage({
                 Manage Billing
               </h3>
               <p className="text-xs text-[#8888aa]">
-                View invoices, update your payment method, or manage your subscription anytime through
-                your Stripe customer portal.
+                View your payment confirmation in your PayPal account. To update billing or cancel hosting, email us at contact@zyphlabs.com.
               </p>
             </div>
           </div>

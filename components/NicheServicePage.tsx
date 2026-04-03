@@ -26,7 +26,7 @@ export default function NicheServicePage({ nicheKey }: NicheServicePageProps) {
   ]
 
   const processSteps = [
-    { icon: '🛒', title: 'You Order', desc: 'Pick your tier and hosting plan. One checkout — secure Stripe payment.' },
+    { icon: '🛒', title: 'You Order', desc: 'Pick your tier and hosting plan. One checkout — secure PayPal payment.' },
     { icon: '📋', title: 'Onboarding Questionnaire', desc: 'Fill out a short form with your brand, content, and goals. No calls — just a quick questionnaire.' },
     { icon: '⚙️', title: 'We Build & Review', desc: 'Custom design built for your niche. You approve a preview before launch.' },
     { icon: '🚀', title: 'Go Live', desc: 'We deploy to your domain, configure SSL, and your site is live.' },
@@ -139,7 +139,7 @@ export default function NicheServicePage({ nicheKey }: NicheServicePageProps) {
             </h2>
             <p className="text-[#8888aa] max-w-xl mx-auto">
               Choose your build tier below, then select your hosting plan inside the card.
-              Your 30-day free hosting trial begins at checkout.
+              First month hosting included at checkout. Month-to-month after that — cancel anytime.
             </p>
           </div>
 
@@ -150,7 +150,6 @@ export default function NicheServicePage({ nicheKey }: NicheServicePageProps) {
                 tierKey={tierKey}
                 name={tier.name}
                 price={tier.price}
-                priceId={tier.priceId}
                 features={tier.features}
                 popular={tier.popular}
                 nicheSlug={niche.slug}

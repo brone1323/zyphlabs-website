@@ -39,10 +39,10 @@ export default function Footer() {
             <div className="flex items-center gap-3 text-xs text-[#8888aa]">
               <span className="flex items-center gap-1.5">
                 <span className="w-1.5 h-1.5 rounded-full bg-[#00cec9] inline-block" />
-                Secure checkout via Stripe
+                Secure checkout via PayPal
               </span>
               <span>·</span>
-              <span>30-day hosting trial</span>
+              <span>Cancel hosting anytime</span>
             </div>
           </div>
 
@@ -82,7 +82,7 @@ export default function Footer() {
         {/* Bottom bar */}
         <div className="mt-12 pt-8 border-t border-white/5 flex flex-col sm:flex-row justify-between items-center gap-4 text-xs text-[#555577]">
           <p>© {new Date().getFullYear()} Zyph Labs. All rights reserved.</p>
-          <p>Built with Next.js · Hosted on Vercel · Payments by Stripe</p>
+          <p>Built with Next.js · Hosted on Vercel · Payments by PayPal</p>
         </div>
       </div>
     </footer>

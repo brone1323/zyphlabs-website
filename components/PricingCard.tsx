@@ -7,7 +7,6 @@ interface PricingCardProps {
   tierKey: string
   name: string
   price: number
-  priceId: string
   features: readonly string[]
   popular?: boolean
   nicheSlug: string
@@ -17,7 +16,6 @@ export default function PricingCard({
   tierKey,
   name,
   price,
-  priceId,
   features,
   popular,
   nicheSlug,
@@ -27,31 +25,9 @@ export default function PricingCard({
 
   const selectedPlan = HOSTING_PLANS.find((p) => p.id === selectedHosting)!
 
-  const handleCheckout = async () => {
+  const handleCheckout = () => {
     setLoading(true)
-    try {
-      const res = await fetch('/api/checkout', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          buildPriceId: priceId,
-          hostingPriceId: selectedPlan.priceId,
-          niche: nicheSlug,
-          tier: tierKey,
-          hostingPlan: selectedHosting,
-        }),
-      })
-      const data = await res.json()
-      if (data.url) {
-        window.location.href = data.url
-      } else {
-        throw new Error(data.error || 'Checkout failed')
-      }
-    } catch (err) {
-      console.error('Checkout error:', err)
-      alert('Something went wrong starting checkout. Please try again.')
-      setLoading(false)
-    }
+    window.location.href = `/checkout?niche=${encodeURIComponent(nicheSlug)}&tier=${encodeURIComponent(tierKey)}&hosting=${encodeURIComponent(selectedHosting)}`
   }
 
   return (
@@ -177,7 +153,7 @@ export default function PricingCard({
               <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
               <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
             </svg>
-            Redirecting to checkout...
+            Loading checkout...
           </span>
         ) : (
           'Get Started →'
@@ -185,7 +161,7 @@ export default function PricingCard({
       </button>
 
       <p className="text-center text-[10px] text-[#444466] mt-3">
-        Secure checkout powered by Stripe
+        Secure checkout powered by PayPal
       </p>
     </div>
   )
