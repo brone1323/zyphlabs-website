@@ -433,6 +433,104 @@
     height: 100%; width: 0%; background: linear-gradient(90deg, #f59e0b, #f97316);
     transition: width 0.6s ease;
   }
+
+  /* ── Mobile Responsive ── */
+  @media (max-width: 640px) {
+    body { overflow-x: hidden; }
+
+    /* Landing */
+    .landing-icon { width: 56px; height: 56px; margin-bottom: 20px; }
+    .landing-title { font-size: 32px; letter-spacing: -1px; }
+    .landing-sub { font-size: 15px; margin-bottom: 32px; }
+    .start-btn { padding: 14px 36px; font-size: 15px; }
+
+    /* Narration */
+    .narration {
+      top: 32px; font-size: 16px; max-width: 90%; padding: 0 12px;
+      line-height: 1.5;
+    }
+
+    /* Steps bar */
+    .steps-bar { bottom: 20px; gap: 8px; }
+    .step-dot { width: 8px; height: 8px; }
+    .step-dot.active { width: 22px; }
+
+    /* Upload scene */
+    .drop-zone {
+      width: calc(100vw - 48px); max-width: 360px;
+      height: 220px;
+    }
+
+    /* File cards */
+    .file-card { font-size: 12px; padding: 10px 14px; gap: 8px; }
+    .file-card .file-icon { width: 28px; height: 28px; font-size: 14px; }
+
+    /* Contract */
+    .contract-doc {
+      width: calc(100vw - 48px); max-width: 360px;
+      padding: 24px 20px;
+    }
+    .contract-header { font-size: 16px; }
+    .contract-label { font-size: 10px; width: 64px; }
+    .contract-value { font-size: 12px; }
+    .contract-badge { font-size: 12px; padding: 5px 12px; }
+
+    /* Drawing canvas */
+    .drawing-canvas-wrap {
+      width: calc(100vw - 32px); max-width: 420px;
+      height: auto; aspect-ratio: 520 / 380;
+    }
+    .drawing-toolbar { height: 32px; padding: 0 10px; }
+    .toolbar-dot { width: 8px; height: 8px; }
+    .toolbar-title { font-size: 10px; }
+    .dxf-badge { top: 42px; right: 10px; font-size: 9px; padding: 3px 8px; }
+    .drawing-label { font-size: 10px; bottom: 8px; right: 10px; }
+
+    /* Permits */
+    .permits-wrap {
+      flex-direction: column; align-items: center;
+      gap: 16px; padding: 0 16px;
+    }
+    .permit-card {
+      width: calc(100vw - 48px); max-width: 340px;
+      padding: 20px 18px;
+    }
+    .permit-title { font-size: 14px; }
+    .permit-provider { font-size: 11px; margin-bottom: 14px; }
+    .permit-field-label { font-size: 11px; }
+    .permit-field-value { font-size: 12px; }
+    .permit-status { font-size: 12px; padding: 6px 12px; }
+
+    /* Finish */
+    .finish-check { width: 60px; height: 60px; }
+    .finish-text { font-size: 20px; }
+    .finish-sub { font-size: 14px; }
+    .restart-btn { padding: 10px 28px; font-size: 14px; }
+
+    /* Custom build */
+    .custom-wrap { max-width: 90vw; gap: 20px; padding: 0 16px; }
+    .custom-icon-box { width: 44px; height: 44px; font-size: 20px; border-radius: 10px; }
+    .custom-connector { width: 16px; }
+    .custom-heading { font-size: 19px; }
+    .custom-body { font-size: 14px; line-height: 1.6; }
+    .custom-timeline { padding: 10px 16px; gap: 10px; }
+    .custom-timeline-num { font-size: 26px; }
+    .custom-timeline-label { font-size: 12px; }
+    .custom-note { font-size: 12px; }
+
+    .finish-extra { font-size: 13px; max-width: 85vw; }
+    .zyph-logo-text { font-size: 24px; letter-spacing: 4px; }
+    .zyph-logo-sub { font-size: 9px; letter-spacing: 2px; }
+  }
+
+  /* Tablet tweaks */
+  @media (max-width: 768px) and (min-width: 641px) {
+    .landing-title { font-size: 42px; }
+    .narration { font-size: 19px; max-width: 85%; }
+    .drawing-canvas-wrap { width: calc(100vw - 48px); max-width: 500px; height: auto; aspect-ratio: 520 / 380; }
+    .permits-wrap { gap: 16px; }
+    .permit-card { width: 240px; padding: 22px 18px; }
+  }
 </style>
 </head>
 <body>
