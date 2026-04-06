@@ -59,13 +59,51 @@ export async function POST(request: NextRequest) {
     )
 
     if (!res.ok) {
-      const err = await res.text()
-      const hint =
-        res.status === 404 || res.status === 422
-          ? ' Ensure PAYPAL_MODE matches your credentials (live vs sandbox).'
-          : ''
+      const errText = await res.text()
+      console.error('PayPal capture raw error:', errText)
+
+      // Parse the PayPal error and return a user-friendly message
+      let userMessage = 'Payment could not be processed. Please try again.'
+      let errorCode = 'PAYMENT_FAILED'
+
+      try {
+        const errJson = JSON.parse(errText)
+        const issue = errJson.details?.[0]?.issue
+
+        switch (issue) {
+          case 'INSTRUMENT_DECLINED':
+            userMessage = 'Your payment method was declined. Please try a different card or payment method.'
+            errorCode = 'DECLINED'
+            break
+          case 'PAYER_ACTION_REQUIRED':
+            userMessage = 'Additional action is required to complete payment. Please try again.'
+            errorCode = 'ACTION_REQUIRED'
+            break
+          case 'ORDER_NOT_APPROVED':
+            userMessage = 'The payment was not approved. Please try again.'
+            errorCode = 'NOT_APPROVED'
+            break
+          case 'DUPLICATE_INVOICE_ID':
+            userMessage = 'This order has already been processed.'
+            errorCode = 'DUPLICATE'
+            break
+          case 'MAX_NUMBER_OF_PAYMENT_ATTEMPTS_EXCEEDED':
+            userMessage = 'Too many payment attempts. Please wait a few minutes and try again.'
+            errorCode = 'TOO_MANY_ATTEMPTS'
+            break
+          default:
+            if (res.status === 404 || res.status === 422) {
+              userMessage = 'Payment service configuration error. Please contact support.'
+              errorCode = 'CONFIG_ERROR'
+            }
+            break
+        }
+      } catch (_) {
+        // Not JSON â use default message
+      }
+
       return NextResponse.json(
-        { error: `PayPal capture failed: ${err}${hint}` },
+        { error: userMessage, code: errorCode },
         { status: 500 }
       )
     }
