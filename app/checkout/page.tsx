@@ -16,6 +16,8 @@ interface PageProps {
   }
 }
 
+type TierInfo = { name: string; price: number; priceId: string; features: readonly string[] }
+
 export default function CheckoutPage({ searchParams }: PageProps) {
   const { niche, tier, hosting } = searchParams
 
@@ -23,8 +25,9 @@ export default function CheckoutPage({ searchParams }: PageProps) {
   const nicheData = niche ? NICHE_PRICES[niche as keyof typeof NICHE_PRICES] : null
   if (!nicheData) redirect('/')
 
-  // Validate tier
-  const tierData = tier ? nicheData.tiers[tier as keyof typeof nicheData.tiers] : null
+  // Validate tier — cast needed because as-const niches have non-overlapping tier keys
+  const tiers = nicheData.tiers as Record<string, TierInfo>
+  const tierData = tier ? tiers[tier] : null
   if (!tierData) redirect('/')
 
   // Validate hosting plan
