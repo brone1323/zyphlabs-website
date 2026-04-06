@@ -4,8 +4,10 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Solar AI Agent</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <style>
-  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
 
   * { margin: 0; padding: 0; box-sizing: border-box; }
 
@@ -70,6 +72,15 @@
     opacity: 0; transition: opacity 0.8s ease;
   }
   #demo.show { opacity: 1; }
+  #demo.scrollable {
+    position: absolute;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    justify-content: flex-start;
+    padding-top: 40px;
+    padding-bottom: 60px;
+  }
+  #demo.scrollable ~ .steps-bar { display: none; }
 
   /* ── Narration Text ── */
   .narration {
@@ -637,19 +648,23 @@
     .zyph-logo-sub { font-size: 9px; letter-spacing: 2px; }
 
     /* Pricing mobile */
-    .pricing-section { margin-top: 36px; padding: 0 12px; }
+    .pricing-section { margin-top: 36px; padding: 0 12px; width: 100%; }
     .pricing-heading { font-size: 18px; }
-    .pricing-sub { font-size: 13px; }
-    .pricing-cards { flex-direction: column; align-items: center; }
+    .pricing-sub { font-size: 13px; padding: 0 8px; }
+    .pricing-cards { flex-direction: column; align-items: center; gap: 16px; }
     .pricing-card { min-width: unset; width: calc(100vw - 48px); max-width: 320px; }
     .pricing-amount { font-size: 30px; }
+    .pricing-cta { padding: 14px 0; font-size: 16px; }
 
     /* Add-ons mobile */
-    .addons-section { margin-top: 28px; padding: 0 12px; }
+    .addons-section { margin-top: 28px; padding: 0 12px; width: 100%; }
     .addons-grid { grid-template-columns: 1fr 1fr; gap: 10px; }
     .addon-icon { font-size: 24px; }
     .addon-name { font-size: 13px; }
     .addon-desc { font-size: 11px; }
+
+    /* Make finish scene scrollable on mobile so pricing is accessible */
+    #demo.scrollable { padding-top: 24px; padding-bottom: 80px; }
   }
 
   /* Tablet tweaks */
@@ -1436,6 +1451,11 @@ async function playCustomScene() {
   showScene('scene-custom');
   setStep(5); setProgress(97);
   setNarration('');
+
+  // Enable scrolling so pricing section is accessible on all screen sizes
+  document.body.style.overflow = 'auto';
+  $('demo').classList.add('scrollable');
+
   await wait(400);
 
   $('customIcons').classList.add('show');
@@ -1474,6 +1494,11 @@ async function playFinishScene() {
 }
 
 function restart() {
+  // Reset scrolling state
+  document.body.style.overflow = 'hidden';
+  $('demo').classList.remove('scrollable');
+  $('demo').scrollTop = 0;
+
   // Reset everything
   $('demo').classList.remove('show');
   $('landing').classList.remove('hide');
