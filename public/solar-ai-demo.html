@@ -434,6 +434,83 @@
     transition: width 0.6s ease;
   }
 
+  /* ── Early Release Pricing ── */
+  .pricing-section {
+    margin-top: 48px; width: 100%; max-width: 680px;
+    opacity: 0; transform: translateY(16px);
+    transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  .pricing-section.show { opacity: 1; transform: translateY(0); }
+  .pricing-divider {
+    width: 60px; height: 2px; margin: 0 auto 28px;
+    background: linear-gradient(90deg, #f59e0b, #f97316); border-radius: 2px;
+  }
+  .pricing-heading {
+    font-size: 22px; font-weight: 700; color: #0f172a;
+    text-align: center; margin-bottom: 6px; letter-spacing: -0.5px;
+  }
+  .pricing-sub {
+    font-size: 14px; color: #64748b; text-align: center;
+    margin-bottom: 28px; font-weight: 400;
+  }
+  .pricing-cards {
+    display: flex; gap: 20px; justify-content: center;
+    flex-wrap: wrap;
+  }
+  .pricing-card {
+    flex: 1; min-width: 240px; max-width: 300px;
+    background: #fff; border: 1.5px solid #e2e8f0;
+    border-radius: 16px; padding: 28px 24px;
+    display: flex; flex-direction: column; align-items: center;
+    transition: border-color 0.3s, box-shadow 0.3s;
+    position: relative;
+  }
+  .pricing-card:hover {
+    border-color: #f59e0b;
+    box-shadow: 0 8px 32px rgba(245, 158, 11, 0.12);
+  }
+  .pricing-card.featured {
+    border-color: #f59e0b;
+    box-shadow: 0 4px 24px rgba(245, 158, 11, 0.10);
+  }
+  .pricing-save-tag {
+    position: absolute; top: -12px; right: 16px;
+    background: linear-gradient(135deg, #f59e0b, #f97316);
+    color: #fff; font-size: 11px; font-weight: 700;
+    padding: 4px 12px; border-radius: 20px; letter-spacing: 0.3px;
+  }
+  .pricing-badge {
+    font-size: 11px; font-weight: 600; color: #f59e0b;
+    text-transform: uppercase; letter-spacing: 1.5px;
+    margin-bottom: 8px;
+  }
+  .pricing-amount {
+    font-size: 36px; font-weight: 800; color: #0f172a;
+    letter-spacing: -1px; margin-bottom: 4px;
+  }
+  .pricing-period {
+    font-size: 16px; font-weight: 400; color: #94a3b8;
+  }
+  .pricing-perks {
+    list-style: none; padding: 0; margin: 16px 0 20px;
+    width: 100%;
+  }
+  .pricing-perks li {
+    font-size: 13px; color: #475569; padding: 5px 0;
+    padding-left: 20px; position: relative; line-height: 1.5;
+  }
+  .pricing-perks li::before {
+    content: '✓'; position: absolute; left: 0;
+    color: #f59e0b; font-weight: 700;
+  }
+  .paypal-btn-wrap {
+    width: 100%; min-height: 50px;
+  }
+  .pricing-note {
+    font-size: 12px; color: #94a3b8; text-align: center;
+    margin-top: 20px; font-weight: 400;
+  }
+
   /* ── Mobile Responsive ── */
   @media (max-width: 640px) {
     body { overflow-x: hidden; }
@@ -510,6 +587,14 @@
     .finish-extra { font-size: 13px; max-width: 85vw; }
     .zyph-logo-text { font-size: 24px; letter-spacing: 4px; }
     .zyph-logo-sub { font-size: 9px; letter-spacing: 2px; }
+
+    /* Pricing mobile */
+    .pricing-section { margin-top: 36px; padding: 0 12px; }
+    .pricing-heading { font-size: 18px; }
+    .pricing-sub { font-size: 13px; }
+    .pricing-cards { flex-direction: column; align-items: center; }
+    .pricing-card { min-width: unset; width: calc(100vw - 48px); max-width: 320px; }
+    .pricing-amount { font-size: 30px; }
   }
 
   /* Tablet tweaks */
@@ -868,6 +953,37 @@
         <div class="zyph-logo-sub">Labs</div>
       </div>
       <button class="restart-btn" id="restartBtn" onclick="restart()">Watch Again</button>
+
+      <!-- Early Release Pricing -->
+      <div class="pricing-section" id="pricingSection">
+        <div class="pricing-divider"></div>
+        <h2 class="pricing-heading">Move Ahead With Early Release Pricing Today</h2>
+        <p class="pricing-sub">Lock in founding-member rates before general availability.</p>
+        <div class="pricing-cards">
+          <div class="pricing-card" id="priceMonthly">
+            <div class="pricing-badge">Monthly</div>
+            <div class="pricing-amount">$500<span class="pricing-period">/mo</span></div>
+            <ul class="pricing-perks">
+              <li>Full Solar AI automation suite</li>
+              <li>Permit-ready document generation</li>
+              <li>Cancel anytime — no lock-in</li>
+            </ul>
+            <div id="paypal-btn-monthly" class="paypal-btn-wrap"></div>
+          </div>
+          <div class="pricing-card featured" id="priceYearly">
+            <div class="pricing-save-tag">Save $3,000/yr</div>
+            <div class="pricing-badge">Annual</div>
+            <div class="pricing-amount">$3,000<span class="pricing-period">/yr</span></div>
+            <ul class="pricing-perks">
+              <li>Everything in Monthly</li>
+              <li>6 months free vs. monthly</li>
+              <li>Priority onboarding &amp; support</li>
+            </ul>
+            <div id="paypal-btn-yearly" class="paypal-btn-wrap"></div>
+          </div>
+        </div>
+        <p class="pricing-note">All prices in CAD. Secure checkout powered by PayPal.</p>
+      </div>
     </div>
   </div>
 
@@ -1256,6 +1372,9 @@ async function playFinishScene() {
   $('zyphLogo').classList.add('show');
   await wait(1000);
   $('restartBtn').classList.add('show');
+  await wait(600);
+  $('pricingSection').classList.add('show');
+  initPayPalButtons();
 }
 
 function restart() {
@@ -1312,8 +1431,84 @@ function restart() {
   $('finishExtra').classList.remove('show');
   $('zyphLogo').classList.remove('show');
   $('restartBtn').classList.remove('show');
+  $('pricingSection').classList.remove('show');
 
   setProgress(0);
+}
+
+/* ── PayPal Integration ── */
+let paypalLoaded = false;
+let paypalButtonsRendered = false;
+
+function loadPayPalSDK() {
+  return new Promise((resolve, reject) => {
+    if (paypalLoaded) { resolve(); return; }
+    const s = document.createElement('script');
+    s.src = 'https://www.paypal.com/sdk/js?client-id=AXWoGoWLQudPw09MQ44AuEJlml7etuTGA_cFfhjQnFVZ1j12BAyZkT8ivbKwTlLPTxT7Rv_GlsXN_511&currency=CAD&intent=capture&components=buttons';
+    s.onload = () => { paypalLoaded = true; resolve(); };
+    s.onerror = reject;
+    document.head.appendChild(s);
+  });
+}
+
+async function initPayPalButtons() {
+  if (paypalButtonsRendered) return;
+  try {
+    await loadPayPalSDK();
+    renderPayPalButton('paypal-btn-monthly', 500, 'solar-ai-monthly');
+    renderPayPalButton('paypal-btn-yearly', 3000, 'solar-ai-annual');
+    paypalButtonsRendered = true;
+  } catch (e) {
+    console.error('PayPal SDK failed to load:', e);
+  }
+}
+
+function renderPayPalButton(containerId, amount, plan) {
+  const container = document.getElementById(containerId);
+  if (!container || container.hasChildNodes()) return;
+
+  paypal.Buttons({
+    style: {
+      layout: 'vertical',
+      color: 'gold',
+      shape: 'rect',
+      label: 'pay',
+      height: 40
+    },
+    createOrder: async function() {
+      const res = await fetch('/api/paypal/create-order', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          buildFee: amount,
+          hostingFee: 0,
+          niche: 'solar-ai',
+          tier: plan,
+          hostingPlan: 'none'
+        })
+      });
+      const data = await res.json();
+      if (data.error) throw new Error(data.error);
+      return data.orderID;
+    },
+    onApprove: async function(data) {
+      const res = await fetch('/api/paypal/capture-order', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ orderID: data.orderID })
+      });
+      const result = await res.json();
+      if (result.error) {
+        alert('Payment issue: ' + result.error);
+        return;
+      }
+      window.location.href = '/welcome?order_id=' + data.orderID;
+    },
+    onError: function(err) {
+      console.error('PayPal error:', err);
+      alert('Something went wrong with the payment. Please try again.');
+    }
+  }).render('#' + containerId);
 }
 </script>
 </body>
