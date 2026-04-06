@@ -489,5 +489,20 @@ document.querySelectorAll('[data-slider]').forEach(slider => {
   window.addEventListener('touchend', () => dragging = false);
 });
 </script>
+<!-- Zyph Labs Analytics -->
+<script>
+(function(){
+  try {
+    var ref = "direct";
+    try { if (document.referrer) ref = new URL(document.referrer).hostname; } catch(e){}
+    fetch("/api/analytics/track", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ path: location.pathname, referrer: ref }),
+      keepalive: true
+    }).catch(function(){});
+  } catch(e){}
+})();
+</script>
 </body>
 </html>
