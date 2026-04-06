@@ -29,6 +29,8 @@ export default function CheckoutClient({
 }: CheckoutClientProps) {
   const router = useRouter()
   const total = buildFee + hostingFee
+  const isSaaS = hostingPlan === 'none'
+  const isAnnual = tier === 'annual'
 
   const handleSuccess = (orderID: string) => {
     router.push(`/welcome?order_id=${orderID}`)
@@ -42,7 +44,7 @@ export default function CheckoutClient({
             href={serviceHref}
             className="text-sm text-[#8888aa] hover:text-white transition-colors"
           >
-            ← Back
+            \u2190 Back
           </Link>
           <h1
             className="text-3xl font-bold text-white mt-4"
@@ -73,27 +75,33 @@ export default function CheckoutClient({
                 <div className="flex justify-between items-start">
                   <div>
                     <p className="text-sm font-medium text-white">{tierName}</p>
-                    <p className="text-xs text-[#8888aa]">One-time build fee</p>
+                    <p className="text-xs text-[#8888aa]">
+                      {isSaaS
+                        ? isAnnual ? 'Annual subscription' : 'Monthly subscription'
+                        : 'One-time build fee'}
+                    </p>
                   </div>
                   <span className="text-sm font-semibold text-white">
-                    ${buildFee.toLocaleString()}
+                    ${buildFee.toLocaleString()}{isSaaS && !isAnnual ? '/mo' : isSaaS && isAnnual ? '/yr' : ''}
                   </span>
                 </div>
               </div>
 
-              <div className="border-t border-white/8 pt-4">
-                <div className="flex justify-between items-start">
-                  <div>
-                    <p className="text-sm font-medium text-white">
-                      {hostingName} Hosting
-                    </p>
-                    <p className="text-xs text-[#8888aa]">First month</p>
+              {!isSaaS && (
+                <div className="border-t border-white/8 pt-4">
+                  <div className="flex justify-between items-start">
+                    <div>
+                      <p className="text-sm font-medium text-white">
+                        {hostingName} Hosting
+                      </p>
+                      <p className="text-xs text-[#8888aa]">First month</p>
+                    </div>
+                    <span className="text-sm font-semibold text-white">
+                      ${hostingFee}/mo
+                    </span>
                   </div>
-                  <span className="text-sm font-semibold text-white">
-                    ${hostingFee}/mo
-                  </span>
                 </div>
-              </div>
+              )}
             </div>
 
             <div className="bg-white/4 rounded-xl p-4 border border-white/6 mb-6">
@@ -104,21 +112,38 @@ export default function CheckoutClient({
                 </span>
               </div>
               <p className="text-xs text-[#555577] mt-2">
-                All prices in CAD. Includes build fee + first month hosting. Hosting renews monthly at ${hostingFee}/mo.
+                {isSaaS
+                  ? `All prices in CAD. ${isAnnual ? 'Renews annually.' : 'Renews monthly.'} Cancel anytime.`
+                  : `All prices in CAD. Includes build fee + first month hosting. Hosting renews monthly at $${hostingFee}/mo.`}
               </p>
             </div>
 
             <div className="space-y-2">
+              {isSaaS ? (
+                <>
+                  <div className="flex items-center gap-2 text-xs text-[#666688]">
+                    <span className="text-[#00cec9]">\u2713</span>
+                    Onboarded and live within 48 hours
+                  </div>
+                  <div className="flex items-center gap-2 text-xs text-[#666688]">
+                    <span className="text-[#00cec9]">\u2713</span>
+                    Cancel anytime \u2014 no lock-in
+                  </div>
+                </>
+              ) : (
+                <>
+                  <div className="flex items-center gap-2 text-xs text-[#666688]">
+                    <span className="text-[#00cec9]">\u2713</span>
+                    Site built and launched within 7\u201314 days
+                  </div>
+                  <div className="flex items-center gap-2 text-xs text-[#666688]">
+                    <span className="text-[#00cec9]">\u2713</span>
+                    Cancel hosting anytime \u2014 no long-term contract
+                  </div>
+                </>
+              )}
               <div className="flex items-center gap-2 text-xs text-[#666688]">
-                <span className="text-[#00cec9]">✓</span>
-                Site built and launched within 7–14 days
-              </div>
-              <div className="flex items-center gap-2 text-xs text-[#666688]">
-                <span className="text-[#00cec9]">✓</span>
-                Cancel hosting anytime — no long-term contract
-              </div>
-              <div className="flex items-center gap-2 text-xs text-[#666688]">
-                <span className="text-[#00cec9]">✓</span>
+                <span className="text-[#00cec9]">\u2713</span>
                 Buyer protection via PayPal
               </div>
             </div>
