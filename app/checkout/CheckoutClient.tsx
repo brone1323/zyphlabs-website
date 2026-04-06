@@ -44,7 +44,7 @@ export default function CheckoutClient({
             href={serviceHref}
             className="text-sm text-[#8888aa] hover:text-white transition-colors"
           >
-            \u2190 Back
+            ← Back
           </Link>
           <h1
             className="text-3xl font-bold text-white mt-4"
@@ -122,28 +122,28 @@ export default function CheckoutClient({
               {isSaaS ? (
                 <>
                   <div className="flex items-center gap-2 text-xs text-[#666688]">
-                    <span className="text-[#00cec9]">\u2713</span>
+                    <span className="text-[#00cec9]">✓</span>
                     Onboarded and live within 48 hours
                   </div>
                   <div className="flex items-center gap-2 text-xs text-[#666688]">
-                    <span className="text-[#00cec9]">\u2713</span>
-                    Cancel anytime \u2014 no lock-in
+                    <span className="text-[#00cec9]">✓</span>
+                    Cancel anytime — no lock-in
                   </div>
                 </>
               ) : (
                 <>
                   <div className="flex items-center gap-2 text-xs text-[#666688]">
-                    <span className="text-[#00cec9]">\u2713</span>
-                    Site built and launched within 7\u201314 days
+                    <span className="text-[#00cec9]">✓</span>
+                    Site built and launched within 7–14 days
                   </div>
                   <div className="flex items-center gap-2 text-xs text-[#666688]">
-                    <span className="text-[#00cec9]">\u2713</span>
-                    Cancel hosting anytime \u2014 no long-term contract
+                    <span className="text-[#00cec9]">✓</span>
+                    Cancel hosting anytime — no long-term contract
                   </div>
                 </>
               )}
               <div className="flex items-center gap-2 text-xs text-[#666688]">
-                <span className="text-[#00cec9]">\u2713</span>
+                <span className="text-[#00cec9]">✓</span>
                 Buyer protection via PayPal
               </div>
             </div>
