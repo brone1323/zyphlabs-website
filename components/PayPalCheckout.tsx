@@ -1,6 +1,6 @@
 'use client'
 
-import { Component, type ReactNode } from 'react'
+import { Component, type ReactNode, useState } from 'react'
 import {
   PayPalScriptProvider,
   PayPalButtons,
@@ -62,11 +62,12 @@ function PayPalButtonsWrapper({
   onSuccess,
 }: PayPalCheckoutProps) {
   const [{ isPending, isRejected }] = usePayPalScriptReducer()
+  const [errorMsg, setErrorMsg] = useState<string | null>(null)
 
   if (isPending) {
     return (
       <div className="min-h-[120px] flex items-center justify-center rounded-xl bg-white/5 border border-white/10">
-        <p className="text-[#8888aa] text-sm">Loading PayPal…</p>
+        <p className="text-[#8888aa] text-sm">Loading PayPalâ¦</p>
       </div>
     )
   }
@@ -90,37 +91,61 @@ function PayPalButtonsWrapper({
   }
 
   return (
-    <div className="rounded-xl bg-white p-4">
-      <PayPalButtons
-        style={{ layout: 'vertical', color: 'blue', shape: 'rect', label: 'pay' }}
-        createOrder={async () => {
-          const res = await fetch('/api/paypal/create-order', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ buildFee, hostingFee, niche, tier, hostingPlan }),
-          })
-          const data = await res.json()
-          if (!res.ok) throw new Error(data.error || 'Failed to create order')
-          return data.orderID
-        }}
-        onApprove={async ({ orderID }) => {
-          const res = await fetch('/api/paypal/capture-order', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ orderID }),
-          })
-          const data = await res.json()
-          if (!res.ok) {
-            alert(data.error || 'Payment failed. Please try again.')
-            return
-          }
-          onSuccess(orderID)
-        }}
-        onError={(err) => {
-          console.error('PayPal error:', err)
-          alert('Payment failed. Please try again.')
-        }}
-      />
+    <div className="space-y-3">
+      {errorMsg && (
+        <div className="rounded-xl bg-red-500/15 border border-red-500/40 p-4 flex flex-col gap-2 animate-in fade-in">
+          <p className="text-red-300 text-sm font-medium">{errorMsg}</p>
+          <p className="text-red-300/70 text-xs">
+            If the problem persists, contact us at{' '}
+            <a
+              href="mailto:contact@zyphlabs.com"
+              className="text-[#00cec9] hover:underline"
+            >
+              contact@zyphlabs.com
+            </a>
+          </p>
+          <button
+            onClick={() => setErrorMsg(null)}
+            className="self-start text-xs text-white/50 hover:text-white transition-colors mt-1"
+          >
+            Dismiss
+          </button>
+        </div>
+      )}
+      <div className="rounded-xl bg-white p-4">
+        <PayPalButtons
+          style={{ layout: 'vertical', color: 'blue', shape: 'rect', label: 'pay' }}
+          createOrder={async () => {
+            setErrorMsg(null)
+            const res = await fetch('/api/paypal/create-order', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ buildFee, hostingFee, niche, tier, hostingPlan }),
+            })
+            const data = await res.json()
+            if (!res.ok) throw new Error(data.error || 'Failed to create order')
+            return data.orderID
+          }}
+          onApprove={async ({ orderID }) => {
+            setErrorMsg(null)
+            const res = await fetch('/api/paypal/capture-order', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ orderID }),
+            })
+            const data = await res.json()
+            if (!res.ok) {
+              setErrorMsg(data.error || 'Payment could not be processed. Please try again.')
+              return
+            }
+            onSuccess(orderID)
+          }}
+          onError={(err) => {
+            console.error('PayPal error:', err)
+            setErrorMsg('Something went wrong with PayPal. Please try again.')
+          }}
+        />
+      </div>
     </div>
   )
 }
