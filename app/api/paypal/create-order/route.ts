@@ -103,13 +103,38 @@ export async function POST(request: NextRequest) {
     })
 
     if (!res.ok) {
-      const err = await res.text()
-      const hint =
-        res.status === 401 || res.status === 404
-          ? ' Check PAYPAL_CLIENT_SECRET and PAYPAL_MODE (live vs sandbox).'
-          : ''
+      const errText = await res.text()
+      console.error('PayPal create-order raw error:', errText)
+
+      let userMessage = 'Could not start checkout. Please try again.'
+      let errorCode = 'CREATE_FAILED'
+
+      try {
+        const errJson = JSON.parse(errText)
+        const issue = errJson.details?.[0]?.issue
+
+        switch (issue) {
+          case 'CURRENCY_NOT_SUPPORTED':
+            userMessage = 'This currency is not supported. Please contact support.'
+            errorCode = 'CURRENCY_ERROR'
+            break
+          case 'DECIMAL_PRECISION':
+            userMessage = 'There was a pricing error. Please contact support.'
+            errorCode = 'PRECISION_ERROR'
+            break
+          default:
+            if (res.status === 401 || res.status === 404) {
+              userMessage = 'Payment service configuration error. Please contact support.'
+              errorCode = 'CONFIG_ERROR'
+            }
+            break
+        }
+      } catch (_) {
+        // Not JSON â use default message
+      }
+
       return NextResponse.json(
-        { error: `PayPal create order failed: ${err}${hint}` },
+        { error: userMessage, code: errorCode },
         { status: 500 }
       )
     }
