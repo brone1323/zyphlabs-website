@@ -40,7 +40,7 @@ export async function POST(request: NextRequest) {
     const { buildFee, hostingFee, niche, tier, hostingPlan } =
       await request.json()
 
-    if (!buildFee || !hostingFee) {
+    if (buildFee == null || hostingFee == null) {
       return NextResponse.json(
         { error: 'Missing required fee amounts' },
         { status: 400 }
@@ -50,15 +50,37 @@ export async function POST(request: NextRequest) {
     const buildAmount = Number(buildFee).toFixed(2)
     const hostingAmount = Number(hostingFee).toFixed(2)
     const total = (Number(buildFee) + Number(hostingFee)).toFixed(2)
+    const isSaaS = hostingPlan === 'none'
 
     const accessToken = await getAccessToken()
+
+    const items = [
+      {
+        name: isSaaS
+          ? `Solar AI Agent \u2014 ${tier === 'annual' ? 'Annual' : 'Monthly'} Plan`
+          : `Website Build \u2014 ${tier} (${niche})`,
+        quantity: '1',
+        unit_amount: { currency_code: 'CAD', value: buildAmount },
+      },
+    ]
+
+    // Only add hosting line item when there's actual hosting
+    if (!isSaaS) {
+      items.push({
+        name: `Hosting \u2014 ${hostingPlan} (first month)`,
+        quantity: '1',
+        unit_amount: { currency_code: 'CAD', value: hostingAmount },
+      })
+    }
 
     const orderPayload = {
       intent: 'CAPTURE',
       purchase_units: [
         {
           custom_id: JSON.stringify({ niche, tier, hostingPlan }),
-          description: `Zyph Labs – ${tier} build (${niche}) + ${hostingPlan} hosting`,
+          description: isSaaS
+            ? `Zyph Labs \u2013 Solar AI Agent ${tier === 'annual' ? 'Annual' : 'Monthly'} Plan`
+            : `Zyph Labs \u2013 ${tier} build (${niche}) + ${hostingPlan} hosting`,
           amount: {
             currency_code: 'CAD',
             value: total,
@@ -66,18 +88,7 @@ export async function POST(request: NextRequest) {
               item_total: { currency_code: 'CAD', value: total },
             },
           },
-          items: [
-            {
-              name: `Website Build — ${tier} (${niche})`,
-              quantity: '1',
-              unit_amount: { currency_code: 'CAD', value: buildAmount },
-            },
-            {
-              name: `Hosting — ${hostingPlan} (first month)`,
-              quantity: '1',
-              unit_amount: { currency_code: 'CAD', value: hostingAmount },
-            },
-          ],
+          items,
         },
       ],
     }
