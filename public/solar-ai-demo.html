@@ -503,13 +503,61 @@
     content: '✓'; position: absolute; left: 0;
     color: #f59e0b; font-weight: 700;
   }
-  .paypal-btn-wrap {
-    width: 100%; min-height: 50px;
+  .pricing-cta {
+    display: inline-block; width: 100%; text-align: center;
+    padding: 12px 0; border-radius: 10px; font-weight: 700;
+    font-size: 15px; color: #fff; text-decoration: none;
+    background: linear-gradient(135deg, #f59e0b, #f97316);
+    transition: transform 0.2s, box-shadow 0.2s;
+    margin-top: 4px;
+  }
+  .pricing-cta:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(245, 158, 11, 0.35);
   }
   .pricing-note {
     font-size: 12px; color: #94a3b8; text-align: center;
     margin-top: 20px; font-weight: 400;
   }
+
+  /* ── AI Add-ons ── */
+  .addons-section {
+    margin-top: 40px; width: 100%; max-width: 680px;
+    opacity: 0; transform: translateY(16px);
+    transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  .addons-section.show { opacity: 1; transform: translateY(0); }
+  .addons-grid {
+    display: grid; grid-template-columns: repeat(3, 1fr);
+    gap: 14px;
+  }
+  .addon-card {
+    background: #fff; border: 1.5px solid #e2e8f0;
+    border-radius: 14px; padding: 20px 16px;
+    text-align: center; transition: border-color 0.3s, box-shadow 0.3s;
+  }
+  .addon-card:hover {
+    border-color: #f59e0b;
+    box-shadow: 0 4px 16px rgba(245, 158, 11, 0.10);
+  }
+  .addon-icon { font-size: 28px; margin-bottom: 8px; }
+  .addon-name {
+    font-size: 14px; font-weight: 700; color: #0f172a;
+    margin-bottom: 6px;
+  }
+  .addon-desc {
+    font-size: 12px; color: #64748b; line-height: 1.5;
+    font-weight: 400;
+  }
+  .addons-cta-text {
+    text-align: center; margin-top: 20px;
+    font-size: 14px; color: #475569;
+  }
+  .addons-cta-link {
+    color: #f59e0b; font-weight: 700; text-decoration: none;
+    transition: color 0.2s;
+  }
+  .addons-cta-link:hover { color: #f97316; }
 
   /* ── Mobile Responsive ── */
   @media (max-width: 640px) {
@@ -595,6 +643,13 @@
     .pricing-cards { flex-direction: column; align-items: center; }
     .pricing-card { min-width: unset; width: calc(100vw - 48px); max-width: 320px; }
     .pricing-amount { font-size: 30px; }
+
+    /* Add-ons mobile */
+    .addons-section { margin-top: 28px; padding: 0 12px; }
+    .addons-grid { grid-template-columns: 1fr 1fr; gap: 10px; }
+    .addon-icon { font-size: 24px; }
+    .addon-name { font-size: 13px; }
+    .addon-desc { font-size: 11px; }
   }
 
   /* Tablet tweaks */
@@ -968,7 +1023,7 @@
               <li>Permit-ready document generation</li>
               <li>Cancel anytime — no lock-in</li>
             </ul>
-            <div id="paypal-btn-monthly" class="paypal-btn-wrap"></div>
+            <a href="/checkout?niche=solar-ai&tier=monthly&hosting=none" class="pricing-cta">Get Started →</a>
           </div>
           <div class="pricing-card featured" id="priceYearly">
             <div class="pricing-save-tag">Save $3,000/yr</div>
@@ -979,10 +1034,50 @@
               <li>6 months free vs. monthly</li>
               <li>Priority onboarding &amp; support</li>
             </ul>
-            <div id="paypal-btn-yearly" class="paypal-btn-wrap"></div>
+            <a href="/checkout?niche=solar-ai&tier=annual&hosting=none" class="pricing-cta">Get Started →</a>
           </div>
         </div>
-        <p class="pricing-note">All prices in CAD. Secure checkout powered by PayPal.</p>
+        <p class="pricing-note">All prices in CAD. Pay with PayPal or credit card at checkout.</p>
+      </div>
+
+      <!-- AI Add-ons -->
+      <div class="addons-section" id="addonsSection">
+        <div class="pricing-divider"></div>
+        <h2 class="pricing-heading">AI-Powered Add-Ons</h2>
+        <p class="pricing-sub">Anything done on a computer, we can now automate. Add any of these to your Solar AI plan.</p>
+        <div class="addons-grid">
+          <div class="addon-card">
+            <div class="addon-icon">🤖</div>
+            <div class="addon-name">CRM Integration</div>
+            <div class="addon-desc">Auto-sync leads, jobs, and follow-ups with your existing CRM. No more double entry.</div>
+          </div>
+          <div class="addon-card">
+            <div class="addon-icon">📈</div>
+            <div class="addon-name">Lead Generation</div>
+            <div class="addon-desc">AI-qualified leads delivered to your inbox. Chatbot captures &amp; scores prospects 24/7.</div>
+          </div>
+          <div class="addon-card">
+            <div class="addon-icon">✍️</div>
+            <div class="addon-name">Content Creation</div>
+            <div class="addon-desc">Auto-generated proposals, social posts, and email campaigns tailored to each client.</div>
+          </div>
+          <div class="addon-card">
+            <div class="addon-icon">📅</div>
+            <div class="addon-name">Booking &amp; Scheduling</div>
+            <div class="addon-desc">Clients self-book site visits. Calendar syncs, confirmations, and reminders — all automated.</div>
+          </div>
+          <div class="addon-card">
+            <div class="addon-icon">⭐</div>
+            <div class="addon-name">Review Automation</div>
+            <div class="addon-desc">Auto-request Google reviews after every install. Build your reputation on autopilot.</div>
+          </div>
+          <div class="addon-card">
+            <div class="addon-icon">📧</div>
+            <div class="addon-name">Email Nurture</div>
+            <div class="addon-desc">Drip sequences that turn cold leads warm. Automated follow-ups that close deals while you sleep.</div>
+          </div>
+        </div>
+        <p class="addons-cta-text">Interested in any of these? <a href="mailto:contact@zyphlabs.com?subject=Solar%20AI%20Add-Ons%20Inquiry" class="addons-cta-link">Just let us know →</a></p>
       </div>
     </div>
   </div>
@@ -1374,7 +1469,8 @@ async function playFinishScene() {
   $('restartBtn').classList.add('show');
   await wait(600);
   $('pricingSection').classList.add('show');
-  initPayPalButtons();
+  await wait(800);
+  $('addonsSection').classList.add('show');
 }
 
 function restart() {
@@ -1432,84 +1528,12 @@ function restart() {
   $('zyphLogo').classList.remove('show');
   $('restartBtn').classList.remove('show');
   $('pricingSection').classList.remove('show');
+  $('addonsSection').classList.remove('show');
 
   setProgress(0);
 }
 
-/* ── PayPal Integration ── */
-let paypalLoaded = false;
-let paypalButtonsRendered = false;
 
-function loadPayPalSDK() {
-  return new Promise((resolve, reject) => {
-    if (paypalLoaded) { resolve(); return; }
-    const s = document.createElement('script');
-    s.src = 'https://www.paypal.com/sdk/js?client-id=AXWoGoWLQudPw09MQ44AuEJlml7etuTGA_cFfhjQnFVZ1j12BAyZkT8ivbKwTlLPTxT7Rv_GlsXN_511&currency=CAD&intent=capture&components=buttons';
-    s.onload = () => { paypalLoaded = true; resolve(); };
-    s.onerror = reject;
-    document.head.appendChild(s);
-  });
-}
-
-async function initPayPalButtons() {
-  if (paypalButtonsRendered) return;
-  try {
-    await loadPayPalSDK();
-    renderPayPalButton('paypal-btn-monthly', 500, 'solar-ai-monthly');
-    renderPayPalButton('paypal-btn-yearly', 3000, 'solar-ai-annual');
-    paypalButtonsRendered = true;
-  } catch (e) {
-    console.error('PayPal SDK failed to load:', e);
-  }
-}
-
-function renderPayPalButton(containerId, amount, plan) {
-  const container = document.getElementById(containerId);
-  if (!container || container.hasChildNodes()) return;
-
-  paypal.Buttons({
-    style: {
-      layout: 'vertical',
-      color: 'gold',
-      shape: 'rect',
-      label: 'pay',
-      height: 40
-    },
-    createOrder: async function() {
-      const res = await fetch('/api/paypal/create-order', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          buildFee: amount,
-          hostingFee: 0,
-          niche: 'solar-ai',
-          tier: plan,
-          hostingPlan: 'none'
-        })
-      });
-      const data = await res.json();
-      if (data.error) throw new Error(data.error);
-      return data.orderID;
-    },
-    onApprove: async function(data) {
-      const res = await fetch('/api/paypal/capture-order', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ orderID: data.orderID })
-      });
-      const result = await res.json();
-      if (result.error) {
-        alert('Payment issue: ' + result.error);
-        return;
-      }
-      window.location.href = '/welcome?order_id=' + data.orderID;
-    },
-    onError: function(err) {
-      console.error('PayPal error:', err);
-      alert('Something went wrong with the payment. Please try again.');
-    }
-  }).render('#' + containerId);
-}
 </script>
 </body>
 </html>
