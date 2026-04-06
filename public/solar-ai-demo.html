@@ -544,25 +544,25 @@
   }
   .addon-card {
     background: #fff; border: 1.5px solid #e2e8f0;
-    border-radius: 14px; padding: 20px 16px;
+    border-radius: 14px; padding: 22px 14px 18px;
     text-align: center; transition: border-color 0.3s, box-shadow 0.3s;
   }
   .addon-card:hover {
     border-color: #f59e0b;
     box-shadow: 0 4px 16px rgba(245, 158, 11, 0.10);
   }
-  .addon-icon { font-size: 28px; margin-bottom: 8px; }
+  .addon-icon { font-size: 28px; margin-bottom: 8px; line-height: 1.2; display: flex; align-items: center; justify-content: center; height: 36px; }
   .addon-name {
     font-size: 14px; font-weight: 700; color: #0f172a;
     margin-bottom: 6px;
   }
   .addon-desc {
     font-size: 12px; color: #64748b; line-height: 1.5;
-    font-weight: 400;
+    font-weight: 400; margin-top: 2px;
   }
   .addons-cta-text {
     text-align: center; margin-top: 20px;
-    font-size: 14px; color: #475569;
+    font-size: 14px; color: #475569; margin-bottom: 24px;
   }
   .addons-cta-link {
     color: #f59e0b; font-weight: 700; text-decoration: none;
@@ -658,13 +658,13 @@
 
     /* Add-ons mobile */
     .addons-section { margin-top: 28px; padding: 0 12px; width: 100%; }
-    .addons-grid { grid-template-columns: 1fr 1fr; gap: 10px; }
+    .addons-grid { grid-template-columns: 1fr 1fr; gap: 12px; }
     .addon-icon { font-size: 24px; }
     .addon-name { font-size: 13px; }
     .addon-desc { font-size: 11px; }
 
     /* Make finish scene scrollable on mobile so pricing is accessible */
-    #demo.scrollable { padding-top: 24px; padding-bottom: 80px; }
+    #demo.scrollable { padding-top: 24px; padding-bottom: 100px; }
   }
 
   /* Tablet tweaks */
@@ -1451,11 +1451,6 @@ async function playCustomScene() {
   showScene('scene-custom');
   setStep(5); setProgress(97);
   setNarration('');
-
-  // Enable scrolling so pricing section is accessible on all screen sizes
-  document.body.style.overflow = 'auto';
-  $('demo').classList.add('scrollable');
-
   await wait(400);
 
   $('customIcons').classList.add('show');
@@ -1474,22 +1469,27 @@ async function playFinishScene() {
   showScene('scene-finish');
   setStep(6); setProgress(100);
   setNarration('');
-  await wait(400);
+
+  // Enable scrolling so pricing section is accessible on all screen sizes
+  document.body.style.overflow = 'auto';
+  $('demo').classList.add('scrollable');
+
+  await wait(300);
 
   $('finishCheck').classList.add('show');
   await wait(500);
   $('finishText').classList.add('show');
   await wait(400);
   $('finishSub').classList.add('show');
-  await wait(1200);
+  await wait(700);
   $('finishExtra').classList.add('show');
-  await wait(1400);
-  $('zyphLogo').classList.add('show');
-  await wait(1000);
-  $('restartBtn').classList.add('show');
-  await wait(600);
-  $('pricingSection').classList.add('show');
   await wait(800);
+  $('zyphLogo').classList.add('show');
+  await wait(600);
+  $('restartBtn').classList.add('show');
+  await wait(400);
+  $('pricingSection').classList.add('show');
+  await wait(400);
   $('addonsSection').classList.add('show');
 }
 
