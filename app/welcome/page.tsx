@@ -143,7 +143,7 @@ export default function WelcomePage({
               </h3>
               <p className="text-xs text-[#8888aa]">
                 Email us anytime at{' '}
-                <span className="text-[#a29bfe]">contact@zyphlabs.com</span>. We respond within 24 hours,
+                <span className="text-[#a29bfe]">alex@zyphlabs.com</span>. We respond within 24 hours,
                 faster on Professional and Business plans.
               </p>
             </div>
@@ -156,7 +156,7 @@ export default function WelcomePage({
                 Manage Billing
               </h3>
               <p className="text-xs text-[#8888aa]">
-                View your payment confirmation in your PayPal account. To update billing or cancel hosting, email us at contact@zyphlabs.com.
+                View your payment confirmation in your PayPal account. To update billing or cancel hosting, email us at alex@zyphlabs.com.
               </p>
             </div>
           </div>
@@ -181,7 +181,7 @@ export default function WelcomePage({
             Can't find it? Reach us directly below.
           </p>
           <a
-            href="mailto:contact@zyphlabs.com?subject=Onboarding%20Questionnaire%20Help"
+            href="mailto:alex@zyphlabs.com?subject=Onboarding%20Questionnaire%20Help"
             className="btn-primary inline-block px-10 py-4 text-base"
           >
             Email Us →

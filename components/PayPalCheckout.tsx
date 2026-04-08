@@ -32,10 +32,10 @@ class PayPalErrorBoundary extends Component<
             your order.
           </p>
           <a
-            href="mailto:contact@zyphlabs.com"
+            href="mailto:alex@zyphlabs.com"
             className="text-[#00cec9] hover:underline text-sm mt-1"
           >
-            Email contact@zyphlabs.com
+            Email alex@zyphlabs.com
           </a>
         </div>
       )
@@ -81,10 +81,10 @@ function PayPalButtonsWrapper({
           your order.
         </p>
         <a
-          href="mailto:contact@zyphlabs.com"
+          href="mailto:alex@zyphlabs.com"
           className="text-[#00cec9] hover:underline text-sm mt-1"
         >
-          Email contact@zyphlabs.com
+          Email alex@zyphlabs.com
         </a>
       </div>
     )
@@ -98,10 +98,10 @@ function PayPalButtonsWrapper({
           <p className="text-red-300/70 text-xs">
             If the problem persists, contact us at{' '}
             <a
-              href="mailto:contact@zyphlabs.com"
+              href="mailto:alex@zyphlabs.com"
               className="text-[#00cec9] hover:underline"
             >
-              contact@zyphlabs.com
+              alex@zyphlabs.com
             </a>
           </p>
           <button

@@ -168,7 +168,7 @@ export async function sendWelcomeEmail(params: {
           <li>We'll review your questionnaire and get started on your site.</li>
           <li>Your site will be live within the agreed turnaround window.</li>
         </ol>
-        <p style="margin-top:24px">Questions? Reply to this email or reach us at <a href="mailto:contact@zyphlabs.com">contact@zyphlabs.com</a>.</p>
+        <p style="margin-top:24px">Questions? Reply to this email or reach us at <a href="mailto:alex@zyphlabs.com">alex@zyphlabs.com</a>.</p>
         <p style="color:#64748b;font-size:13px;margin-top:32px">— The Zyph Labs Team</p>
       </div>
     `,

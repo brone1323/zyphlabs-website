@@ -175,10 +175,10 @@ export default function CheckoutClient({
             <p className="text-center text-xs text-[#444466] mt-4">
               Questions?{' '}
               <a
-                href="mailto:contact@zyphlabs.com"
+                href="mailto:alex@zyphlabs.com"
                 className="text-[#8888aa] hover:text-white transition-colors"
               >
-                contact@zyphlabs.com
+                alex@zyphlabs.com
               </a>
             </p>
           </div>
