@@ -1434,8 +1434,8 @@ function aiTask(text){
   $('ai-task').innerHTML=text;
 }
 
-function show(id){ $('scene-'+id).style.display='flex'; }
-function hide(id){ $('scene-'+id).style.display='none'; }
+const show=id=>$(id).style.display='flex';
+const hide=id=>$(id).style.display='none';
 
 async function animateDrag(cursorId, ghostId, zone, startX, startY, endX, endY, dur){
   const cur=$(cursorId), ghost=$(ghostId);
