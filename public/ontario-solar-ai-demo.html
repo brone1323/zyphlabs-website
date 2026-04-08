@@ -1,0 +1,1715 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ontario Solar AI Agent — Hydro One CIA Automation</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Inter', -apple-system, sans-serif;
+    background: linear-gradient(135deg, #080d1a 0%, #0f1d35 50%, #0a1628 100%);
+    min-height: 100vh;
+    overflow: hidden;
+    color: #e2e8f0;
+  }
+
+  /* ── Landing Screen ── */
+  #landing {
+    position: fixed; inset: 0;
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    z-index: 100;
+    background: linear-gradient(135deg, #080d1a 0%, #0f1d35 50%, #0a1628 100%);
+    transition: opacity 0.8s ease, transform 0.8s ease;
+  }
+  #landing.hide {
+    opacity: 0; transform: scale(1.05); pointer-events: none;
+  }
+
+  .landing-badge {
+    display: inline-flex; align-items: center; gap: 8px;
+    padding: 6px 16px; border-radius: 20px; margin-bottom: 28px;
+    background: rgba(59,130,246,0.12); border: 1px solid rgba(59,130,246,0.25);
+    font-size: 12px; font-weight: 600; color: #60a5fa;
+    letter-spacing: 1.5px; text-transform: uppercase;
+  }
+  .landing-badge::before {
+    content: '';
+    width: 6px; height: 6px; border-radius: 50%;
+    background: #3b82f6;
+    box-shadow: 0 0 8px #3b82f6;
+    animation: pulse-dot 2s ease-in-out infinite;
+  }
+  @keyframes pulse-dot {
+    0%, 100% { opacity: 1; box-shadow: 0 0 8px #3b82f6; }
+    50% { opacity: 0.5; box-shadow: 0 0 16px #3b82f6; }
+  }
+
+  .landing-icon {
+    width: 88px; height: 88px; margin-bottom: 28px;
+    animation: float 3s ease-in-out infinite;
+  }
+  @keyframes float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-10px); }
+  }
+
+  .landing-title {
+    font-size: 52px; font-weight: 700;
+    background: linear-gradient(135deg, #f1f5f9 0%, #93c5fd 60%, #60a5fa 100%);
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    letter-spacing: -1.5px; margin-bottom: 10px; text-align: center;
+  }
+  .landing-sub {
+    font-size: 17px; color: #64748b; font-weight: 300;
+    margin-bottom: 12px; letter-spacing: 0.3px; text-align: center;
+  }
+  .landing-jurisdiction {
+    font-size: 14px; color: #3b82f6; font-weight: 500;
+    margin-bottom: 44px; letter-spacing: 0.5px; text-align: center;
+    font-family: 'JetBrains Mono', monospace;
+  }
+
+  .start-btn {
+    padding: 16px 52px; font-size: 17px; font-weight: 600;
+    color: #fff; background: linear-gradient(135deg, #2563eb 0%, #3b82f6 100%);
+    border: none; border-radius: 50px; cursor: pointer;
+    box-shadow: 0 4px 28px rgba(59,130,246,0.4);
+    transition: all 0.3s ease; letter-spacing: 0.3px;
+  }
+  .start-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 36px rgba(59,130,246,0.55);
+  }
+
+  /* ── Demo Container ── */
+  #demo {
+    position: fixed; inset: 0;
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    opacity: 0; transition: opacity 0.8s ease;
+  }
+  #demo.show { opacity: 1; }
+  #demo.scrollable {
+    position: absolute;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    justify-content: flex-start;
+    padding-top: 40px;
+    padding-bottom: 60px;
+  }
+  #demo.scrollable ~ .steps-bar { display: none; }
+
+  /* ── Progress bar ── */
+  .progress-track {
+    position: absolute; top: 0; left: 0; right: 0; height: 3px;
+    background: rgba(255,255,255,0.06);
+  }
+  .progress-fill {
+    height: 100%; width: 0%;
+    background: linear-gradient(90deg, #2563eb, #60a5fa);
+    transition: width 0.6s ease;
+  }
+
+  /* ── Narration Text ── */
+  .narration {
+    position: absolute; top: 60px; left: 50%; transform: translateX(-50%);
+    font-size: 21px; font-weight: 400; color: #cbd5e1;
+    text-align: center; max-width: 680px; line-height: 1.6;
+    opacity: 0; transition: opacity 0.6s ease;
+  }
+  .narration.show { opacity: 1; }
+
+  /* ── Step dots ── */
+  .steps-bar {
+    position: absolute; bottom: 40px; left: 50%; transform: translateX(-50%);
+    display: flex; gap: 12px; align-items: center;
+  }
+  .step-dot {
+    width: 10px; height: 10px; border-radius: 50%;
+    background: rgba(255,255,255,0.15); transition: all 0.4s ease;
+  }
+  .step-dot.active { background: #3b82f6; width: 28px; border-radius: 5px; box-shadow: 0 0 12px rgba(59,130,246,0.6); }
+  .step-dot.done { background: #22c55e; }
+
+  /* ── Scenes ── */
+  .scene { display: none; position: relative; width: 100%; height: 100%; }
+  .scene.active { display: flex; align-items: center; justify-content: center; }
+
+  /* ── Glass card ── */
+  .glass-card {
+    background: rgba(255,255,255,0.04);
+    backdrop-filter: blur(20px);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 20px;
+  }
+
+  /* ── Scene 1: Upload ── */
+  .drop-zone {
+    width: 420px; height: 280px;
+    border: 2px dashed rgba(59,130,246,0.3); border-radius: 20px;
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    background: rgba(255,255,255,0.02);
+    backdrop-filter: blur(20px);
+    transition: all 0.4s ease;
+  }
+  .drop-zone.highlight {
+    border-color: #3b82f6;
+    background: rgba(59,130,246,0.07);
+    box-shadow: 0 0 48px rgba(59,130,246,0.12), inset 0 0 48px rgba(59,130,246,0.04);
+  }
+  .drop-zone-icon { width: 44px; height: 44px; margin-bottom: 14px; opacity: 0.3; }
+  .drop-zone-text { font-size: 15px; color: #64748b; font-weight: 400; }
+  .drop-zone-hint { font-size: 12px; color: #334155; margin-top: 6px; }
+
+  .cursor {
+    position: absolute; width: 24px; height: 24px;
+    z-index: 50; opacity: 0; transition: opacity 0.3s;
+    filter: drop-shadow(0 2px 8px rgba(59,130,246,0.4));
+    pointer-events: none;
+  }
+
+  .file-card {
+    position: absolute; z-index: 45;
+    background: rgba(255,255,255,0.06);
+    backdrop-filter: blur(20px);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 12px;
+    padding: 14px 20px; display: flex; align-items: center; gap: 12px;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+    opacity: 0; pointer-events: none;
+    font-size: 14px; font-weight: 500; color: #e2e8f0;
+  }
+  .file-card .file-icon {
+    width: 36px; height: 36px; border-radius: 8px;
+    display: flex; align-items: center; justify-content: center; font-size: 18px;
+  }
+  .file-card .file-icon.proposal { background: rgba(37,99,235,0.2); }
+  .file-card .file-icon.bill { background: rgba(234,179,8,0.15); }
+
+  .landed-file {
+    display: flex; align-items: center; gap: 10px;
+    padding: 10px 16px;
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(255,255,255,0.07);
+    border-radius: 10px; margin-top: 10px;
+    font-size: 13px; font-weight: 500; color: #94a3b8;
+    opacity: 0; transform: scale(0.8);
+    transition: all 0.4s ease;
+  }
+  .landed-file.show { opacity: 1; transform: scale(1); }
+
+  /* ── Scene 2: Form B ── */
+  .formb-doc {
+    width: 440px;
+    border-radius: 20px;
+    padding: 32px 30px;
+    opacity: 0; transform: translateY(30px) scale(0.96);
+    transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  .formb-doc.show { opacity: 1; transform: translateY(0) scale(1); }
+
+  .formb-header {
+    display: flex; align-items: center; gap: 12px; margin-bottom: 20px;
+  }
+  .formb-logo {
+    width: 32px; height: 32px; border-radius: 8px;
+    background: linear-gradient(135deg, #1d4ed8, #2563eb);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 16px; flex-shrink: 0;
+  }
+  .formb-title {
+    font-size: 14px; font-weight: 700; color: #f1f5f9;
+    line-height: 1.2;
+  }
+  .formb-sub {
+    font-size: 10px; color: #60a5fa; font-weight: 600;
+    text-transform: uppercase; letter-spacing: 1px;
+  }
+
+  .formb-section {
+    margin-bottom: 14px;
+    opacity: 0; transform: translateX(-8px);
+    transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  .formb-section.show { opacity: 1; transform: translateX(0); }
+
+  .formb-section-label {
+    font-size: 10px; font-weight: 700; color: #3b82f6;
+    text-transform: uppercase; letter-spacing: 1.5px;
+    margin-bottom: 7px; display: flex; align-items: center; gap: 6px;
+  }
+  .formb-section-label::after {
+    content: '';
+    flex: 1; height: 1px;
+    background: rgba(59,130,246,0.2);
+  }
+
+  .formb-row {
+    display: flex; align-items: center; gap: 8px;
+    padding: 5px 0;
+  }
+  .formb-check {
+    width: 16px; height: 16px; border-radius: 4px;
+    background: rgba(34,197,94,0.15); border: 1px solid rgba(34,197,94,0.3);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 9px; flex-shrink: 0; color: #22c55e;
+    opacity: 0; transition: opacity 0.3s;
+  }
+  .formb-check.show { opacity: 1; }
+  .formb-field-name {
+    font-size: 11px; color: #64748b; font-weight: 500;
+    width: 120px; flex-shrink: 0;
+  }
+  .formb-field-val {
+    font-size: 11px; color: #e2e8f0; font-weight: 500;
+    font-family: 'JetBrains Mono', monospace;
+    opacity: 0; transition: opacity 0.35s;
+  }
+  .formb-field-val.show { opacity: 1; }
+
+  .formb-progress-bar {
+    margin-top: 18px; padding-top: 16px;
+    border-top: 1px solid rgba(255,255,255,0.07);
+    opacity: 0; transition: opacity 0.5s;
+  }
+  .formb-progress-bar.show { opacity: 1; }
+  .formb-progress-label {
+    display: flex; justify-content: space-between;
+    font-size: 11px; color: #64748b; margin-bottom: 8px;
+  }
+  .formb-progress-label span { color: #22c55e; font-weight: 700; }
+  .formb-track {
+    height: 6px; background: rgba(255,255,255,0.06);
+    border-radius: 3px; overflow: hidden;
+  }
+  .formb-fill {
+    height: 100%; border-radius: 3px;
+    background: linear-gradient(90deg, #22c55e, #4ade80);
+    transform: scaleX(0); transform-origin: left;
+    transition: transform 1.2s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  .formb-fill.go { transform: scaleX(0.78); }
+
+  /* ── Scene 3: Calc Engine (Terminal) ── */
+  .terminal-wrap {
+    width: 520px;
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 24px 80px rgba(0,0,0,0.6);
+    border: 1px solid rgba(255,255,255,0.07);
+    opacity: 0; transform: translateY(30px);
+    transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  .terminal-wrap.show { opacity: 1; transform: translateY(0); }
+
+  .terminal-bar {
+    background: #1a1f2e; padding: 10px 16px;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .t-dot { width: 10px; height: 10px; border-radius: 50%; }
+  .terminal-title {
+    font-size: 12px; color: #475569;
+    font-family: 'JetBrains Mono', monospace;
+    margin-left: auto; font-weight: 500;
+  }
+
+  .terminal-body {
+    background: #0d1117;
+    padding: 20px 24px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12.5px;
+    line-height: 1.8;
+    min-height: 280px;
+  }
+
+  .t-line {
+    opacity: 0; transform: translateX(-6px);
+    transition: opacity 0.3s ease, transform 0.3s ease;
+    white-space: pre;
+  }
+  .t-line.show { opacity: 1; transform: translateX(0); }
+  .t-prompt { color: #3b82f6; }
+  .t-cmd { color: #f1f5f9; }
+  .t-key { color: #94a3b8; }
+  .t-val { color: #4ade80; }
+  .t-calc { color: #a78bfa; }
+  .t-result { color: #22c55e; font-weight: 600; }
+  .t-divider { color: #1e3a5f; }
+  .t-warn { color: #fbbf24; }
+  .t-comment { color: #374151; }
+  .t-cursor {
+    display: inline-block; width: 8px; height: 14px;
+    background: #3b82f6; border-radius: 1px;
+    animation: blink 1s step-end infinite;
+    vertical-align: middle; margin-left: 2px;
+  }
+  @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
+
+  /* ── Scene 4: SLD Drawing ── */
+  .drawing-canvas-wrap {
+    position: relative; width: 520px; height: 380px;
+    border-radius: 16px;
+    overflow: hidden;
+    background: rgba(255,255,255,0.02);
+    border: 1px solid rgba(255,255,255,0.07);
+    box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+  }
+  .drawing-toolbar {
+    position: absolute; top: 0; left: 0; right: 0;
+    height: 40px; background: rgba(15,25,50,0.9);
+    backdrop-filter: blur(10px);
+    display: flex; align-items: center; padding: 0 16px; gap: 8px;
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+  }
+  .toolbar-dot { width: 10px; height: 10px; border-radius: 50%; }
+  .toolbar-title {
+    font-size: 12px; color: #475569; margin-left: auto;
+    font-weight: 500; letter-spacing: 0.5px;
+    font-family: 'JetBrains Mono', monospace;
+  }
+
+  .drawing-svg {
+    position: absolute; top: 40px; left: 0; right: 0; bottom: 0;
+  }
+  .drawing-svg line, .drawing-svg rect, .drawing-svg polyline,
+  .drawing-svg circle, .drawing-svg path, .drawing-svg polygon {
+    stroke-dasharray: 1000; stroke-dashoffset: 1000;
+    transition: none;
+  }
+  .drawing-svg text {
+    opacity: 0; transition: opacity 0.3s ease;
+  }
+  .drawing-svg text.show { opacity: 1; }
+
+  .sld-badge {
+    position: absolute; top: 52px; right: 16px;
+    padding: 4px 12px; border-radius: 6px;
+    background: rgba(59,130,246,0.15);
+    border: 1px solid rgba(59,130,246,0.3);
+    color: #60a5fa; font-size: 10px;
+    font-weight: 700; letter-spacing: 1px;
+    font-family: 'JetBrains Mono', monospace;
+    opacity: 0; transition: opacity 0.4s;
+  }
+  .sld-badge.show { opacity: 1; }
+  .drawing-label {
+    position: absolute; bottom: 10px; right: 16px;
+    font-size: 10px; color: #334155; font-weight: 500;
+    opacity: 0; transition: opacity 0.4s;
+    font-family: 'JetBrains Mono', monospace;
+  }
+  .drawing-label.show { opacity: 1; }
+
+  /* ── Scene 5: Submission Package ── */
+  .submission-wrap {
+    display: flex; gap: 22px; align-items: flex-start;
+  }
+  .sub-card {
+    width: 272px;
+    border-radius: 18px;
+    padding: 26px 22px;
+    opacity: 0; transform: translateY(30px);
+    transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  .sub-card.show { opacity: 1; transform: translateY(0); }
+
+  .sub-icon-wrap {
+    width: 44px; height: 44px; border-radius: 12px;
+    display: flex; align-items: center; justify-content: center;
+    margin-bottom: 14px; font-size: 20px;
+  }
+  .sub-icon-wrap.formb { background: rgba(37,99,235,0.15); border: 1px solid rgba(37,99,235,0.2); }
+  .sub-icon-wrap.muni { background: rgba(34,197,94,0.1); border: 1px solid rgba(34,197,94,0.2); }
+
+  .sub-title { font-size: 15px; font-weight: 700; color: #f1f5f9; margin-bottom: 3px; }
+  .sub-provider { font-size: 11px; color: #60a5fa; margin-bottom: 18px; font-weight: 500; letter-spacing: 0.3px; }
+  .sub-provider.green { color: #4ade80; }
+
+  .sub-field {
+    display: flex; justify-content: space-between;
+    align-items: center; padding: 7px 0;
+    border-bottom: 1px solid rgba(255,255,255,0.05);
+  }
+  .sub-field:last-of-type { border-bottom: none; }
+  .sub-field-label { font-size: 11px; color: #475569; font-weight: 500; }
+  .sub-field-value {
+    font-size: 12px; color: #e2e8f0; font-weight: 600;
+    opacity: 0; transition: opacity 0.3s;
+    font-family: 'JetBrains Mono', monospace;
+    text-align: right;
+  }
+  .sub-field-value.show { opacity: 1; }
+
+  .sub-status {
+    display: inline-flex; align-items: center; gap: 6px;
+    padding: 7px 14px; border-radius: 8px; margin-top: 16px;
+    font-size: 12px; font-weight: 600;
+    opacity: 0; transition: opacity 0.4s;
+  }
+  .sub-status.show { opacity: 1; }
+  .sub-status.blue {
+    background: rgba(59,130,246,0.1); color: #60a5fa;
+    border: 1px solid rgba(59,130,246,0.2);
+  }
+  .sub-status.green {
+    background: rgba(34,197,94,0.1); color: #4ade80;
+    border: 1px solid rgba(34,197,94,0.2);
+  }
+
+  /* ── Scene 6: Custom Build ── */
+  .custom-wrap {
+    display: flex; flex-direction: column; align-items: center;
+    gap: 28px; max-width: 560px; text-align: center;
+  }
+  .custom-icon-row {
+    display: flex; gap: 14px; align-items: center;
+    opacity: 0; transform: translateY(12px);
+    transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  .custom-icon-row.show { opacity: 1; transform: translateY(0); }
+  .custom-icon-box {
+    width: 54px; height: 54px; border-radius: 14px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 22px; border: 1px solid rgba(255,255,255,0.08);
+  }
+  .custom-icon-box.formb { background: rgba(37,99,235,0.15); }
+  .custom-icon-box.calc { background: rgba(167,139,250,0.12); }
+  .custom-icon-box.sld { background: rgba(34,197,94,0.1); }
+  .custom-connector { width: 24px; height: 1px; background: rgba(255,255,255,0.1); }
+
+  .custom-heading {
+    font-size: 24px; font-weight: 700; color: #f1f5f9;
+    line-height: 1.4;
+    opacity: 0; transition: opacity 0.6s ease;
+  }
+  .custom-heading.show { opacity: 1; }
+  .custom-body {
+    font-size: 16px; color: #64748b; font-weight: 400;
+    line-height: 1.7;
+    opacity: 0; transform: translateY(8px);
+    transition: all 0.6s ease;
+  }
+  .custom-body.show { opacity: 1; transform: translateY(0); }
+
+  .custom-timeline {
+    display: flex; align-items: center; gap: 14px;
+    padding: 14px 26px; border-radius: 14px;
+    background: rgba(255,255,255,0.03);
+    border: 1px solid rgba(255,255,255,0.07);
+    opacity: 0; transform: scale(0.95);
+    transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  .custom-timeline.show { opacity: 1; transform: scale(1); }
+  .custom-timeline-num {
+    font-size: 34px; font-weight: 700;
+    background: linear-gradient(135deg, #3b82f6, #60a5fa);
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  }
+  .custom-timeline-label {
+    font-size: 14px; color: #64748b; font-weight: 500; text-align: left;
+    line-height: 1.4;
+  }
+  .custom-note {
+    font-size: 13px; color: #334155; font-weight: 400;
+    font-style: italic; line-height: 1.6;
+    opacity: 0; transition: opacity 0.6s;
+  }
+  .custom-note.show { opacity: 1; }
+
+  /* ── Scene 7: Finish ── */
+  .finish-wrap {
+    display: flex; flex-direction: column; align-items: center;
+    gap: 22px;
+  }
+  .finish-check {
+    width: 80px; height: 80px; border-radius: 50%;
+    background: linear-gradient(135deg, #22c55e, #16a34a);
+    display: flex; align-items: center; justify-content: center;
+    opacity: 0; transform: scale(0.5);
+    transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+    box-shadow: 0 0 40px rgba(34,197,94,0.3);
+  }
+  .finish-check.show { opacity: 1; transform: scale(1); }
+  .finish-text {
+    font-size: 26px; font-weight: 700; color: #f1f5f9;
+    opacity: 0; transition: opacity 0.6s;
+  }
+  .finish-text.show { opacity: 1; }
+  .finish-sub {
+    font-size: 16px; color: #64748b; font-weight: 300;
+    opacity: 0; transition: opacity 0.6s;
+    text-align: center; max-width: 460px; line-height: 1.6;
+  }
+  .finish-sub.show { opacity: 1; }
+
+  .restart-btn {
+    padding: 12px 36px; font-size: 15px; font-weight: 600;
+    color: #3b82f6; background: transparent;
+    border: 1.5px solid rgba(59,130,246,0.4); border-radius: 50px;
+    cursor: pointer; transition: all 0.3s ease; opacity: 0;
+  }
+  .restart-btn.show { opacity: 1; }
+  .restart-btn:hover {
+    background: rgba(59,130,246,0.1);
+    border-color: #3b82f6;
+    color: #60a5fa;
+  }
+
+  .review-callout {
+    display: flex; align-items: center; gap: 14px;
+    padding: 16px 24px; border-radius: 14px;
+    background: rgba(59,130,246,0.08);
+    border: 1px solid rgba(59,130,246,0.22);
+    max-width: 480px; width: 100%;
+    opacity: 0; transform: translateY(10px);
+    transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  .review-callout.show { opacity: 1; transform: translateY(0); }
+  .review-callout-icon {
+    font-size: 22px; flex-shrink: 0;
+  }
+  .review-callout-text {
+    font-size: 14px; color: #93c5fd; font-weight: 500; line-height: 1.5;
+  }
+  .review-callout-text strong {
+    display: block; color: #e2e8f0; font-weight: 700;
+    font-size: 15px; margin-bottom: 2px;
+  }
+
+  .finish-extra {
+    font-size: 15px; color: #475569; font-weight: 300;
+    text-align: center; max-width: 480px; line-height: 1.7;
+    opacity: 0; transform: translateY(10px);
+    transition: all 0.6s ease;
+  }
+  .finish-extra.show { opacity: 1; transform: translateY(0); }
+
+  .zyph-logo-wrap {
+    display: flex; flex-direction: column; align-items: center; gap: 6px;
+    opacity: 0; transform: translateY(10px);
+    transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+    margin-top: 6px;
+  }
+  .zyph-logo-wrap.show { opacity: 1; transform: translateY(0); }
+  .zyph-logo-text {
+    font-size: 32px; font-weight: 700; letter-spacing: 6px;
+    background: linear-gradient(135deg, #f1f5f9 0%, #60a5fa 100%);
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  }
+  .zyph-logo-sub {
+    font-size: 11px; color: #334155; letter-spacing: 3px;
+    text-transform: uppercase; font-weight: 500;
+  }
+
+  /* ── Pricing section ── */
+  .pricing-section {
+    margin-top: 48px; width: 100%; max-width: 700px;
+    opacity: 0; transform: translateY(16px);
+    transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  .pricing-section.show { opacity: 1; transform: translateY(0); }
+
+  .pricing-divider {
+    width: 60px; height: 2px; margin: 0 auto 28px;
+    background: linear-gradient(90deg, #2563eb, #60a5fa); border-radius: 2px;
+  }
+  .pricing-heading {
+    font-size: 22px; font-weight: 700; color: #f1f5f9;
+    text-align: center; margin-bottom: 6px; letter-spacing: -0.5px;
+  }
+  .pricing-sub {
+    font-size: 14px; color: #64748b; text-align: center;
+    margin-bottom: 28px; font-weight: 400;
+  }
+  .pricing-cards { display: flex; gap: 20px; justify-content: center; flex-wrap: wrap; }
+  .pricing-card {
+    flex: 1; min-width: 240px; max-width: 300px;
+    background: rgba(255,255,255,0.03);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 18px; padding: 28px 24px;
+    display: flex; flex-direction: column; align-items: center;
+    transition: border-color 0.3s, box-shadow 0.3s; position: relative;
+  }
+  .pricing-card:hover {
+    border-color: rgba(59,130,246,0.4);
+    box-shadow: 0 8px 32px rgba(59,130,246,0.1);
+  }
+  .pricing-card.featured {
+    border-color: rgba(59,130,246,0.35);
+    box-shadow: 0 4px 24px rgba(59,130,246,0.1);
+  }
+  .pricing-save-tag {
+    position: absolute; top: -12px; right: 16px;
+    background: linear-gradient(135deg, #2563eb, #3b82f6);
+    color: #fff; font-size: 11px; font-weight: 700;
+    padding: 4px 12px; border-radius: 20px; letter-spacing: 0.3px;
+  }
+  .pricing-badge {
+    font-size: 11px; font-weight: 600; color: #3b82f6;
+    text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 8px;
+  }
+  .pricing-amount {
+    font-size: 36px; font-weight: 800; color: #f1f5f9;
+    letter-spacing: -1px; margin-bottom: 4px;
+  }
+  .pricing-period { font-size: 16px; font-weight: 400; color: #475569; }
+  .pricing-perks {
+    list-style: none; padding: 0; margin: 16px 0 20px; width: 100%;
+  }
+  .pricing-perks li {
+    font-size: 13px; color: #64748b; padding: 5px 0;
+    padding-left: 20px; position: relative; line-height: 1.5;
+  }
+  .pricing-perks li::before {
+    content: '✓'; position: absolute; left: 0;
+    color: #3b82f6; font-weight: 700;
+  }
+  .pricing-cta {
+    display: inline-block; width: 100%; text-align: center;
+    padding: 12px 0; border-radius: 10px; font-weight: 700;
+    font-size: 15px; color: #fff; text-decoration: none;
+    background: linear-gradient(135deg, #2563eb, #3b82f6);
+    transition: transform 0.2s, box-shadow 0.2s; margin-top: 4px;
+  }
+  .pricing-cta:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(59,130,246,0.4);
+  }
+  .pricing-note { font-size: 12px; color: #334155; text-align: center; margin-top: 20px; }
+
+  /* Add-ons */
+  .addons-section {
+    margin-top: 40px; width: 100%; max-width: 700px;
+    opacity: 0; transform: translateY(16px);
+    transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  .addons-section.show { opacity: 1; transform: translateY(0); }
+  .addons-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
+  .addon-card {
+    background: rgba(255,255,255,0.03);
+    border: 1px solid rgba(255,255,255,0.07);
+    border-radius: 14px; padding: 20px 16px; text-align: center;
+    transition: border-color 0.3s, box-shadow 0.3s;
+  }
+  .addon-card:hover {
+    border-color: rgba(59,130,246,0.3);
+    box-shadow: 0 4px 16px rgba(59,130,246,0.08);
+  }
+  .addon-icon { font-size: 26px; margin-bottom: 8px; }
+  .addon-name { font-size: 14px; font-weight: 700; color: #f1f5f9; margin-bottom: 6px; }
+  .addon-desc { font-size: 12px; color: #475569; line-height: 1.5; font-weight: 400; }
+  .addons-cta-text { text-align: center; margin-top: 20px; font-size: 14px; color: #475569; }
+  .addons-cta-link { color: #3b82f6; font-weight: 700; text-decoration: none; transition: color 0.2s; }
+  .addons-cta-link:hover { color: #60a5fa; }
+
+  /* ── Mobile ── */
+  @media (max-width: 640px) {
+    body { overflow-x: hidden; }
+    .landing-title { font-size: 32px; letter-spacing: -1px; }
+    .landing-sub { font-size: 15px; margin-bottom: 8px; }
+    .landing-jurisdiction { font-size: 12px; margin-bottom: 32px; }
+    .start-btn { padding: 14px 36px; font-size: 15px; }
+    .narration { top: 32px; font-size: 15px; max-width: 90%; padding: 0 12px; line-height: 1.5; }
+    .steps-bar { bottom: 20px; gap: 8px; }
+    .step-dot { width: 8px; height: 8px; }
+    .step-dot.active { width: 22px; }
+    .drop-zone { width: calc(100vw - 48px); max-width: 360px; height: 220px; }
+    .file-card { font-size: 12px; padding: 10px 14px; gap: 8px; }
+    .formb-doc { width: calc(100vw - 48px); max-width: 360px; padding: 20px 16px; }
+    .terminal-wrap { width: calc(100vw - 32px); max-width: 440px; }
+    .terminal-body { font-size: 10.5px; padding: 14px 16px; min-height: 220px; }
+    .drawing-canvas-wrap { width: calc(100vw - 32px); max-width: 420px; height: 300px; }
+    .submission-wrap { flex-direction: column; align-items: center; gap: 16px; padding: 0 16px; }
+    .sub-card { width: calc(100vw - 48px); max-width: 340px; padding: 20px 18px; }
+    .custom-wrap { max-width: 90vw; gap: 20px; padding: 0 16px; }
+    .custom-icon-box { width: 44px; height: 44px; font-size: 18px; border-radius: 10px; }
+    .custom-heading { font-size: 19px; }
+    .custom-body { font-size: 14px; }
+    .pricing-section, .addons-section { padding: 0 12px; }
+    .pricing-heading { font-size: 18px; }
+    .pricing-cards { flex-direction: column; align-items: center; gap: 16px; }
+    .pricing-card { min-width: unset; width: calc(100vw - 48px); max-width: 320px; }
+    .addons-grid { grid-template-columns: 1fr 1fr; }
+    #demo.scrollable { padding-top: 24px; padding-bottom: 80px; }
+  }
+
+  @media (max-width: 768px) and (min-width: 641px) {
+    .landing-title { font-size: 42px; }
+    .narration { font-size: 18px; max-width: 85%; }
+    .terminal-wrap { width: calc(100vw - 48px); }
+    .submission-wrap { gap: 16px; }
+    .sub-card { width: 240px; padding: 20px 18px; }
+  }
+
+</style>
+</head>
+<body>
+
+<!-- Landing -->
+<div id="landing">
+  <div class="landing-badge">Ontario Edition</div>
+  <svg class="landing-icon" viewBox="0 0 88 88" fill="none">
+    <!-- Solar panel base -->
+    <rect x="10" y="40" width="68" height="38" rx="5" fill="rgba(37,99,235,0.12)" stroke="rgba(59,130,246,0.3)" stroke-width="1.5"/>
+    <!-- Panel grid -->
+    <line x1="10" y1="59" x2="78" y2="59" stroke="rgba(59,130,246,0.25)" stroke-width="1"/>
+    <line x1="32" y1="40" x2="32" y2="78" stroke="rgba(59,130,246,0.25)" stroke-width="1"/>
+    <line x1="54" y1="40" x2="54" y2="78" stroke="rgba(59,130,246,0.25)" stroke-width="1"/>
+    <!-- Shaded cells -->
+    <rect x="11" y="41" width="20" height="17" rx="2" fill="rgba(59,130,246,0.18)"/>
+    <rect x="33" y="41" width="20" height="17" rx="2" fill="rgba(59,130,246,0.25)"/>
+    <rect x="55" y="41" width="22" height="17" rx="2" fill="rgba(59,130,246,0.18)"/>
+    <rect x="11" y="60" width="20" height="17" rx="2" fill="rgba(59,130,246,0.25)"/>
+    <rect x="33" y="60" width="20" height="17" rx="2" fill="rgba(59,130,246,0.15)"/>
+    <rect x="55" y="60" width="22" height="17" rx="2" fill="rgba(59,130,246,0.25)"/>
+    <!-- Sun -->
+    <circle cx="68" cy="20" r="10" fill="rgba(96,165,250,0.2)" stroke="rgba(96,165,250,0.5)" stroke-width="1.5"/>
+    <circle cx="68" cy="20" r="5" fill="#60a5fa"/>
+    <line x1="68" y1="6" x2="68" y2="3" stroke="#60a5fa" stroke-width="1.5" stroke-linecap="round"/>
+    <line x1="78" y1="10" x2="81" y2="7" stroke="#60a5fa" stroke-width="1.5" stroke-linecap="round"/>
+    <line x1="82" y1="20" x2="85" y2="20" stroke="#60a5fa" stroke-width="1.5" stroke-linecap="round"/>
+    <!-- Hydro connection bolt -->
+    <path d="M42 8 L36 20 L41 20 L38 32 L48 17 L43 17 Z" fill="#a78bfa" opacity="0.8"/>
+  </svg>
+  <div class="landing-title">Ontario Solar AI Agent</div>
+  <div class="landing-sub">Automate your entire Hydro One CIA submission</div>
+  <div class="landing-jurisdiction">jurisdiction: ON · utility: hydro-one · form: cia-form-b</div>
+  <button class="start-btn" onclick="startDemo()">Start Demo</button>
+</div>
+
+<!-- Demo -->
+<div id="demo">
+  <div class="progress-track"><div class="progress-fill" id="progressFill"></div></div>
+  <div class="narration" id="narration"></div>
+
+  <!-- Scene 1: Upload -->
+  <div class="scene" id="scene-upload">
+    <div style="display:flex;flex-direction:column;align-items:center;">
+      <div class="drop-zone" id="dropZone">
+        <svg class="drop-zone-icon" viewBox="0 0 44 44" fill="none">
+          <path d="M22 6v22M14 14l8-8 8 8" stroke="rgba(59,130,246,0.5)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M6 28v6a4 4 0 004 4h24a4 4 0 004-4v-6" stroke="rgba(59,130,246,0.5)" stroke-width="2.5" stroke-linecap="round"/>
+        </svg>
+        <div class="drop-zone-text">Drop your files here</div>
+        <div class="drop-zone-hint">Your proposal + Hydro One bill</div>
+        <div id="landedFiles"></div>
+      </div>
+    </div>
+
+    <svg class="cursor" id="cursor" viewBox="0 0 24 24">
+      <path d="M5 3l14 8-6 2 4 8-3 1.5-4-8-5 5z" fill="#60a5fa" stroke="rgba(0,0,0,0.4)" stroke-width="1"/>
+    </svg>
+
+    <div class="file-card" id="fileCard1">
+      <div class="file-icon proposal">📋</div>
+      <div>
+        <div style="font-weight:600;">Your_Proposal.pdf</div>
+        <div style="font-size:11px;color:#60a5fa;font-family:JetBrains Mono,monospace;">421 Lakeshore Blvd W · 11 kW</div>
+      </div>
+    </div>
+    <div class="file-card" id="fileCard2">
+      <div class="file-icon bill">⚡</div>
+      <div>
+        <div style="font-weight:600;">HydroOne_Bill.pdf</div>
+        <div style="font-size:11px;color:#fbbf24;font-family:JetBrains Mono,monospace;">Acct: 7823-459-2</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Scene 2: Form B Auto-fill -->
+  <div class="scene" id="scene-formb">
+    <div class="formb-doc glass-card" id="formbDoc">
+      <div class="formb-header">
+        <div class="formb-logo">🏛</div>
+        <div>
+          <div class="formb-title">Hydro One CIA — Form B</div>
+          <div class="formb-sub">Connection Impact Assessment · Auto-filling</div>
+        </div>
+      </div>
+
+      <!-- Section A -->
+      <div class="formb-section" id="fs-a">
+        <div class="formb-section-label">Section A — Application Info</div>
+        <div class="formb-row">
+          <div class="formb-check" id="fcheck-a1">✓</div>
+          <div class="formb-field-name">Application type</div>
+          <div class="formb-field-val" id="fval-a1">New CIA</div>
+        </div>
+        <div class="formb-row">
+          <div class="formb-check" id="fcheck-a2">✓</div>
+          <div class="formb-field-name">DER type</div>
+          <div class="formb-field-val" id="fval-a2">Inverter based</div>
+        </div>
+        <div class="formb-row">
+          <div class="formb-check" id="fcheck-a3">✓</div>
+          <div class="formb-field-name">Fuel source</div>
+          <div class="formb-field-val" id="fval-a3">Solar (PV)</div>
+        </div>
+      </div>
+
+      <!-- Section D -->
+      <div class="formb-section" id="fs-d">
+        <div class="formb-section-label">Section D — Customer</div>
+        <div class="formb-row">
+          <div class="formb-check" id="fcheck-d1">✓</div>
+          <div class="formb-field-name">Customer name</div>
+          <div class="formb-field-val" id="fval-d1">Jennifer & Mark Santos</div>
+        </div>
+        <div class="formb-row">
+          <div class="formb-check" id="fcheck-d2">✓</div>
+          <div class="formb-field-name">Service address</div>
+          <div class="formb-field-val" id="fval-d2">421 Lakeshore Blvd W, Toronto</div>
+        </div>
+        <div class="formb-row">
+          <div class="formb-check" id="fcheck-d3">✓</div>
+          <div class="formb-field-name">Hydro One acct</div>
+          <div class="formb-field-val" id="fval-d3">7823-459-2</div>
+        </div>
+      </div>
+
+      <!-- Section F -->
+      <div class="formb-section" id="fs-f">
+        <div class="formb-section-label">Section F — Equipment Capacity</div>
+        <div class="formb-row">
+          <div class="formb-check" id="fcheck-f1">✓</div>
+          <div class="formb-field-name">System size</div>
+          <div class="formb-field-val" id="fval-f1">10.95 kW AC</div>
+        </div>
+        <div class="formb-row">
+          <div class="formb-check" id="fcheck-f2">✓</div>
+          <div class="formb-field-name">Equipment kVA</div>
+          <div class="formb-field-val" id="fval-f2">10.98 kVA</div>
+        </div>
+        <div class="formb-row">
+          <div class="formb-check" id="fcheck-f3">✓</div>
+          <div class="formb-field-name">Inverter count</div>
+          <div class="formb-field-val" id="fval-f3">30 × IQ8M-72</div>
+        </div>
+      </div>
+
+      <!-- Progress -->
+      <div class="formb-progress-bar" id="fbProgressBar">
+        <div class="formb-progress-label">
+          <span>Fields auto-filled</span>
+          <span id="fbCount">0 of 78</span>
+        </div>
+        <div class="formb-track"><div class="formb-fill" id="fbFill"></div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Scene 3: Calculation Engine (Terminal) -->
+  <div class="scene" id="scene-calc">
+    <div class="terminal-wrap" id="terminalWrap">
+      <div class="terminal-bar">
+        <div class="t-dot" style="background:#ef4444"></div>
+        <div class="t-dot" style="background:#fbbf24"></div>
+        <div class="t-dot" style="background:#22c55e"></div>
+        <div class="terminal-title">solar-ai-agent · section-k-calc.js</div>
+      </div>
+      <div class="terminal-body" id="terminalBody">
+        <!-- Lines injected by JS -->
+      </div>
+    </div>
+  </div>
+
+  <!-- Scene 4: SLD Drawing -->
+  <div class="scene" id="scene-sld">
+    <div class="drawing-canvas-wrap">
+      <div class="drawing-toolbar">
+        <div class="toolbar-dot" style="background:#ef4444"></div>
+        <div class="toolbar-dot" style="background:#fbbf24"></div>
+        <div class="toolbar-dot" style="background:#22c55e"></div>
+        <div class="toolbar-title">SLD_421_LAKESHORE_BLVD_W.dxf</div>
+      </div>
+      <div class="sld-badge" id="sldBadge">SINGLE LINE DIAGRAM</div>
+      <svg class="drawing-svg" id="sldSvg" viewBox="0 0 520 340">
+        <!-- PV Array -->
+        <rect id="s-pv" x="30" y="55" width="80" height="52" rx="4" fill="none" stroke="#3b82f6" stroke-width="1.5"/>
+        <line id="s-pv-d1" x1="30" y1="55" x2="110" y2="107" stroke="#3b82f6" stroke-width="1"/>
+        <line id="s-pv-d2" x1="30" y1="107" x2="110" y2="55" stroke="#3b82f6" stroke-width="1"/>
+        <text id="st-pv" x="38" y="48" font-size="9" fill="#3b82f6" font-weight="700">PV ARRAY</text>
+        <text id="st-pvkw" x="42" y="126" font-size="7.5" fill="#475569" font-weight="500">10.95 kW DC</text>
+
+        <!-- DC wiring -->
+        <line id="s-dc1" x1="70" y1="107" x2="70" y2="150" stroke="#ef4444" stroke-width="1.5"/>
+        <text id="st-dc" x="78" y="134" font-size="7" fill="#ef4444" font-weight="600">DC+</text>
+
+        <!-- DC Disconnect -->
+        <rect id="s-dcd" x="45" y="150" width="50" height="26" rx="3" fill="none" stroke="#64748b" stroke-width="1.5"/>
+        <text id="st-dcd" x="49" y="167" font-size="7.5" fill="#64748b" font-weight="600">DC DISC</text>
+
+        <!-- Wire to inverter -->
+        <line id="s-dc2" x1="70" y1="176" x2="70" y2="210" stroke="#ef4444" stroke-width="1.5"/>
+
+        <!-- Inverter box -->
+        <rect id="s-inv" x="30" y="210" width="80" height="40" rx="4" fill="none" stroke="#22c55e" stroke-width="1.5"/>
+        <text id="st-inv" x="36" y="234" font-size="8" fill="#22c55e" font-weight="700">INVERTER</text>
+        <text id="st-invmodel" x="34" y="261" font-size="7" fill="#475569" font-weight="500">IQ8M-72 Micro</text>
+
+        <!-- AC output line right -->
+        <line id="s-ac1" x1="110" y1="230" x2="178" y2="230" stroke="#fbbf24" stroke-width="1.5"/>
+        <text id="st-ac" x="130" y="224" font-size="7" fill="#fbbf24" font-weight="600">240V AC</text>
+
+        <!-- ESA Inspection badge on wire -->
+        <rect id="s-esa" x="116" y="216" width="36" height="14" rx="3" fill="none" stroke="rgba(167,139,250,0.5)" stroke-width="1" stroke-dasharray="3,2"/>
+        <text id="st-esa" x="120" y="226" font-size="6" fill="#a78bfa" font-weight="600">ESA ✓</text>
+
+        <!-- AC Disconnect -->
+        <rect id="s-acd" x="178" y="217" width="50" height="26" rx="3" fill="none" stroke="#64748b" stroke-width="1.5"/>
+        <text id="st-acd" x="182" y="234" font-size="7.5" fill="#64748b" font-weight="600">AC DISC</text>
+
+        <!-- Wire to production meter -->
+        <line id="s-ac2" x1="228" y1="230" x2="290" y2="230" stroke="#fbbf24" stroke-width="1.5"/>
+
+        <!-- Net meter (bi-directional) -->
+        <circle id="s-pmeter" cx="310" cy="230" r="18" fill="none" stroke="#64748b" stroke-width="1.5"/>
+        <text id="st-pm" x="296" y="234" font-size="7.5" fill="#64748b" font-weight="700">kWh</text>
+        <text id="st-pmlab" x="276" y="260" font-size="7" fill="#475569" font-weight="500">NET METER</text>
+        <!-- Bi-directional arrows -->
+        <path id="s-arrow1" d="M298 224 L303 218 L308 224" fill="none" stroke="#3b82f6" stroke-width="1"/>
+        <path id="s-arrow2" d="M318 236 L313 242 L308 236" fill="none" stroke="#22c55e" stroke-width="1"/>
+
+        <!-- Wire to main panel -->
+        <line id="s-ac3" x1="328" y1="230" x2="395" y2="230" stroke="#fbbf24" stroke-width="1.5"/>
+
+        <!-- Main breaker panel -->
+        <rect id="s-panel" x="395" y="190" width="70" height="80" rx="4" fill="none" stroke="#64748b" stroke-width="2"/>
+        <text id="st-panel" x="402" y="210" font-size="8" fill="#64748b" font-weight="700">MAIN</text>
+        <text id="st-panel2" x="402" y="222" font-size="8" fill="#64748b" font-weight="700">PANEL</text>
+        <text id="st-panelamp" x="402" y="257" font-size="7" fill="#475569" font-weight="500">200A Service</text>
+        <rect id="s-brk1" x="407" y="228" width="20" height="8" rx="1" fill="none" stroke="#475569" stroke-width="1"/>
+        <rect id="s-brk2" x="407" y="240" width="20" height="8" rx="1" fill="none" stroke="#475569" stroke-width="1"/>
+        <rect id="s-brk3" x="433" y="228" width="20" height="8" rx="1" fill="none" stroke="#3b82f6" stroke-width="1.2"/>
+        <rect id="s-brk4" x="433" y="240" width="20" height="8" rx="1" fill="none" stroke="#475569" stroke-width="1"/>
+        <text id="st-solar" x="435" y="226" font-size="6" fill="#3b82f6" font-weight="600">SOLAR</text>
+
+        <!-- Utility feed from top — Hydro One -->
+        <line id="s-util" x1="430" y1="135" x2="430" y2="190" stroke="#64748b" stroke-width="2"/>
+        <text id="st-util" x="406" y="130" font-size="8" fill="#64748b" font-weight="700">HYDRO ONE</text>
+        <text id="st-util2" x="410" y="142" font-size="7" fill="#3b82f6" font-weight="500">120/240V Grid</text>
+
+        <!-- Utility meter -->
+        <circle id="s-umeter" cx="430" cy="110" r="18" fill="none" stroke="#64748b" stroke-width="1.5"/>
+        <text id="st-um" x="418" y="114" font-size="7.5" fill="#64748b" font-weight="700">kWh</text>
+        <text id="st-umlab" x="399" y="92" font-size="7" fill="#475569" font-weight="500">UTIL METER</text>
+
+        <!-- Ground symbol -->
+        <line id="s-gnd1" x1="430" y1="270" x2="430" y2="293" stroke="#64748b" stroke-width="1.5"/>
+        <line id="s-gnd2" x1="415" y1="293" x2="445" y2="293" stroke="#64748b" stroke-width="1.5"/>
+        <line id="s-gnd3" x1="420" y1="299" x2="440" y2="299" stroke="#64748b" stroke-width="1.2"/>
+        <line id="s-gnd4" x1="425" y1="305" x2="435" y2="305" stroke="#64748b" stroke-width="1"/>
+        <text id="st-gnd" x="448" y="298" font-size="7" fill="#475569" font-weight="500">GND</text>
+
+        <!-- POE label -->
+        <text id="st-poe" x="440" y="68" font-size="7" fill="#a78bfa" font-weight="600">POE</text>
+        <line id="s-poe-line" x1="448" y1="73" x2="448" y2="92" stroke="rgba(167,139,250,0.4)" stroke-width="1" stroke-dasharray="3,2"/>
+      </svg>
+      <div class="drawing-label" id="drawingLabel">Auto-generated · Hydro One net metering · Toronto, ON</div>
+    </div>
+  </div>
+
+  <!-- Scene 5: Submission Package -->
+  <div class="scene" id="scene-submit">
+    <div class="submission-wrap">
+      <div class="sub-card glass-card" id="subCard1">
+        <div class="sub-icon-wrap formb">🏛</div>
+        <div class="sub-title">CIA Form B</div>
+        <div class="sub-provider">Hydro One — auto-completed</div>
+        <div class="sub-field">
+          <span class="sub-field-label">Customer</span>
+          <span class="sub-field-value" id="sv1">Jennifer Santos</span>
+        </div>
+        <div class="sub-field">
+          <span class="sub-field-label">Address</span>
+          <span class="sub-field-value" id="sv2">421 Lakeshore Blvd W</span>
+        </div>
+        <div class="sub-field">
+          <span class="sub-field-label">System size</span>
+          <span class="sub-field-value" id="sv3">10.95 kW AC</span>
+        </div>
+        <div class="sub-field">
+          <span class="sub-field-label">Inverters</span>
+          <span class="sub-field-value" id="sv4">30 × IQ8M-72</span>
+        </div>
+        <div class="sub-field">
+          <span class="sub-field-label">Fields filled</span>
+          <span class="sub-field-value" id="sv5">61 / 78 ✓</span>
+        </div>
+        <div class="sub-status blue" id="ss1">⏳ Awaiting P.Eng. review</div>
+      </div>
+
+      <div class="sub-card glass-card" id="subCard2">
+        <div class="sub-icon-wrap muni">🏙</div>
+        <div class="sub-title">Toronto Building Permit</div>
+        <div class="sub-provider green">City of Toronto — auto-identified</div>
+        <div class="sub-field">
+          <span class="sub-field-label">Permit type</span>
+          <span class="sub-field-value" id="sv6">Electrical – Solar PV</span>
+        </div>
+        <div class="sub-field">
+          <span class="sub-field-label">Property</span>
+          <span class="sub-field-value" id="sv7">421 Lakeshore Blvd W</span>
+        </div>
+        <div class="sub-field">
+          <span class="sub-field-label">Panel count</span>
+          <span class="sub-field-value" id="sv8">22 panels</span>
+        </div>
+        <div class="sub-field">
+          <span class="sub-field-label">ESA category</span>
+          <span class="sub-field-value" id="sv9">Category 1 – Minor</span>
+        </div>
+        <div class="sub-field">
+          <span class="sub-field-label">SLD attached</span>
+          <span class="sub-field-value" id="sv10">Yes — auto-gen ✓</span>
+        </div>
+        <div class="sub-status green" id="ss2">✓ Ready for submission</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Scene 6: Custom Build -->
+  <div class="scene" id="scene-custom">
+    <div class="custom-wrap">
+      <div class="custom-icon-row" id="customIcons">
+        <div class="custom-icon-box formb">🏛</div>
+        <div class="custom-connector"></div>
+        <div class="custom-icon-box calc">⚡</div>
+        <div class="custom-connector"></div>
+        <div class="custom-icon-box sld">📐</div>
+      </div>
+      <div class="custom-heading" id="customHeading">Built and wired to your Ontario workflow</div>
+      <div class="custom-body" id="customBody">Integrated with your proposal software, inverter equipment database, and Hydro One's Form B structure. Every field calculation, every SLD, every submission package — tailored to how your company operates in Ontario.</div>
+      <div class="custom-timeline" id="customTimeline">
+        <div class="custom-timeline-num">7</div>
+        <div class="custom-timeline-label">Day integration build-out<br/>based on current backlog</div>
+      </div>
+      <div class="custom-note" id="customNote">Ontario solar companies are saving 4–6 hours per CIA submission with this automation.</div>
+    </div>
+  </div>
+
+  <!-- Scene 7: Finish -->
+  <div class="scene" id="scene-finish">
+    <div class="finish-wrap">
+      <div class="finish-check" id="finishCheck">
+        <svg width="36" height="36" viewBox="0 0 36 36" fill="none">
+          <path d="M10 18l6 6 10-12" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </div>
+      <div class="finish-text" id="finishText">CIA Submission Ready</div>
+      <div class="finish-sub" id="finishSub">From your proposal to Hydro One CIA Form B — automated, calculated, and packaged for your P.Eng. to review and stamp.</div>
+      <div class="review-callout" id="reviewCallout">
+        <div class="review-callout-icon">📋</div>
+        <div class="review-callout-text">
+          <strong>Your form and drawings are ready for review</strong>
+          CIA Form B (61/78 fields complete) and the SLD are packaged and waiting — just needs your P.Eng. to sign off.
+        </div>
+      </div>
+      <div class="finish-extra" id="finishExtra">Connect your CRM, proposal software, Outlook, and more. Anything done on a computer in your Ontario solar workflow, we can automate.</div>
+      <div class="zyph-logo-wrap" id="zyphLogo">
+        <svg width="48" height="48" viewBox="0 0 48 48" fill="none">
+          <rect x="2" y="2" width="44" height="44" rx="10" stroke="url(#zyph-grad-on)" stroke-width="2.5" fill="none"/>
+          <path d="M14 16h20l-14 16h20" stroke="url(#zyph-grad-on)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+          <defs>
+            <linearGradient id="zyph-grad-on" x1="0" y1="0" x2="48" y2="48">
+              <stop offset="0%" stop-color="#f1f5f9"/>
+              <stop offset="100%" stop-color="#60a5fa"/>
+            </linearGradient>
+          </defs>
+        </svg>
+        <div class="zyph-logo-text">ZYPH</div>
+        <div class="zyph-logo-sub">Labs</div>
+      </div>
+      <button class="restart-btn" id="restartBtn" onclick="restart()">Watch Again</button>
+
+      <!-- Pricing -->
+      <div class="pricing-section" id="pricingSection">
+        <div class="pricing-divider"></div>
+        <h2 class="pricing-heading">Move Ahead With Early Release Pricing Today</h2>
+        <p class="pricing-sub">Lock in founding-member rates before general availability.</p>
+        <div class="pricing-cards">
+          <div class="pricing-card" id="priceMonthly">
+            <div class="pricing-badge">Monthly</div>
+            <div class="pricing-amount">$500<span class="pricing-period">/mo</span></div>
+            <ul class="pricing-perks">
+              <li>Full Ontario CIA Form B automation</li>
+              <li>Inverter database + calculation engine</li>
+              <li>Cancel anytime — no lock-in</li>
+            </ul>
+            <a href="/checkout?niche=solar-ai-on&tier=monthly&hosting=none" class="pricing-cta">Get Started →</a>
+          </div>
+          <div class="pricing-card featured" id="priceYearly">
+            <div class="pricing-save-tag">Save $3,000/yr</div>
+            <div class="pricing-badge">Annual</div>
+            <div class="pricing-amount">$3,000<span class="pricing-period">/yr</span></div>
+            <ul class="pricing-perks">
+              <li>Everything in Monthly</li>
+              <li>6 months free vs. monthly</li>
+              <li>Priority onboarding &amp; support</li>
+            </ul>
+            <a href="/checkout?niche=solar-ai-on&tier=annual&hosting=none" class="pricing-cta">Get Started →</a>
+          </div>
+        </div>
+        <p class="pricing-note">All prices in CAD. Pay with PayPal or credit card at checkout.</p>
+      </div>
+
+      <!-- Add-ons -->
+      <div class="addons-section" id="addonsSection">
+        <div class="pricing-divider"></div>
+        <h2 class="pricing-heading">AI-Powered Add-Ons</h2>
+        <p class="pricing-sub">Anything done on a computer in your solar business, we can now automate.</p>
+        <div class="addons-grid">
+          <div class="addon-card">
+            <div class="addon-icon">🤖</div>
+            <div class="addon-name">Proposal Sync</div>
+            <div class="addon-desc">Auto-pull your proposal the moment a job is marked sold. No manual export needed.</div>
+          </div>
+          <div class="addon-card">
+            <div class="addon-icon">🧮</div>
+            <div class="addon-name">Inverter Database</div>
+            <div class="addon-desc">Pre-built specs for Enphase, SolarEdge, Fronius &amp; more. Section K auto-fills instantly.</div>
+          </div>
+          <div class="addon-card">
+            <div class="addon-icon">📧</div>
+            <div class="addon-name">Hydro One Submission</div>
+            <div class="addon-desc">Package Form B + SLD + calculations and draft the submission email automatically.</div>
+          </div>
+          <div class="addon-card">
+            <div class="addon-icon">📅</div>
+            <div class="addon-name">Booking &amp; Scheduling</div>
+            <div class="addon-desc">Clients self-book site visits. Calendar syncs, confirmations, and reminders — automated.</div>
+          </div>
+          <div class="addon-card">
+            <div class="addon-icon">📈</div>
+            <div class="addon-name">Lead Generation</div>
+            <div class="addon-desc">AI-qualified Ontario leads delivered to your inbox. Chatbot scores prospects 24/7.</div>
+          </div>
+          <div class="addon-card">
+            <div class="addon-icon">⭐</div>
+            <div class="addon-name">Review Automation</div>
+            <div class="addon-desc">Auto-request Google reviews after every install. Build your reputation on autopilot.</div>
+          </div>
+        </div>
+        <p class="addons-cta-text">Interested in any of these? <a href="mailto:contact@zyphlabs.com?subject=Ontario%20Solar%20AI%20Add-Ons" class="addons-cta-link">Just let us know →</a></p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Step dots -->
+  <div class="steps-bar" id="stepsBar">
+    <div class="step-dot" id="dot0"></div>
+    <div class="step-dot" id="dot1"></div>
+    <div class="step-dot" id="dot2"></div>
+    <div class="step-dot" id="dot3"></div>
+    <div class="step-dot" id="dot4"></div>
+    <div class="step-dot" id="dot5"></div>
+    <div class="step-dot" id="dot6"></div>
+  </div>
+</div>
+
+<script>
+const $ = id => document.getElementById(id);
+const wait = ms => new Promise(r => setTimeout(r, ms));
+
+function setNarration(text) {
+  const el = $('narration');
+  el.classList.remove('show');
+  setTimeout(() => { el.textContent = text; el.classList.add('show'); }, 300);
+}
+
+function setProgress(pct) {
+  $('progressFill').style.width = pct + '%';
+}
+
+function setStep(idx) {
+  for (let i = 0; i < 7; i++) {
+    const d = $('dot' + i);
+    d.classList.remove('active', 'done');
+    if (i < idx) d.classList.add('done');
+    if (i === idx) d.classList.add('active');
+  }
+}
+
+function showScene(id) {
+  document.querySelectorAll('.scene').forEach(s => s.classList.remove('active'));
+  $(id).classList.add('active');
+}
+
+function animateDraw(el, duration) {
+  return new Promise(resolve => {
+    const len = el.getTotalLength ? el.getTotalLength() : 200;
+    el.style.strokeDasharray = len;
+    el.style.strokeDashoffset = len;
+    el.style.transition = `stroke-dashoffset ${duration}ms ease`;
+    requestAnimationFrame(() => {
+      el.style.strokeDashoffset = '0';
+      setTimeout(resolve, duration);
+    });
+  });
+}
+
+function moveElement(el, from, to, duration) {
+  return new Promise(resolve => {
+    el.style.left = from.x + 'px';
+    el.style.top = from.y + 'px';
+    el.style.opacity = '1';
+    el.style.transition = `left ${duration}ms cubic-bezier(0.4,0,0.2,1), top ${duration}ms cubic-bezier(0.4,0,0.2,1)`;
+    requestAnimationFrame(() => {
+      el.style.left = to.x + 'px';
+      el.style.top = to.y + 'px';
+      setTimeout(resolve, duration);
+    });
+  });
+}
+
+/* Animate a terminal line appearing */
+function showLine(id, delay) {
+  return new Promise(resolve => {
+    setTimeout(() => {
+      const el = $(id);
+      if (el) el.classList.add('show');
+      resolve();
+    }, delay);
+  });
+}
+
+/* Build terminal HTML lines */
+function buildTerminal() {
+  const body = $('terminalBody');
+  const lines = [
+    `<span class="t-prompt">$</span> <span class="t-cmd">solar-agent --lookup-inverter "Enphase IQ8M-72" --qty 30</span>`,
+    `<span class="t-divider">────────────────────────────────────────</span>`,
+    `<span class="t-key">model          </span><span class="t-val">Enphase IQ8M-72</span>`,
+    `<span class="t-key">units          </span><span class="t-val">30</span>`,
+    `<span class="t-key">rated_kVA_ea   </span><span class="t-val">0.366 kVA</span>`,
+    `<span class="t-divider">────────────────────────────────────────</span>`,
+    `<span class="t-comment">// Running Section K calculations...</span>`,
+    `<span class="t-calc">calc:</span> <span class="t-key">output_kW      </span> <span class="t-val">0.366 × 30 = </span><span class="t-result">10.98 kW</span>`,
+    `<span class="t-calc">calc:</span> <span class="t-key">fault_current  </span> <span class="t-val">8.4A × 30 = </span><span class="t-result">252A</span>`,
+    `<span class="t-calc">calc:</span> <span class="t-key">lag_kVAR       </span> <span class="t-val">10.98 × sin(acos(0.85)) = </span><span class="t-result">±5.77 kVAR</span>`,
+    `<span class="t-calc">calc:</span> <span class="t-key">output_voltage </span> <span class="t-val">single-phase → </span><span class="t-result">0.240 kV</span>`,
+    `<span class="t-calc">calc:</span> <span class="t-key">inrush_current </span> <span class="t-val">certified inverter → </span><span class="t-result">1.0 pu</span>`,
+    `<span class="t-divider">────────────────────────────────────────</span>`,
+    `<span class="t-result">✓ 12 Section K fields populated automatically</span>`,
+    `<span class="t-result">✓ Form B updated · 61 of 78 fields complete</span>`,
+    `<span class="t-prompt">$</span> <span class="t-cursor"></span>`,
+  ];
+
+  lines.forEach((html, i) => {
+    const div = document.createElement('div');
+    div.className = 't-line';
+    div.id = 'tline' + i;
+    div.innerHTML = html;
+    body.appendChild(div);
+  });
+}
+
+async function startDemo() {
+  $('landing').classList.add('hide');
+  await wait(400);
+  $('demo').classList.add('show');
+  await wait(400);
+  await playUploadScene();
+  await playFormbScene();
+  await playCalcScene();
+  await playSldScene();
+  await playSubmitScene();
+  await playCustomScene();
+  await playFinishScene();
+}
+
+async function playUploadScene() {
+  showScene('scene-upload');
+  setStep(0); setProgress(5);
+  setNarration('Start by dropping in your proposal and the customer\'s Hydro One bill.');
+  await wait(1200);
+
+  const zone = $('dropZone').getBoundingClientRect();
+  const cx = zone.left + zone.width / 2;
+  const cy = zone.top + zone.height / 2;
+
+  const cursor = $('cursor');
+  const card1 = $('fileCard1');
+  const startX1 = zone.left - 220;
+  const startY1 = zone.top - 90;
+
+  card1.style.left = startX1 + 'px';
+  card1.style.top = startY1 + 'px';
+  card1.style.opacity = '1';
+  cursor.style.left = (startX1 + 40) + 'px';
+  cursor.style.top = (startY1 + 20) + 'px';
+  cursor.style.opacity = '1';
+
+  await wait(400);
+  $('dropZone').classList.add('highlight');
+
+  await Promise.all([
+    moveElement(card1, {x: startX1, y: startY1}, {x: cx - 80, y: cy - 44}, 1200),
+    moveElement(cursor, {x: startX1+40, y: startY1+20}, {x: cx-40, y: cy-24}, 1200)
+  ]);
+
+  card1.style.opacity = '0';
+  const lf1 = document.createElement('div');
+  lf1.className = 'landed-file';
+  lf1.innerHTML = '📋 Your_Proposal.pdf';
+  $('landedFiles').appendChild(lf1);
+  await wait(50); lf1.classList.add('show');
+  setProgress(10);
+  await wait(600);
+
+  const card2 = $('fileCard2');
+  const startX2 = zone.right + 60;
+  const startY2 = zone.top - 40;
+  card2.style.left = startX2 + 'px';
+  card2.style.top = startY2 + 'px';
+  card2.style.opacity = '1';
+
+  await Promise.all([
+    moveElement(card2, {x: startX2, y: startY2}, {x: cx - 80, y: cy - 10}, 1200),
+    moveElement(cursor, {x: startX2+40, y: startY2+20}, {x: cx-40, y: cy+10}, 1200)
+  ]);
+
+  card2.style.opacity = '0';
+  cursor.style.opacity = '0';
+  const lf2 = document.createElement('div');
+  lf2.className = 'landed-file';
+  lf2.innerHTML = '⚡ HydroOne_Bill.pdf';
+  $('landedFiles').appendChild(lf2);
+  await wait(50); lf2.classList.add('show');
+  $('dropZone').classList.remove('highlight');
+  setProgress(20);
+  await wait(1200);
+}
+
+async function playFormbScene() {
+  showScene('scene-formb');
+  setStep(1); setProgress(24);
+  setNarration('The agent reads both files and starts filling Hydro One\'s 78-field CIA Form B.');
+  await wait(800);
+
+  $('formbDoc').classList.add('show');
+  await wait(700);
+
+  // Section A
+  $('fs-a').classList.add('show');
+  await wait(400);
+  for (const [id, vid] of [['fcheck-a1','fval-a1'],['fcheck-a2','fval-a2'],['fcheck-a3','fval-a3']]) {
+    await wait(380);
+    $(id).classList.add('show');
+    await wait(60);
+    $(vid).classList.add('show');
+  }
+  setProgress(28);
+  await wait(500);
+
+  // Section D
+  $('fs-d').classList.add('show');
+  await wait(300);
+  for (const [id, vid] of [['fcheck-d1','fval-d1'],['fcheck-d2','fval-d2'],['fcheck-d3','fval-d3']]) {
+    await wait(380);
+    $(id).classList.add('show');
+    await wait(60);
+    $(vid).classList.add('show');
+  }
+  setProgress(32);
+  await wait(500);
+
+  // Section F
+  $('fs-f').classList.add('show');
+  await wait(300);
+  for (const [id, vid] of [['fcheck-f1','fval-f1'],['fcheck-f2','fval-f2'],['fcheck-f3','fval-f3']]) {
+    await wait(380);
+    $(id).classList.add('show');
+    await wait(60);
+    $(vid).classList.add('show');
+  }
+  setProgress(37);
+  await wait(500);
+
+  // Progress bar
+  $('fbProgressBar').classList.add('show');
+  await wait(300);
+
+  // Animate count up
+  let count = 0;
+  const target = 61;
+  const interval = setInterval(() => {
+    count = Math.min(count + 3, target);
+    $('fbCount').textContent = count + ' of 78';
+    if (count >= target) clearInterval(interval);
+  }, 40);
+
+  await wait(300);
+  $('fbFill').classList.add('go');
+  await wait(1200);
+  setProgress(42);
+  await wait(1400);
+}
+
+async function playCalcScene() {
+  showScene('scene-calc');
+  setStep(2); setProgress(44);
+  setNarration('For Section K, the AI runs the electrical calculations — reactive power, fault current, output voltage.');
+  await wait(800);
+
+  buildTerminal();
+  $('terminalWrap').classList.add('show');
+  await wait(600);
+
+  // Show lines with staggered delays
+  const delays = [0, 500, 900, 1050, 1200, 1350, 1550, 1800, 2000, 2200, 2400, 2600, 2900, 3300, 3600, 3900];
+  const total = 16;
+  for (let i = 0; i < total; i++) {
+    await showLine('tline' + i, 0);
+    setProgress(44 + Math.round(i / total * 20));
+    await wait(delays[i] !== undefined ? (i === 0 ? 0 : (delays[i] - (delays[i-1] || 0))) : 200);
+  }
+
+  setProgress(64);
+  await wait(1800);
+}
+
+async function playSldScene() {
+  showScene('scene-sld');
+  setStep(3); setProgress(65);
+  setNarration('It generates the single line diagram — every electrical component, Hydro One meter, and ESA checkpoint mapped automatically.');
+  await wait(1000);
+
+  // PV Array
+  await animateDraw($('s-pv'), 600);
+  await animateDraw($('s-pv-d1'), 280);
+  await animateDraw($('s-pv-d2'), 280);
+  $('st-pv').classList.add('show');
+  $('st-pvkw').classList.add('show');
+  setProgress(67);
+
+  // DC wiring
+  await animateDraw($('s-dc1'), 300);
+  $('st-dc').classList.add('show');
+  await animateDraw($('s-dcd'), 380);
+  $('st-dcd').classList.add('show');
+  await animateDraw($('s-dc2'), 280);
+  setProgress(68);
+
+  // Inverter
+  await animateDraw($('s-inv'), 500);
+  $('st-inv').classList.add('show');
+  $('st-invmodel').classList.add('show');
+  setProgress(69);
+  await wait(200);
+
+  // AC output + ESA
+  await animateDraw($('s-ac1'), 400);
+  $('st-ac').classList.add('show');
+  await wait(100);
+  await animateDraw($('s-esa'), 300);
+  $('st-esa').classList.add('show');
+  await animateDraw($('s-acd'), 380);
+  $('st-acd').classList.add('show');
+  await animateDraw($('s-ac2'), 280);
+  setProgress(71);
+
+  // Net meter (bi-directional)
+  await animateDraw($('s-pmeter'), 500);
+  $('st-pm').classList.add('show');
+  $('st-pmlab').classList.add('show');
+  await wait(200);
+  await animateDraw($('s-arrow1'), 200);
+  await animateDraw($('s-arrow2'), 200);
+  await animateDraw($('s-ac3'), 380);
+  setProgress(73);
+
+  // Main panel
+  await animateDraw($('s-panel'), 600);
+  $('st-panel').classList.add('show');
+  $('st-panel2').classList.add('show');
+  $('st-panelamp').classList.add('show');
+  for (const b of ['s-brk1','s-brk2','s-brk3','s-brk4']) {
+    await animateDraw($(b), 140);
+  }
+  $('st-solar').classList.add('show');
+  setProgress(75);
+
+  // Utility (Hydro One)
+  await animateDraw($('s-umeter'), 500);
+  $('st-um').classList.add('show');
+  $('st-umlab').classList.add('show');
+  await animateDraw($('s-util'), 400);
+  $('st-util').classList.add('show');
+  $('st-util2').classList.add('show');
+  setProgress(77);
+
+  // POE marker
+  await animateDraw($('s-poe-line'), 250);
+  $('st-poe').classList.add('show');
+
+  // Ground
+  await animateDraw($('s-gnd1'), 180);
+  await animateDraw($('s-gnd2'), 160);
+  await animateDraw($('s-gnd3'), 140);
+  await animateDraw($('s-gnd4'), 120);
+  $('st-gnd').classList.add('show');
+
+  setProgress(80);
+  $('sldBadge').classList.add('show');
+  $('drawingLabel').classList.add('show');
+  await wait(1800);
+}
+
+async function playSubmitScene() {
+  showScene('scene-submit');
+  setStep(4); setProgress(81);
+  setNarration('The full submission package is assembled — CIA Form B and the Toronto building permit, both ready for review.');
+  await wait(1000);
+
+  $('subCard1').classList.add('show');
+  await wait(300);
+  setProgress(83);
+
+  for (const id of ['sv1','sv2','sv3','sv4','sv5']) {
+    await wait(340);
+    $(id).classList.add('show');
+  }
+  setProgress(88);
+  await wait(300);
+  $('ss1').classList.add('show');
+  await wait(600);
+
+  $('subCard2').classList.add('show');
+  await wait(300);
+  setProgress(91);
+
+  for (const id of ['sv6','sv7','sv8','sv9','sv10']) {
+    await wait(340);
+    $(id).classList.add('show');
+  }
+  setProgress(96);
+  await wait(300);
+  $('ss2').classList.add('show');
+  await wait(1800);
+}
+
+async function playCustomScene() {
+  showScene('scene-custom');
+  setStep(5); setProgress(97);
+  setNarration('');
+  await wait(400);
+
+  $('customIcons').classList.add('show');
+  await wait(600);
+  $('customHeading').classList.add('show');
+  await wait(800);
+  $('customBody').classList.add('show');
+  await wait(1200);
+  $('customTimeline').classList.add('show');
+  await wait(1200);
+  $('customNote').classList.add('show');
+  await wait(2500);
+}
+
+async function playFinishScene() {
+  showScene('scene-finish');
+  setStep(6); setProgress(100);
+  setNarration('');
+
+  document.body.style.overflow = 'auto';
+  $('demo').classList.add('scrollable');
+
+  await wait(400);
+  $('finishCheck').classList.add('show');
+  await wait(500);
+  $('finishText').classList.add('show');
+  await wait(400);
+  $('finishSub').classList.add('show');
+  await wait(900);
+  $('reviewCallout').classList.add('show');
+  await wait(1000);
+  $('finishExtra').classList.add('show');
+  await wait(1400);
+  $('zyphLogo').classList.add('show');
+  await wait(1000);
+  $('restartBtn').classList.add('show');
+  await wait(600);
+  $('pricingSection').classList.add('show');
+  await wait(800);
+  $('addonsSection').classList.add('show');
+}
+
+function restart() {
+  document.body.style.overflow = 'hidden';
+  $('demo').classList.remove('scrollable');
+  $('demo').scrollTop = 0;
+  $('demo').classList.remove('show');
+  $('landing').classList.remove('hide');
+
+  // Reset upload
+  $('dropZone').classList.remove('highlight');
+  $('landedFiles').innerHTML = '';
+  ['fileCard1','fileCard2','cursor'].forEach(id => {
+    $(id).style.opacity = '0';
+    $(id).style.transition = 'none';
+  });
+
+  // Reset Form B
+  $('formbDoc').classList.remove('show');
+  ['fs-a','fs-d','fs-f'].forEach(id => $(id).classList.remove('show'));
+  document.querySelectorAll('.formb-check, .formb-field-val').forEach(el => el.classList.remove('show'));
+  $('fbProgressBar').classList.remove('show');
+  $('fbCount').textContent = '0 of 78';
+  $('fbFill').classList.remove('go');
+
+  // Reset terminal
+  $('terminalWrap').classList.remove('show');
+  $('terminalBody').innerHTML = '';
+
+  // Reset SLD
+  const sldEls = $('sldSvg').querySelectorAll('line, rect, polyline, circle, path, polygon');
+  sldEls.forEach(el => {
+    el.style.transition = 'none';
+    el.style.strokeDashoffset = '1000';
+  });
+  $('sldSvg').querySelectorAll('text').forEach(t => t.classList.remove('show'));
+  $('sldBadge').classList.remove('show');
+  $('drawingLabel').classList.remove('show');
+
+  // Reset submission
+  ['subCard1','subCard2'].forEach(id => $(id).classList.remove('show'));
+  ['sv1','sv2','sv3','sv4','sv5','sv6','sv7','sv8','sv9','sv10'].forEach(id => $(id).classList.remove('show'));
+  ['ss1','ss2'].forEach(id => $(id).classList.remove('show'));
+
+  // Reset custom
+  ['customIcons','customHeading','customBody','customTimeline','customNote'].forEach(id => $(id).classList.remove('show'));
+
+  // Reset finish
+  ['finishCheck','finishText','finishSub','reviewCallout','finishExtra','zyphLogo','restartBtn','pricingSection','addonsSection']
+    .forEach(id => $(id).classList.remove('show'));
+
+  setProgress(0);
+}
+</script>
+
+<!-- Zyph Labs Analytics -->
+<script>
+(function(){
+  try {
+    var ref = "direct";
+    try { if (document.referrer) ref = new URL(document.referrer).hostname; } catch(e){}
+    fetch("/api/analytics/track", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ path: location.pathname, referrer: ref }),
+      keepalive: true
+    }).catch(function(){});
+  } catch(e){}
+})();
+</script>
+</body>
+</html>
