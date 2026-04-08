@@ -3,6 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="icon" href="/favicon.ico" sizes="any">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
 <title>Solar AI Agent — Texas Demo v2</title>
 <style>
   * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -1373,7 +1375,7 @@
     </div>
     <h1 class="cta-headline" id="cta-headline">Are you ready to save <span>time and money</span>?</h1>
     <p class="cta-sub" id="cta-sub">In under 5 minutes, the AI completed 5 core solar workflow tasks — proposal to permit application and interconnection filing.</p>
-    <button class="cta-button" id="cta-btn">Start Your Free Solar Assessment</button>
+    <a class="cta-button" id="cta-btn" href="/checkout?niche=solar-ai&tier=monthly&hosting=none">Get Started →</a>
     <div class="cta-fine" id="cta-fine">
       No credit card required • Instant quotes • Fully automated • 24/7 availability<br>
       <br>
@@ -1491,27 +1493,27 @@ async function playContract(){
   narrate('<span class="hl">Uploading solar proposal</span> — extracting customer data, system specs, and pricing...');
 
   // Drag file 1: proposal
-  await delay(400);
+  await delay(200);
   const zone=$('upload-zone');
   const zW=zone.offsetWidth, zH=zone.offsetHeight;
-  await animateDrag('drag-cursor','drag-ghost-1',zone, zW+20, -30, zW/2-60, zH/2-16, 700);
+  await animateDrag('drag-cursor','drag-ghost-1',zone, zW+20, -30, zW/2-60, zH/2-16, 500);
   $('upload-box').classList.add('highlight');
-  await delay(200);
+  await delay(100);
   $('drag-ghost-1').classList.remove('show');
   $('upload-box').classList.add('dropped');
   $('file-card-1').classList.add('show');
-  await delay(300);
+  await delay(150);
 
   // Drag file 2: energy bill
   narrate('Uploading <span class="hl">energy bill</span> — extracting consumption data, account number...');
   $('drag-cursor').classList.remove('show');
-  await delay(200);
-  await animateDrag('drag-cursor','drag-ghost-2',zone, zW+40, -20, zW/2-60, zH/2+10, 650);
-  await delay(150);
+  await delay(100);
+  await animateDrag('drag-cursor','drag-ghost-2',zone, zW+40, -20, zW/2-60, zH/2+10, 450);
+  await delay(80);
   $('drag-ghost-2').classList.remove('show');
   $('drag-cursor').classList.remove('show');
   $('file-card-2').classList.add('show');
-  await delay(500); progress(4);
+  await delay(250); progress(4);
 
   $('upload-zone').style.display='none';
   $('file-card-1').style.display='none';
@@ -1519,37 +1521,37 @@ async function playContract(){
 
   narrate('Populating <span class="hl">installation contract</span> — mapping fields from proposal data...');
   const cd=$('contract-doc');
-  cd.classList.add('show'); cd.scrollTop=0; await delay(300);
+  cd.classList.add('show'); cd.scrollTop=0; await delay(150);
 
-  await fillField('cf-date','April 7, 2026',28);
-  await fillField('cf-cust-name','John & Jane Smith',22); progress(6);
+  await fillField('cf-date','April 7, 2026',18);
+  await fillField('cf-cust-name','John & Jane Smith',14); progress(6);
   cd.scrollBy({top:40,behavior:'smooth'});
-  await fillField('cf-address','4210 Bluebonnet Lane',22);
-  await fillField('cf-city','Austin, Texas  78745',20); progress(8);
-  await fillField('cf-phone','(512) 555-0142',25);
-  await fillField('cf-email','john.smith@gmail.com',20); progress(10);
+  await fillField('cf-address','4210 Bluebonnet Lane',14);
+  await fillField('cf-city','Austin, Texas  78745',14); progress(8);
+  await fillField('cf-phone','(512) 555-0142',16);
+  await fillField('cf-email','john.smith@gmail.com',14); progress(10);
   cd.scrollBy({top:40,behavior:'smooth'});
 
   narrate('Mapping <span class="hl">equipment specifications</span> — panels, inverter, production estimate...');
-  await fillField('cf-sys-size','11.2 kWdc (28 panels × 400W)',18); progress(12);
-  await fillField('cf-panels','Canadian Solar CS7L-400MS (28 units)',16);
-  await fillField('cf-inverter','SolarEdge SE10000H-US — 10.0 kWac',16); progress(14);
+  await fillField('cf-sys-size','11.2 kWdc (28 panels × 400W)',12); progress(12);
+  await fillField('cf-panels','Canadian Solar CS7L-400MS (28 units)',10);
+  await fillField('cf-inverter','SolarEdge SE10000H-US — 10.0 kWac',10); progress(14);
   cd.scrollBy({top:60,behavior:'smooth'});
-  await fillField('cf-mounting','Flush roof mount — IronRidge XR100',18);
-  await fillField('cf-production','15,400 kWh/year (Austin irradiance)',16); progress(16);
+  await fillField('cf-mounting','Flush roof mount — IronRidge XR100',12);
+  await fillField('cf-production','15,400 kWh/year (Austin irradiance)',10); progress(16);
   cd.scrollBy({top:50,behavior:'smooth'});
 
   narrate('Calculating <span class="hl">contract price</span> — equipment, labour, permits included...');
-  await fillField('cf-total','$32,500.00 (before tax)',20); progress(17);
-  await fillField('cf-deposit','$16,250.00',24);
-  await fillField('cf-balance','$16,250.00',24); progress(18);
+  await fillField('cf-total','$32,500.00 (before tax)',14); progress(17);
+  await fillField('cf-deposit','$16,250.00',16);
+  await fillField('cf-balance','$16,250.00',16); progress(18);
   cd.scrollBy({top:50,behavior:'smooth'});
 
-  await delay(300);
+  await delay(150);
   $('ds-tag-1').classList.add('show'); $('ds-tag-2').classList.add('show');
   $('contract-badge').classList.add('show'); progress(20);
   cd.scrollTo({top:cd.scrollHeight,behavior:'smooth'});
-  await delay(900);
+  await delay(500);
 }
 
 /* ═══ SCENE 2: SLD ═══ */
@@ -1621,7 +1623,7 @@ async function playSLD(){
 
   await cmdType('sld-cmd','_QSAVE');
   cmdHist('sld-hist','Drawing saved: Smith_SLD.dwg');
-  await delay(600);
+  await delay(300);
 }
 
 /* ═══ SCENE 3: LAYOUT ═══ */
@@ -1629,7 +1631,7 @@ async function playLayout(){
   aiTask('<span class="step-name">AutoCAD Site Plan</span> — measuring roof, placing 28 panels, verifying setbacks...');
   setStep(2); progress(48); hide('scene-sld'); show('scene-layout');
   narrate('Generating <span class="hl">roof layout &amp; site plan</span> — satellite data, structure, panel placement...');
-  $('ch-lay').classList.add('show'); await delay(300);
+  $('ch-lay').classList.add('show'); await delay(150);
 
   // Property + house
   await cmdType('lay-cmd','_RECTANGLE 30,14 410,258');
@@ -1704,7 +1706,7 @@ async function playLayout(){
 
   await cmdType('lay-cmd','_QSAVE');
   cmdHist('lay-hist','Drawing saved: Smith_SitePlan.dwg');
-  await delay(600);
+  await delay(300);
 }
 
 /* ═══ SCENE 4: PERMIT ═══ */
@@ -1712,10 +1714,10 @@ async function playPermit(){
   aiTask('<span class="step-name">Austin Permit</span> — navigating portal, auto-filling electrical permit form...');
   setStep(3); progress(66); hide('scene-layout'); show('scene-permit');
   narrate('Opening <span class="hl">City of Austin permit portal</span> — auto-filling electrical permit application...');
-  await delay(400);
+  await delay(200);
 
   const pw=$('permit-window');
-  $('pm-s1').classList.add('show'); await delay(200);
+  $('pm-s1').classList.add('show'); await delay(100);
   $('pm-s1').scrollIntoView({behavior:'smooth',block:'end'});
   await fillField('pm-contractor','Solar Company',22);
   await fillField('pm-license','#28456',24); progress(69);
@@ -1723,7 +1725,7 @@ async function playPermit(){
   await fillField('pm-phone','(512) 555-0199',24); progress(71);
 
   narrate('Mapping <span class="hl">property details</span> from proposal data...');
-  $('pm-s2').classList.add('show'); await delay(200);
+  $('pm-s2').classList.add('show'); await delay(100);
   $('pm-s2').scrollIntoView({behavior:'smooth',block:'end'});
   await fillField('pm-addr','4210 Bluebonnet Lane',20);
   await fillField('pm-city','Austin',28);
@@ -1733,7 +1735,7 @@ async function playPermit(){
   pw.scrollBy({top:60,behavior:'smooth'});
 
   narrate('Populating <span class="hl">system specifications</span> — all data from proposal...');
-  $('pm-s3').classList.add('show'); await delay(200);
+  $('pm-s3').classList.add('show'); await delay(100);
   $('pm-s3').scrollIntoView({behavior:'smooth',block:'end'});
   await fillField('pm-kw','11.2 kWdc',24);
   await fillField('pm-kwac','10.0 kWac',24); progress(78);
@@ -1746,11 +1748,11 @@ async function playPermit(){
   await fillField('pm-inter','Load-side — NEC Article 705',18);
   await fillField('pm-desc','Solar PV — New Installation',18); progress(82);
 
-  await delay(250);
-  $('pm-submit').classList.add('show'); await delay(300);
+  await delay(150);
+  $('pm-submit').classList.add('show'); await delay(200);
   $('pm-status').textContent='✓ Submitted — Confirmation #COA-2026-18847';
   pw.scrollTo({top:pw.scrollHeight,behavior:'smooth'});
-  progress(84); await delay(800);
+  progress(84); await delay(400);
 }
 
 /* ═══ SCENE 5: ONCOR DG APPLICATION ═══ */
@@ -1758,10 +1760,10 @@ async function playMicrogen(){
   aiTask('<span class="step-name">Oncor Interconnection</span> — filing DG application, checking declarations...');
   setStep(4); progress(84); hide('scene-permit'); show('scene-microgen');
   narrate('Opening <span class="hl">Oncor distributed generation portal</span> — filing DG application...');
-  await delay(400);
+  await delay(200);
 
   const mw=$('mg-window');
-  $('mg-s1').classList.add('show'); await delay(200);
+  $('mg-s1').classList.add('show'); await delay(100);
   $('mg-s1').scrollIntoView({behavior:'smooth',block:'end'});
   await fillField('mg-owner','John & Jane Smith',20);
   await fillField('mg-site','4210 Bluebonnet Lane, Austin, TX',16); progress(86);
@@ -1771,7 +1773,7 @@ async function playMicrogen(){
   await fillField('mg-rate','TXU Energy / Residential',22); progress(88);
 
   narrate('Populating <span class="hl">generating unit details</span>...');
-  $('mg-s2').classList.add('show'); await delay(200);
+  $('mg-s2').classList.add('show'); await delay(100);
   $('mg-s2').scrollIntoView({behavior:'smooth',block:'end'});
   await fillField('mg-type','Solar Photovoltaic (PV)',20);
   await fillField('mg-cap','11.2 kW',26);
@@ -1785,7 +1787,7 @@ async function playMicrogen(){
   await fillField('mg-imod','SE10000H-US',22); progress(92);
 
   narrate('Auto-filling <span class="hl">installer details</span>...');
-  $('mg-s3').classList.add('show'); await delay(200);
+  $('mg-s3').classList.add('show'); await delay(100);
   $('mg-s3').scrollIntoView({behavior:'smooth',block:'end'});
   await fillField('mg-co','Solar Company',24);
   await fillField('mg-me','#28456',22);
@@ -1795,19 +1797,19 @@ async function playMicrogen(){
   await fillField('mg-em','info@solarcompany.com',18); progress(94);
 
   narrate('Checking <span class="hl">compliance declarations</span>...');
-  $('mg-s4').classList.add('show'); await delay(250);
+  $('mg-s4').classList.add('show'); await delay(150);
   $('mg-s4').scrollIntoView({behavior:'smooth',block:'end'});
   for(const id of['mc1','mc2','mc3','mc4','mc5']){
-    await delay(240); $(id).textContent='✓'; $(id).classList.add('checked');
+    await delay(150); $(id).textContent='✓'; $(id).classList.add('checked');
     mw.scrollBy({top:20,behavior:'smooth'});
   }
   progress(96);
 
-  await delay(250);
-  $('mg-submit').classList.add('show'); await delay(300);
+  await delay(150);
+  $('mg-submit').classList.add('show'); await delay(200);
   $('mg-status').textContent='✓ Filed — Reference #ONC-DG-2026-18847';
   mw.scrollTo({top:mw.scrollHeight,behavior:'smooth'});
-  progress(98); await delay(800);
+  progress(98); await delay(400);
 }
 
 /* ═══ SCENE 6: CTA ═══ */
@@ -1818,21 +1820,21 @@ async function playCTA(){
   $('scene-cta').style.display='flex';
   narrate('');
 
-  await delay(250);
+  await delay(200);
   $('cta-check').classList.add('show');
-  await delay(350);
+  await delay(250);
   $('cta-summary').classList.add('show');
-  await delay(500);
+  await delay(350);
   $('cta-headline').classList.add('show');
-  await delay(500);
+  await delay(350);
   $('cta-sub').classList.add('show');
-  await delay(500);
+  await delay(350);
   $('cta-btn').classList.add('show');
-  await delay(500);
+  await delay(350);
   $('cta-fine').classList.add('show');
-  await delay(400);
+  await delay(300);
   $('cta-logo').classList.add('show');
-  await delay(400);
+  await delay(300);
   $('restart-btn').style.display='block';
 }
 
