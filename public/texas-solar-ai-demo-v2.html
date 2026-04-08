@@ -1,0 +1,1913 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Solar AI Agent — Texas Demo v2</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    background: #0a0a0f; color: #e0e0e0;
+    font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+    min-height: 100vh; display: flex; flex-direction: column;
+    align-items: center; overflow-x: hidden;
+  }
+
+  /* ── AI Status Bar ── */
+  .ai-bar {
+    width: 100%; max-width: 960px;
+    padding: 20px 24px 0;
+  }
+  .ai-bar-inner {
+    background: linear-gradient(135deg, rgba(42,110,245,0.08), rgba(42,159,214,0.08));
+    border: 1px solid rgba(42,110,245,0.2);
+    border-radius: 8px; padding: 10px 18px;
+    display: flex; align-items: center; gap: 12px;
+  }
+  .ai-orb {
+    width: 32px; height: 32px; border-radius: 50%;
+    background: radial-gradient(circle at 40% 40%, #4d8eff, #1a4ec0);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 16px; flex-shrink: 0;
+    box-shadow: 0 0 16px rgba(42,110,245,0.4);
+    animation: orbPulse 2s ease-in-out infinite;
+  }
+  @keyframes orbPulse {
+    0%, 100% { box-shadow: 0 0 12px rgba(42,110,245,0.3); transform: scale(1); }
+    50% { box-shadow: 0 0 24px rgba(42,110,245,0.6); transform: scale(1.05); }
+  }
+  .ai-info { flex: 1; }
+  .ai-label {
+    font-size: 10px; font-weight: 700; color: #2a6ef5;
+    text-transform: uppercase; letter-spacing: 0.1em;
+    display: flex; align-items: center; gap: 6px;
+  }
+  .ai-label .dot {
+    width: 6px; height: 6px; border-radius: 50%;
+    background: #2a9fd6; animation: blink 1.2s ease-in-out infinite;
+  }
+  .ai-task {
+    font-size: 12px; color: #888; margin-top: 2px;
+    transition: opacity 0.3s ease;
+  }
+  .ai-task .step-name { color: #b0c8e8; font-weight: 600; }
+  .ai-timer {
+    font-family: 'Consolas', monospace;
+    font-size: 13px; color: #2a6ef5; font-weight: 700;
+    letter-spacing: 0.04em; flex-shrink: 0;
+    min-width: 50px; text-align: right;
+  }
+
+  /* ── Header ── */
+  .header {
+    width: 100%; max-width: 960px;
+    padding: 14px 24px 0;
+    display: flex; justify-content: space-between; align-items: center;
+  }
+  .state-badge {
+    background: linear-gradient(135deg, #8B0000, #c0392b);
+    color: #fff; font-size: 11px; font-weight: 700;
+    letter-spacing: 0.12em; text-transform: uppercase;
+    padding: 5px 14px; border-radius: 4px;
+  }
+  .brand-mini {
+    display: flex; align-items: center; gap: 8px; opacity: 0.5;
+  }
+  .brand-mini .b-icon {
+    width: 26px; height: 26px;
+    background: linear-gradient(135deg, #2a6ef5, #1a4ec0);
+    border-radius: 6px; display: flex; align-items: center; justify-content: center;
+    font-size: 13px; font-weight: 900; color: #fff; letter-spacing: -1px;
+  }
+  .brand-mini span { font-size: 13px; font-weight: 700; letter-spacing: 0.08em; color: #aaa; }
+
+  /* ── Progress ── */
+  .steps-container {
+    width: 100%; max-width: 960px;
+    padding: 24px 24px 0;
+    display: flex; align-items: center; justify-content: center; gap: 0;
+  }
+  .step-dot {
+    width: 10px; height: 10px; border-radius: 50%;
+    background: #1a1a2a; border: 2px solid #2a2a3a;
+    transition: all 0.4s ease; flex-shrink: 0;
+  }
+  .step-dot.active { background: #2a9fd6; border-color: #2a9fd6; box-shadow: 0 0 8px rgba(42,159,214,0.6); }
+  .step-dot.done { background: #2a6ef5; border-color: #2a6ef5; }
+  .step-line {
+    flex: 1; height: 2px; background: #151520;
+    transition: background 0.4s ease; min-width: 24px; max-width: 60px;
+  }
+  .step-line.done { background: #2a6ef5; }
+
+  .progress-bar-wrap { width: 100%; max-width: 960px; padding: 12px 24px 0; }
+  .progress-bar-bg { height: 3px; background: #111118; border-radius: 2px; overflow: hidden; }
+  .progress-bar-fill {
+    height: 100%; background: linear-gradient(90deg, #2a9fd6, #2a6ef5);
+    border-radius: 2px; width: 0%; transition: width 0.6s ease;
+  }
+
+  .narration {
+    width: 100%; max-width: 960px;
+    padding: 16px 24px 0; min-height: 44px;
+    display: flex; align-items: center;
+  }
+  .narration-text { font-size: 13px; color: #666; line-height: 1.6; font-style: italic; }
+  .narration-text .hl { color: #2a9fd6; font-style: normal; font-weight: 600; }
+
+  .scene-area {
+    width: 100%; max-width: 960px;
+    padding: 14px 24px 24px; min-height: 460px; position: relative;
+  }
+  .scene-header {
+    font-size: 11px; color: #444; letter-spacing: 0.12em;
+    text-transform: uppercase; font-weight: 700; margin-bottom: 12px;
+  }
+
+  @keyframes fadeUp { from { opacity:0; transform:translateY(8px); } to { opacity:1; transform:translateY(0); } }
+  @keyframes blink { 0%,100% { opacity:1; } 50% { opacity:0; } }
+  .scene { display: none; flex-direction: column; gap: 12px; animation: fadeUp 0.35s ease; }
+
+  /* ═══ UPLOAD ═══ */
+  .upload-zone { position: relative; min-height: 120px; }
+  .upload-box {
+    border: 2px dashed #1e1e2e; border-radius: 10px;
+    padding: 24px; text-align: center; background: #0d0d16;
+    transition: all 0.4s ease;
+  }
+  .upload-box.highlight { border-color: #2a9fd6; background: rgba(42,159,214,0.03); }
+  .upload-box.dropped { border-color: #27ae60; background: rgba(39,174,96,0.04); }
+  .upload-icon { font-size: 30px; margin-bottom: 8px; }
+  .upload-title { font-size: 14px; font-weight: 600; color: #c0c0c0; margin-bottom: 3px; }
+  .upload-sub { font-size: 11px; color: #444; }
+
+  /* Drag cursor + file ghost */
+  .drag-cursor {
+    position: absolute; z-index: 20;
+    pointer-events: none; opacity: 0;
+    transition: opacity 0.25s ease;
+  }
+  .drag-cursor.show { opacity: 1; }
+  .drag-cursor svg { display: block; }
+
+  .drag-ghost {
+    position: absolute; z-index: 19;
+    pointer-events: none; opacity: 0;
+    background: rgba(20,20,35,0.92); border: 1px solid #2a2a3e;
+    border-radius: 6px; padding: 6px 12px;
+    display: flex; align-items: center; gap: 8px;
+    white-space: nowrap;
+    box-shadow: 0 6px 20px rgba(0,0,0,0.4);
+    transition: opacity 0.25s ease;
+  }
+  .drag-ghost.show { opacity: 0.92; }
+  .drag-ghost .dg-icon { font-size: 16px; }
+  .drag-ghost .dg-name { font-size: 11px; color: #ccc; font-weight: 600; }
+
+  .file-card {
+    display: none; background: #0e0e18; border: 1px solid #1e1e2e; border-radius: 8px;
+    padding: 10px 14px; align-items: center; gap: 12px;
+  }
+  .file-card.show { display: flex; }
+  .file-card .icon { font-size: 18px; }
+  .file-card .name { font-size: 12px; font-weight: 600; color: #d0d0d0; }
+  .file-card .meta { font-size: 10px; color: #444; margin-top: 1px; }
+  .file-card .check { margin-left: auto; color: #2a6ef5; font-size: 15px; font-weight: 700; }
+
+  /* ═══ CONTRACT ═══ */
+  .contract-doc {
+    display: none; background: #fff; color: #1a1a1a;
+    border-radius: 5px; overflow: hidden;
+    box-shadow: 0 8px 40px rgba(0,0,0,0.5);
+    font-family: 'Times New Roman', Georgia, serif;
+    max-height: 480px; overflow-y: auto; position: relative;
+  }
+  .contract-doc.show { display: block; }
+  .contract-doc::-webkit-scrollbar { width: 5px; }
+  .contract-doc::-webkit-scrollbar-track { background: #f0f0f0; }
+  .contract-doc::-webkit-scrollbar-thumb { background: #ccc; border-radius: 3px; }
+
+  .contract-page { padding: 36px 44px; }
+
+  .contract-letterhead {
+    display: flex; align-items: center; justify-content: space-between;
+    border-bottom: 3px solid #1a3a6a; padding-bottom: 12px; margin-bottom: 18px;
+  }
+  .contract-logo-area { display: flex; align-items: center; gap: 10px; }
+  .contract-logo-box {
+    width: 40px; height: 40px; background: linear-gradient(135deg, #f7941d, #e8651a);
+    border-radius: 6px; display: flex; align-items: center; justify-content: center;
+    font-size: 18px; font-weight: 900; color: #fff;
+  }
+  .contract-company { font-family: 'Segoe UI', sans-serif; }
+  .contract-company .name { font-size: 16px; font-weight: 800; color: #1a3a6a; }
+  .contract-company .sub { font-size: 8px; color: #888; letter-spacing: 0.08em; text-transform: uppercase; }
+  .contract-contact {
+    text-align: right; font-family: 'Segoe UI', sans-serif;
+    font-size: 8px; color: #888; line-height: 1.6;
+  }
+
+  .contract-title-block { text-align: center; margin-bottom: 18px; }
+  .contract-title-block h1 {
+    font-size: 15px; font-weight: 700; color: #1a1a1a;
+    text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 3px;
+  }
+  .contract-title-block .subtitle { font-size: 10px; color: #888; font-family: 'Segoe UI', sans-serif; }
+
+  .c-section { margin-bottom: 14px; }
+  .c-section-title {
+    font-family: 'Segoe UI', sans-serif;
+    font-size: 10px; font-weight: 700; color: #1a3a6a;
+    text-transform: uppercase; letter-spacing: 0.1em;
+    border-bottom: 1px solid #ddd; padding-bottom: 3px; margin-bottom: 8px;
+  }
+  .c-row {
+    display: flex; align-items: baseline; margin-bottom: 5px;
+    font-size: 11.5px; line-height: 1.7;
+  }
+  .c-label {
+    font-family: 'Segoe UI', sans-serif;
+    font-size: 9px; color: #666; min-width: 130px;
+    text-transform: uppercase; letter-spacing: 0.04em;
+    flex-shrink: 0; padding-top: 2px;
+  }
+  .c-field {
+    flex: 1; border-bottom: 1px solid #ccc;
+    min-height: 18px; padding: 0 3px;
+    font-size: 11.5px; color: #1a1a1a;
+    transition: background 0.3s ease;
+  }
+  .c-field.filling { background: rgba(42,110,245,0.08); border-bottom-color: #2a6ef5; }
+  .c-field.filled { background: transparent; border-bottom-color: #aaa; color: #1a3a6a; font-weight: 600; }
+
+  .c-paragraph {
+    font-size: 10.5px; line-height: 1.8; color: #333;
+    margin-bottom: 8px; text-align: justify;
+  }
+  .c-paragraph .c-inline-field {
+    display: inline; border-bottom: 1px solid #ccc; padding: 0 3px;
+    font-weight: 600; color: #1a3a6a; transition: background 0.3s ease;
+  }
+  .c-paragraph .c-inline-field.filling { background: rgba(42,110,245,0.1); border-bottom-color: #2a6ef5; }
+
+  .c-sig-block {
+    display: flex; gap: 36px; margin-top: 20px; padding-top: 14px; border-top: 1px solid #ddd;
+  }
+  .c-sig-col { flex: 1; }
+  .c-sig-label {
+    font-family: 'Segoe UI', sans-serif;
+    font-size: 8px; color: #888; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 3px;
+  }
+  .c-sig-line { border-bottom: 1px solid #999; height: 26px; position: relative; }
+  .c-sig-line .docusign-tag {
+    display: none; position: absolute; bottom: 2px; left: 0;
+    background: #4c28c4; color: #fff; font-family: 'Segoe UI', sans-serif;
+    font-size: 7px; font-weight: 700; padding: 2px 7px; border-radius: 2px;
+  }
+  .c-sig-line .docusign-tag.show { display: inline-block; }
+  .c-date-line { font-family: 'Segoe UI', sans-serif; font-size: 8px; color: #aaa; margin-top: 3px; }
+
+  .contract-ai-badge {
+    display: none; position: sticky; bottom: 0; left: 0; right: 0;
+    background: linear-gradient(180deg, transparent, rgba(42,110,245,0.06) 30%, rgba(42,110,245,0.12));
+    padding: 9px 18px; text-align: center;
+    font-family: 'Segoe UI', sans-serif;
+    font-size: 10px; font-weight: 700; color: #2a6ef5; letter-spacing: 0.06em;
+  }
+  .contract-ai-badge.show { display: block; }
+
+  /* ═══ AUTOCAD ═══ */
+  .autocad-window {
+    background: #1e1e1e; border: 1px solid #333;
+    border-radius: 4px; overflow: hidden;
+    box-shadow: 0 8px 40px rgba(0,0,0,0.6);
+  }
+  .acad-titlebar {
+    background: linear-gradient(180deg, #3a3a3a, #2a2a2a);
+    padding: 3px 10px; display: flex; align-items: center; gap: 8px;
+    border-bottom: 1px solid #444;
+  }
+  .acad-titlebar .dots { display: flex; gap: 5px; }
+  .acad-titlebar .dot { width: 9px; height: 9px; border-radius: 50%; }
+  .acad-titlebar .dot.r { background: #ff5f57; }
+  .acad-titlebar .dot.y { background: #febc2e; }
+  .acad-titlebar .dot.g { background: #28c840; }
+  .acad-titlebar .title {
+    flex: 1; text-align: center;
+    font-size: 10px; color: #aaa; font-family: 'Segoe UI', sans-serif;
+  }
+
+  .acad-ribbon {
+    background: #2d2d30; border-bottom: 1px solid #3e3e42;
+    padding: 2px 8px; display: flex; align-items: center;
+  }
+  .acad-tab {
+    font-size: 9px; color: #999; padding: 3px 10px;
+    font-family: 'Segoe UI', sans-serif;
+    border-bottom: 2px solid transparent;
+  }
+  .acad-tab.active { color: #fff; border-bottom-color: #0078d4; background: rgba(255,255,255,0.04); }
+  .acad-tools {
+    display: flex; align-items: center; gap: 1px;
+    margin-left: 14px; padding-left: 14px; border-left: 1px solid #3e3e42;
+  }
+  .acad-tool-btn {
+    width: 24px; height: 24px; display: flex; align-items: center; justify-content: center;
+    font-size: 12px; color: #888; border-radius: 2px;
+  }
+  .acad-tool-btn.active-tool { background: rgba(0,120,212,0.2); color: #4db8ff; }
+
+  .acad-main { display: flex; height: 360px; }
+
+  .acad-canvas {
+    flex: 1; background: #1a1a2e; position: relative; overflow: hidden;
+  }
+  .acad-canvas svg { width: 100%; height: 100%; }
+  .acad-grid-pattern {
+    position: absolute; inset: 0;
+    background-image:
+      linear-gradient(rgba(50,50,80,0.25) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(50,50,80,0.25) 1px, transparent 1px);
+    background-size: 20px 20px; pointer-events: none;
+  }
+  .acad-crosshair {
+    position: absolute; pointer-events: none; opacity: 0; transition: opacity 0.3s ease;
+  }
+  .acad-crosshair.show { opacity: 1; }
+  .acad-crosshair .ch-h, .acad-crosshair .ch-v { position: absolute; background: rgba(255,255,255,0.3); }
+  .acad-crosshair .ch-h { width: 40px; height: 1px; top: 50%; left: -20px; }
+  .acad-crosshair .ch-v { width: 1px; height: 40px; left: 50%; top: -20px; }
+
+  .acad-layers {
+    width: 155px; background: #252526; border-left: 1px solid #3e3e42; overflow-y: auto;
+  }
+  .acad-layers-title {
+    font-size: 9px; font-weight: 700; color: #888;
+    padding: 5px 8px; border-bottom: 1px solid #3e3e42;
+    font-family: 'Segoe UI', sans-serif;
+    text-transform: uppercase; letter-spacing: 0.08em;
+  }
+  .acad-layer {
+    display: flex; align-items: center; gap: 5px;
+    padding: 3px 8px; font-size: 9px; color: #aaa;
+    font-family: 'Segoe UI', sans-serif;
+    border-bottom: 1px solid #2a2a2e;
+    opacity: 0; transition: opacity 0.3s ease;
+  }
+  .acad-layer.show { opacity: 1; }
+  .acad-layer.active-layer { background: rgba(0,120,212,0.12); color: #fff; }
+  .acad-layer-color { width: 7px; height: 7px; border-radius: 2px; flex-shrink: 0; }
+  .acad-layer-icons { margin-left: auto; font-size: 8px; color: #555; }
+
+  .acad-cmdline {
+    background: #1e1e1e; border-top: 1px solid #3e3e42;
+    padding: 3px 8px; font-family: 'Consolas', 'Courier New', monospace;
+    font-size: 10px; min-height: 40px;
+  }
+  .acad-cmd-history { color: #666; font-size: 9px; }
+  .acad-cmd-current { color: #fff; display: flex; align-items: center; }
+  .acad-cmd-prompt { color: #4db8ff; margin-right: 4px; }
+  .acad-cmd-text { color: #ddd; }
+  .acad-cmd-cursor {
+    display: inline-block; width: 6px; height: 12px;
+    background: #fff; animation: blink 0.8s step-end infinite; margin-left: 1px;
+  }
+  .acad-statusbar {
+    background: #007acc; padding: 2px 8px;
+    display: flex; align-items: center; gap: 12px;
+    font-size: 8px; color: rgba(255,255,255,0.8);
+    font-family: 'Segoe UI', sans-serif;
+  }
+  .acad-coords { font-family: 'Consolas', monospace; font-size: 9px; }
+
+  /* ═══ BROWSER CHROME (shared by permit/microgen) ═══ */
+  .browser-chrome {
+    background: #dee1e6; border-bottom: 1px solid #c0c0c0;
+  }
+  .browser-tabs {
+    display: flex; align-items: flex-end; padding: 5px 8px 0; gap: 2px;
+  }
+  .browser-tab {
+    background: #f0f0f0; border: 1px solid #c0c0c0; border-bottom: none;
+    border-radius: 7px 7px 0 0; padding: 5px 12px;
+    font-size: 10px; color: #333; font-family: 'Segoe UI', sans-serif;
+    display: flex; align-items: center; gap: 5px;
+  }
+  .browser-tab.active { background: #fff; }
+  .browser-tab .fav { width: 11px; height: 11px; border-radius: 2px; }
+  .browser-url-bar {
+    background: #fff; margin: 0 8px 5px; border-radius: 18px;
+    padding: 4px 12px; display: flex; align-items: center; gap: 7px;
+    border: 1px solid #ddd;
+  }
+  .browser-url-bar .lock { color: #1a8a1a; font-size: 10px; }
+  .browser-url-bar .url { font-size: 11px; color: #333; font-family: 'Segoe UI', sans-serif; }
+  .browser-url-bar .url .domain { color: #1a1a1a; font-weight: 600; }
+  .browser-url-bar .url .path { color: #666; }
+
+  /* ═══ CITY OF AUSTIN PERMIT ═══ */
+  .permit-window {
+    background: #fff; border-radius: 5px; overflow: hidden;
+    box-shadow: 0 8px 40px rgba(0,0,0,0.5);
+    max-height: 490px; overflow-y: auto;
+  }
+  .permit-window::-webkit-scrollbar { width: 5px; }
+  .permit-window::-webkit-scrollbar-track { background: #f0f0f0; }
+  .permit-window::-webkit-scrollbar-thumb { background: #ccc; border-radius: 3px; }
+
+  .coa-header {
+    background: linear-gradient(135deg, #00467F, #0056a1);
+    padding: 12px 22px; display: flex; align-items: center; gap: 12px;
+  }
+  .coa-logo-text {
+    font-family: 'Segoe UI', sans-serif; font-size: 20px; font-weight: 800; color: #fff;
+  }
+  .coa-logo-sub {
+    font-size: 9px; color: rgba(255,255,255,0.6);
+    font-family: 'Segoe UI', sans-serif; letter-spacing: 0.06em;
+  }
+  .coa-nav {
+    margin-left: auto; display: flex; gap: 16px;
+  }
+  .coa-nav a {
+    font-size: 10px; color: rgba(255,255,255,0.7);
+    font-family: 'Segoe UI', sans-serif; text-decoration: none;
+  }
+
+  .permit-body { padding: 20px 24px; font-family: 'Segoe UI', sans-serif; }
+  .permit-form-title { font-size: 16px; font-weight: 700; color: #00467F; margin-bottom: 3px; }
+  .permit-form-sub { font-size: 11px; color: #888; margin-bottom: 16px; }
+
+  .pm-section {
+    margin-bottom: 14px; opacity: 0; transform: translateY(6px);
+    transition: all 0.4s ease;
+  }
+  .pm-section.show { opacity: 1; transform: translateY(0); }
+  .pm-section-title {
+    font-size: 11px; font-weight: 700; color: #00467F;
+    text-transform: uppercase; letter-spacing: 0.06em;
+    border-bottom: 2px solid #0078d4; padding-bottom: 3px; margin-bottom: 10px;
+  }
+  .pm-field-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px 14px; }
+  .pm-field { display: flex; flex-direction: column; gap: 2px; }
+  .pm-field.full { grid-column: 1 / -1; }
+  .pm-field-label {
+    font-size: 9px; color: #666; text-transform: uppercase;
+    letter-spacing: 0.04em; font-weight: 600;
+  }
+  .pm-field-label .req { color: #c0392b; }
+  .pm-field-input {
+    background: #f8f9fa; border: 1px solid #ddd; border-radius: 3px;
+    padding: 6px 9px; font-size: 11px; color: #1a1a1a;
+    font-family: 'Segoe UI', sans-serif;
+    min-height: 28px; transition: all 0.3s ease;
+  }
+  .pm-field-input.filling { background: #e8f4fd; border-color: #0078d4; box-shadow: 0 0 0 2px rgba(0,120,212,0.12); }
+  .pm-field-input.filled { background: #f0faf0; border-color: #27ae60; color: #1a3a1a; font-weight: 500; }
+
+  .pm-submit-bar { display: none; padding: 12px 0; border-top: 1px solid #e0e0e0; margin-top: 12px; align-items: center; gap: 10px; }
+  .pm-submit-bar.show { display: flex; }
+  .pm-submit-btn {
+    background: #00467F; color: #fff; border: none; border-radius: 3px;
+    padding: 8px 20px; font-size: 11px; font-weight: 700;
+    font-family: 'Segoe UI', sans-serif; cursor: default;
+  }
+  .pm-submit-status { font-size: 10px; color: #27ae60; font-weight: 600; }
+
+  /* ═══ ONCOR INTERCONNECTION ═══ */
+  .microgen-window {
+    background: #fff; border-radius: 5px; overflow: hidden;
+    box-shadow: 0 8px 40px rgba(0,0,0,0.5);
+    max-height: 490px; overflow-y: auto;
+  }
+  .microgen-window::-webkit-scrollbar { width: 5px; }
+  .microgen-window::-webkit-scrollbar-track { background: #f0f0f0; }
+  .microgen-window::-webkit-scrollbar-thumb { background: #ccc; border-radius: 3px; }
+
+  .oncor-dg-header {
+    background: linear-gradient(135deg, #003DA5, #005580);
+    padding: 12px 22px; display: flex; align-items: center; gap: 12px;
+  }
+  .oncor-dg-logo {
+    font-family: 'Segoe UI', sans-serif; font-size: 20px; font-weight: 800; color: #fff;
+  }
+  .oncor-dg-sub {
+    font-size: 9px; color: rgba(255,255,255,0.6);
+    font-family: 'Segoe UI', sans-serif; letter-spacing: 0.06em;
+  }
+  .oncor-dg-nav {
+    margin-left: auto; display: flex; gap: 16px;
+  }
+  .oncor-dg-nav a {
+    font-size: 10px; color: rgba(255,255,255,0.7);
+    font-family: 'Segoe UI', sans-serif; text-decoration: none;
+  }
+
+  .mg-body { padding: 20px 24px; font-family: 'Segoe UI', sans-serif; }
+  .mg-title { font-size: 16px; font-weight: 700; color: #003DA5; margin-bottom: 3px; }
+  .mg-sub { font-size: 11px; color: #888; margin-bottom: 4px; }
+  .mg-ref { font-size: 9px; color: #aaa; margin-bottom: 16px; font-style: italic; }
+
+  .mg-section {
+    margin-bottom: 14px; opacity: 0; transform: translateY(6px);
+    transition: all 0.4s ease;
+  }
+  .mg-section.show { opacity: 1; transform: translateY(0); }
+  .mg-section-title {
+    font-size: 11px; font-weight: 700; color: #003DA5;
+    border-left: 3px solid #0078d4; padding-left: 8px; margin-bottom: 8px;
+  }
+  .mg-field-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px 14px; }
+  .mg-field { display: flex; flex-direction: column; gap: 2px; }
+  .mg-field.full { grid-column: 1 / -1; }
+  .mg-field-label { font-size: 9px; color: #666; font-weight: 600; text-transform: uppercase; letter-spacing: 0.03em; }
+  .mg-field-input {
+    background: #f8f9fa; border: 1px solid #ddd; border-radius: 3px;
+    padding: 6px 9px; font-size: 11px; color: #1a1a1a;
+    font-family: 'Segoe UI', sans-serif; min-height: 28px; transition: all 0.3s ease;
+  }
+  .mg-field-input.filling { background: #e8f4fd; border-color: #0078d4; box-shadow: 0 0 0 2px rgba(0,120,212,0.12); }
+  .mg-field-input.filled { background: #f0faf0; border-color: #27ae60; color: #1a3a1a; font-weight: 500; }
+
+  .mg-checkbox-row {
+    display: flex; align-items: center; gap: 7px;
+    font-size: 11px; color: #333; margin: 3px 0;
+  }
+  .mg-checkbox {
+    width: 14px; height: 14px; border: 2px solid #ccc; border-radius: 2px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 9px; color: transparent; transition: all 0.2s ease; flex-shrink: 0;
+  }
+  .mg-checkbox.checked { background: #003DA5; border-color: #003DA5; color: #fff; }
+
+  .mg-submit-bar { display: none; padding: 12px 0; border-top: 1px solid #e0e0e0; margin-top: 12px; align-items: center; gap: 10px; }
+  .mg-submit-bar.show { display: flex; }
+  .mg-submit-btn {
+    background: #003DA5; color: #fff; border: none; border-radius: 3px;
+    padding: 8px 20px; font-size: 11px; font-weight: 700;
+    font-family: 'Segoe UI', sans-serif; cursor: default;
+  }
+  .mg-submit-status { font-size: 10px; color: #27ae60; font-weight: 600; }
+
+  /* ═══ CTA FINISH ═══ */
+  .scene-cta {
+    display: none; flex-direction: column; align-items: center;
+    gap: 18px; padding: 40px 0 32px;
+    text-align: center;
+  }
+  .cta-check {
+    width: 60px; height: 60px; border-radius: 50%;
+    border: 3px solid #27ae60;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 24px; opacity: 0; transform: scale(0.7);
+    transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  }
+  .cta-check.show { opacity: 1; transform: scale(1); }
+
+  .cta-summary {
+    display: flex; gap: 10px; flex-wrap: wrap; justify-content: center;
+    opacity: 0; transition: opacity 0.5s ease;
+  }
+  .cta-summary.show { opacity: 1; }
+  .cta-card {
+    background: #111118; border: 1px solid #1e1e2e; border-radius: 7px;
+    padding: 12px 16px; min-width: 120px; text-align: center;
+  }
+  .cta-card-icon { font-size: 18px; margin-bottom: 4px; }
+  .cta-card-label { font-size: 9px; color: #555; text-transform: uppercase; letter-spacing: 0.06em; }
+  .cta-card-value { font-size: 12px; font-weight: 700; color: #27ae60; margin-top: 2px; }
+
+  .cta-headline {
+    font-size: 28px; font-weight: 800; color: #fff;
+    line-height: 1.3; letter-spacing: -0.02em;
+    opacity: 0; transform: translateY(10px);
+    transition: all 0.6s ease;
+    max-width: 500px;
+  }
+  .cta-headline.show { opacity: 1; transform: translateY(0); }
+  .cta-headline span { color: #2a9fd6; }
+
+  .cta-sub {
+    font-size: 14px; color: #666; max-width: 440px;
+    line-height: 1.6;
+    opacity: 0; transition: opacity 0.5s ease;
+  }
+  .cta-sub.show { opacity: 1; }
+
+  .cta-button {
+    display: inline-block;
+    background: linear-gradient(135deg, #2a6ef5, #1a4ec0);
+    color: #fff; text-decoration: none;
+    font-family: 'Segoe UI', sans-serif;
+    font-size: 16px; font-weight: 700;
+    padding: 14px 40px; border-radius: 8px;
+    letter-spacing: 0.04em;
+    box-shadow: 0 6px 24px rgba(42,110,245,0.35);
+    opacity: 0; transform: translateY(8px);
+    transition: all 0.5s ease;
+    cursor: pointer;
+  }
+  .cta-button.show { opacity: 1; transform: translateY(0); }
+  .cta-button:hover { box-shadow: 0 8px 32px rgba(42,110,245,0.5); transform: translateY(-2px); }
+
+  .cta-fine {
+    font-size: 11px; color: #444; line-height: 1.5;
+    opacity: 0; transition: opacity 0.5s ease;
+  }
+  .cta-fine.show { opacity: 1; }
+
+  .cta-logo {
+    display: flex; flex-direction: column; align-items: center;
+    gap: 6px; opacity: 0; transition: all 0.6s ease; margin-top: 4px;
+  }
+  .cta-logo.show { opacity: 1; }
+  .cta-logo-icon {
+    width: 44px; height: 44px;
+    background: linear-gradient(135deg, #2a6ef5, #1a4ec0);
+    border-radius: 10px; display: flex; align-items: center; justify-content: center;
+    font-size: 22px; font-weight: 900; color: #fff;
+    box-shadow: 0 6px 20px rgba(42,110,245,0.3);
+  }
+  .cta-logo-name { font-size: 16px; font-weight: 800; color: #d0d0d0; letter-spacing: 0.1em; text-transform: uppercase; }
+  .cta-logo-name b { color: #2a6ef5; font-weight: 800; }
+
+  .restart-btn {
+    display: none; background: #111118; border: 1px solid #1e1e2e;
+    color: #555; border-radius: 5px; padding: 7px 18px;
+    font-size: 11px; font-weight: 600; cursor: pointer;
+    transition: all 0.2s ease; margin-top: 6px;
+  }
+  .restart-btn:hover { border-color: #2a9fd6; color: #2a9fd6; }
+</style>
+</head>
+<body>
+
+<div class="ai-bar">
+  <div class="ai-bar-inner">
+    <div class="ai-orb">✦</div>
+    <div class="ai-info">
+      <div class="ai-label"><div class="dot"></div> AI Agent Working</div>
+      <div class="ai-task" id="ai-task"><span class="step-name">Initializing pipeline</span> — reading proposal data...</div>
+    </div>
+    <div class="ai-timer" id="ai-timer">0:00</div>
+  </div>
+</div>
+
+<div class="header">
+  <div class="state-badge">Texas, USA</div>
+  <div class="brand-mini">
+    <div class="b-icon">Z</div>
+    <span>ZYPH Labs</span>
+  </div>
+</div>
+
+<!-- 6 dots: upload/contract, SLD, layout, permit, interconnection, CTA -->
+<div class="steps-container">
+  <div class="step-dot" id="dot-0"></div><div class="step-line" id="line-0"></div>
+  <div class="step-dot" id="dot-1"></div><div class="step-line" id="line-1"></div>
+  <div class="step-dot" id="dot-2"></div><div class="step-line" id="line-2"></div>
+  <div class="step-dot" id="dot-3"></div><div class="step-line" id="line-3"></div>
+  <div class="step-dot" id="dot-4"></div><div class="step-line" id="line-4"></div>
+  <div class="step-dot" id="dot-5"></div>
+</div>
+
+<div class="progress-bar-wrap">
+  <div class="progress-bar-bg"><div class="progress-bar-fill" id="progress-fill"></div></div>
+</div>
+
+<div class="narration">
+  <div class="narration-text" id="narration">Initializing solar AI pipeline&hellip;</div>
+</div>
+
+<div class="scene-area">
+
+  <!-- ═══ SCENE 1: UPLOAD + CONTRACT ═══ -->
+  <div class="scene" id="scene-contract">
+    <div class="scene-header">Step 1 — Proposal Upload &amp; Contract Generation</div>
+
+    <div class="upload-zone" id="upload-zone">
+      <div class="upload-box" id="upload-box">
+        <div class="upload-icon">📄</div>
+        <div class="upload-title">Drop proposal &amp; energy bill here</div>
+        <div class="upload-sub">PDF solar proposal + utility bill</div>
+      </div>
+      <!-- Animated cursor -->
+      <div class="drag-cursor" id="drag-cursor">
+        <svg width="18" height="22" viewBox="0 0 18 22"><path d="M1,1 L1,16 L5,12 L8.5,19 L11,18 L7.5,11 L13,11 Z" fill="#fff" stroke="#222" stroke-width="1.2" stroke-linejoin="round"/></svg>
+      </div>
+      <!-- Ghost file 1 -->
+      <div class="drag-ghost" id="drag-ghost-1">
+        <span class="dg-icon">📋</span>
+        <span class="dg-name">Smith_Proposal_11.2kW.pdf</span>
+      </div>
+      <!-- Ghost file 2 -->
+      <div class="drag-ghost" id="drag-ghost-2">
+        <span class="dg-icon">💡</span>
+        <span class="dg-name">Oncor_Bill_Mar2026.pdf</span>
+      </div>
+    </div>
+
+    <div class="file-card" id="file-card-1">
+      <div class="icon">📋</div>
+      <div>
+        <div class="name">Smith_Proposal_11.2kW.pdf</div>
+        <div class="meta">Solar proposal &bull; 2.1 MB &bull; Uploaded</div>
+      </div>
+      <div class="check">✓</div>
+    </div>
+    <div class="file-card" id="file-card-2">
+      <div class="icon">💡</div>
+      <div>
+        <div class="name">Oncor_Bill_Mar2026.pdf</div>
+        <div class="meta">Energy bill &bull; 340 KB &bull; Uploaded</div>
+      </div>
+      <div class="check">✓</div>
+    </div>
+
+    <div class="contract-doc" id="contract-doc">
+      <div class="contract-page">
+        <div class="contract-letterhead">
+          <div class="contract-logo-area">
+            <div class="contract-logo-box">☀</div>
+            <div class="contract-company">
+              <div class="name">Solar Company</div>
+              <div class="sub">Solar Energy Solutions &bull; Texas</div>
+            </div>
+          </div>
+          <div class="contract-contact">
+            info@solarcompany.com<br>
+            Austin, TX, USA<br>
+            TDLR TECL License #28456
+          </div>
+        </div>
+
+        <div class="contract-title-block">
+          <h1>Solar Installation Agreement</h1>
+          <div class="subtitle">Residential Photovoltaic System — State of Texas</div>
+        </div>
+
+        <div class="c-section">
+          <div class="c-section-title">1. Parties to Agreement</div>
+          <div class="c-paragraph">
+            This Solar Installation Agreement ("Agreement") is entered into as of
+            <span class="c-inline-field" id="cf-date"></span>
+            by and between <strong>Solar Company</strong> ("Installer"), located in Austin, Texas, and
+            the property owner identified below ("Customer"):
+          </div>
+          <div class="c-row"><div class="c-label">Customer Name</div><div class="c-field" id="cf-cust-name"></div></div>
+          <div class="c-row"><div class="c-label">Service Address</div><div class="c-field" id="cf-address"></div></div>
+          <div class="c-row"><div class="c-label">City / State</div><div class="c-field" id="cf-city"></div></div>
+          <div class="c-row"><div class="c-label">Phone</div><div class="c-field" id="cf-phone"></div></div>
+          <div class="c-row"><div class="c-label">Email</div><div class="c-field" id="cf-email"></div></div>
+        </div>
+
+        <div class="c-section">
+          <div class="c-section-title">2. System Specifications</div>
+          <div class="c-paragraph">
+            The Installer agrees to furnish and install a grid-tied photovoltaic system with the following specifications at the Customer's property:
+          </div>
+          <div class="c-row"><div class="c-label">System Size (DC)</div><div class="c-field" id="cf-sys-size"></div></div>
+          <div class="c-row"><div class="c-label">Panel Model / Qty</div><div class="c-field" id="cf-panels"></div></div>
+          <div class="c-row"><div class="c-label">Inverter</div><div class="c-field" id="cf-inverter"></div></div>
+          <div class="c-row"><div class="c-label">Mounting Type</div><div class="c-field" id="cf-mounting"></div></div>
+          <div class="c-row"><div class="c-label">Est. Annual Prod.</div><div class="c-field" id="cf-production"></div></div>
+        </div>
+
+        <div class="c-section">
+          <div class="c-section-title">3. Contract Price &amp; Payment</div>
+          <div class="c-paragraph">
+            The total contract price for the system described in Section 2, including all equipment,
+            labour, electrical permit, Oncor interconnection, and Distributed Generation application is:
+          </div>
+          <div class="c-row"><div class="c-label">Total Contract Price</div><div class="c-field" id="cf-total"></div></div>
+          <div class="c-row"><div class="c-label">Deposit (50%)</div><div class="c-field" id="cf-deposit"></div></div>
+          <div class="c-row"><div class="c-label">Balance on Completion</div><div class="c-field" id="cf-balance"></div></div>
+          <div class="c-paragraph" style="margin-top:6px;font-size:9.5px;color:#666;">
+            Payment terms: 50% deposit due upon signing. Balance due upon substantial completion
+            and successful inspection. Texas Property Code solar provisions and TDLR guidelines apply.
+          </div>
+        </div>
+
+        <div class="c-section">
+          <div class="c-section-title">4. Warranties &amp; Obligations</div>
+          <div class="c-paragraph">
+            <strong>Workmanship Warranty:</strong> Installer warrants all installation work for a period of
+            ten (10) years from the date of substantial completion. <strong>Equipment Warranty:</strong>
+            All manufacturer warranties shall be assigned to the Customer. Panel manufacturer provides
+            a 25-year performance warranty; inverter manufacturer provides a 12-year product warranty.
+          </div>
+          <div class="c-paragraph">
+            <strong>Permits &amp; Approvals:</strong> Installer shall obtain all required electrical permits,
+            Oncor utility interconnection approval, and Distributed Generation registration on behalf of the Customer.
+          </div>
+        </div>
+
+        <div class="c-sig-block">
+          <div class="c-sig-col">
+            <div class="c-sig-label">Customer Signature</div>
+            <div class="c-sig-line"><div class="docusign-tag" id="ds-tag-1">DOCUSIGN — SIGN HERE</div></div>
+            <div class="c-date-line">Date: _______________</div>
+          </div>
+          <div class="c-sig-col">
+            <div class="c-sig-label">Installer (Solar Company)</div>
+            <div class="c-sig-line"><div class="docusign-tag" id="ds-tag-2">DOCUSIGN — SIGN HERE</div></div>
+            <div class="c-date-line">Date: _______________</div>
+          </div>
+        </div>
+      </div>
+      <div class="contract-ai-badge" id="contract-badge">✓ CONTRACT AUTO-POPULATED — READY FOR DOCUSIGN</div>
+    </div>
+  </div>
+
+  <!-- ═══ SCENE 2: AUTOCAD SLD ═══ -->
+  <div class="scene" id="scene-sld">
+    <div class="scene-header">Step 2 — AutoCAD Single-Line Diagram</div>
+    <div class="autocad-window">
+      <div class="acad-titlebar">
+        <div class="dots"><div class="dot r"></div><div class="dot y"></div><div class="dot g"></div></div>
+        <div class="title" id="sld-acad-title">AutoCAD 2025 — [Smith_SLD.dwg]</div>
+      </div>
+      <div class="acad-ribbon">
+        <div class="acad-tab active">Home</div><div class="acad-tab">Insert</div><div class="acad-tab">Annotate</div><div class="acad-tab">View</div>
+        <div class="acad-tools">
+          <div class="acad-tool-btn active-tool">╱</div><div class="acad-tool-btn">▭</div><div class="acad-tool-btn">○</div><div class="acad-tool-btn">A</div><div class="acad-tool-btn">⟷</div>
+        </div>
+      </div>
+      <div class="acad-main">
+        <div class="acad-canvas">
+          <div class="acad-grid-pattern"></div>
+          <svg id="sld-svg" viewBox="0 0 700 360" xmlns="http://www.w3.org/2000/svg">
+            <!-- Title Block — large and prominent -->
+            <rect id="s-tb-outer" x="430" y="270" width="262" height="84" fill="none" stroke="#4a4a6a" stroke-width="1.2" opacity="0"/>
+            <line id="s-tb-div1" x1="430" y1="290" x2="692" y2="290" stroke="#3a3a5a" stroke-width="0.6" opacity="0"/>
+            <line id="s-tb-div2" x1="430" y1="310" x2="692" y2="310" stroke="#3a3a5a" stroke-width="0.6" opacity="0"/>
+            <line id="s-tb-div3" x1="430" y1="330" x2="692" y2="330" stroke="#3a3a5a" stroke-width="0.6" opacity="0"/>
+            <line id="s-tb-vmid" x1="560" y1="310" x2="560" y2="354" stroke="#3a3a5a" stroke-width="0.6" opacity="0"/>
+            <text id="s-tb-company" x="561" y="284" fill="#aaaacc" font-size="11" text-anchor="middle" font-weight="800" font-family="Consolas, monospace" opacity="0">SOLAR COMPANY — AUSTIN, TX</text>
+            <text id="s-tb-l1" x="438" y="304" fill="#777799" font-size="7" font-family="Consolas, monospace" opacity="0">DRAWING:</text>
+            <text id="s-tb-v1" x="490" y="304" fill="#aaaacc" font-size="8" font-weight="700" font-family="Consolas, monospace" opacity="0">SINGLE-LINE DIAGRAM (SLD)</text>
+            <text id="s-tb-l2" x="438" y="324" fill="#777799" font-size="7" font-family="Consolas, monospace" opacity="0">PROJECT:</text>
+            <text id="s-tb-v2" x="490" y="324" fill="#aaaacc" font-size="8" font-weight="700" font-family="Consolas, monospace" opacity="0">SMITH RESIDENCE — 4210 BLUEBONNET LN, AUSTIN</text>
+            <text id="s-tb-l3" x="438" y="344" fill="#777799" font-size="7" font-family="Consolas, monospace" opacity="0">DATE:</text>
+            <text id="s-tb-v3" x="478" y="344" fill="#8888aa" font-size="7.5" font-family="Consolas, monospace" opacity="0">2026-04-07</text>
+            <text id="s-tb-l4" x="568" y="344" fill="#777799" font-size="7" font-family="Consolas, monospace" opacity="0">SCALE:</text>
+            <text id="s-tb-v4" x="600" y="344" fill="#8888aa" font-size="7.5" font-family="Consolas, monospace" opacity="0">NTS</text>
+            <text id="s-tb-l5" x="635" y="344" fill="#777799" font-size="7" font-family="Consolas, monospace" opacity="0">DWG#:</text>
+            <text id="s-tb-v5" x="665" y="344" fill="#8888aa" font-size="7.5" font-family="Consolas, monospace" opacity="0">E-001</text>
+
+            <!-- PV Array -->
+            <rect id="s-pv" x="22" y="95" width="88" height="68" rx="2" fill="none" stroke="#00ff00" stroke-width="1.2" opacity="0"/>
+            <text id="s-pv1" x="66" y="116" fill="#00ff00" font-size="9" text-anchor="middle" font-family="Consolas, monospace" opacity="0">PV ARRAY</text>
+            <text id="s-pv2" x="66" y="130" fill="#00ccff" font-size="10.5" text-anchor="middle" font-weight="700" font-family="Consolas, monospace" opacity="0">11.2 kWdc</text>
+            <text id="s-pv3" x="66" y="143" fill="#00ff00" font-size="7" text-anchor="middle" font-family="Consolas, monospace" opacity="0">28× CS7L-400MS</text>
+            <text id="s-pv4" x="66" y="155" fill="#555577" font-size="6" text-anchor="middle" font-family="Consolas, monospace" opacity="0">Voc=49.2V  Isc=10.36A</text>
+
+            <!-- DC wire -->
+            <line id="s-dc1" x1="110" y1="129" x2="158" y2="129" stroke="#ff0000" stroke-width="1.2" opacity="0"/>
+            <text id="s-dcL" x="134" y="122" fill="#ff4444" font-size="7" text-anchor="middle" font-family="Consolas, monospace" opacity="0">DC (+)(−)</text>
+            <text id="s-dcW" x="134" y="141" fill="#555577" font-size="5.5" text-anchor="middle" font-family="Consolas, monospace" opacity="0">#10 AWG PV WIRE</text>
+
+            <!-- DC Disc -->
+            <rect id="s-dcd" x="158" y="114" width="48" height="30" rx="2" fill="none" stroke="#ffff00" stroke-width="1.2" opacity="0"/>
+            <text id="s-dcd1" x="182" y="132" fill="#ffff00" font-size="7.5" text-anchor="middle" font-family="Consolas, monospace" opacity="0">DC DISC</text>
+            <text id="s-dcd2" x="182" y="152" fill="#555577" font-size="5.5" text-anchor="middle" font-family="Consolas, monospace" opacity="0">30A / 600VDC</text>
+
+            <line id="s-dc2" x1="206" y1="129" x2="252" y2="129" stroke="#ff0000" stroke-width="1.2" opacity="0"/>
+
+            <!-- Inverter -->
+            <rect id="s-inv" x="252" y="88" width="100" height="82" rx="3" fill="none" stroke="#00ccff" stroke-width="1.5" opacity="0"/>
+            <text id="s-inv1" x="302" y="110" fill="#00ccff" font-size="9" text-anchor="middle" font-family="Consolas, monospace" opacity="0">INVERTER</text>
+            <text id="s-inv2" x="302" y="125" fill="#ffffff" font-size="10.5" text-anchor="middle" font-weight="700" font-family="Consolas, monospace" opacity="0">SE10000H</text>
+            <text id="s-inv3" x="302" y="139" fill="#00ccff" font-size="8" text-anchor="middle" font-family="Consolas, monospace" opacity="0">10.0 kWac</text>
+            <text id="s-inv4" x="302" y="155" fill="#555577" font-size="6" text-anchor="middle" font-family="Consolas, monospace" opacity="0">240V / 41.7A OUTPUT</text>
+
+            <!-- AC wire -->
+            <line id="s-ac1" x1="352" y1="129" x2="398" y2="129" stroke="#00ff00" stroke-width="1.2" opacity="0"/>
+            <text id="s-acL" x="375" y="122" fill="#00ff00" font-size="7" text-anchor="middle" font-family="Consolas, monospace" opacity="0">AC L1 L2 N G</text>
+            <text id="s-acW" x="375" y="141" fill="#555577" font-size="5.5" text-anchor="middle" font-family="Consolas, monospace" opacity="0">#6 AWG CU</text>
+
+            <!-- AC Disc -->
+            <rect id="s-acd" x="398" y="114" width="48" height="30" rx="2" fill="none" stroke="#ffff00" stroke-width="1.2" opacity="0"/>
+            <text id="s-acd1" x="422" y="132" fill="#ffff00" font-size="7.5" text-anchor="middle" font-family="Consolas, monospace" opacity="0">AC DISC</text>
+            <text id="s-acd2" x="422" y="152" fill="#555577" font-size="5.5" text-anchor="middle" font-family="Consolas, monospace" opacity="0">50A / 240V</text>
+
+            <line id="s-ac2" x1="446" y1="129" x2="492" y2="129" stroke="#00ff00" stroke-width="1.2" opacity="0"/>
+
+            <!-- Main Panel -->
+            <rect id="s-pan" x="492" y="80" width="70" height="98" rx="2" fill="none" stroke="#ffffff" stroke-width="1.5" opacity="0"/>
+            <text id="s-pan1" x="527" y="102" fill="#ffffff" font-size="8" text-anchor="middle" font-family="Consolas, monospace" opacity="0">MAIN PANEL</text>
+            <text id="s-pan2" x="527" y="116" fill="#00ccff" font-size="11" text-anchor="middle" font-weight="700" font-family="Consolas, monospace" opacity="0">200A</text>
+            <rect id="s-brk" x="502" y="125" width="50" height="13" rx="1" fill="rgba(0,204,255,0.15)" stroke="#00ccff" stroke-width="0.8" opacity="0"/>
+            <text id="s-brk1" x="527" y="135" fill="#00ccff" font-size="7" text-anchor="middle" font-family="Consolas, monospace" opacity="0">50A SOLAR</text>
+            <rect id="s-mbrk" x="502" y="142" width="50" height="13" rx="1" fill="rgba(255,255,255,0.04)" stroke="#666" stroke-width="0.8" opacity="0"/>
+            <text id="s-mbrk1" x="527" y="152" fill="#888" font-size="7" text-anchor="middle" font-family="Consolas, monospace" opacity="0">200A MAIN</text>
+
+            <!-- Meter -->
+            <line id="s-wm" x1="562" y1="129" x2="608" y2="129" stroke="#888" stroke-width="1.2" opacity="0"/>
+            <circle id="s-meter" cx="630" cy="129" r="22" fill="none" stroke="#888" stroke-width="1.5" opacity="0"/>
+            <text id="s-met1" x="630" y="126" fill="#888" font-size="7" text-anchor="middle" font-family="Consolas, monospace" opacity="0">ONCOR</text>
+            <text id="s-met2" x="630" y="136" fill="#888" font-size="7" text-anchor="middle" font-family="Consolas, monospace" opacity="0">METER</text>
+
+            <!-- Ground -->
+            <line id="s-g1" x1="527" y1="178" x2="527" y2="206" stroke="#00ff00" stroke-width="1" opacity="0"/>
+            <line id="s-g2" x1="518" y1="206" x2="536" y2="206" stroke="#00ff00" stroke-width="1" opacity="0"/>
+            <line id="s-g3" x1="521" y1="211" x2="533" y2="211" stroke="#00ff00" stroke-width="0.8" opacity="0"/>
+            <line id="s-g4" x1="524" y1="216" x2="530" y2="216" stroke="#00ff00" stroke-width="0.6" opacity="0"/>
+            <text id="s-gT" x="527" y="228" fill="#00ff00" font-size="7" text-anchor="middle" font-family="Consolas, monospace" opacity="0">GND — #6 CU</text>
+
+            <!-- Notes -->
+            <text id="s-n0" x="22" y="248" fill="#ffff00" font-size="7" font-family="Consolas, monospace" opacity="0">NOTES:</text>
+            <text id="s-n1" x="22" y="260" fill="#aaa" font-size="6.5" font-family="Consolas, monospace" opacity="0">1. ALL WIRING PER NEC 2023 &amp; TEXAS ELECTRICAL CODE</text>
+            <text id="s-n2" x="22" y="270" fill="#aaa" font-size="6.5" font-family="Consolas, monospace" opacity="0">2. RAPID SHUTDOWN PER NEC 690.12</text>
+            <text id="s-n3" x="22" y="280" fill="#aaa" font-size="6.5" font-family="Consolas, monospace" opacity="0">3. LOAD-SIDE INTERCONNECTION PER NEC ARTICLE 705</text>
+            <text id="s-n4" x="22" y="290" fill="#aaa" font-size="6.5" font-family="Consolas, monospace" opacity="0">4. ONCOR INSPECTION REQUIRED PRIOR TO ENERGIZATION</text>
+          </svg>
+          <div class="acad-crosshair" id="ch-sld" style="left:50%;top:50%;"><div class="ch-h"></div><div class="ch-v"></div></div>
+        </div>
+        <div class="acad-layers" id="sld-layers">
+          <div class="acad-layers-title">Layers</div>
+          <div class="acad-layer" id="sl-0"><div class="acad-layer-color" style="background:#fff"></div>0 (Default)<div class="acad-layer-icons">👁</div></div>
+          <div class="acad-layer" id="sl-pv"><div class="acad-layer-color" style="background:#0f0"></div>PV-ARRAY<div class="acad-layer-icons">👁</div></div>
+          <div class="acad-layer" id="sl-dc"><div class="acad-layer-color" style="background:#f00"></div>DC-WIRING<div class="acad-layer-icons">👁</div></div>
+          <div class="acad-layer" id="sl-inv"><div class="acad-layer-color" style="background:#0cf"></div>INVERTER<div class="acad-layer-icons">👁</div></div>
+          <div class="acad-layer" id="sl-disc"><div class="acad-layer-color" style="background:#ff0"></div>DISCONNECT<div class="acad-layer-icons">👁</div></div>
+          <div class="acad-layer" id="sl-ac"><div class="acad-layer-color" style="background:#0f0"></div>AC-WIRING<div class="acad-layer-icons">👁</div></div>
+          <div class="acad-layer" id="sl-pan"><div class="acad-layer-color" style="background:#fff"></div>MAIN-PANEL<div class="acad-layer-icons">👁</div></div>
+          <div class="acad-layer" id="sl-util"><div class="acad-layer-color" style="background:#888"></div>UTILITY<div class="acad-layer-icons">👁</div></div>
+          <div class="acad-layer" id="sl-gnd"><div class="acad-layer-color" style="background:#0f0"></div>GROUNDING<div class="acad-layer-icons">👁</div></div>
+          <div class="acad-layer" id="sl-note"><div class="acad-layer-color" style="background:#ff0"></div>NOTES<div class="acad-layer-icons">👁</div></div>
+          <div class="acad-layer" id="sl-tb"><div class="acad-layer-color" style="background:#88a"></div>TITLE-BLK<div class="acad-layer-icons">👁</div></div>
+        </div>
+      </div>
+      <div class="acad-cmdline">
+        <div class="acad-cmd-history" id="sld-hist"></div>
+        <div class="acad-cmd-current"><span class="acad-cmd-prompt">Command:</span><span class="acad-cmd-text" id="sld-cmd"></span><span class="acad-cmd-cursor"></span></div>
+      </div>
+      <div class="acad-statusbar"><span class="acad-coords">0.000, 0.000</span><span>MODEL</span><span>SNAP</span><span>GRID</span><span>ORTHO</span><span style="margin-left:auto">Scale: 1:1</span></div>
+    </div>
+  </div>
+
+  <!-- ═══ SCENE 3: AUTOCAD LAYOUT ═══ -->
+  <div class="scene" id="scene-layout">
+    <div class="scene-header">Step 3 — AutoCAD Roof Layout &amp; Site Plan</div>
+    <div class="autocad-window">
+      <div class="acad-titlebar">
+        <div class="dots"><div class="dot r"></div><div class="dot y"></div><div class="dot g"></div></div>
+        <div class="title">AutoCAD 2025 — [Smith_SitePlan.dwg]</div>
+      </div>
+      <div class="acad-ribbon">
+        <div class="acad-tab active">Home</div><div class="acad-tab">Insert</div><div class="acad-tab">Annotate</div><div class="acad-tab">View</div>
+        <div class="acad-tools">
+          <div class="acad-tool-btn active-tool">╱</div><div class="acad-tool-btn">▭</div><div class="acad-tool-btn">○</div><div class="acad-tool-btn">A</div><div class="acad-tool-btn">⟷</div>
+        </div>
+      </div>
+      <div class="acad-main">
+        <div class="acad-canvas">
+          <div class="acad-grid-pattern"></div>
+          <svg id="lay-svg" viewBox="0 0 700 360" xmlns="http://www.w3.org/2000/svg">
+            <!-- Title Block -->
+            <rect id="l-tb-outer" x="430" y="270" width="262" height="84" fill="none" stroke="#4a4a6a" stroke-width="1.2" opacity="0"/>
+            <line id="l-tb-d1" x1="430" y1="290" x2="692" y2="290" stroke="#3a3a5a" stroke-width="0.6" opacity="0"/>
+            <line id="l-tb-d2" x1="430" y1="310" x2="692" y2="310" stroke="#3a3a5a" stroke-width="0.6" opacity="0"/>
+            <line id="l-tb-d3" x1="430" y1="330" x2="692" y2="330" stroke="#3a3a5a" stroke-width="0.6" opacity="0"/>
+            <line id="l-tb-vm" x1="560" y1="310" x2="560" y2="354" stroke="#3a3a5a" stroke-width="0.6" opacity="0"/>
+            <text id="l-tb-co" x="561" y="284" fill="#aaaacc" font-size="11" text-anchor="middle" font-weight="800" font-family="Consolas, monospace" opacity="0">SOLAR COMPANY — AUSTIN, TX</text>
+            <text id="l-tb-la" x="438" y="304" fill="#777799" font-size="7" font-family="Consolas, monospace" opacity="0">DRAWING:</text>
+            <text id="l-tb-va" x="490" y="304" fill="#aaaacc" font-size="8" font-weight="700" font-family="Consolas, monospace" opacity="0">ROOF LAYOUT &amp; SITE PLAN</text>
+            <text id="l-tb-lb" x="438" y="324" fill="#777799" font-size="7" font-family="Consolas, monospace" opacity="0">PROJECT:</text>
+            <text id="l-tb-vb" x="490" y="324" fill="#aaaacc" font-size="8" font-weight="700" font-family="Consolas, monospace" opacity="0">SMITH RESIDENCE — 4210 BLUEBONNET LN, AUSTIN</text>
+            <text id="l-tb-lc" x="438" y="344" fill="#777799" font-size="7" font-family="Consolas, monospace" opacity="0">DATE:</text>
+            <text id="l-tb-vc" x="478" y="344" fill="#8888aa" font-size="7.5" font-family="Consolas, monospace" opacity="0">2026-04-07</text>
+            <text id="l-tb-ld" x="568" y="344" fill="#777799" font-size="7" font-family="Consolas, monospace" opacity="0">SCALE:</text>
+            <text id="l-tb-vd" x="600" y="344" fill="#8888aa" font-size="7.5" font-family="Consolas, monospace" opacity="0">1:100</text>
+            <text id="l-tb-le" x="635" y="344" fill="#777799" font-size="7" font-family="Consolas, monospace" opacity="0">DWG#:</text>
+            <text id="l-tb-ve" x="665" y="344" fill="#8888aa" font-size="7.5" font-family="Consolas, monospace" opacity="0">S-001</text>
+
+            <!-- Property line -->
+            <rect id="l-prop" x="30" y="14" width="380" height="244" rx="1" fill="none" stroke="#334455" stroke-width="0.8" stroke-dasharray="6,3" opacity="0"/>
+            <text id="l-propT" x="35" y="11" fill="#334455" font-size="6" font-family="Consolas, monospace" opacity="0">PROPERTY LINE</text>
+
+            <!-- House footprint -->
+            <rect id="l-house" x="60" y="30" width="320" height="210" rx="1" fill="rgba(14,22,36,0.7)" stroke="#4488aa" stroke-width="1.4" opacity="0"/>
+
+            <!-- Ridge line -->
+            <line id="l-ridge" x1="60" y1="100" x2="380" y2="100" stroke="#4488aa" stroke-width="1.2" stroke-dasharray="8,4" opacity="0"/>
+            <text id="l-ridgeT" x="66" y="96" fill="#4488aa" font-size="6.5" font-weight="700" font-family="Consolas, monospace" opacity="0">RIDGE</text>
+
+            <!-- North slope label -->
+            <text id="l-northL" x="220" y="68" fill="#2a3a5a" font-size="7.5" text-anchor="middle" font-family="Consolas, monospace" opacity="0">NORTH-FACING — NO PANELS</text>
+
+            <!-- Setback -->
+            <rect id="l-setback" x="78" y="114" width="284" height="112" fill="none" stroke="#00ccff" stroke-width="0.8" stroke-dasharray="4,3" opacity="0"/>
+            <text id="l-setT" x="84" y="126" fill="#006688" font-size="6" font-family="Consolas, monospace" opacity="0">SETBACK ZONE (18" RIDGE / 36" EAVE)</text>
+
+            <!-- Panels group (JS-generated) -->
+            <g id="l-panels"></g>
+
+            <!-- Panel count -->
+            <text id="l-count" x="220" y="245" fill="#00ccff" font-size="9" text-anchor="middle" font-weight="700" font-family="Consolas, monospace" opacity="0">28 PANELS — 11.2 kWdc</text>
+
+            <!-- North arrow -->
+            <g id="l-north" opacity="0">
+              <line x1="404" y1="55" x2="404" y2="28" stroke="#667788" stroke-width="1.4"/>
+              <polygon points="404,22 399,32 404,28 409,32" fill="#667788"/>
+              <text x="404" y="64" fill="#667788" font-size="8" text-anchor="middle" font-weight="700" font-family="Consolas, monospace">N</text>
+            </g>
+
+            <!-- Inverter marker -->
+            <g id="l-inv-mk" opacity="0">
+              <rect x="390" y="120" width="36" height="20" rx="1" fill="none" stroke="#00ccff" stroke-width="0.8"/>
+              <text x="408" y="131" fill="#006688" font-size="6" text-anchor="middle" font-family="Consolas, monospace">INVERTER</text>
+              <text x="408" y="138" fill="#006688" font-size="5.5" text-anchor="middle" font-family="Consolas, monospace">10.0kW</text>
+            </g>
+
+            <!-- AC Disc marker -->
+            <g id="l-disc-mk" opacity="0">
+              <rect x="390" y="146" width="36" height="14" rx="1" fill="none" stroke="#667788" stroke-width="0.8"/>
+              <text x="408" y="156" fill="#667788" font-size="5.5" text-anchor="middle" font-family="Consolas, monospace">AC DISC</text>
+            </g>
+
+            <!-- Meter -->
+            <g id="l-meter-mk" opacity="0">
+              <circle cx="408" cy="174" r="8" fill="none" stroke="#888" stroke-width="0.8"/>
+              <text x="408" y="177" fill="#888" font-size="5" text-anchor="middle" font-family="Consolas, monospace">M</text>
+            </g>
+          </svg>
+          <div class="acad-crosshair" id="ch-lay" style="left:40%;top:45%;"><div class="ch-h"></div><div class="ch-v"></div></div>
+        </div>
+        <div class="acad-layers" id="lay-layers">
+          <div class="acad-layers-title">Layers</div>
+          <div class="acad-layer" id="ll-prop"><div class="acad-layer-color" style="background:#345"></div>PROPERTY<div class="acad-layer-icons">👁</div></div>
+          <div class="acad-layer" id="ll-house"><div class="acad-layer-color" style="background:#48a"></div>BUILDING<div class="acad-layer-icons">👁</div></div>
+          <div class="acad-layer" id="ll-roof"><div class="acad-layer-color" style="background:#48a"></div>ROOF-STRUCT<div class="acad-layer-icons">👁</div></div>
+          <div class="acad-layer" id="ll-set"><div class="acad-layer-color" style="background:#0cf"></div>SETBACKS<div class="acad-layer-icons">👁</div></div>
+          <div class="acad-layer" id="ll-panels"><div class="acad-layer-color" style="background:#0cf"></div>PV-PANELS<div class="acad-layer-icons">👁</div></div>
+          <div class="acad-layer" id="ll-equip"><div class="acad-layer-color" style="background:#0cf"></div>EQUIPMENT<div class="acad-layer-icons">👁</div></div>
+          <div class="acad-layer" id="ll-anno"><div class="acad-layer-color" style="background:#ff0"></div>ANNOTATION<div class="acad-layer-icons">👁</div></div>
+          <div class="acad-layer" id="ll-tb"><div class="acad-layer-color" style="background:#88a"></div>TITLE-BLK<div class="acad-layer-icons">👁</div></div>
+        </div>
+      </div>
+      <div class="acad-cmdline">
+        <div class="acad-cmd-history" id="lay-hist"></div>
+        <div class="acad-cmd-current"><span class="acad-cmd-prompt">Command:</span><span class="acad-cmd-text" id="lay-cmd"></span><span class="acad-cmd-cursor"></span></div>
+      </div>
+      <div class="acad-statusbar"><span class="acad-coords">0.000, 0.000</span><span>MODEL</span><span>SNAP</span><span>GRID</span><span>ORTHO</span><span style="margin-left:auto">Scale: 1:1</span></div>
+    </div>
+  </div>
+
+  <!-- ═══ SCENE 4: CITY OF AUSTIN PERMIT ═══ -->
+  <div class="scene" id="scene-permit">
+    <div class="scene-header">Step 4 — City of Austin Electrical Permit Application</div>
+    <div class="permit-window">
+      <div class="browser-chrome">
+        <div class="browser-tabs">
+          <div class="browser-tab active"><span class="fav" style="background:#c84330;"></span>Electrical Permit</div>
+        </div>
+        <div class="browser-url-bar">
+          <span class="lock">🔒</span>
+          <span class="url"><span class="domain">abc.austintexas.gov</span><span class="path">/permits/electrical/solar</span></span>
+        </div>
+      </div>
+
+      <div class="permit-body">
+        <div class="coa-header">
+          <div style="display:flex;align-items:center;gap:10px;">
+            <div style="font-size:24px;font-weight:900;color:#fff;">★</div>
+            <div>
+              <div class="coa-logo-text">City of Austin</div>
+              <div class="coa-logo-sub">Austin Building + Code Compliance • Solar PV Installation</div>
+            </div>
+          </div>
+          <div class="coa-nav">
+            <a href="#">Services</a>
+            <a href="#">Permits</a>
+            <a href="#">Contact</a>
+          </div>
+        </div>
+
+        <div style="padding:20px 24px;background:#f8f9fa;">
+          <h2 class="permit-form-title">City of Austin — Electrical Permit Application</h2>
+          <p class="permit-form-sub">Austin Building + Code Compliance • Solar PV Installation</p>
+
+          <div class="pm-section" id="pm-s1">
+            <div class="pm-section-title">Contractor Information</div>
+            <div class="pm-field-grid">
+              <div class="pm-field full">
+                <div class="pm-field-label">Company Name <span class="req">*</span></div>
+                <div class="pm-field-input" id="pm-contractor"></div>
+              </div>
+              <div class="pm-field">
+                <div class="pm-field-label">TDLR TECL License <span class="req">*</span></div>
+                <div class="pm-field-input" id="pm-license"></div>
+              </div>
+              <div class="pm-field">
+                <div class="pm-field-label">Email</div>
+                <div class="pm-field-input" id="pm-email"></div>
+              </div>
+              <div class="pm-field">
+                <div class="pm-field-label">Phone</div>
+                <div class="pm-field-input" id="pm-phone"></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="pm-section" id="pm-s2">
+            <div class="pm-section-title">Property Information</div>
+            <div class="pm-field-grid">
+              <div class="pm-field full">
+                <div class="pm-field-label">Street Address <span class="req">*</span></div>
+                <div class="pm-field-input" id="pm-addr"></div>
+              </div>
+              <div class="pm-field">
+                <div class="pm-field-label">City <span class="req">*</span></div>
+                <div class="pm-field-input" id="pm-city"></div>
+              </div>
+              <div class="pm-field">
+                <div class="pm-field-label">ZIP Code</div>
+                <div class="pm-field-input" id="pm-postal"></div>
+              </div>
+              <div class="pm-field">
+                <div class="pm-field-label">Owner Name</div>
+                <div class="pm-field-input" id="pm-owner"></div>
+              </div>
+              <div class="pm-field">
+                <div class="pm-field-label">Oncor Account #</div>
+                <div class="pm-field-input" id="pm-acct"></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="pm-section" id="pm-s3">
+            <div class="pm-section-title">System Specifications</div>
+            <div class="pm-field-grid">
+              <div class="pm-field">
+                <div class="pm-field-label">System Size (kWdc)</div>
+                <div class="pm-field-input" id="pm-kw"></div>
+              </div>
+              <div class="pm-field">
+                <div class="pm-field-label">Inverter (kWac)</div>
+                <div class="pm-field-input" id="pm-kwac"></div>
+              </div>
+              <div class="pm-field">
+                <div class="pm-field-label">Panel Manufacturer</div>
+                <div class="pm-field-input" id="pm-panmod"></div>
+              </div>
+              <div class="pm-field">
+                <div class="pm-field-label">Qty</div>
+                <div class="pm-field-input" id="pm-panqty"></div>
+              </div>
+              <div class="pm-field">
+                <div class="pm-field-label">Inverter Model</div>
+                <div class="pm-field-input" id="pm-invmod"></div>
+              </div>
+              <div class="pm-field">
+                <div class="pm-field-label">Main Panel (A)</div>
+                <div class="pm-field-input" id="pm-main"></div>
+              </div>
+              <div class="pm-field">
+                <div class="pm-field-label">Interconnection Type</div>
+                <div class="pm-field-input" id="pm-inter"></div>
+              </div>
+              <div class="pm-field full">
+                <div class="pm-field-label">Work Description</div>
+                <div class="pm-field-input" id="pm-desc"></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="pm-submit-bar" id="pm-submit">
+            <button class="pm-submit-btn">Submit Application</button>
+            <div class="pm-submit-status" id="pm-status"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ SCENE 5: ONCOR INTERCONNECTION ═══ -->
+  <div class="scene" id="scene-microgen">
+    <div class="scene-header">Step 5 — Oncor Distributed Generation Interconnection Application</div>
+    <div class="microgen-window" id="mg-window">
+      <div class="browser-chrome">
+        <div class="browser-tabs">
+          <div class="browser-tab active"><span class="fav" style="background:#003DA5;"></span>DG Application</div>
+        </div>
+        <div class="browser-url-bar">
+          <span class="lock">🔒</span>
+          <span class="url"><span class="domain">portal.oncor.com</span><span class="path">/distributed-generation/application</span></span>
+        </div>
+      </div>
+
+      <div class="mg-body">
+        <div class="oncor-dg-header">
+          <div>
+            <div class="oncor-dg-logo">ONCOR</div>
+            <div class="oncor-dg-sub">ERCOT Region • Residential Solar PV • Distributed Generation Interconnection</div>
+          </div>
+          <div class="oncor-dg-nav">
+            <a href="#">Account</a>
+            <a href="#">Help</a>
+          </div>
+        </div>
+
+        <div style="padding:20px 24px;">
+          <h2 class="mg-title">Oncor — Distributed Generation Interconnection Application</h2>
+          <p class="mg-sub">ERCOT Region • Residential Solar PV</p>
+
+          <div class="mg-section" id="mg-s1">
+            <div class="mg-section-title">Customer &amp; Site Information</div>
+            <div class="mg-field-grid">
+              <div class="mg-field full">
+                <div class="mg-field-label">Owner Name</div>
+                <div class="mg-field-input" id="mg-owner"></div>
+              </div>
+              <div class="mg-field full">
+                <div class="mg-field-label">Site Address</div>
+                <div class="mg-field-input" id="mg-site"></div>
+              </div>
+              <div class="mg-field">
+                <div class="mg-field-label">City</div>
+                <div class="mg-field-input" id="mg-city"></div>
+              </div>
+              <div class="mg-field">
+                <div class="mg-field-label">ZIP</div>
+                <div class="mg-field-input" id="mg-postal"></div>
+              </div>
+              <div class="mg-field">
+                <div class="mg-field-label">Oncor Account #</div>
+                <div class="mg-field-input" id="mg-acct"></div>
+              </div>
+              <div class="mg-field">
+                <div class="mg-field-label">REP / Rate Class</div>
+                <div class="mg-field-input" id="mg-rate"></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="mg-section" id="mg-s2">
+            <div class="mg-section-title">Generating Unit Details</div>
+            <div class="mg-field-grid">
+              <div class="mg-field">
+                <div class="mg-field-label">Type</div>
+                <div class="mg-field-input" id="mg-type"></div>
+              </div>
+              <div class="mg-field">
+                <div class="mg-field-label">Capacity (kW DC)</div>
+                <div class="mg-field-input" id="mg-cap"></div>
+              </div>
+              <div class="mg-field">
+                <div class="mg-field-label">Inverter (kW AC)</div>
+                <div class="mg-field-input" id="mg-invr"></div>
+              </div>
+              <div class="mg-field">
+                <div class="mg-field-label">Panel Mfg</div>
+                <div class="mg-field-input" id="mg-pmfg"></div>
+              </div>
+              <div class="mg-field">
+                <div class="mg-field-label">Panel Model</div>
+                <div class="mg-field-input" id="mg-pmod"></div>
+              </div>
+              <div class="mg-field">
+                <div class="mg-field-label">Qty</div>
+                <div class="mg-field-input" id="mg-pqty"></div>
+              </div>
+              <div class="mg-field">
+                <div class="mg-field-label">Inverter Mfg</div>
+                <div class="mg-field-input" id="mg-imfg"></div>
+              </div>
+              <div class="mg-field">
+                <div class="mg-field-label">Inverter Model</div>
+                <div class="mg-field-input" id="mg-imod"></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="mg-section" id="mg-s3">
+            <div class="mg-section-title">Installer Information</div>
+            <div class="mg-field-grid">
+              <div class="mg-field full">
+                <div class="mg-field-label">Company Name</div>
+                <div class="mg-field-input" id="mg-co"></div>
+              </div>
+              <div class="mg-field">
+                <div class="mg-field-label">TDLR TECL License</div>
+                <div class="mg-field-input" id="mg-me"></div>
+              </div>
+              <div class="mg-field">
+                <div class="mg-field-label">Contact</div>
+                <div class="mg-field-input" id="mg-contact"></div>
+              </div>
+              <div class="mg-field">
+                <div class="mg-field-label">Phone</div>
+                <div class="mg-field-input" id="mg-ph"></div>
+              </div>
+              <div class="mg-field full">
+                <div class="mg-field-label">Email</div>
+                <div class="mg-field-input" id="mg-em"></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="mg-section" id="mg-s4">
+            <div class="mg-section-title">Compliance Declarations</div>
+            <div class="mg-checkbox-row">
+              <div class="mg-checkbox" id="mc1"></div>
+              <span>System complies with NEC 2023 Article 690</span>
+            </div>
+            <div class="mg-checkbox-row">
+              <div class="mg-checkbox" id="mc2"></div>
+              <span>City electrical permit obtained (Confirmation #COA-2026-18847)</span>
+            </div>
+            <div class="mg-checkbox-row">
+              <div class="mg-checkbox" id="mc3"></div>
+              <span>System will be connected to Oncor distribution system</span>
+            </div>
+            <div class="mg-checkbox-row">
+              <div class="mg-checkbox" id="mc4"></div>
+              <span>Capacity does not exceed service entrance capacity</span>
+            </div>
+            <div class="mg-checkbox-row">
+              <div class="mg-checkbox" id="mc5"></div>
+              <span>Owner has received manufacturer warranties</span>
+            </div>
+          </div>
+
+          <div class="mg-submit-bar" id="mg-submit">
+            <button class="mg-submit-btn">Submit Application</button>
+            <div class="mg-submit-status" id="mg-status"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ SCENE 6: CTA ═══ -->
+  <div class="scene-cta" id="scene-cta">
+    <div class="cta-check" id="cta-check">✓</div>
+    <div class="cta-summary" id="cta-summary">
+      <div class="cta-card">
+        <div class="cta-card-icon">📋</div>
+        <div class="cta-card-label">Contract</div>
+        <div class="cta-card-value">Generated</div>
+      </div>
+      <div class="cta-card">
+        <div class="cta-card-icon">⚡</div>
+        <div class="cta-card-label">SLD</div>
+        <div class="cta-card-value">Drawn</div>
+      </div>
+      <div class="cta-card">
+        <div class="cta-card-icon">🏠</div>
+        <div class="cta-card-label">Site Plan</div>
+        <div class="cta-card-value">Designed</div>
+      </div>
+      <div class="cta-card">
+        <div class="cta-card-icon">✔</div>
+        <div class="cta-card-label">Permit</div>
+        <div class="cta-card-value">Applied</div>
+      </div>
+      <div class="cta-card">
+        <div class="cta-card-icon">🔗</div>
+        <div class="cta-card-label">Interconnection</div>
+        <div class="cta-card-value">Filed</div>
+      </div>
+    </div>
+    <h1 class="cta-headline" id="cta-headline">Are you ready to save <span>time and money</span>?</h1>
+    <p class="cta-sub" id="cta-sub">In under 5 minutes, the AI completed 5 core solar workflow tasks — proposal to permit application and interconnection filing.</p>
+    <button class="cta-button" id="cta-btn">Start Your Free Solar Assessment</button>
+    <div class="cta-fine" id="cta-fine">
+      No credit card required • Instant quotes • Fully automated • 24/7 availability<br>
+      <br>
+      Powered by ZYPH Labs — The AI Pipeline for Solar Professionals
+    </div>
+    <div class="cta-logo" id="cta-logo">
+      <div class="cta-logo-icon">Z</div>
+      <div class="cta-logo-name"><b>ZYPH</b> Labs</div>
+    </div>
+    <button class="restart-btn" id="restart-btn" onclick="restart()">↻ Restart Demo</button>
+  </div>
+
+</div>
+
+<script>
+const $=id=>document.getElementById(id);
+const delay=ms=>new Promise(r=>setTimeout(r,ms));
+
+let timerInterval=null;
+let seconds=0;
+
+function startTimer(){
+  seconds=0;
+  timerInterval=setInterval(()=>{
+    seconds++;
+    const m=Math.floor(seconds/60), s=seconds%60;
+    $('ai-timer').textContent=`${m}:${String(s).padStart(2,'0')}`;
+  },1000);
+}
+
+function stopTimer(){
+  if(timerInterval)clearInterval(timerInterval);
+}
+
+function setStep(i){
+  for(let j=0;j<6;j++){
+    if(j<i)$('dot-'+j).className='step-dot done';
+    else if(j===i)$('dot-'+j).className='step-dot active';
+    else $('dot-'+j).className='step-dot';
+  }
+  for(let j=0;j<5;j++){
+    if(j<i)$('line-'+j).className='step-line done';
+    else $('line-'+j).className='step-line';
+  }
+}
+
+function progress(p){
+  $('progress-fill').style.width=p+'%';
+}
+
+function narrate(text){
+  $('narration').innerHTML=text;
+}
+
+function aiTask(text){
+  $('ai-task').innerHTML=text;
+}
+
+function show(id){ $('scene-'+id).style.display='flex'; }
+function hide(id){ $('scene-'+id).style.display='none'; }
+
+async function animateDrag(cursorId, ghostId, zone, startX, startY, endX, endY, dur){
+  const cur=$(cursorId), ghost=$(ghostId);
+  cur.style.left=startX+'px'; cur.style.top=startY+'px';
+  ghost.style.left=(startX+16)+'px'; ghost.style.top=(startY+4)+'px';
+  cur.classList.add('show'); ghost.classList.add('show');
+  const steps=Math.round(dur/16); let i=0;
+  return new Promise(r=>{
+    const iv=setInterval(()=>{
+      i++;
+      const t=i/steps;
+      const ease=t<0.5?2*t*t:(1-Math.pow(-2*t+2,2)/2); // easeInOutQuad
+      const x=startX+(endX-startX)*ease;
+      const y=startY+(endY-startY)*ease;
+      cur.style.left=x+'px'; cur.style.top=y+'px';
+      ghost.style.left=(x+16)+'px'; ghost.style.top=(y+4)+'px';
+      if(i>=steps){clearInterval(iv);r();}
+    },16);
+  });
+}
+
+async function fillField(id,text,delay_ms=30){
+  const el=$(id);
+  el.classList.add('filling');
+  el.textContent='';
+  for(let i=0;i<text.length;i++){
+    el.textContent+=text[i];
+    await delay(delay_ms);
+  }
+  el.classList.remove('filling');
+  el.classList.add('filled');
+}
+
+function fadeSVG(id){
+  return new Promise(r=>{
+    const el=$(id); el.style.transition='opacity 0.3s ease';
+    el.setAttribute('opacity','1'); setTimeout(r,320);
+  });
+}
+
+function showLyr(id){$(id).classList.add('show');}
+function actLyr(id){$(id).classList.add('show','active-layer');}
+
+async function cmdType(cmdEl,text){
+  const el=$(cmdEl); el.textContent='';
+  for(let i=0;i<text.length;i++){el.textContent+=text[i]; await delay(25);}
+}
+function cmdHist(histEl,text){$(histEl).textContent=text;$(histEl.replace('hist','cmd')).textContent='';}
+
+/* ═══ SCENE 1: CONTRACT ═══ */
+async function playContract(){
+  startTimer();
+  aiTask('<span class="step-name">Contract Generation</span> — extracting proposal data, populating contract fields...');
+  setStep(0); progress(2); show('scene-contract');
+  narrate('<span class="hl">Uploading solar proposal</span> — extracting customer data, system specs, and pricing...');
+
+  // Drag file 1: proposal
+  await delay(400);
+  const zone=$('upload-zone');
+  const zW=zone.offsetWidth, zH=zone.offsetHeight;
+  await animateDrag('drag-cursor','drag-ghost-1',zone, zW+20, -30, zW/2-60, zH/2-16, 700);
+  $('upload-box').classList.add('highlight');
+  await delay(200);
+  $('drag-ghost-1').classList.remove('show');
+  $('upload-box').classList.add('dropped');
+  $('file-card-1').classList.add('show');
+  await delay(300);
+
+  // Drag file 2: energy bill
+  narrate('Uploading <span class="hl">energy bill</span> — extracting consumption data, account number...');
+  $('drag-cursor').classList.remove('show');
+  await delay(200);
+  await animateDrag('drag-cursor','drag-ghost-2',zone, zW+40, -20, zW/2-60, zH/2+10, 650);
+  await delay(150);
+  $('drag-ghost-2').classList.remove('show');
+  $('drag-cursor').classList.remove('show');
+  $('file-card-2').classList.add('show');
+  await delay(500); progress(4);
+
+  $('upload-zone').style.display='none';
+  $('file-card-1').style.display='none';
+  $('file-card-2').style.display='none';
+
+  narrate('Populating <span class="hl">installation contract</span> — mapping fields from proposal data...');
+  const cd=$('contract-doc');
+  cd.classList.add('show'); cd.scrollTop=0; await delay(300);
+
+  await fillField('cf-date','April 7, 2026',28);
+  await fillField('cf-cust-name','John & Jane Smith',22); progress(6);
+  cd.scrollBy({top:40,behavior:'smooth'});
+  await fillField('cf-address','4210 Bluebonnet Lane',22);
+  await fillField('cf-city','Austin, Texas  78745',20); progress(8);
+  await fillField('cf-phone','(512) 555-0142',25);
+  await fillField('cf-email','john.smith@gmail.com',20); progress(10);
+  cd.scrollBy({top:40,behavior:'smooth'});
+
+  narrate('Mapping <span class="hl">equipment specifications</span> — panels, inverter, production estimate...');
+  await fillField('cf-sys-size','11.2 kWdc (28 panels × 400W)',18); progress(12);
+  await fillField('cf-panels','Canadian Solar CS7L-400MS (28 units)',16);
+  await fillField('cf-inverter','SolarEdge SE10000H-US — 10.0 kWac',16); progress(14);
+  cd.scrollBy({top:60,behavior:'smooth'});
+  await fillField('cf-mounting','Flush roof mount — IronRidge XR100',18);
+  await fillField('cf-production','15,400 kWh/year (Austin irradiance)',16); progress(16);
+  cd.scrollBy({top:50,behavior:'smooth'});
+
+  narrate('Calculating <span class="hl">contract price</span> — equipment, labour, permits included...');
+  await fillField('cf-total','$32,500.00 (before tax)',20); progress(17);
+  await fillField('cf-deposit','$16,250.00',24);
+  await fillField('cf-balance','$16,250.00',24); progress(18);
+  cd.scrollBy({top:50,behavior:'smooth'});
+
+  await delay(300);
+  $('ds-tag-1').classList.add('show'); $('ds-tag-2').classList.add('show');
+  $('contract-badge').classList.add('show'); progress(20);
+  cd.scrollTo({top:cd.scrollHeight,behavior:'smooth'});
+  await delay(900);
+}
+
+/* ═══ SCENE 2: SLD ═══ */
+async function playSLD(){
+  aiTask('<span class="step-name">AutoCAD SLD</span> — drawing single-line diagram, inserting component blocks...');
+  setStep(1); progress(22); hide('scene-contract'); show('scene-sld');
+  narrate('Opening <span class="hl">AutoCAD</span> — generating Single-Line Diagram from proposal data...');
+  $('ch-sld').classList.add('show'); await delay(300);
+
+  // PV
+  await cmdType('sld-cmd','_RECTANGLE 22,95 110,163');
+  actLyr('sl-pv');
+  for(const id of['s-pv','s-pv1','s-pv2','s-pv3','s-pv4'])await fadeSVG(id);
+  cmdHist('sld-hist','RECTANGLE: PV-ARRAY layer'); progress(26);
+
+  // DC
+  await cmdType('sld-cmd','_LINE 110,129 158,129');
+  actLyr('sl-dc');
+  for(const id of['s-dc1','s-dcL','s-dcW'])await fadeSVG(id);
+  cmdHist('sld-hist','LINE: DC-WIRING | Length=48'); progress(28);
+
+  // DC Disc
+  actLyr('sl-disc');
+  for(const id of['s-dcd','s-dcd1','s-dcd2','s-dc2'])await fadeSVG(id);
+  progress(30);
+
+  // Inverter
+  narrate('Inserting <span class="hl">inverter block</span> — SolarEdge SE10000H-US auto-populated...');
+  await cmdType('sld-cmd','_INSERT SE_INV_Block 252,88');
+  actLyr('sl-inv');
+  for(const id of['s-inv','s-inv1','s-inv2','s-inv3','s-inv4'])await fadeSVG(id);
+  cmdHist('sld-hist','INSERT: INVERTER layer | Block inserted'); progress(34);
+
+  // AC wiring + disc
+  actLyr('sl-ac');
+  for(const id of['s-ac1','s-acL','s-acW','s-acd','s-acd1','s-acd2','s-ac2'])await fadeSVG(id);
+  progress(37);
+
+  // Panel
+  narrate('Drawing <span class="hl">main panel</span> — 200A service, 50A solar breaker, NEC compliant...');
+  await cmdType('sld-cmd','_INSERT MainPanel_200A 492,80');
+  actLyr('sl-pan');
+  for(const id of['s-pan','s-pan1','s-pan2','s-brk','s-brk1','s-mbrk','s-mbrk1'])await fadeSVG(id);
+  cmdHist('sld-hist','INSERT: MAIN-PANEL layer'); progress(40);
+
+  // Meter
+  actLyr('sl-util');
+  for(const id of['s-wm','s-meter','s-met1','s-met2'])await fadeSVG(id);
+  progress(42);
+
+  // Ground
+  actLyr('sl-gnd');
+  for(const id of['s-g1','s-g2','s-g3','s-g4','s-gT'])await fadeSVG(id);
+  progress(43);
+
+  // Notes
+  actLyr('sl-note');
+  for(const id of['s-n0','s-n1','s-n2','s-n3','s-n4'])await fadeSVG(id);
+  progress(44);
+
+  // Title block
+  narrate('Stamping <span class="hl">title block</span> — company, project, date, drawing number...');
+  await cmdType('sld-cmd','_INSERT TitleBlock_A3 430,270');
+  actLyr('sl-tb');
+  for(const id of['s-tb-outer','s-tb-div1','s-tb-div2','s-tb-div3','s-tb-vmid',
+    's-tb-company','s-tb-l1','s-tb-v1','s-tb-l2','s-tb-v2',
+    's-tb-l3','s-tb-v3','s-tb-l4','s-tb-v4','s-tb-l5','s-tb-v5'])await fadeSVG(id);
+  cmdHist('sld-hist','INSERT: TITLE-BLK layer | TitleBlock_A3 inserted'); progress(46);
+
+  await cmdType('sld-cmd','_QSAVE');
+  cmdHist('sld-hist','Drawing saved: Smith_SLD.dwg');
+  await delay(600);
+}
+
+/* ═══ SCENE 3: LAYOUT ═══ */
+async function playLayout(){
+  aiTask('<span class="step-name">AutoCAD Site Plan</span> — measuring roof, placing 28 panels, verifying setbacks...');
+  setStep(2); progress(48); hide('scene-sld'); show('scene-layout');
+  narrate('Generating <span class="hl">roof layout &amp; site plan</span> — satellite data, structure, panel placement...');
+  $('ch-lay').classList.add('show'); await delay(300);
+
+  // Property + house
+  await cmdType('lay-cmd','_RECTANGLE 30,14 410,258');
+  actLyr('ll-prop');
+  await fadeSVG('l-prop'); await fadeSVG('l-propT'); progress(50);
+  actLyr('ll-house');
+  await fadeSVG('l-house'); progress(51);
+
+  // Roof structure
+  narrate('Drawing <span class="hl">roof structure</span> — ridge line, slope orientation...');
+  await cmdType('lay-cmd','_LINE 60,100 380,100');
+  actLyr('ll-roof');
+  await fadeSVG('l-ridge'); await fadeSVG('l-ridgeT');
+  await fadeSVG('l-northL'); progress(53);
+
+  // Setbacks
+  actLyr('ll-set');
+  await fadeSVG('l-setback'); await fadeSVG('l-setT'); progress(55);
+
+  // Panels (28 instead of 31)
+  narrate('Placing <span class="hl">28 panels</span> on the south-facing slope — inside setback zone...');
+  await cmdType('lay-cmd','_ARRAY PV_Panel 28');
+  actLyr('ll-panels');
+  const ns='http://www.w3.org/2000/svg';
+  const g=$('l-panels'); g.innerHTML='';
+  // Setback zone: x=78,y=114,w=284,h=112 → center array within it
+  const pw=24,ph=13,gx=3,gy=3,cols=7,rows=4;
+  const arrayW=cols*pw+(cols-1)*gx; // 7*24+6*3=186
+  const arrayH=rows*ph+(rows-1)*gy; // 4*13+3*3=61
+  const sX=78+Math.round((284-arrayW)/2); // centered: 78+49=127
+  const sY=114+Math.round((112-arrayH)/2); // centered: 114+25=139
+  let count=0;
+  for(let r=0;r<rows&&count<28;r++){
+    for(let c=0;c<cols&&count<28;c++){
+      const rect=document.createElementNS(ns,'rect');
+      rect.setAttribute('x',sX+c*(pw+gx));
+      rect.setAttribute('y',sY+r*(ph+gy));
+      rect.setAttribute('width',pw); rect.setAttribute('height',ph);
+      rect.setAttribute('rx','1');
+      rect.setAttribute('fill','rgba(0,204,255,0.15)');
+      rect.setAttribute('stroke','#00ccff');
+      rect.setAttribute('stroke-width','0.7');
+      rect.setAttribute('opacity','0');
+      g.appendChild(rect);
+      count++;
+    }
+  }
+  const panels=g.querySelectorAll('rect');
+  for(let i=0;i<panels.length;i++){
+    panels[i].style.transition='opacity 0.12s ease';
+    panels[i].setAttribute('opacity','1');
+    await delay(35);
+    if(i%7===6)progress(55+Math.floor(i/7));
+  }
+  progress(60);
+  await fadeSVG('l-count');
+
+  // Equipment
+  actLyr('ll-equip');
+  await fadeSVG('l-north');
+  await fadeSVG('l-inv-mk'); await fadeSVG('l-disc-mk'); await fadeSVG('l-meter-mk');
+  progress(62);
+
+  // Title block
+  narrate('Stamping <span class="hl">title block</span> — site plan drawing...');
+  await cmdType('lay-cmd','_INSERT TitleBlock_A3 430,270');
+  actLyr('ll-tb');
+  for(const id of['l-tb-outer','l-tb-d1','l-tb-d2','l-tb-d3','l-tb-vm',
+    'l-tb-co','l-tb-la','l-tb-va','l-tb-lb','l-tb-vb',
+    'l-tb-lc','l-tb-vc','l-tb-ld','l-tb-vd','l-tb-le','l-tb-ve'])await fadeSVG(id);
+  cmdHist('lay-hist','INSERT: TITLE-BLK | TitleBlock_A3 inserted'); progress(64);
+
+  await cmdType('lay-cmd','_QSAVE');
+  cmdHist('lay-hist','Drawing saved: Smith_SitePlan.dwg');
+  await delay(600);
+}
+
+/* ═══ SCENE 4: PERMIT ═══ */
+async function playPermit(){
+  aiTask('<span class="step-name">Austin Permit</span> — navigating portal, auto-filling electrical permit form...');
+  setStep(3); progress(66); hide('scene-layout'); show('scene-permit');
+  narrate('Opening <span class="hl">City of Austin permit portal</span> — auto-filling electrical permit application...');
+  await delay(400);
+
+  const pw=$('permit-window');
+  $('pm-s1').classList.add('show'); await delay(200);
+  $('pm-s1').scrollIntoView({behavior:'smooth',block:'end'});
+  await fillField('pm-contractor','Solar Company',22);
+  await fillField('pm-license','#28456',24); progress(69);
+  await fillField('pm-email','info@solarcompany.com',20);
+  await fillField('pm-phone','(512) 555-0199',24); progress(71);
+
+  narrate('Mapping <span class="hl">property details</span> from proposal data...');
+  $('pm-s2').classList.add('show'); await delay(200);
+  $('pm-s2').scrollIntoView({behavior:'smooth',block:'end'});
+  await fillField('pm-addr','4210 Bluebonnet Lane',20);
+  await fillField('pm-city','Austin',28);
+  await fillField('pm-postal','78745',30); progress(74);
+  await fillField('pm-owner','John Smith',24);
+  await fillField('pm-acct','ONC-2847591036',20); progress(76);
+  pw.scrollBy({top:60,behavior:'smooth'});
+
+  narrate('Populating <span class="hl">system specifications</span> — all data from proposal...');
+  $('pm-s3').classList.add('show'); await delay(200);
+  $('pm-s3').scrollIntoView({behavior:'smooth',block:'end'});
+  await fillField('pm-kw','11.2 kWdc',24);
+  await fillField('pm-kwac','10.0 kWac',24); progress(78);
+  pw.scrollBy({top:60,behavior:'smooth'});
+  await fillField('pm-panmod','Canadian Solar CS7L-400MS',16);
+  await fillField('pm-panqty','28',40);
+  await fillField('pm-invmod','SolarEdge SE10000H-US',18); progress(80);
+  pw.scrollBy({top:60,behavior:'smooth'});
+  await fillField('pm-main','200A',30);
+  await fillField('pm-inter','Load-side — NEC Article 705',18);
+  await fillField('pm-desc','Solar PV — New Installation',18); progress(82);
+
+  await delay(250);
+  $('pm-submit').classList.add('show'); await delay(300);
+  $('pm-status').textContent='✓ Submitted — Confirmation #COA-2026-18847';
+  pw.scrollTo({top:pw.scrollHeight,behavior:'smooth'});
+  progress(84); await delay(800);
+}
+
+/* ═══ SCENE 5: ONCOR DG APPLICATION ═══ */
+async function playMicrogen(){
+  aiTask('<span class="step-name">Oncor Interconnection</span> — filing DG application, checking declarations...');
+  setStep(4); progress(84); hide('scene-permit'); show('scene-microgen');
+  narrate('Opening <span class="hl">Oncor distributed generation portal</span> — filing DG application...');
+  await delay(400);
+
+  const mw=$('mg-window');
+  $('mg-s1').classList.add('show'); await delay(200);
+  $('mg-s1').scrollIntoView({behavior:'smooth',block:'end'});
+  await fillField('mg-owner','John & Jane Smith',20);
+  await fillField('mg-site','4210 Bluebonnet Lane, Austin, TX',16); progress(86);
+  await fillField('mg-city','Austin',26);
+  await fillField('mg-postal','78745',28);
+  await fillField('mg-acct','ONC-2847591036',20);
+  await fillField('mg-rate','TXU Energy / Residential',22); progress(88);
+
+  narrate('Populating <span class="hl">generating unit details</span>...');
+  $('mg-s2').classList.add('show'); await delay(200);
+  $('mg-s2').scrollIntoView({behavior:'smooth',block:'end'});
+  await fillField('mg-type','Solar Photovoltaic (PV)',20);
+  await fillField('mg-cap','11.2 kW',26);
+  await fillField('mg-invr','10.0 kW',26); progress(90);
+  mw.scrollBy({top:60,behavior:'smooth'});
+  await fillField('mg-pmfg','Canadian Solar',22);
+  await fillField('mg-pmod','CS7L-400MS',24);
+  await fillField('mg-pqty','28',40);
+  mw.scrollBy({top:60,behavior:'smooth'});
+  await fillField('mg-imfg','SolarEdge',24);
+  await fillField('mg-imod','SE10000H-US',22); progress(92);
+
+  narrate('Auto-filling <span class="hl">installer details</span>...');
+  $('mg-s3').classList.add('show'); await delay(200);
+  $('mg-s3').scrollIntoView({behavior:'smooth',block:'end'});
+  await fillField('mg-co','Solar Company',24);
+  await fillField('mg-me','#28456',22);
+  mw.scrollBy({top:50,behavior:'smooth'});
+  await fillField('mg-contact','Office',26);
+  await fillField('mg-ph','(512) 555-0199',22);
+  await fillField('mg-em','info@solarcompany.com',18); progress(94);
+
+  narrate('Checking <span class="hl">compliance declarations</span>...');
+  $('mg-s4').classList.add('show'); await delay(250);
+  $('mg-s4').scrollIntoView({behavior:'smooth',block:'end'});
+  for(const id of['mc1','mc2','mc3','mc4','mc5']){
+    await delay(240); $(id).textContent='✓'; $(id).classList.add('checked');
+    mw.scrollBy({top:20,behavior:'smooth'});
+  }
+  progress(96);
+
+  await delay(250);
+  $('mg-submit').classList.add('show'); await delay(300);
+  $('mg-status').textContent='✓ Filed — Reference #ONC-DG-2026-18847';
+  mw.scrollTo({top:mw.scrollHeight,behavior:'smooth'});
+  progress(98); await delay(800);
+}
+
+/* ═══ SCENE 6: CTA ═══ */
+async function playCTA(){
+  stopTimer();
+  aiTask('<span class="step-name">Pipeline Complete</span> — all 5 processes finished successfully ✓');
+  setStep(5); progress(100); hide('scene-microgen');
+  $('scene-cta').style.display='flex';
+  narrate('');
+
+  await delay(250);
+  $('cta-check').classList.add('show');
+  await delay(350);
+  $('cta-summary').classList.add('show');
+  await delay(500);
+  $('cta-headline').classList.add('show');
+  await delay(500);
+  $('cta-sub').classList.add('show');
+  await delay(500);
+  $('cta-btn').classList.add('show');
+  await delay(500);
+  $('cta-fine').classList.add('show');
+  await delay(400);
+  $('cta-logo').classList.add('show');
+  await delay(400);
+  $('restart-btn').style.display='block';
+}
+
+/* ═══ RESTART ═══ */
+function restart(){
+  ['scene-contract','scene-sld','scene-layout','scene-permit','scene-microgen'].forEach(id=>$(id).style.display='none');
+  $('scene-cta').style.display='none';
+
+  // Contract
+  $('upload-zone').style.display=''; $('upload-box').style.display='block'; $('upload-box').classList.remove('highlight','dropped');
+  $('drag-cursor').classList.remove('show'); $('drag-ghost-1').classList.remove('show'); $('drag-ghost-2').classList.remove('show');
+  $('file-card-1').style.display=''; $('file-card-1').classList.remove('show');
+  $('file-card-2').style.display=''; $('file-card-2').classList.remove('show');
+  $('contract-doc').classList.remove('show'); $('contract-doc').scrollTop=0;
+  ['cf-date','cf-cust-name','cf-address','cf-city','cf-phone','cf-email',
+   'cf-sys-size','cf-panels','cf-inverter','cf-mounting','cf-production',
+   'cf-total','cf-deposit','cf-balance'].forEach(id=>{$(id).textContent='';$(id).classList.remove('filling','filled');});
+  $('ds-tag-1').classList.remove('show'); $('ds-tag-2').classList.remove('show');
+  $('contract-badge').classList.remove('show');
+
+  // SLD
+  document.querySelectorAll('#sld-svg [id^="s-"]').forEach(el=>{el.style.transition='none';el.setAttribute('opacity','0');});
+  $('ch-sld').classList.remove('show');
+  document.querySelectorAll('#sld-layers .acad-layer').forEach(el=>el.classList.remove('show','active-layer'));
+  $('sld-cmd').textContent=''; $('sld-hist').textContent='';
+
+  // Layout
+  $('l-panels').innerHTML='';
+  document.querySelectorAll('#lay-svg [id^="l-"]').forEach(el=>{el.style.transition='none';el.setAttribute('opacity','0');});
+  $('ch-lay').classList.remove('show');
+  document.querySelectorAll('#lay-layers .acad-layer').forEach(el=>el.classList.remove('show','active-layer'));
+  $('lay-cmd').textContent=''; $('lay-hist').textContent='';
+
+  // Permit
+  ['pm-s1','pm-s2','pm-s3'].forEach(id=>$(id).classList.remove('show'));
+  ['pm-contractor','pm-license','pm-email','pm-phone','pm-addr','pm-city','pm-postal','pm-owner','pm-acct',
+   'pm-kw','pm-kwac','pm-panmod','pm-panqty','pm-invmod','pm-main','pm-inter','pm-desc'
+  ].forEach(id=>{$(id).textContent='';$(id).classList.remove('filling','filled');});
+  $('pm-submit').classList.remove('show'); $('pm-status').textContent='';
+  $('permit-window').scrollTop=0;
+
+  // Oncor
+  ['mg-s1','mg-s2','mg-s3','mg-s4'].forEach(id=>$(id).classList.remove('show'));
+  ['mg-owner','mg-site','mg-city','mg-postal','mg-acct','mg-rate',
+   'mg-type','mg-cap','mg-invr','mg-pmfg','mg-pmod','mg-pqty','mg-imfg','mg-imod',
+   'mg-co','mg-me','mg-contact','mg-ph','mg-em'
+  ].forEach(id=>{$(id).textContent='';$(id).classList.remove('filling','filled');});
+  ['mc1','mc2','mc3','mc4','mc5'].forEach(id=>{$(id).textContent='';$(id).classList.remove('checked');});
+  $('mg-submit').classList.remove('show'); $('mg-status').textContent='';
+  $('mg-window').scrollTop=0;
+
+  // CTA
+  ['cta-check','cta-summary','cta-headline','cta-sub','cta-btn','cta-fine','cta-logo'].forEach(id=>$(id).classList.remove('show'));
+  $('restart-btn').style.display='none';
+
+  stopTimer();
+  $('ai-timer').textContent='0:00';
+  aiTask('<span class="step-name">Initializing pipeline</span> — reading proposal data...');
+  progress(0);
+  narrate('Initializing solar AI pipeline&hellip;');
+  for(let i=0;i<6;i++)$('dot-'+i).className='step-dot';
+  for(let i=0;i<5;i++)$('line-'+i).className='step-line';
+  setTimeout(run,500);
+}
+
+async function run(){
+  await playContract();
+  await playSLD();
+  await playLayout();
+  await playPermit();
+  await playMicrogen();
+  await playCTA();
+}
+
+window.addEventListener('load',()=>setTimeout(run,500));
+</script>
+</body>
+</html>
