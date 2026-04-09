@@ -1,0 +1,1344 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Digital Bookkeeper Demo — Zyph Labs</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-primary: #f5f7fa;
+            --bg-secondary: #ffffff;
+            --text-primary: #0f172a;
+            --text-secondary: #475569;
+            --text-tertiary: #94a3b8;
+            --accent-primary: #00b894;
+            --accent-secondary: #00cec9;
+            --accent-light: #e8f9f6;
+            --border: #e2e8f0;
+            --border-dark: #cbd5e1;
+            --error: #ef4444;
+            --warning: #f59e0b;
+            --success: #10b981;
+            --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+            --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Outfit', sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.6;
+            padding: 40px 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        /* Hero Section */
+        .hero {
+            text-align: center;
+            margin-bottom: 60px;
+        }
+
+        .hero h1 {
+            font-size: 3.5rem;
+            font-weight: 700;
+            margin-bottom: 20px;
+            color: var(--text-primary);
+            line-height: 1.2;
+        }
+
+        .hero p {
+            font-size: 1.25rem;
+            color: var(--text-secondary);
+            margin-bottom: 40px;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .btn-launch {
+            display: inline-block;
+            padding: 14px 32px;
+            background: linear-gradient(135deg, var(--accent-primary) 0%, var(--accent-secondary) 100%);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            font-family: 'Outfit', sans-serif;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: var(--shadow-md);
+        }
+
+        .btn-launch:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .btn-launch:active {
+            transform: translateY(0);
+        }
+
+        .hero.hidden {
+            display: none;
+        }
+
+        /* Demo Container */
+        .demo-container {
+            display: none;
+        }
+
+        .demo-container.active {
+            display: block;
+        }
+
+        /* Narration Section */
+        .narration {
+            text-align: center;
+            margin-bottom: 30px;
+            min-height: 120px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .step-badge {
+            display: inline-block;
+            background: var(--accent-light);
+            color: var(--accent-primary);
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            margin-bottom: 12px;
+        }
+
+        .narration h2 {
+            font-size: 2rem;
+            margin-bottom: 10px;
+            color: var(--text-primary);
+        }
+
+        .narration p {
+            font-size: 1rem;
+            color: var(--text-secondary);
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        /* App Window */
+        .app-window {
+            background: var(--bg-secondary);
+            border-radius: 12px;
+            box-shadow: var(--shadow-lg);
+            overflow: hidden;
+            margin-bottom: 30px;
+            border: 1px solid var(--border);
+        }
+
+        .app-titlebar {
+            background: #f1f5f9;
+            padding: 12px 16px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .traffic-lights {
+            display: flex;
+            gap: 8px;
+        }
+
+        .traffic-light {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+        }
+
+        .traffic-light.red {
+            background: #ff5f56;
+        }
+
+        .traffic-light.yellow {
+            background: #ffbd2e;
+        }
+
+        .traffic-light.green {
+            background: #27c93f;
+        }
+
+        .app-title {
+            margin-left: 16px;
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            font-weight: 500;
+        }
+
+        .app-content {
+            display: flex;
+            height: 600px;
+        }
+
+        .app-sidebar {
+            width: 220px;
+            background: #f8fafb;
+            border-right: 1px solid var(--border);
+            padding: 20px 0;
+        }
+
+        .app-logo {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 0 16px;
+            margin-bottom: 24px;
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: var(--text-primary);
+        }
+
+        .app-nav {
+            list-style: none;
+        }
+
+        .app-nav li {
+            padding: 0;
+        }
+
+        .app-nav a {
+            display: block;
+            padding: 10px 16px;
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-size: 0.95rem;
+            transition: all 0.2s ease;
+            border-left: 3px solid transparent;
+        }
+
+        .app-nav a:hover {
+            background: rgba(0, 184, 148, 0.05);
+            color: var(--text-primary);
+        }
+
+        .app-nav a.active {
+            background: var(--accent-light);
+            color: var(--accent-primary);
+            border-left-color: var(--accent-primary);
+            font-weight: 600;
+        }
+
+        .app-main {
+            flex: 1;
+            padding: 24px;
+            overflow-y: auto;
+            background: var(--bg-primary);
+        }
+
+        .content-card {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 16px;
+            opacity: 0;
+            animation: slideIn 0.4s ease forwards;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .content-card.highlight {
+            border-color: var(--accent-primary);
+            background: var(--accent-light);
+        }
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+
+        .card-title {
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .card-status {
+            display: inline-block;
+            padding: 4px 10px;
+            border-radius: 4px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+
+        .status-in-progress {
+            background: #fef3c7;
+            color: #b45309;
+        }
+
+        .status-complete {
+            background: #d1fae5;
+            color: #065f46;
+        }
+
+        .status-paid {
+            background: #d1fae5;
+            color: #065f46;
+        }
+
+        /* Email Notification */
+        .email-notification {
+            background: #fef3c7;
+            border: 1px solid #fcd34d;
+            border-radius: 8px;
+            padding: 16px;
+            margin-bottom: 16px;
+            display: flex;
+            gap: 12px;
+            align-items: flex-start;
+        }
+
+        .email-icon {
+            font-size: 1.5rem;
+            flex-shrink: 0;
+        }
+
+        .email-content h4 {
+            margin-bottom: 4px;
+            color: var(--text-primary);
+        }
+
+        .email-content p {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            margin: 0;
+        }
+
+        /* Invoice */
+        .invoice {
+            background: white;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 24px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.9rem;
+        }
+
+        .invoice-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 24px;
+            border-bottom: 2px solid var(--border);
+            padding-bottom: 16px;
+        }
+
+        .invoice-num {
+            color: var(--text-secondary);
+        }
+
+        .invoice-num strong {
+            color: var(--text-primary);
+        }
+
+        .invoice-date {
+            color: var(--text-secondary);
+        }
+
+        .invoice-section {
+            margin-bottom: 20px;
+        }
+
+        .invoice-label {
+            color: var(--text-tertiary);
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            margin-bottom: 6px;
+        }
+
+        .invoice-lines {
+            background: var(--bg-primary);
+            border-radius: 4px;
+            padding: 12px;
+            margin-bottom: 16px;
+        }
+
+        .invoice-line {
+            display: flex;
+            justify-content: space-between;
+            padding: 6px 0;
+            border-bottom: 1px solid var(--border);
+            opacity: 0;
+            animation: slideIn 0.3s ease forwards;
+        }
+
+        .invoice-line:last-child {
+            border-bottom: none;
+        }
+
+        .invoice-line-item {
+            color: var(--text-primary);
+        }
+
+        .invoice-line-amount {
+            color: var(--text-primary);
+            text-align: right;
+            min-width: 100px;
+        }
+
+        .invoice-totals {
+            background: var(--accent-light);
+            border-radius: 4px;
+            padding: 12px;
+            margin-bottom: 16px;
+        }
+
+        .invoice-total-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 6px 0;
+            opacity: 0;
+            animation: slideIn 0.3s ease forwards;
+        }
+
+        .invoice-total-row.final {
+            border-top: 2px solid var(--accent-primary);
+            padding-top: 12px;
+            font-weight: 600;
+            color: var(--accent-primary);
+        }
+
+        .invoice-badge {
+            display: inline-block;
+            background: var(--success);
+            color: white;
+            padding: 6px 12px;
+            border-radius: 4px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            margin-top: 12px;
+        }
+
+        /* Expenses Table */
+        .expenses-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 16px;
+        }
+
+        .expenses-table th {
+            background: var(--bg-primary);
+            padding: 12px;
+            text-align: left;
+            font-weight: 600;
+            color: var(--text-secondary);
+            border-bottom: 2px solid var(--border);
+            font-size: 0.9rem;
+        }
+
+        .expenses-table td {
+            padding: 12px;
+            border-bottom: 1px solid var(--border);
+            opacity: 0;
+            animation: slideIn 0.3s ease forwards;
+        }
+
+        .expense-name {
+            color: var(--text-primary);
+            font-weight: 500;
+        }
+
+        .expense-amount {
+            text-align: right;
+            color: var(--text-primary);
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        .category-tag {
+            display: inline-block;
+            padding: 4px 10px;
+            border-radius: 4px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+
+        .category-materials {
+            background: #dbeafe;
+            color: #1e40af;
+        }
+
+        .category-plumbing {
+            background: #e0e7ff;
+            color: #3730a3;
+        }
+
+        .category-subcontractor {
+            background: #fcd34d;
+            color: #78350f;
+        }
+
+        .category-disposal {
+            background: #fbcfe8;
+            color: #831843;
+        }
+
+        .category-vehicle {
+            background: #e9d5ff;
+            color: #581c87;
+        }
+
+        .check-mark {
+            color: var(--success);
+            font-weight: 700;
+        }
+
+        /* Payroll Table */
+        .payroll-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 16px;
+        }
+
+        .payroll-table th {
+            background: var(--bg-primary);
+            padding: 12px;
+            text-align: left;
+            font-weight: 600;
+            color: var(--text-secondary);
+            border-bottom: 2px solid var(--border);
+            font-size: 0.9rem;
+        }
+
+        .payroll-table td {
+            padding: 12px;
+            border-bottom: 1px solid var(--border);
+            opacity: 0;
+            animation: slideIn 0.3s ease forwards;
+        }
+
+        .payroll-name {
+            color: var(--text-primary);
+            font-weight: 500;
+        }
+
+        .payroll-role {
+            color: var(--text-tertiary);
+            font-size: 0.85rem;
+        }
+
+        .payroll-amount {
+            text-align: right;
+            color: var(--text-primary);
+            font-family: 'JetBrains Mono', monospace;
+            font-weight: 600;
+        }
+
+        /* Summary */
+        .summary-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 16px;
+            margin-bottom: 16px;
+        }
+
+        .summary-item {
+            background: var(--bg-primary);
+            border-radius: 8px;
+            padding: 16px;
+            border: 1px solid var(--border);
+            opacity: 0;
+            animation: slideIn 0.4s ease forwards;
+        }
+
+        .summary-label {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            margin-bottom: 6px;
+        }
+
+        .summary-value {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        .summary-item.positive .summary-value {
+            color: var(--accent-primary);
+        }
+
+        .summary-item.negative .summary-value {
+            color: var(--text-primary);
+        }
+
+        .qb-sync {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 12px;
+            background: var(--accent-light);
+            border-radius: 4px;
+            margin-top: 12px;
+        }
+
+        .qb-logo {
+            font-size: 1.2rem;
+        }
+
+        .qb-text {
+            color: var(--accent-primary);
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+
+        /* Activity Log */
+        .activity-log {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 30px;
+        }
+
+        .activity-log h3 {
+            font-size: 1rem;
+            margin-bottom: 16px;
+            color: var(--text-primary);
+        }
+
+        .activity-item {
+            display: flex;
+            gap: 12px;
+            padding: 8px 0;
+            border-bottom: 1px solid var(--border);
+            opacity: 0;
+            animation: slideIn 0.3s ease forwards;
+        }
+
+        .activity-item:last-child {
+            border-bottom: none;
+        }
+
+        .activity-time {
+            color: var(--text-tertiary);
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.85rem;
+            min-width: 50px;
+        }
+
+        .activity-text {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+        }
+
+        .activity-text strong {
+            color: var(--text-primary);
+        }
+
+        /* Progress Bar */
+        .progress-container {
+            background: var(--bg-secondary);
+            border-radius: 8px;
+            padding: 16px;
+            margin-bottom: 30px;
+            border: 1px solid var(--border);
+        }
+
+        .progress-label {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            margin-bottom: 10px;
+            font-weight: 600;
+        }
+
+        .progress-bar {
+            height: 8px;
+            background: var(--border);
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--accent-primary) 0%, var(--accent-secondary) 100%);
+            width: 0%;
+            transition: width 0.4s ease;
+            border-radius: 4px;
+        }
+
+        /* Final CTA */
+        .final-cta {
+            text-align: center;
+            padding: 40px 20px;
+            background: linear-gradient(135deg, var(--accent-light) 0%, rgba(0, 206, 201, 0.05) 100%);
+            border-radius: 12px;
+            border: 1px solid var(--border);
+            display: none;
+        }
+
+        .final-cta.show {
+            display: block;
+            animation: slideIn 0.4s ease;
+        }
+
+        .final-cta h2 {
+            font-size: 2rem;
+            margin-bottom: 16px;
+            color: var(--text-primary);
+        }
+
+        .btn-contact {
+            display: inline-block;
+            padding: 12px 28px;
+            background: linear-gradient(135deg, var(--accent-primary) 0%, var(--accent-secondary) 100%);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 0.95rem;
+            font-weight: 600;
+            font-family: 'Outfit', sans-serif;
+            cursor: pointer;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        .btn-contact:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
+        }
+
+        /* Typewriter Effect */
+        .typewriter {
+            overflow: hidden;
+            border-right: 2px solid var(--accent-primary);
+            white-space: nowrap;
+            animation: blink 0.7s infinite;
+        }
+
+        @keyframes blink {
+            0%, 49%, 100% {
+                border-right-color: var(--accent-primary);
+            }
+            50%, 99% {
+                border-right-color: transparent;
+            }
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+
+            .app-content {
+                height: 800px;
+            }
+
+            .app-sidebar {
+                width: 180px;
+            }
+
+            .app-main {
+                padding: 16px;
+            }
+
+            .summary-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .expenses-table th,
+            .expenses-table td,
+            .payroll-table th,
+            .payroll-table td {
+                padding: 8px;
+                font-size: 0.85rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Hero Section -->
+        <div class="hero" id="hero">
+            <h1>Watch AI run your books.</h1>
+            <p>See the Digital Bookkeeper automate invoicing, expense tracking, payroll, and profit reporting in real-time.</p>
+            <button class="btn-launch" onclick="startDemo()">Launch Demo</button>
+        </div>
+
+        <!-- Demo Container -->
+        <div class="demo-container" id="demoContainer">
+            <!-- Progress Bar -->
+            <div class="progress-container">
+                <div class="progress-label">Demo Progress</div>
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progressFill"></div>
+                </div>
+            </div>
+
+            <!-- Narration Section -->
+            <div class="narration" id="narration">
+                <div class="step-badge" id="stepBadge">Step 1 of 5</div>
+                <h2 id="narrationTitle">Job Completion Detected</h2>
+                <p id="narrationDesc">The AI monitors your inbox and detects when a job is marked complete.</p>
+            </div>
+
+            <!-- App Window -->
+            <div class="app-window">
+                <div class="app-titlebar">
+                    <div class="traffic-lights">
+                        <div class="traffic-light red"></div>
+                        <div class="traffic-light yellow"></div>
+                        <div class="traffic-light green"></div>
+                    </div>
+                    <div class="app-title">Digital Bookkeeper — Interactive Demo</div>
+                </div>
+
+                <div class="app-content">
+                    <div class="app-sidebar">
+                        <div class="app-logo">📊 Bookkeeper</div>
+                        <ul class="app-nav">
+                            <li><a href="#" class="active">Dashboard</a></li>
+                            <li><a href="#" id="navInvoices">Invoices</a></li>
+                            <li><a href="#" id="navExpenses">Expenses</a></li>
+                            <li><a href="#" id="navPayroll">Payroll</a></li>
+                            <li><a href="#" id="navReports">Reports</a></li>
+                            <li><a href="#" id="navSettings">Settings</a></li>
+                        </ul>
+                    </div>
+
+                    <div class="app-main" id="appMain">
+                        <!-- Step 1 Content: Job Completion -->
+                        <div id="step1Content" style="display: none;">
+                            <div class="email-notification" id="emailNotif" style="opacity: 0;">
+                                <div class="email-icon">📧</div>
+                                <div class="email-content">
+                                    <h4>Project complete: Reynolds Kitchen Renovation</h4>
+                                    <p>From: Mike Reynolds &lt;mike.reynolds@email.com&gt;</p>
+                                </div>
+                            </div>
+
+                            <div class="content-card" id="jobCard" style="display: none;">
+                                <div class="card-header">
+                                    <div class="card-title">Mike Reynolds — Kitchen Reno</div>
+                                    <span class="card-status status-in-progress" id="jobStatus">In Progress</span>
+                                </div>
+                                <p style="color: var(--text-secondary); font-size: 0.95rem; margin: 0;">
+                                    Started: Mar 15 • <span id="jobDate">Last update: pending...</span>
+                                </p>
+                            </div>
+                        </div>
+
+                        <!-- Step 2 Content: Invoice -->
+                        <div id="step2Content" style="display: none;">
+                            <div class="invoice" id="invoice">
+                                <div class="invoice-header">
+                                    <div>
+                                        <div class="invoice-num">Invoice <strong id="invNum">INV-2024-0847</strong></div>
+                                    </div>
+                                    <div style="text-align: right;">
+                                        <div class="invoice-date" id="invDate">Date: Mar 21, 2024</div>
+                                    </div>
+                                </div>
+
+                                <div class="invoice-section">
+                                    <div class="invoice-label">Bill To</div>
+                                    <div id="invClient" style="color: var(--text-primary);">
+                                        <strong>Mike Reynolds</strong><br>
+                                        4821 Westlake Dr<br>
+                                        Austin, TX 78746
+                                    </div>
+                                </div>
+
+                                <div class="invoice-section">
+                                    <div class="invoice-label">Services</div>
+                                    <div class="invoice-lines" id="invLines">
+                                        <!-- Lines added via JS -->
+                                    </div>
+                                </div>
+
+                                <div class="invoice-section">
+                                    <div class="invoice-label">Totals</div>
+                                    <div class="invoice-totals" id="invTotals">
+                                        <!-- Totals added via JS -->
+                                    </div>
+                                    <div class="invoice-badge" id="sentBadge" style="opacity: 0;">Sent to client ✓</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Step 3 Content: Expenses -->
+                        <div id="step3Content" style="display: none;">
+                            <table class="expenses-table" id="expenseTable">
+                                <thead>
+                                    <tr>
+                                        <th>Vendor</th>
+                                        <th>Amount</th>
+                                        <th>Category</th>
+                                        <th></th>
+                                    </tr>
+                                </thead>
+                                <tbody id="expenseBody">
+                                    <!-- Rows added via JS -->
+                                </tbody>
+                            </table>
+                            <div id="expenseTotal" style="text-align: right; font-weight: 600; color: var(--accent-primary); padding-top: 12px; border-top: 2px solid var(--border);">
+                                Total Expenses: <span id="expenseTotalAmount">$0.00</span>
+                            </div>
+                        </div>
+
+                        <!-- Step 4 Content: Payroll -->
+                        <div id="step4Content" style="display: none;">
+                            <table class="payroll-table" id="payrollTable">
+                                <thead>
+                                    <tr>
+                                        <th>Employee</th>
+                                        <th>Hours</th>
+                                        <th>Rate</th>
+                                        <th>Amount</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="payrollBody">
+                                    <!-- Rows added via JS -->
+                                </tbody>
+                            </table>
+                            <div style="text-align: right; padding-top: 12px; border-top: 2px solid var(--border);">
+                                <div style="font-weight: 600; color: var(--text-primary); margin-bottom: 8px;">Total Payroll</div>
+                                <div style="font-size: 1.3rem; font-weight: 700; color: var(--accent-primary); font-family: 'JetBrains Mono', monospace;" id="payrollTotal">$0.00</div>
+                            </div>
+                            <div style="margin-top: 12px;">
+                                <span class="card-status status-complete">Scheduled for Friday ✓</span>
+                            </div>
+                        </div>
+
+                        <!-- Step 5 Content: Profit Summary -->
+                        <div id="step5Content" style="display: none;">
+                            <div class="summary-grid">
+                                <div class="summary-item positive">
+                                    <div class="summary-label">Revenue</div>
+                                    <div class="summary-value" id="summaryRevenue">$0.00</div>
+                                </div>
+                                <div class="summary-item negative">
+                                    <div class="summary-label">Expenses</div>
+                                    <div class="summary-value" id="summaryExpenses">-$0.00</div>
+                                </div>
+                                <div class="summary-item negative">
+                                    <div class="summary-label">Payroll</div>
+                                    <div class="summary-value" id="summaryPayroll">-$0.00</div>
+                                </div>
+                                <div class="summary-item positive">
+                                    <div class="summary-label">Gross Profit</div>
+                                    <div class="summary-value" id="summaryProfit">$0.00</div>
+                                </div>
+                            </div>
+
+                            <div style="margin-top: 16px;">
+                                <div class="summary-label" style="margin-bottom: 8px;">Profit Margin</div>
+                                <div style="font-size: 1.8rem; font-weight: 700; color: var(--accent-primary); font-family: 'JetBrains Mono', monospace;" id="profitMargin">0%</div>
+                            </div>
+
+                            <div class="qb-sync" id="qbSync" style="opacity: 0;">
+                                <div class="qb-logo">📊</div>
+                                <div class="qb-text">Synced to QuickBooks ✓</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Activity Log -->
+            <div class="activity-log">
+                <h3>📋 Activity Log</h3>
+                <div id="activityLog">
+                    <div class="activity-item" style="color: var(--text-tertiary);">
+                        <span class="activity-time">—</span>
+                        <span class="activity-text">Demo ready. Launch to begin.</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Final CTA -->
+        <div class="final-cta" id="finalCta">
+            <h2>That's bookkeeping on autopilot.</h2>
+            <p style="color: var(--text-secondary); margin-bottom: 20px; font-size: 1.05rem;">
+                The Digital Bookkeeper handles the numbers so you can focus on the work.
+            </p>
+            <a href="mailto:contact@zyphlabs.com" class="btn-contact">Get in Touch</a>
+        </div>
+    </div>
+
+    <script>
+        // Data
+        const INVOICE_DATA = {
+            lineItems: [
+                { name: 'Demolition', amount: 4200 },
+                { name: 'Cabinetry', amount: 18500 },
+                { name: 'Countertops', amount: 8900 },
+                { name: 'Plumbing', amount: 6300 },
+                { name: 'Electrical', amount: 4800 },
+                { name: 'Flooring', amount: 7200 },
+                { name: 'Project Management', amount: 3500 }
+            ],
+            subtotal: 53400,
+            tax: 4405.50,
+            total: 57805.50,
+            previousPayment: -17341.65,
+            balanceDue: 40463.85
+        };
+
+        const EXPENSES_DATA = [
+            { vendor: 'Home Depot', amount: 2847.30, category: 'Materials', categoryClass: 'category-materials' },
+            { vendor: 'Ferguson Plumbing Supply', amount: 1420.00, category: 'Plumbing', categoryClass: 'category-plumbing' },
+            { vendor: 'Austin Electric Co', amount: 890.00, category: 'Subcontractor', categoryClass: 'category-subcontractor' },
+            { vendor: 'Waste Management', amount: 450.00, category: 'Disposal', categoryClass: 'category-disposal' },
+            { vendor: 'Shell Gas Station', amount: 187.50, category: 'Vehicle', categoryClass: 'category-vehicle' }
+        ];
+
+        const PAYROLL_DATA = [
+            { name: 'Jake Thompson', role: 'Lead Carpenter', hours: 84, rate: 32 },
+            { name: 'Maria Santos', role: 'Tile Specialist', hours: 62, rate: 28 },
+            { name: 'Dave Chen', role: 'Licensed Electrician', hours: 40, rate: 45 }
+        ];
+
+        const STEPS = [
+            {
+                badge: 'Step 1 of 5',
+                title: 'Job Completion Detected',
+                desc: 'The AI monitors your inbox and detects when a job is marked complete.',
+                narration: 'Email notification received and processed...',
+                contentId: 'step1Content'
+            },
+            {
+                badge: 'Step 2 of 5',
+                title: 'Invoice Auto-Generated',
+                desc: 'The system creates a professional invoice with line items and payment tracking.',
+                narration: 'Invoice building in real-time...',
+                contentId: 'step2Content'
+            },
+            {
+                badge: 'Step 3 of 5',
+                title: 'Expenses Categorized',
+                desc: 'Receipts and vendor emails are scanned and automatically categorized.',
+                narration: 'Scanning inbox for receipts and vendor emails...',
+                contentId: 'step3Content'
+            },
+            {
+                badge: 'Step 4 of 5',
+                title: 'Payroll Calculated',
+                desc: 'Hours are extracted from email logs and payroll is computed and scheduled.',
+                narration: 'Computing payroll from email time submissions...',
+                contentId: 'step4Content'
+            },
+            {
+                badge: 'Step 5 of 5',
+                title: 'Profit Summary & Sync',
+                desc: 'Final P&L is generated and automatically synced to QuickBooks.',
+                narration: 'Generating final report and syncing...',
+                contentId: 'step5Content'
+            }
+        ];
+
+        let currentStep = 0;
+        let isRunning = false;
+
+        // Utility: Format currency
+        function formatCurrency(amount) {
+            return new Intl.NumberFormat('en-US', {
+                style: 'currency',
+                currency: 'USD',
+                minimumFractionDigits: 2
+            }).format(amount);
+        }
+
+        // Utility: Typewriter effect
+        async function typeText(element, text, speed = 30) {
+            element.textContent = '';
+            for (let char of text) {
+                element.textContent += char;
+                await new Promise(r => setTimeout(r, speed));
+            }
+        }
+
+        // Utility: Add activity log entry
+        function addActivityLog(text, timestamp) {
+            const log = document.getElementById('activityLog');
+            const item = document.createElement('div');
+            item.className = 'activity-item';
+            item.style.opacity = '0';
+            item.style.animation = 'slideIn 0.3s ease forwards';
+            const hours = String(timestamp.getHours()).padStart(2, '0');
+            const mins = String(timestamp.getMinutes()).padStart(2, '0');
+            const secs = String(timestamp.getSeconds()).padStart(2, '0');
+            item.innerHTML = `
+                <span class="activity-time">${hours}:${mins}:${secs}</span>
+                <span class="activity-text">${text}</span>
+            `;
+            log.appendChild(item);
+        }
+
+        // Utility: Wait
+        function wait(ms) {
+            return new Promise(r => setTimeout(r, ms));
+        }
+
+        // Utility: Update progress bar
+        function updateProgress(step) {
+            const fill = document.getElementById('progressFill');
+            const percent = ((step + 1) / 5) * 100;
+            fill.style.width = percent + '%';
+        }
+
+        // Step 1: Job Completion
+        async function runStep1() {
+            addActivityLog('Monitoring inbox...', new Date());
+            await wait(800);
+
+            const emailNotif = document.getElementById('emailNotif');
+            emailNotif.style.opacity = '1';
+            await wait(1200);
+
+            addActivityLog('Email received from Mike Reynolds', new Date());
+            await wait(800);
+
+            const jobCard = document.getElementById('jobCard');
+            jobCard.style.display = 'block';
+            await wait(600);
+
+            addActivityLog('Job completion detected and parsed', new Date());
+            await wait(1000);
+
+            const jobStatus = document.getElementById('jobStatus');
+            jobStatus.textContent = 'Complete';
+            jobStatus.className = 'card-status status-complete';
+            document.getElementById('jobDate').textContent = 'Completed: Mar 21, 2024';
+            await wait(600);
+
+            addActivityLog('Triggering invoice generation...', new Date());
+        }
+
+        // Step 2: Invoice
+        async function runStep2() {
+            addActivityLog('Building invoice...', new Date());
+            const invLines = document.getElementById('invLines');
+            invLines.innerHTML = '';
+
+            let subtotalAmount = 0;
+            for (let i = 0; i < INVOICE_DATA.lineItems.length; i++) {
+                const item = INVOICE_DATA.lineItems[i];
+                subtotalAmount += item.amount;
+
+                const line = document.createElement('div');
+                line.className = 'invoice-line';
+                line.innerHTML = `
+                    <span class="invoice-line-item">${item.name}</span>
+                    <span class="invoice-line-amount">${formatCurrency(item.amount)}</span>
+                `;
+                invLines.appendChild(line);
+
+                await wait(250);
+            }
+
+            addActivityLog('Invoice line items added', new Date());
+            await wait(800);
+
+            const invTotals = document.getElementById('invTotals');
+            invTotals.innerHTML = `
+                <div class="invoice-total-row">
+                    <span>Subtotal</span>
+                    <span>${formatCurrency(INVOICE_DATA.subtotal)}</span>
+                </div>
+                <div class="invoice-total-row">
+                    <span>Tax (8.25%)</span>
+                    <span>${formatCurrency(INVOICE_DATA.tax)}</span>
+                </div>
+                <div class="invoice-total-row">
+                    <span>Previous Payments</span>
+                    <span>${formatCurrency(INVOICE_DATA.previousPayment)}</span>
+                </div>
+                <div class="invoice-total-row final">
+                    <span>Balance Due</span>
+                    <span>${formatCurrency(INVOICE_DATA.balanceDue)}</span>
+                </div>
+            `;
+
+            const rows = invTotals.querySelectorAll('.invoice-total-row');
+            for (let row of rows) {
+                await wait(300);
+            }
+
+            addActivityLog('Invoice totals calculated', new Date());
+            await wait(800);
+
+            const sentBadge = document.getElementById('sentBadge');
+            sentBadge.style.opacity = '1';
+            await wait(600);
+
+            addActivityLog('Invoice sent to client', new Date());
+        }
+
+        // Step 3: Expenses
+        async function runStep3() {
+            addActivityLog('Scanning inbox for receipts...', new Date());
+            const expenseBody = document.getElementById('expenseBody');
+            expenseBody.innerHTML = '';
+
+            let totalExpenses = 0;
+            for (let i = 0; i < EXPENSES_DATA.length; i++) {
+                const exp = EXPENSES_DATA[i];
+                totalExpenses += exp.amount;
+
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td class="expense-name">${exp.vendor}</td>
+                    <td class="expense-amount">${formatCurrency(exp.amount)}</td>
+                    <td><span class="category-tag ${exp.categoryClass}">${exp.category}</span></td>
+                    <td class="check-mark">✓</td>
+                `;
+                expenseBody.appendChild(row);
+
+                await wait(350);
+            }
+
+            addActivityLog(`${EXPENSES_DATA.length} expenses categorized from inbox scan`, new Date());
+            await wait(800);
+
+            document.getElementById('expenseTotalAmount').textContent = formatCurrency(totalExpenses);
+        }
+
+        // Step 4: Payroll
+        async function runStep4() {
+            addActivityLog('Processing email time logs...', new Date());
+            const payrollBody = document.getElementById('payrollBody');
+            payrollBody.innerHTML = '';
+
+            let totalPayroll = 0;
+            for (let i = 0; i < PAYROLL_DATA.length; i++) {
+                const emp = PAYROLL_DATA[i];
+                const amount = emp.hours * emp.rate;
+                totalPayroll += amount;
+
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>
+                        <div class="payroll-name">${emp.name}</div>
+                        <div class="payroll-role">${emp.role}</div>
+                    </td>
+                    <td>${emp.hours}h</td>
+                    <td>${formatCurrency(emp.rate)}/hr</td>
+                    <td class="payroll-amount">${formatCurrency(amount)}</td>
+                `;
+                payrollBody.appendChild(row);
+
+                await wait(350);
+            }
+
+            addActivityLog('Payroll calculated from email time submissions', new Date());
+            await wait(800);
+
+            document.getElementById('payrollTotal').textContent = formatCurrency(totalPayroll);
+        }
+
+        // Step 5: Profit Summary
+        async function runStep5() {
+            addActivityLog('Generating P&L statement...', new Date());
+
+            const revenue = INVOICE_DATA.balanceDue;
+            const expenses = EXPENSES_DATA.reduce((sum, e) => sum + e.amount, 0);
+            const payroll = PAYROLL_DATA.reduce((sum, e) => sum + (e.hours * e.rate), 0);
+            const profit = revenue - expenses - payroll;
+            const margin = (profit / revenue * 100).toFixed(1);
+
+            await wait(400);
+            document.getElementById('summaryRevenue').textContent = formatCurrency(revenue);
+            await wait(300);
+            document.getElementById('summaryExpenses').textContent = formatCurrency(-expenses);
+            await wait(300);
+            document.getElementById('summaryPayroll').textContent = formatCurrency(-payroll);
+            await wait(300);
+            document.getElementById('summaryProfit').textContent = formatCurrency(profit);
+            await wait(300);
+            document.getElementById('profitMargin').textContent = margin + '%';
+
+            addActivityLog('P&L generated and margins calculated', new Date());
+            await wait(1000);
+
+            const qbSync = document.getElementById('qbSync');
+            qbSync.style.opacity = '1';
+            await wait(600);
+
+            addActivityLog('QuickBooks sync completed', new Date());
+        }
+
+        // Main demo loop
+        async function runDemo() {
+            if (isRunning) return;
+            isRunning = true;
+
+            for (let i = 0; i < 5; i++) {
+                currentStep = i;
+                const step = STEPS[i];
+
+                // Update UI
+                document.getElementById('stepBadge').textContent = step.badge;
+                document.getElementById('narrationTitle').textContent = step.title;
+                document.getElementById('narrationDesc').textContent = step.desc;
+                updateProgress(i);
+
+                // Hide all content
+                document.querySelectorAll('[id^="step"]').forEach(el => el.style.display = 'none');
+                document.getElementById(step.contentId).style.display = 'block';
+
+                // Clear previous animation states
+                document.querySelectorAll('[style*="opacity"]').forEach(el => {
+                    if (el.id.startsWith('email') || el.id === 'sentBadge' || el.id === 'qbSync') {
+                        el.style.opacity = '0';
+                    }
+                });
+
+                // Run step
+                if (i === 0) await runStep1();
+                else if (i === 1) await runStep2();
+                else if (i === 2) await runStep3();
+                else if (i === 3) await runStep4();
+                else if (i === 4) await runStep5();
+
+                await wait(1500);
+            }
+
+            // Final CTA
+            document.getElementById('finalCta').classList.add('show');
+            addActivityLog('Demo completed. Bookkeeping automated end-to-end.', new Date());
+
+            isRunning = false;
+        }
+
+        // Start demo
+        function startDemo() {
+            document.getElementById('hero').classList.add('hidden');
+            document.getElementById('demoContainer').classList.add('active');
+            runDemo();
+        }
+    </script>
+</body>
+</html>

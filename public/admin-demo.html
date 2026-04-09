@@ -1,0 +1,1082 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Digital Administrator Demo - Zyph Labs</title>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&family=Outfit:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-primary: #f5f7fa;
+            --bg-secondary: #ffffff;
+            --text-primary: #0f172a;
+            --text-secondary: #64748b;
+            --accent-primary: #6c5ce7;
+            --accent-light: #8b76e8;
+            --accent-dark: #5445cc;
+            --border-color: #e2e8f0;
+            --success-color: #10b981;
+            --success-light: #d1fae5;
+            --email-bg: #fef3c7;
+            --spacing-xs: 0.25rem;
+            --spacing-sm: 0.5rem;
+            --spacing-md: 1rem;
+            --spacing-lg: 1.5rem;
+            --spacing-xl: 2rem;
+            --spacing-2xl: 3rem;
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            --font-display: 'Outfit', sans-serif;
+            --font-mono: 'JetBrains Mono', monospace;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: var(--font-display);
+            background: linear-gradient(135deg, var(--bg-primary) 0%, #eef2f7 100%);
+            color: var(--text-primary);
+            line-height: 1.6;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: var(--spacing-lg);
+        }
+
+        .hero-section {
+            text-align: center;
+            margin-bottom: var(--spacing-2xl);
+            opacity: 1;
+            animation: fadeIn 0.6s ease-out;
+        }
+
+        .hero-section.hidden {
+            display: none;
+        }
+
+        .hero-title {
+            font-size: 3.5rem;
+            font-weight: 700;
+            margin-bottom: var(--spacing-md);
+            color: var(--text-primary);
+        }
+
+        .hero-subtitle {
+            font-size: 1.25rem;
+            color: var(--text-secondary);
+            margin-bottom: var(--spacing-xl);
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .launch-button {
+            background: linear-gradient(135deg, var(--accent-primary) 0%, var(--accent-light) 100%);
+            color: white;
+            font-family: var(--font-display);
+            font-size: 1.1rem;
+            font-weight: 600;
+            padding: var(--spacing-md) var(--spacing-2xl);
+            border: none;
+            border-radius: 0.75rem;
+            cursor: pointer;
+            transition: var(--transition);
+            box-shadow: 0 10px 25px rgba(108, 92, 231, 0.25);
+        }
+
+        .launch-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 15px 35px rgba(108, 92, 231, 0.35);
+        }
+
+        .launch-button:active {
+            transform: translateY(0);
+        }
+
+        .demo-container {
+            width: 100%;
+            max-width: 1200px;
+            opacity: 0;
+            display: none;
+        }
+
+        .demo-container.active {
+            display: flex;
+            flex-direction: column;
+            opacity: 1;
+            animation: fadeIn 0.4s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .narration-section {
+            margin-bottom: var(--spacing-lg);
+            text-align: center;
+        }
+
+        .step-badge {
+            display: inline-block;
+            background: var(--accent-primary);
+            color: white;
+            padding: var(--spacing-xs) var(--spacing-md);
+            border-radius: 2rem;
+            font-size: 0.85rem;
+            font-weight: 600;
+            margin-bottom: var(--spacing-md);
+        }
+
+        .narration-title {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: var(--spacing-sm);
+        }
+
+        .narration-text {
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .app-window {
+            background: var(--bg-secondary);
+            border-radius: 0.75rem;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            display: flex;
+            height: 600px;
+            margin-bottom: var(--spacing-xl);
+        }
+
+        .app-titlebar {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3rem;
+            background: linear-gradient(to bottom, #fafbfc, #f3f4f6);
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            align-items: center;
+            padding: 0 var(--spacing-lg);
+            z-index: 10;
+        }
+
+        .traffic-lights {
+            display: flex;
+            gap: var(--spacing-xs);
+            margin-right: var(--spacing-lg);
+        }
+
+        .traffic-light {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            opacity: 0.6;
+            transition: var(--transition);
+        }
+
+        .traffic-light.red { background: #ff5f56; }
+        .traffic-light.yellow { background: #ffbd2e; }
+        .traffic-light.green { background: #27c93f; }
+
+        .app-title {
+            font-weight: 600;
+            font-size: 0.95rem;
+            color: var(--text-secondary);
+        }
+
+        .app-badge {
+            margin-left: auto;
+            background: var(--success-light);
+            color: var(--success-color);
+            padding: 0.25rem 0.75rem;
+            border-radius: 2rem;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+
+        .app-content {
+            display: flex;
+            width: 100%;
+            margin-top: 3rem;
+            flex: 1;
+            position: relative;
+        }
+
+        .sidebar {
+            width: 200px;
+            background: #fafbfc;
+            border-right: 1px solid var(--border-color);
+            padding: var(--spacing-lg);
+            display: flex;
+            flex-direction: column;
+            gap: var(--spacing-sm);
+        }
+
+        .sidebar-item {
+            padding: var(--spacing-sm) var(--spacing-md);
+            border-radius: 0.5rem;
+            cursor: pointer;
+            font-size: 0.95rem;
+            color: var(--text-secondary);
+            transition: var(--transition);
+        }
+
+        .sidebar-item.active {
+            background: var(--accent-primary);
+            color: white;
+            font-weight: 600;
+        }
+
+        .main-content {
+            flex: 1;
+            padding: var(--spacing-lg);
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .email-notification {
+            background: var(--email-bg);
+            border: 1px solid #fcd34d;
+            border-radius: 0.5rem;
+            padding: var(--spacing-lg);
+            margin-bottom: var(--spacing-lg);
+            animation: slideInRight 0.5s ease-out;
+        }
+
+        @keyframes slideInRight {
+            from {
+                opacity: 0;
+                transform: translateX(100px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        .email-from {
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 0.25rem;
+        }
+
+        .email-subject {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+        }
+
+        .form-section {
+            background: var(--bg-primary);
+            border: 1px solid var(--border-color);
+            border-radius: 0.5rem;
+            padding: var(--spacing-lg);
+            margin-bottom: var(--spacing-lg);
+        }
+
+        .form-group {
+            margin-bottom: var(--spacing-md);
+        }
+
+        .form-label {
+            display: block;
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 0.25rem;
+        }
+
+        .form-field {
+            width: 100%;
+            padding: var(--spacing-sm) var(--spacing-md);
+            border: 1px solid var(--border-color);
+            border-radius: 0.375rem;
+            font-family: var(--font-mono);
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            background: white;
+            height: 2rem;
+            min-height: 2rem;
+            overflow: hidden;
+            white-space: nowrap;
+            transition: var(--transition);
+        }
+
+        .form-field.populated {
+            border-color: var(--success-color);
+            background: var(--success-light);
+            color: var(--text-primary);
+        }
+
+        .document-content {
+            background: white;
+            border: 1px solid var(--border-color);
+            border-radius: 0.5rem;
+            padding: var(--spacing-lg);
+            font-family: var(--font-mono);
+            font-size: 0.85rem;
+            line-height: 1.8;
+            color: var(--text-primary);
+            max-height: 350px;
+            overflow-y: auto;
+        }
+
+        .doc-header {
+            text-align: center;
+            font-weight: 600;
+            margin-bottom: var(--spacing-lg);
+            border-bottom: 2px solid var(--border-color);
+            padding-bottom: var(--spacing-md);
+        }
+
+        .doc-section {
+            margin-bottom: var(--spacing-md);
+        }
+
+        .doc-section-title {
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: var(--accent-primary);
+        }
+
+        .doc-line {
+            display: flex;
+            justify-content: space-between;
+            padding: 0.25rem 0;
+        }
+
+        .doc-total {
+            margin-top: var(--spacing-md);
+            border-top: 2px solid var(--border-color);
+            padding-top: var(--spacing-md);
+            font-weight: 700;
+            color: var(--accent-primary);
+        }
+
+        .badge-ready {
+            display: inline-block;
+            background: var(--success-color);
+            color: white;
+            padding: 0.25rem 0.75rem;
+            border-radius: 0.375rem;
+            font-size: 0.75rem;
+            font-weight: 600;
+            margin-top: var(--spacing-sm);
+        }
+
+        .permit-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: var(--spacing-md);
+        }
+
+        .followup-timeline {
+            display: flex;
+            flex-direction: column;
+            gap: var(--spacing-lg);
+        }
+
+        .timeline-item {
+            display: flex;
+            gap: var(--spacing-lg);
+            opacity: 0;
+            animation: fadeIn 0.4s ease-out forwards;
+        }
+
+        .timeline-item:nth-child(2) { animation-delay: 0.2s; }
+        .timeline-item:nth-child(3) { animation-delay: 0.4s; }
+        .timeline-item:nth-child(4) { animation-delay: 0.6s; }
+
+        .timeline-dot {
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            background: var(--border-color);
+            border: 2px solid var(--border-color);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.7rem;
+            flex-shrink: 0;
+            margin-top: 2px;
+        }
+
+        .timeline-dot.active {
+            background: var(--success-color);
+            border-color: var(--success-color);
+            color: white;
+        }
+
+        .timeline-dot.upcoming {
+            background: var(--accent-light);
+            border-color: var(--accent-light);
+            color: white;
+        }
+
+        .timeline-content {
+            flex: 1;
+        }
+
+        .timeline-day {
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 0.25rem;
+        }
+
+        .timeline-message {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+        }
+
+        .activity-log {
+            background: var(--bg-primary);
+            border: 1px solid var(--border-color);
+            border-radius: 0.5rem;
+            padding: var(--spacing-lg);
+            margin-bottom: var(--spacing-xl);
+            font-family: var(--font-mono);
+            font-size: 0.85rem;
+            max-height: 250px;
+            overflow-y: auto;
+        }
+
+        .activity-entry {
+            display: flex;
+            gap: var(--spacing-md);
+            margin-bottom: var(--spacing-md);
+            opacity: 0;
+            animation: fadeIn 0.3s ease-out forwards;
+            padding-bottom: var(--spacing-md);
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .activity-entry:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+            padding-bottom: 0;
+        }
+
+        .activity-time {
+            color: var(--text-secondary);
+            white-space: nowrap;
+            font-weight: 500;
+        }
+
+        .activity-message {
+            color: var(--text-primary);
+            flex: 1;
+        }
+
+        .activity-icon {
+            color: var(--accent-primary);
+            font-weight: 600;
+        }
+
+        .progress-section {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: var(--spacing-lg);
+            margin-bottom: var(--spacing-xl);
+        }
+
+        .progress-pips {
+            display: flex;
+            gap: var(--spacing-sm);
+        }
+
+        .progress-pip {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: var(--border-color);
+            transition: var(--transition);
+        }
+
+        .progress-pip.active {
+            background: var(--accent-primary);
+            transform: scale(1.3);
+        }
+
+        .progress-pip.completed {
+            background: var(--success-color);
+        }
+
+        .progress-bar {
+            flex: 1;
+            height: 4px;
+            background: var(--border-color);
+            border-radius: 2px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--accent-primary) 0%, var(--accent-light) 100%);
+            width: 0%;
+            transition: width 0.6s ease-out;
+        }
+
+        .cta-section {
+            text-align: center;
+            margin-top: var(--spacing-2xl);
+        }
+
+        .cta-title {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: var(--spacing-lg);
+        }
+
+        .cta-button {
+            background: linear-gradient(135deg, var(--accent-primary) 0%, var(--accent-light) 100%);
+            color: white;
+            font-family: var(--font-display);
+            font-size: 1.1rem;
+            font-weight: 600;
+            padding: var(--spacing-md) var(--spacing-2xl);
+            border: none;
+            border-radius: 0.75rem;
+            cursor: pointer;
+            transition: var(--transition);
+            box-shadow: 0 10px 25px rgba(108, 92, 231, 0.25);
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .cta-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 15px 35px rgba(108, 92, 231, 0.35);
+        }
+
+        @media (max-width: 768px) {
+            .app-window {
+                height: auto;
+                flex-direction: column;
+            }
+
+            .sidebar {
+                display: none;
+            }
+
+            .hero-title {
+                font-size: 2rem;
+            }
+
+            .narration-title {
+                font-size: 1.5rem;
+            }
+
+            .permit-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .app-content {
+                margin-top: 3rem;
+            }
+        }
+
+        .hidden-step {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="hero-section" id="heroSection">
+        <h1 class="hero-title">Watch AI handle your paperwork.</h1>
+        <p class="hero-subtitle">See how Digital Administrator generates proposals, contracts, and permits — automatically.</p>
+        <button class="launch-button" onclick="startDemo()">Launch Demo</button>
+    </div>
+
+    <div class="demo-container" id="demoContainer">
+        <div class="narration-section">
+            <div class="step-badge" id="stepBadge">Step 1 of 5</div>
+            <h2 class="narration-title" id="narrationTitle">New Client Email Arrives</h2>
+            <p class="narration-text" id="narrationText">The AI scans your inbox and extracts client information directly from emails.</p>
+        </div>
+
+        <div class="app-window">
+            <div class="app-titlebar">
+                <div class="traffic-lights">
+                    <div class="traffic-light red"></div>
+                    <div class="traffic-light yellow"></div>
+                    <div class="traffic-light green"></div>
+                </div>
+                <div class="app-title">🗂️ Digital Administrator</div>
+                <div class="app-badge">Interactive Demo</div>
+            </div>
+
+            <div class="app-content">
+                <div class="sidebar">
+                    <div class="sidebar-item active">📄 Documents</div>
+                    <div class="sidebar-item">👥 Clients</div>
+                    <div class="sidebar-item">📋 Templates</div>
+                    <div class="sidebar-item">📧 Follow-ups</div>
+                    <div class="sidebar-item">⚙️ Settings</div>
+                </div>
+
+                <div class="main-content" id="mainContent">
+                    <!-- Step 1: Email Notification -->
+                    <div id="step1" class="hidden-step">
+                        <div class="email-notification" id="emailNotif">
+                            <div class="email-from">📬 New inquiry from Sarah Mitchell</div>
+                            <div class="email-subject">Kitchen renovation estimate request</div>
+                        </div>
+                        <div class="form-section">
+                            <div class="form-group">
+                                <div class="form-label">Client Name</div>
+                                <div class="form-field" id="field-name"></div>
+                            </div>
+                            <div class="form-group">
+                                <div class="form-label">Email</div>
+                                <div class="form-field" id="field-email"></div>
+                            </div>
+                            <div class="form-group">
+                                <div class="form-label">Phone</div>
+                                <div class="form-field" id="field-phone"></div>
+                            </div>
+                            <div class="form-group">
+                                <div class="form-label">Project Type</div>
+                                <div class="form-field" id="field-project"></div>
+                            </div>
+                            <div class="form-group">
+                                <div class="form-label">Address</div>
+                                <div class="form-field" id="field-address"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Step 2: Proposal -->
+                    <div id="step2" class="hidden-step">
+                        <div class="document-content" id="proposalDoc">
+                            <div class="doc-header">PROPOSAL</div>
+                            <div class="doc-section">
+                                <div class="doc-section-title">Company: Reynolds Contracting</div>
+                                <div style="font-size: 0.8rem; color: var(--text-secondary); margin-bottom: var(--spacing-md);">
+                                    License #RC-2024-001 | Insured & Bonded
+                                </div>
+                            </div>
+                            <div class="doc-section">
+                                <div class="doc-section-title">Client: <span id="prop-client">Sarah Mitchell</span></div>
+                            </div>
+                            <div class="doc-section">
+                                <div class="doc-section-title">Scope of Work:</div>
+                                <div id="scopeItems"></div>
+                            </div>
+                            <div class="doc-total">
+                                Total: <span id="propTotal">$0</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Step 3: Contract -->
+                    <div id="step3" class="hidden-step">
+                        <div class="document-content" id="contractDoc">
+                            <div class="doc-header">SERVICE AGREEMENT & CONTRACT</div>
+                            <div class="doc-section">
+                                <div class="doc-section-title">Contractor:</div>
+                                <div>Reynolds Contracting</div>
+                            </div>
+                            <div class="doc-section">
+                                <div class="doc-section-title">Client:</div>
+                                <div id="contract-client">Sarah Mitchell</div>
+                            </div>
+                            <div class="doc-section">
+                                <div class="doc-section-title">Project Scope:</div>
+                                <div id="contract-scope">Kitchen Renovation</div>
+                            </div>
+                            <div class="doc-section">
+                                <div class="doc-section-title">Payment Schedule:</div>
+                                <div class="doc-line">
+                                    <span>30% Deposit upon signing</span>
+                                    <span id="payment1"></span>
+                                </div>
+                                <div class="doc-line">
+                                    <span>40% At project midpoint</span>
+                                    <span id="payment2"></span>
+                                </div>
+                                <div class="doc-line">
+                                    <span>30% Upon completion</span>
+                                    <span id="payment3"></span>
+                                </div>
+                            </div>
+                            <div class="doc-section">
+                                <div class="doc-section-title">Terms & Conditions:</div>
+                                <div style="font-size: 0.8rem; color: var(--text-secondary); line-height: 1.6;">
+                                    • Work completed per specifications and timeline<br>
+                                    • All materials included in quoted price<br>
+                                    • Workmanship guaranteed for 1 year<br>
+                                    • Subject to unforeseen site conditions
+                                </div>
+                            </div>
+                            <div style="margin-top: var(--spacing-lg); text-align: center;">
+                                <div class="badge-ready">Ready for Signature</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Step 4: Permit -->
+                    <div id="step4" class="hidden-step">
+                        <div class="form-section">
+                            <div class="form-label" style="margin-bottom: var(--spacing-lg); font-size: 1rem;">Residential Renovation Permit Application</div>
+                            <div class="permit-grid">
+                                <div class="form-group">
+                                    <div class="form-label">Jurisdiction</div>
+                                    <div class="form-field" id="field-jurisdiction"></div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="form-label">Contractor License</div>
+                                    <div class="form-field" id="field-license"></div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="form-label">Insurance Policy #</div>
+                                    <div class="form-field" id="field-insurance"></div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="form-label">Project Estimate</div>
+                                    <div class="form-field" id="field-estimate"></div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="form-label">Property Address</div>
+                                    <div class="form-field" id="field-permit-address"></div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="form-label">Work Type</div>
+                                    <div class="form-field" id="field-worktype"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Step 5: Follow-up Sequence -->
+                    <div id="step5" class="hidden-step">
+                        <div class="followup-timeline" id="followupTimeline"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="progress-section">
+            <div class="progress-pips" id="progressPips"></div>
+            <div class="progress-bar">
+                <div class="progress-fill" id="progressFill"></div>
+            </div>
+        </div>
+
+        <div class="activity-log" id="activityLog"></div>
+
+        <div class="cta-section" id="ctaSection" style="display: none;">
+            <h2 class="cta-title">That's admin on autopilot.</h2>
+            <a href="mailto:contact@zyphlabs.com" class="cta-button">Get Started</a>
+        </div>
+    </div>
+
+    <script>
+        const STEPS = [
+            {
+                badge: "Step 1 of 5",
+                title: "New Client Email Arrives",
+                text: "The AI scans your inbox and extracts client information directly from emails.",
+                stepId: "step1"
+            },
+            {
+                badge: "Step 2 of 5",
+                title: "Proposal Auto-Generated",
+                text: "Your proposal template is filled with client data and line items, calculating the total automatically.",
+                stepId: "step2"
+            },
+            {
+                badge: "Step 3 of 5",
+                title: "Contract Drafted",
+                text: "A complete service agreement is generated with your standard terms and payment schedule.",
+                stepId: "step3"
+            },
+            {
+                badge: "Step 4 of 5",
+                title: "Permit Application Pre-Filled",
+                text: "Local permit forms are automatically completed using your saved business and job data.",
+                stepId: "step4"
+            },
+            {
+                badge: "Step 5 of 5",
+                title: "Follow-up Sequence Active",
+                text: "Automated follow-ups are scheduled to send if the client hasn't responded.",
+                stepId: "step5"
+            }
+        ];
+
+        let currentStep = 0;
+        let demoRunning = false;
+
+        function startDemo() {
+            const heroSection = document.getElementById('heroSection');
+            const demoContainer = document.getElementById('demoContainer');
+
+            heroSection.classList.add('hidden');
+            demoContainer.classList.add('active');
+
+            // Initialize progress pips
+            initializeProgressPips();
+
+            // Start the demo sequence
+            runDemoSequence();
+        }
+
+        function initializeProgressPips() {
+            const pipsContainer = document.getElementById('progressPips');
+            for (let i = 0; i < 5; i++) {
+                const pip = document.createElement('div');
+                pip.className = 'progress-pip';
+                if (i === 0) pip.classList.add('active');
+                pipsContainer.appendChild(pip);
+            }
+        }
+
+        async function runDemoSequence() {
+            demoRunning = true;
+
+            for (let i = 0; i < STEPS.length; i++) {
+                currentStep = i;
+                await runStep(i);
+
+                if (i < STEPS.length - 1) {
+                    await new Promise(resolve => setTimeout(resolve, 1000));
+                }
+            }
+
+            // Show CTA
+            document.getElementById('ctaSection').style.display = 'block';
+            addActivityEntry('✓', 'Demo complete! Ready to transform your workflow.');
+            demoRunning = false;
+        }
+
+        async function runStep(stepIndex) {
+            const step = STEPS[stepIndex];
+
+            // Update narration
+            document.getElementById('stepBadge').textContent = step.badge;
+            document.getElementById('narrationTitle').textContent = step.title;
+            document.getElementById('narrationText').textContent = step.text;
+
+            // Hide all steps
+            document.querySelectorAll('[id^="step"]').forEach(el => {
+                el.classList.add('hidden-step');
+            });
+
+            // Show current step
+            document.getElementById(step.stepId).classList.remove('hidden-step');
+
+            // Update progress
+            updateProgress(stepIndex);
+
+            // Run step-specific actions
+            switch(stepIndex) {
+                case 0:
+                    await runStep1();
+                    break;
+                case 1:
+                    await runStep2();
+                    break;
+                case 2:
+                    await runStep3();
+                    break;
+                case 3:
+                    await runStep4();
+                    break;
+                case 4:
+                    await runStep5();
+                    break;
+            }
+        }
+
+        async function runStep1() {
+            addActivityEntry('🔍', 'AI scanning inbox... Email from Sarah Mitchell detected');
+            await new Promise(resolve => setTimeout(resolve, 800));
+
+            // Type out client info
+            await typeText('field-name', 'Sarah Mitchell');
+            addActivityEntry('✓', 'Client name extracted');
+
+            await typeText('field-email', 'sarah.mitchell@email.com');
+            addActivityEntry('✓', 'Email extracted');
+
+            await typeText('field-phone', '(512) 555-0147');
+            addActivityEntry('✓', 'Phone number extracted');
+
+            await typeText('field-project', 'Kitchen Renovation');
+            addActivityEntry('✓', 'Project type identified');
+
+            await typeText('field-address', '2847 Riverside Drive, Austin, TX 78704');
+            addActivityEntry('✓', 'Client info extraction complete');
+        }
+
+        async function runStep2() {
+            addActivityEntry('📄', 'Generating proposal from template...');
+            await new Promise(resolve => setTimeout(resolve, 600));
+
+            const items = [
+                { name: 'Demolition & Prep', qty: 1, cost: 8500 },
+                { name: 'Cabinetry Installation', qty: 1, cost: 14200 },
+                { name: 'Countertops', qty: 1, cost: 12300 },
+                { name: 'Plumbing & Fixtures', qty: 1, cost: 11500 },
+                { name: 'Electrical Work', qty: 1, cost: 10450 },
+                { name: 'Flooring Installation', qty: 1, cost: 10500 }
+            ];
+
+            let total = 0;
+            const scopeDiv = document.getElementById('scopeItems');
+            scopeDiv.innerHTML = '';
+
+            for (const item of items) {
+                await new Promise(resolve => setTimeout(resolve, 300));
+                const line = document.createElement('div');
+                line.className = 'doc-line';
+                line.innerHTML = `<span>${item.name}</span><span>$${item.cost.toLocaleString()}</span>`;
+                scopeDiv.appendChild(line);
+                total += item.cost;
+            }
+
+            await new Promise(resolve => setTimeout(resolve, 400));
+            document.getElementById('propTotal').textContent = `$${total.toLocaleString()}`;
+            addActivityEntry('✓', `Proposal generated: $${total.toLocaleString()} total`);
+        }
+
+        async function runStep3() {
+            addActivityEntry('📋', 'Drafting service agreement...');
+            await new Promise(resolve => setTimeout(resolve, 600));
+
+            const total = 67450;
+            const deposit = Math.round(total * 0.3);
+            const midpoint = Math.round(total * 0.4);
+            const final = total - deposit - midpoint;
+
+            await typeText('payment1', `$${deposit.toLocaleString()}`);
+            await new Promise(resolve => setTimeout(resolve, 200));
+
+            await typeText('payment2', `$${midpoint.toLocaleString()}`);
+            await new Promise(resolve => setTimeout(resolve, 200));
+
+            await typeText('payment3', `$${final.toLocaleString()}`);
+            await new Promise(resolve => setTimeout(resolve, 300));
+
+            addActivityEntry('✓', 'Contract generated with payment schedule');
+        }
+
+        async function runStep4() {
+            addActivityEntry('🏛️', 'Pre-filling permit application...');
+            await new Promise(resolve => setTimeout(resolve, 600));
+
+            await typeText('field-jurisdiction', 'City of Austin, TX - Building Dept');
+            await typeText('field-license', 'RC-2024-001');
+            await typeText('field-insurance', 'POL-2024-556721');
+            await typeText('field-estimate', '$67,450');
+            await typeText('field-permit-address', '2847 Riverside Drive, Austin, TX 78704');
+            await typeText('field-worktype', 'Residential Kitchen Renovation');
+
+            await new Promise(resolve => setTimeout(resolve, 300));
+            addActivityEntry('✓', 'Permit application auto-filled - City of Austin');
+        }
+
+        async function runStep5() {
+            addActivityEntry('📧', 'Scheduling follow-up sequence...');
+            await new Promise(resolve => setTimeout(resolve, 400));
+
+            const timeline = document.getElementById('followupTimeline');
+            timeline.innerHTML = '';
+
+            const sequences = [
+                { day: 0, message: 'Proposal sent to client', status: 'active' },
+                { day: 2, message: 'Follow-up: "Just checking in on the proposal"', status: 'upcoming' },
+                { day: 5, message: 'Second follow-up with updated availability', status: 'upcoming' },
+                { day: 10, message: 'Final follow-up with limited-time offer', status: 'upcoming' }
+            ];
+
+            for (let i = 0; i < sequences.length; i++) {
+                await new Promise(resolve => setTimeout(resolve, 300));
+                const item = sequences[i];
+                const div = document.createElement('div');
+                div.className = 'timeline-item';
+                div.innerHTML = `
+                    <div class="timeline-dot ${item.status === 'active' ? 'active' : 'upcoming'}">
+                        ${item.status === 'active' ? '✓' : ''}
+                    </div>
+                    <div class="timeline-content">
+                        <div class="timeline-day">Day ${item.day}</div>
+                        <div class="timeline-message">${item.message}</div>
+                    </div>
+                `;
+                timeline.appendChild(div);
+            }
+
+            await new Promise(resolve => setTimeout(resolve, 400));
+            addActivityEntry('✓', 'Follow-up sequence activated for Sarah Mitchell');
+        }
+
+        async function typeText(elementId, text) {
+            const element = document.getElementById(elementId);
+            element.textContent = '';
+            element.classList.add('populated');
+
+            for (let i = 0; i < text.length; i++) {
+                element.textContent += text[i];
+                await new Promise(resolve => setTimeout(resolve, 20));
+            }
+        }
+
+        function addActivityEntry(icon, message) {
+            const log = document.getElementById('activityLog');
+            const entry = document.createElement('div');
+            entry.className = 'activity-entry';
+
+            const time = new Date().toLocaleTimeString('en-US', {
+                hour12: false,
+                hour: '2-digit',
+                minute: '2-digit',
+                second: '2-digit'
+            });
+
+            entry.innerHTML = `
+                <div class="activity-time">${time}</div>
+                <div class="activity-icon">${icon}</div>
+                <div class="activity-message">${message}</div>
+            `;
+
+            log.appendChild(entry);
+            log.scrollTop = log.scrollHeight;
+        }
+
+        function updateProgress(stepIndex) {
+            const pips = document.querySelectorAll('.progress-pip');
+            pips.forEach((pip, idx) => {
+                pip.classList.remove('active', 'completed');
+                if (idx < stepIndex) {
+                    pip.classList.add('completed');
+                } else if (idx === stepIndex) {
+                    pip.classList.add('active');
+                }
+            });
+
+            const fillPercent = ((stepIndex + 1) / 5) * 100;
+            document.getElementById('progressFill').style.width = fillPercent + '%';
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,704 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI Project Manager — Interactive Demo</title>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #f5f7fa;
+    --bg-card: #ffffff;
+    --bg-raised: #f0f2f5;
+    --bg-input: #f8f9fb;
+    --blue: #2563eb;
+    --blue-light: #3b82f6;
+    --blue-glow: rgba(37,99,235,0.1);
+    --green: #059669;
+    --green-dark: #047857;
+    --green-glow: rgba(5,150,105,0.1);
+    --amber: #d97706;
+    --amber-dark: #b45309;
+    --amber-glow: rgba(217,119,6,0.1);
+    --purple: #7c3aed;
+    --purple-glow: rgba(124,58,237,0.1);
+    --rose: #db2777;
+    --red: #ef4444;
+    --text: #0f172a;
+    --text-dim: #475569;
+    --text-muted: #94a3b8;
+    --border: #e2e8f0;
+    --border-light: #cbd5e1;
+    --shadow-sm: 0 1px 3px rgba(15,23,42,0.04), 0 1px 2px rgba(15,23,42,0.06);
+    --shadow-md: 0 4px 16px rgba(15,23,42,0.06), 0 1px 3px rgba(15,23,42,0.04);
+    --shadow-lg: 0 12px 40px rgba(15,23,42,0.08), 0 4px 12px rgba(15,23,42,0.04);
+    --shadow-xl: 0 24px 64px rgba(15,23,42,0.1), 0 8px 20px rgba(15,23,42,0.05);
+    --font: 'Outfit', -apple-system, sans-serif;
+    --mono: 'JetBrains Mono', monospace;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body { font-family: var(--font); background: var(--bg); color: var(--text); overflow-x: hidden; }
+
+  /* ─── TOP BAR ─── */
+  .topbar {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    padding: 14px 32px; display: flex; align-items: center; justify-content: space-between;
+    background: rgba(255,255,255,0.88); backdrop-filter: blur(16px);
+    border-bottom: 1px solid var(--border); box-shadow: var(--shadow-sm);
+  }
+  .topbar-left { display: flex; align-items: center; gap: 10px; }
+  .topbar-logo {
+    width: 32px; height: 32px; border-radius: 8px;
+    background: linear-gradient(135deg, var(--blue), var(--blue-light));
+    display: flex; align-items: center; justify-content: center;
+    font-size: 12px; font-weight: 800; color: #fff;
+  }
+  .topbar-title { font-size: 15px; font-weight: 700; }
+  .topbar-title span { color: var(--blue); }
+  .topbar-badge {
+    padding: 5px 14px; border-radius: 100px;
+    background: rgba(37,99,235,0.06); border: 1px solid rgba(37,99,235,0.15);
+    font-size: 11px; font-weight: 700; color: var(--blue);
+    letter-spacing: 0.5px; text-transform: uppercase;
+  }
+
+  /* ─── HERO ─── */
+  .demo-hero {
+    min-height: 100vh; display: flex; flex-direction: column;
+    align-items: center; justify-content: center; text-align: center;
+    padding: 120px 24px 80px; position: relative;
+  }
+  .demo-hero::before {
+    content: ''; position: absolute; inset: 0;
+    background: radial-gradient(ellipse at 50% 40%, rgba(37,99,235,0.04) 0%, transparent 65%);
+    pointer-events: none;
+  }
+  .demo-hero h1 {
+    font-size: clamp(38px, 6vw, 72px); font-weight: 900;
+    letter-spacing: -2px; line-height: 1.05; max-width: 750px; margin-bottom: 20px;
+  }
+  .demo-hero h1 em {
+    font-style: normal;
+    background: linear-gradient(135deg, var(--blue), var(--amber));
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+  }
+  .demo-hero p {
+    font-size: 18px; color: var(--text-dim); max-width: 540px;
+    line-height: 1.7; margin-bottom: 48px;
+  }
+  .start-btn {
+    padding: 18px 48px; border-radius: 14px; border: none;
+    background: linear-gradient(135deg, var(--blue), #1d4ed8);
+    color: #fff; font-family: var(--font); font-size: 17px; font-weight: 700;
+    cursor: pointer; transition: all 0.3s;
+    box-shadow: 0 4px 20px rgba(37,99,235,0.25);
+    animation: pulse-glow 2s infinite;
+  }
+  .start-btn:hover { transform: translateY(-2px); box-shadow: 0 8px 28px rgba(37,99,235,0.35); }
+  @keyframes pulse-glow {
+    0%, 100% { box-shadow: 0 4px 20px rgba(37,99,235,0.25); }
+    50% { box-shadow: 0 4px 28px rgba(37,99,235,0.4); }
+  }
+
+  /* ─── DEMO STAGE ─── */
+  .demo-stage {
+    max-width: 1000px; margin: 0 auto; padding: 40px 24px 120px;
+    display: none;
+  }
+  .demo-stage.active { display: block; }
+
+  /* ─── APP WINDOW ─── */
+  .app-window {
+    background: var(--bg-card); border: 1px solid var(--border);
+    border-radius: 16px; overflow: hidden;
+    box-shadow: var(--shadow-xl);
+  }
+  .app-titlebar {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 14px 20px; background: var(--bg-raised); border-bottom: 1px solid var(--border); box-shadow: inset 0 -1px 0 var(--border);
+  }
+  .app-dots { display: flex; gap: 6px; }
+  .app-dot { width: 10px; height: 10px; border-radius: 50%; }
+  .app-title-text { font-size: 13px; font-weight: 600; color: var(--text-muted); }
+
+  /* ─── SIDEBAR + MAIN LAYOUT ─── */
+  .app-layout { display: flex; min-height: 520px; }
+  .app-sidebar {
+    width: 220px; border-right: 1px solid var(--border);
+    padding: 20px 0; background: var(--bg-raised); flex-shrink: 0;
+  }
+  .sidebar-section { padding: 0 16px; margin-bottom: 20px; }
+  .sidebar-label {
+    font-size: 10px; font-weight: 700; color: var(--text-muted);
+    text-transform: uppercase; letter-spacing: 1px; margin-bottom: 10px;
+  }
+  .sidebar-item {
+    display: flex; align-items: center; gap: 10px;
+    padding: 8px 12px; border-radius: 8px; margin-bottom: 2px;
+    font-size: 13px; font-weight: 500; color: var(--text-dim);
+    cursor: default; transition: all 0.2s;
+  }
+  .sidebar-item.active { background: rgba(37,99,235,0.08); color: var(--blue); }
+  .sidebar-item-icon { font-size: 15px; width: 20px; text-align: center; }
+  .sidebar-badge {
+    margin-left: auto; padding: 1px 7px; border-radius: 6px;
+    font-size: 10px; font-weight: 700; background: rgba(37,99,235,0.1); color: var(--blue);
+  }
+  .app-main { flex: 1; padding: 24px; overflow: hidden; }
+
+  /* ─── STATUS BAR ─── */
+  .status-bar {
+    display: flex; align-items: center; gap: 10px;
+    padding: 12px 20px; margin-bottom: 20px;
+    border-radius: 12px; font-size: 13px; font-weight: 600;
+    transition: all 0.5s;
+  }
+  .status-bar.idle { background: var(--bg-raised); color: var(--text-muted); border: 1px solid var(--border); }
+  .status-bar.working { background: rgba(37,99,235,0.06); color: var(--blue); border: 1px solid rgba(37,99,235,0.15); }
+  .status-bar.success { background: rgba(5,150,105,0.06); color: var(--green); border: 1px solid rgba(5,150,105,0.15); }
+  .status-spinner {
+    width: 14px; height: 14px; border: 2px solid rgba(37,99,235,0.2);
+    border-top-color: var(--blue); border-radius: 50%;
+    animation: spin 0.7s linear infinite; display: none;
+  }
+  .status-bar.working .status-spinner { display: block; }
+  .status-check { display: none; color: var(--green); }
+  .status-bar.success .status-check { display: block; }
+  .status-bar.success .status-spinner { display: none; }
+
+  /* ─── NARRATION ─── */
+  .narration { text-align: center; padding: 32px 24px 0; }
+  .narration-step {
+    display: inline-flex; align-items: center; gap: 8px;
+    padding: 5px 14px 5px 5px; border-radius: 100px;
+    font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px;
+    margin-bottom: 12px;
+  }
+  .narration-step .num {
+    width: 22px; height: 22px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 11px; font-weight: 800; color: #fff;
+  }
+  .narration h3 { font-size: 24px; font-weight: 800; letter-spacing: -0.5px; margin-bottom: 6px; }
+  .narration p { font-size: 15px; color: var(--text-dim); max-width: 500px; margin: 0 auto; }
+
+  /* ─── FIELDS ─── */
+  .fields-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 16px; }
+  .data-field {
+    padding: 10px 14px; border-radius: 10px;
+    background: var(--bg-input); border: 1px solid var(--border);
+    transition: all 0.4s;
+  }
+  .data-field.populated { border-color: rgba(5,150,105,0.3); background: rgba(5,150,105,0.04); }
+  .data-field-label { font-size: 10px; font-weight: 700; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px; }
+  .data-field-value { font-family: var(--mono); font-size: 13px; color: var(--text); margin-top: 3px; min-height: 18px; overflow: hidden; white-space: nowrap; }
+  .data-field-value.empty { color: var(--text-muted); font-style: italic; font-family: var(--font); }
+
+  /* ─── GANTT ─── */
+  .gantt-container { margin-top: 20px; }
+  .gantt-header { display: grid; grid-template-columns: 140px 1fr; gap: 12px; padding-bottom: 8px; border-bottom: 1px solid var(--border); margin-bottom: 8px; }
+  .gantt-header-label { font-size: 10px; font-weight: 700; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px; }
+  .gantt-months { display: flex; justify-content: space-between; font-size: 10px; font-weight: 600; color: var(--text-muted); }
+  .gantt-row { display: grid; grid-template-columns: 140px 1fr; gap: 12px; align-items: center; padding: 6px 0; }
+  .gantt-task-name { font-size: 12px; font-weight: 600; color: var(--text-dim); }
+  .gantt-bar-track { height: 28px; background: var(--bg-input); border-radius: 6px; position: relative; overflow: hidden; border: 1px solid var(--border); }
+  .gantt-bar {
+    position: absolute; top: 2px; bottom: 2px; border-radius: 4px;
+    transition: width 1.2s cubic-bezier(0.4, 0, 0.2, 1); width: 0;
+    display: flex; align-items: center; justify-content: flex-end; padding-right: 8px;
+    font-size: 10px; font-weight: 700; color: #fff;
+  }
+  .gantt-bar.blue { background: linear-gradient(90deg, var(--blue), var(--blue-light)); }
+  .gantt-bar.green { background: linear-gradient(90deg, var(--green-dark), var(--green)); }
+  .gantt-bar.amber { background: linear-gradient(90deg, var(--amber-dark), var(--amber)); }
+  .gantt-bar.purple { background: linear-gradient(90deg, #7c3aed, var(--purple)); }
+  .gantt-bar.rose { background: linear-gradient(90deg, #db2777, var(--rose)); }
+  .gantt-bar .bar-check { opacity: 0; transition: opacity 0.3s; margin-left: 4px; }
+  .gantt-bar.complete .bar-check { opacity: 1; }
+
+  /* ─── INVOICE ─── */
+  .invoice-panel { background: var(--bg-card); border: 1px solid var(--border); border-radius: 14px; padding: 24px; margin-top: 20px; box-shadow: var(--shadow-md); }
+  .invoice-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 20px; padding-bottom: 16px; border-bottom: 1px solid var(--border); }
+  .invoice-title { font-size: 20px; font-weight: 800; }
+  .invoice-number { font-family: var(--mono); font-size: 12px; color: var(--text-muted); margin-top: 4px; }
+  .invoice-badge { padding: 4px 12px; border-radius: 8px; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; transition: all 0.5s; }
+  .invoice-badge.draft { background: rgba(100,116,139,0.1); color: var(--text-muted); }
+  .invoice-badge.sent { background: rgba(5,150,105,0.1); color: var(--green); }
+  .invoice-table-head { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 8px; padding: 8px 0; border-bottom: 1px solid var(--border); font-size: 10px; font-weight: 700; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px; }
+  .invoice-row { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 8px; padding: 10px 0; border-bottom: 1px solid var(--border); font-size: 13px; color: var(--text-dim); opacity: 0; transform: translateY(5px); transition: all 0.4s ease; }
+  .invoice-row.visible { opacity: 1; transform: translateY(0); }
+  .invoice-row .amount { font-family: var(--mono); font-weight: 600; color: var(--text); text-align: right; }
+  .invoice-total { display: flex; justify-content: space-between; align-items: center; padding: 14px 0 0; margin-top: 8px; border-top: 2px solid var(--border); font-size: 16px; font-weight: 800; }
+  .invoice-total .total-amount { font-family: var(--mono); color: var(--green); }
+
+  /* ─── QB SYNC ─── */
+  .qb-sync { margin-top: 16px; padding: 14px 18px; border-radius: 12px; background: rgba(5,150,105,0.04); border: 1px solid rgba(5,150,105,0.12); display: flex; align-items: center; gap: 12px; opacity: 0; transition: all 0.5s; }
+  .qb-sync.visible { opacity: 1; }
+  .qb-logo { width: 36px; height: 36px; border-radius: 8px; background: linear-gradient(135deg, #2CA01C, #4ABF2A); display: flex; align-items: center; justify-content: center; font-size: 10px; font-weight: 800; color: #fff; }
+  .qb-sync-text { font-size: 13px; font-weight: 600; color: var(--green); }
+  .qb-sync-sub { font-size: 11px; color: var(--text-muted); margin-top: 1px; }
+  .qb-check { margin-left: auto; width: 24px; height: 24px; border-radius: 50%; background: var(--green); display: flex; align-items: center; justify-content: center; font-size: 13px; color: #fff; }
+
+  /* ─── ACTIVITY LOG ─── */
+  .activity-log { margin-top: 16px; }
+  .log-item { display: flex; gap: 10px; align-items: flex-start; padding: 8px 12px; margin-bottom: 4px; border-radius: 8px; font-size: 12px; color: var(--text-dim); opacity: 0; transform: translateX(-8px); transition: all 0.4s ease; }
+  .log-item.visible { opacity: 1; transform: translateX(0); }
+  .log-time { font-family: var(--mono); font-size: 10px; color: var(--text-muted); white-space: nowrap; padding-top: 1px; min-width: 52px; }
+  .log-dot { width: 6px; height: 6px; border-radius: 50%; margin-top: 5px; flex-shrink: 0; }
+
+  /* ─── PROGRESS BAR ─── */
+  .demo-progress { position: fixed; bottom: 0; left: 0; right: 0; z-index: 100; padding: 16px 32px; background: rgba(255,255,255,0.92); backdrop-filter: blur(16px); border-top: 1px solid var(--border); box-shadow: 0 -2px 12px rgba(15,23,42,0.04); display: none; }
+  .demo-progress.active { display: flex; align-items: center; gap: 20px; }
+  .progress-track { flex: 1; height: 4px; background: var(--border); border-radius: 2px; overflow: hidden; }
+  .progress-fill { height: 100%; background: linear-gradient(90deg, var(--blue), var(--green)); border-radius: 2px; transition: width 0.8s ease; width: 0%; }
+  .progress-label { font-size: 12px; font-weight: 600; color: var(--text-dim); white-space: nowrap; }
+  .progress-pip { width: 8px; height: 8px; border-radius: 50%; background: var(--border); transition: all 0.3s; }
+  .progress-pip.done { background: var(--green); }
+  .progress-pip.current { background: var(--blue); box-shadow: 0 0 8px rgba(37,99,235,0.25); }
+  .progress-steps { display: flex; gap: 6px; }
+
+  /* ─── CTA ─── */
+  .demo-cta { padding: 100px 24px; text-align: center; }
+  .demo-cta h2 { font-size: clamp(32px, 5vw, 56px); font-weight: 900; letter-spacing: -1.5px; line-height: 1.1; margin-bottom: 16px; }
+  .demo-cta p { font-size: 18px; color: var(--text-dim); max-width: 500px; margin: 0 auto 36px; line-height: 1.7; }
+  .cta-btn { padding: 18px 48px; border-radius: 14px; border: none; background: linear-gradient(135deg, var(--blue), #1d4ed8); color: #fff; font-family: var(--font); font-size: 18px; font-weight: 700; cursor: pointer; transition: all 0.3s; box-shadow: 0 4px 20px rgba(37,99,235,0.25); }
+  .cta-btn:hover { transform: translateY(-2px); box-shadow: 0 8px 28px rgba(37,99,235,0.35); }
+
+  @keyframes spin { to { transform: rotate(360deg); } }
+  @keyframes blink { 0%,100% { opacity: 1; } 50% { opacity: 0; } }
+  .cursor { display: inline-block; width: 2px; height: 16px; background: var(--blue); animation: blink 0.8s infinite; vertical-align: middle; margin-left: 1px; }
+
+  @media (max-width: 768px) {
+    .app-sidebar { display: none; }
+    .fields-grid { grid-template-columns: 1fr; }
+    .gantt-header, .gantt-row { grid-template-columns: 100px 1fr; }
+    .invoice-table-head, .invoice-row { grid-template-columns: 2fr 1fr 1fr; }
+    .invoice-table-head > :nth-child(2), .invoice-row > :nth-child(2) { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<!-- TOP BAR -->
+<div class="topbar">
+  <div class="topbar-left">
+    <div class="topbar-logo">AI</div>
+    <div class="topbar-title">AI <span>PM</span></div>
+  </div>
+  <div class="topbar-badge">Interactive Demo</div>
+</div>
+
+<!-- HERO -->
+<section class="demo-hero" id="hero-section">
+  <h1>Watch AI run<br>a <em>real project.</em></h1>
+  <p>This interactive demo shows exactly what happens from the moment you type a client name — every field, every chart, every invoice, automated live.</p>
+  <button class="start-btn" id="startBtn">Launch Demo</button>
+</section>
+
+<!-- DEMO STAGE -->
+<div class="demo-stage" id="demoStage">
+  <div class="narration" id="narration">
+    <div class="narration-step" id="narrationBadge" style="background:var(--blue-glow);color:var(--blue);border:1px solid rgba(37,99,235,0.15)">
+      <div class="num" id="narrationNum" style="background:linear-gradient(135deg,var(--blue),var(--blue-light))">1</div>
+      <span id="narrationLabel">Add Client</span>
+    </div>
+    <h3 id="narrationTitle">Type a client name. Watch AI take over.</h3>
+    <p id="narrationDesc">Every field auto-populates, Gantt charts build, invoices generate, and QuickBooks syncs — without you touching a thing.</p>
+  </div>
+
+  <div class="app-window" style="margin-top:28px">
+    <div class="app-titlebar">
+      <div class="app-dots">
+        <div class="app-dot" style="background:var(--red)"></div>
+        <div class="app-dot" style="background:var(--amber)"></div>
+        <div class="app-dot" style="background:var(--green)"></div>
+      </div>
+      <div class="app-title-text">AI Project Manager — Dashboard</div>
+      <div></div>
+    </div>
+    <div class="app-layout">
+      <div class="app-sidebar">
+        <div class="sidebar-section">
+          <div class="sidebar-label">Navigation</div>
+          <div class="sidebar-item active"><div class="sidebar-item-icon">📋</div> Projects <div class="sidebar-badge" id="projectCount">3</div></div>
+          <div class="sidebar-item"><div class="sidebar-item-icon">👥</div> Clients</div>
+          <div class="sidebar-item"><div class="sidebar-item-icon">📊</div> Gantt View</div>
+          <div class="sidebar-item"><div class="sidebar-item-icon">🧾</div> Invoices</div>
+          <div class="sidebar-item"><div class="sidebar-item-icon">💰</div> Financials</div>
+        </div>
+        <div class="sidebar-section">
+          <div class="sidebar-label">Recent</div>
+          <div class="sidebar-item"><div class="sidebar-item-icon">🏠</div> T. Bradley</div>
+          <div class="sidebar-item"><div class="sidebar-item-icon">🏢</div> L. Park</div>
+        </div>
+      </div>
+      <div class="app-main" id="appMain">
+        <div class="status-bar idle" id="statusBar">
+          <div class="status-spinner" id="statusSpinner"></div>
+          <div class="status-check" id="statusCheck">✓</div>
+          <span id="statusText">Ready — Add a new project to get started</span>
+        </div>
+        <div id="contentArea"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="activity-log" id="activityLog" style="margin-top:16px">
+    <div style="font-size:11px;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:1px;margin-bottom:8px;padding-left:12px">AI Activity Log</div>
+  </div>
+</div>
+
+<!-- PROGRESS BAR -->
+<div class="demo-progress" id="demoProgress">
+  <div class="progress-steps">
+    <div class="progress-pip current" id="pip0"></div>
+    <div class="progress-pip" id="pip1"></div>
+    <div class="progress-pip" id="pip2"></div>
+    <div class="progress-pip" id="pip3"></div>
+    <div class="progress-pip" id="pip4"></div>
+  </div>
+  <div class="progress-track"><div class="progress-fill" id="progressFill"></div></div>
+  <div class="progress-label" id="progressLabel">Step 1 of 5</div>
+</div>
+
+<!-- FINAL CTA -->
+<section class="demo-cta" id="demoCta" style="display:none">
+  <h2>That's what <em style="font-style:normal;background:linear-gradient(135deg,var(--blue),var(--amber));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text">autopilot</em> looks like.</h2>
+  <p>You typed one name. AI built the profile, tracked every receipt, managed the Gantt chart, generated invoices, and synced to QuickBooks.</p>
+  <button class="cta-btn">Get Started Free</button>
+</section>
+
+<script>
+const statusBar = document.getElementById('statusBar');
+const statusText = document.getElementById('statusText');
+const contentArea = document.getElementById('contentArea');
+const activityLog = document.getElementById('activityLog');
+const progressFill = document.getElementById('progressFill');
+const progressLabel = document.getElementById('progressLabel');
+const narrationNum = document.getElementById('narrationNum');
+const narrationLabel = document.getElementById('narrationLabel');
+const narrationTitle = document.getElementById('narrationTitle');
+const narrationDesc = document.getElementById('narrationDesc');
+const narrationBadge = document.getElementById('narrationBadge');
+
+function setStatus(mode, text) {
+  statusBar.className = 'status-bar ' + mode;
+  statusText.textContent = text;
+}
+
+function addLog(time, color, text) {
+  const item = document.createElement('div');
+  item.className = 'log-item';
+  item.innerHTML = '<div class="log-time">' + time + '</div><div class="log-dot" style="background:' + color + '"></div><div>' + text + '</div>';
+  activityLog.appendChild(item);
+  setTimeout(function() { item.classList.add('visible'); }, 50);
+  item.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+}
+
+function setNarration(num, label, title, desc, color) {
+  var colors = {
+    blue: { bg: 'var(--blue-glow)', fg: 'var(--blue)', border: 'rgba(37,99,235,0.15)', grad: 'linear-gradient(135deg,var(--blue),var(--blue-light))' },
+    green: { bg: 'var(--green-glow)', fg: 'var(--green)', border: 'rgba(5,150,105,0.15)', grad: 'linear-gradient(135deg,var(--green-dark),var(--green))' },
+    amber: { bg: 'var(--amber-glow)', fg: 'var(--amber)', border: 'rgba(217,119,6,0.15)', grad: 'linear-gradient(135deg,var(--amber-dark),var(--amber))' },
+    purple: { bg: 'var(--purple-glow)', fg: 'var(--purple)', border: 'rgba(124,58,237,0.15)', grad: 'linear-gradient(135deg,#7c3aed,var(--purple))' },
+    rose: { bg: 'rgba(219,39,119,0.1)', fg: 'var(--rose)', border: 'rgba(219,39,119,0.15)', grad: 'linear-gradient(135deg,#db2777,var(--rose))' }
+  };
+  var c = colors[color];
+  narrationBadge.style.background = c.bg;
+  narrationBadge.style.color = c.fg;
+  narrationBadge.style.borderColor = c.border;
+  narrationNum.style.background = c.grad;
+  narrationNum.textContent = num;
+  narrationLabel.textContent = label;
+  narrationTitle.textContent = title;
+  narrationDesc.textContent = desc;
+}
+
+function updateProgress(step, total, label) {
+  progressFill.style.width = ((step / total) * 100) + '%';
+  progressLabel.textContent = label;
+  for (var i = 0; i <= 4; i++) {
+    var pip = document.getElementById('pip' + i);
+    pip.className = 'progress-pip';
+    if (i < step) pip.classList.add('done');
+    else if (i === step) pip.classList.add('current');
+  }
+}
+
+function typeText(el, text, speed) {
+  speed = speed || 45;
+  return new Promise(function(resolve) {
+    el.textContent = '';
+    var i = 0;
+    var cursor = document.createElement('span');
+    cursor.className = 'cursor';
+    el.appendChild(cursor);
+    var interval = setInterval(function() {
+      if (i < text.length) {
+        el.textContent = text.substring(0, i + 1);
+        el.appendChild(cursor);
+        i++;
+      } else {
+        clearInterval(interval);
+        cursor.remove();
+        resolve();
+      }
+    }, speed);
+  });
+}
+
+function wait(ms) { return new Promise(function(r) { setTimeout(r, ms); }); }
+
+// ─── STEP 1: TYPE NAME + AUTO-POPULATE ───
+async function step1() {
+  setNarration('1', 'Add Client', 'You type a name. AI auto-populates every field.', 'Watch the fields fill themselves in real time as AI scans your inbox and drive.', 'blue');
+  updateProgress(0, 5, 'Step 1 of 5 · Adding client');
+
+  contentArea.innerHTML = '<div style="margin-bottom:16px"><div style="font-size:11px;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:6px">New Project — Client Name</div><div style="width:100%;padding:12px 16px;border-radius:10px;background:var(--bg-input);border:1px solid var(--blue);box-shadow:0 0 0 3px rgba(37,99,235,0.08);font-family:var(--mono);font-size:15px;min-height:44px;display:flex;align-items:center" id="nameInput"></div></div><div style="display:flex;align-items:center;gap:8px;margin:12px 0 4px"><div style="width:18px;height:18px;border-radius:5px;background:var(--blue);display:flex;align-items:center;justify-content:center;font-size:10px;color:#fff">✓</div><span style="font-size:13px;font-weight:600;color:var(--blue)">Let AI find everything</span></div><div class="fields-grid" id="fieldsGrid"><div class="data-field" id="field-email"><div class="data-field-label">Email</div><div class="data-field-value empty">Waiting...</div></div><div class="data-field" id="field-phone"><div class="data-field-label">Phone</div><div class="data-field-value empty">Waiting...</div></div><div class="data-field" id="field-address"><div class="data-field-label">Address</div><div class="data-field-value empty">Waiting...</div></div><div class="data-field" id="field-contract"><div class="data-field-label">Contract Value</div><div class="data-field-value empty">Waiting...</div></div><div class="data-field" id="field-job"><div class="data-field-label">Job Description</div><div class="data-field-value empty">Waiting...</div></div><div class="data-field" id="field-threads"><div class="data-field-label">Email Threads</div><div class="data-field-value empty">Waiting...</div></div></div>';
+
+  setStatus('idle', 'Ready — Type a client name to begin');
+  await wait(600);
+
+  var nameInput = document.getElementById('nameInput');
+  await typeText(nameInput, 'Mike Reynolds', 70);
+  await wait(400);
+  addLog('9:00 AM', 'var(--blue)', '<strong>Client name entered:</strong> Mike Reynolds');
+
+  setStatus('working', 'AI Working — Scanning inbox and drive for "Mike Reynolds"...');
+  await wait(800);
+  addLog('9:00 AM', 'var(--blue)', '<strong>AI scanning:</strong> Gmail inbox — searching 2,847 threads...');
+  await wait(600);
+  addLog('9:00 AM', 'var(--blue)', '<strong>AI scanning:</strong> Google Drive — searching documents...');
+
+  var fields = [
+    { id: 'field-email', value: 'mike.reynolds@gmail.com', log: 'Email found in 14 thread conversations', delay: 700 },
+    { id: 'field-phone', value: '(512) 555-0187', log: 'Phone extracted from email signature', delay: 500 },
+    { id: 'field-address', value: '4821 Westlake Dr, Austin TX', log: 'Address found in contract document', delay: 600 },
+    { id: 'field-contract', value: '$148,500.00', log: 'Contract value: $148,500 — Kitchen & bath renovation', delay: 700 },
+    { id: 'field-job', value: 'Kitchen & bath renovation', log: 'Job description extracted from signed proposal', delay: 500 },
+    { id: 'field-threads', value: '14 conversations', log: '14 email threads linked to project', delay: 500 }
+  ];
+
+  for (var fi = 0; fi < fields.length; fi++) {
+    var f = fields[fi];
+    await wait(f.delay);
+    var el = document.getElementById(f.id);
+    el.classList.add('populated');
+    var valEl = el.querySelector('.data-field-value');
+    valEl.classList.remove('empty');
+    valEl.textContent = '';
+    await typeText(valEl, f.value, 30);
+    addLog('9:00 AM', 'var(--green)', '<strong>Found:</strong> ' + f.log);
+    setStatus('working', 'AI Working — ' + f.log);
+  }
+
+  await wait(500);
+  setStatus('success', 'Profile complete — 6/6 fields auto-populated from AI scan');
+  document.getElementById('projectCount').textContent = '4';
+  addLog('9:01 AM', 'var(--green)', '<strong>✓ Client profile complete.</strong> Project "Reynolds — Kitchen & Bath" created.');
+}
+
+// ─── STEP 2: GANTT CHART ───
+async function step2() {
+  setNarration('2', 'Worker Updates', 'Workers send emails. AI builds the Gantt chart.', 'Each worker email triggers an automatic timeline update. Watch the phases fill in live.', 'green');
+  updateProgress(1, 5, 'Step 2 of 5 · Tracking progress');
+
+  contentArea.innerHTML = '<div style="font-size:15px;font-weight:700;margin-bottom:4px">Reynolds — Kitchen & Bath Renovation</div><div style="font-size:12px;color:var(--text-muted);margin-bottom:16px">$148,500 · 4821 Westlake Dr · <span style="color:var(--green)">● Active</span></div><div class="gantt-container"><div class="gantt-header"><div class="gantt-header-label">Phase</div><div class="gantt-months"><span>Jan</span><span>Feb</span><span>Mar</span><span>Apr</span><span>May</span><span>Jun</span></div></div><div class="gantt-row"><div class="gantt-task-name">Demolition</div><div class="gantt-bar-track"><div class="gantt-bar blue" id="bar1" style="left:0%"><span class="bar-label">Demo</span><span class="bar-check">✓</span></div></div></div><div class="gantt-row"><div class="gantt-task-name">Rough-In</div><div class="gantt-bar-track"><div class="gantt-bar green" id="bar2" style="left:18%"><span class="bar-label">Rough-In</span><span class="bar-check">✓</span></div></div></div><div class="gantt-row"><div class="gantt-task-name">Plumbing & HVAC</div><div class="gantt-bar-track"><div class="gantt-bar amber" id="bar3" style="left:33%"><span class="bar-label">Plumbing/HVAC</span><span class="bar-check">✓</span></div></div></div><div class="gantt-row"><div class="gantt-task-name">Electrical</div><div class="gantt-bar-track"><div class="gantt-bar purple" id="bar4" style="left:45%"><span class="bar-label">Electrical</span><span class="bar-check">✓</span></div></div></div><div class="gantt-row"><div class="gantt-task-name">Finishing</div><div class="gantt-bar-track"><div class="gantt-bar rose" id="bar5" style="left:62%"><span class="bar-label">Finishing</span><span class="bar-check">✓</span></div></div></div></div>';
+
+  setStatus('working', 'AI Working — Monitoring inbox for worker updates...');
+  await wait(800);
+
+  addLog('Jan 15', 'var(--blue)', '<strong>📧 Worker email:</strong> "Demolition complete. Debris hauled. Photos attached."');
+  await wait(500);
+  setStatus('working', 'AI Working — Matching email to Reynolds project... updating timeline');
+  document.getElementById('bar1').style.width = '16%';
+  await wait(800);
+  document.getElementById('bar1').classList.add('complete');
+  addLog('Jan 15', 'var(--green)', '<strong>📊 Gantt updated:</strong> Phase 1 "Demolition" → Complete ✓');
+
+  await wait(900);
+  addLog('Jan 28', 'var(--blue)', '<strong>📧 Worker email:</strong> "Rough-in framing finished. Passed first inspection."');
+  await wait(500);
+  setStatus('working', 'AI Working — Processing rough-in completion...');
+  document.getElementById('bar2').style.width = '14%';
+  await wait(800);
+  document.getElementById('bar2').classList.add('complete');
+  addLog('Jan 28', 'var(--green)', '<strong>📊 Gantt updated:</strong> Phase 2 "Rough-In" → Complete ✓');
+
+  await wait(900);
+  addLog('Feb 12', 'var(--blue)', '<strong>📧 Worker email:</strong> "All plumbing and HVAC installed. Ready for inspection."');
+  await wait(500);
+  setStatus('working', 'AI Working — Processing plumbing/HVAC update...');
+  document.getElementById('bar3').style.width = '12%';
+  await wait(800);
+  document.getElementById('bar3').classList.add('complete');
+  addLog('Feb 12', 'var(--green)', '<strong>📊 Gantt updated:</strong> Phase 3 "Plumbing & HVAC" → Complete ✓');
+
+  await wait(900);
+  addLog('Mar 3', 'var(--blue)', '<strong>📧 Worker email:</strong> "Electrical rough and finish done. Panel upgraded."');
+  await wait(500);
+  document.getElementById('bar4').style.width = '16%';
+  await wait(800);
+  document.getElementById('bar4').classList.add('complete');
+  addLog('Mar 3', 'var(--green)', '<strong>📊 Gantt updated:</strong> Phase 4 "Electrical" → Complete ✓');
+
+  await wait(900);
+  addLog('Mar 20', 'var(--blue)', '<strong>📧 Worker email:</strong> "Tile work 60% done. Cabinets arriving Thursday."');
+  await wait(500);
+  setStatus('working', 'AI Working — Partial progress detected... updating Gantt');
+  document.getElementById('bar5').style.width = '22%';
+  await wait(600);
+  addLog('Mar 20', 'var(--amber)', '<strong>📊 Gantt updated:</strong> Phase 5 "Finishing" → 60% in progress');
+  await wait(500);
+  setStatus('success', 'Timeline current — 4 phases complete, 1 in progress');
+}
+
+// ─── STEP 3: RECEIPT TRACKING ───
+async function step3() {
+  setNarration('3', 'Receipt Tracking', 'Workers email receipts. AI parses every line item.', 'Receipts are automatically categorized, totaled, and matched to the right project phase.', 'amber');
+  updateProgress(2, 5, 'Step 3 of 5 · Tracking receipts');
+
+  contentArea.innerHTML = '<div style="font-size:15px;font-weight:700;margin-bottom:4px">Reynolds — Budget Tracker</div><div style="font-size:12px;color:var(--text-muted);margin-bottom:16px">Contract: $148,500 · <span id="spentAmount" style="color:var(--amber)">$0</span> spent · <span id="profitPct" style="color:var(--green)">—</span> projected profit</div><div style="height:8px;background:var(--bg-input);border-radius:4px;overflow:hidden;margin-bottom:20px;border:1px solid var(--border)"><div id="budgetBar" style="height:100%;background:linear-gradient(90deg,var(--green-dark),var(--green));border-radius:4px;transition:width 1s ease;width:0%"></div></div><div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-bottom:20px"><div style="padding:14px;border-radius:10px;background:var(--bg-input);border:1px solid var(--border)"><div style="font-size:10px;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.5px">Materials</div><div style="font-family:var(--mono);font-size:18px;font-weight:700;margin-top:4px" id="catMaterials">$0</div></div><div style="padding:14px;border-radius:10px;background:var(--bg-input);border:1px solid var(--border)"><div style="font-size:10px;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.5px">Labor</div><div style="font-family:var(--mono);font-size:18px;font-weight:700;margin-top:4px" id="catLabor">$0</div></div><div style="padding:14px;border-radius:10px;background:var(--bg-input);border:1px solid var(--border)"><div style="font-size:10px;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.5px">Permits & Fees</div><div style="font-family:var(--mono);font-size:18px;font-weight:700;margin-top:4px" id="catPermits">$0</div></div></div><div style="font-size:11px;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:8px">Parsed Receipts</div><div id="receiptList"></div>';
+
+  setStatus('working', 'AI Working — Monitoring inbox for receipts...');
+  await wait(600);
+
+  var receipts = [
+    { from: 'Worker: Jake', store: 'Home Depot', items: 'Lumber, drywall, screws', amount: 2847, cat: 'Materials', time: 'Jan 15' },
+    { from: 'Worker: Maria', store: 'Ferguson HVAC', items: 'HVAC unit, copper fittings, ductwork', amount: 4231, cat: 'Materials', time: 'Feb 3' },
+    { from: 'Worker: Jake', store: "Lowe's", items: 'Tile, grout, adhesive, trim', amount: 1893, cat: 'Materials', time: 'Feb 18' },
+    { from: 'Subcontractor', store: 'City of Austin', items: 'Plumbing permit, electrical permit', amount: 875, cat: 'Permits', time: 'Jan 10' },
+    { from: 'Worker: Maria', store: 'Spartan Electric', items: 'Panel, breakers, wire (200ft)', amount: 1547, cat: 'Materials', time: 'Mar 1' },
+    { from: 'Payroll', store: 'Weekly labor', items: 'Jake (40h), Maria (38h), Luis (32h)', amount: 8400, cat: 'Labor', time: 'Mar 7' }
+  ];
+
+  var totalSpent = 0, materials = 0, labor = 0, permits = 0;
+
+  for (var ri = 0; ri < receipts.length; ri++) {
+    var r = receipts[ri];
+    addLog(r.time, 'var(--amber)', '<strong>📧 Receipt email</strong> from ' + r.from + ': "' + r.store + ' — $' + r.amount.toLocaleString() + '"');
+    setStatus('working', 'AI Working — Parsing receipt from ' + r.store + '...');
+    await wait(600);
+
+    var row = document.createElement('div');
+    row.style.cssText = 'display:flex;align-items:center;gap:10px;padding:8px 12px;border-radius:8px;background:rgba(217,119,6,0.04);border:1px solid rgba(217,119,6,0.1);margin-bottom:6px;opacity:0;transform:translateY(5px);transition:all 0.4s';
+    row.innerHTML = '<div style="font-size:12px;font-weight:600;color:var(--amber);min-width:52px">' + r.time + '</div><div style="flex:1;font-size:12px;color:var(--text-dim)"><strong>' + r.store + '</strong> — ' + r.items + '</div><div style="font-family:var(--mono);font-size:13px;font-weight:700;color:var(--text)">$' + r.amount.toLocaleString() + '</div><div style="font-size:10px;font-weight:700;padding:3px 8px;border-radius:5px;background:rgba(5,150,105,0.08);color:var(--green)">' + r.cat + '</div>';
+    document.getElementById('receiptList').appendChild(row);
+    setTimeout((function(el) { return function() { el.style.opacity = '1'; el.style.transform = 'translateY(0)'; }; })(row), 50);
+
+    totalSpent += r.amount;
+    if (r.cat === 'Materials') materials += r.amount;
+    else if (r.cat === 'Labor') labor += r.amount;
+    else permits += r.amount;
+
+    document.getElementById('spentAmount').textContent = '$' + totalSpent.toLocaleString();
+    document.getElementById('catMaterials').textContent = '$' + materials.toLocaleString();
+    document.getElementById('catLabor').textContent = '$' + labor.toLocaleString();
+    document.getElementById('catPermits').textContent = '$' + permits.toLocaleString();
+    document.getElementById('budgetBar').style.width = ((totalSpent / 148500) * 100) + '%';
+    var profit = Math.round((1 - totalSpent / 148500) * 100);
+    document.getElementById('profitPct').textContent = profit + '%';
+
+    addLog(r.time, 'var(--green)', '<strong>✓ Categorized:</strong> ' + r.cat + ' — Budget updated. Total: $' + totalSpent.toLocaleString());
+    await wait(500);
+  }
+
+  setStatus('success', 'Receipt tracking complete — $' + totalSpent.toLocaleString() + ' across ' + receipts.length + ' receipts categorized');
+}
+
+// ─── STEP 4: INVOICE + QUICKBOOKS ───
+async function step4() {
+  setNarration('4', 'Auto-Invoicing', 'Milestone hit. AI generates the invoice and syncs to QuickBooks.', 'Watch line items populate, totals calculate, the invoice sent, and QuickBooks updated — hands-free.', 'purple');
+  updateProgress(3, 5, 'Step 4 of 5 · Generating invoice');
+
+  contentArea.innerHTML = '<div class="invoice-panel"><div class="invoice-header"><div><div class="invoice-title">INVOICE</div><div class="invoice-number">#INV-2026-0047</div><div style="font-size:12px;color:var(--text-muted);margin-top:6px">To: Mike Reynolds · 4821 Westlake Dr, Austin TX</div></div><div class="invoice-badge draft" id="invoiceBadge">DRAFT</div></div><div class="invoice-table"><div class="invoice-table-head"><div>Description</div><div>Category</div><div style="text-align:right">Qty</div><div style="text-align:right">Amount</div></div><div id="invoiceRows"></div></div><div class="invoice-total" id="invoiceTotal" style="opacity:0;transition:opacity 0.5s"><div>Total Due</div><div class="total-amount" id="totalAmount">$0.00</div></div></div><div class="qb-sync" id="qbSync"><div class="qb-logo">QB</div><div><div class="qb-sync-text" id="qbText">Syncing to QuickBooks...</div><div class="qb-sync-sub">Invoice #INV-2026-0047 → Accounts Receivable</div></div><div class="qb-check" style="opacity:0" id="qbCheck">✓</div></div>';
+
+  setStatus('working', 'AI Working — Milestone "Phase 1-4 Complete" triggered. Generating invoice...');
+  addLog('3:00 PM', 'var(--purple)', '<strong>🎯 Milestone reached:</strong> Phases 1-4 complete. Auto-invoice triggered.');
+  await wait(800);
+
+  var lines = [
+    { desc: 'Demolition & debris removal', cat: 'Labor', qty: '1', amount: '$12,400.00' },
+    { desc: 'Rough-in framing & structural', cat: 'Labor', qty: '1', amount: '$8,750.00' },
+    { desc: 'Plumbing installation', cat: 'Plumbing', qty: '1', amount: '$6,200.00' },
+    { desc: 'HVAC system & ductwork', cat: 'HVAC', qty: '1', amount: '$4,231.00' },
+    { desc: 'Electrical panel + wiring', cat: 'Electrical', qty: '1', amount: '$3,847.00' },
+    { desc: 'Materials (lumber, tile, fixtures)', cat: 'Materials', qty: 'Bundle', amount: '$6,740.00' },
+    { desc: 'Permits & inspection fees', cat: 'Permits', qty: '2', amount: '$875.00' }
+  ];
+
+  var rowsContainer = document.getElementById('invoiceRows');
+  var runningTotal = 0;
+
+  for (var li = 0; li < lines.length; li++) {
+    var line = lines[li];
+    var invoiceRow = document.createElement('div');
+    invoiceRow.className = 'invoice-row';
+    invoiceRow.innerHTML = '<div>' + line.desc + '</div><div style="font-size:11px;color:var(--text-muted)">' + line.cat + '</div><div style="text-align:right;font-family:var(--mono);font-size:12px">' + line.qty + '</div><div class="amount">' + line.amount + '</div>';
+    rowsContainer.appendChild(invoiceRow);
+    await wait(350);
+    invoiceRow.classList.add('visible');
+    setStatus('working', 'AI Working — Adding line: ' + line.desc);
+    addLog('3:00 PM', 'var(--purple)', '<strong>📝 Line added:</strong> ' + line.desc + ' — ' + line.amount);
+    runningTotal += parseFloat(line.amount.replace(/[$,]/g, ''));
+  }
+
+  await wait(500);
+  document.getElementById('totalAmount').textContent = '$' + runningTotal.toLocaleString(undefined, { minimumFractionDigits: 2 });
+  document.getElementById('invoiceTotal').style.opacity = '1';
+  addLog('3:01 PM', 'var(--purple)', '<strong>💰 Invoice total:</strong> $' + runningTotal.toLocaleString(undefined, { minimumFractionDigits: 2 }));
+
+  await wait(700);
+  document.getElementById('invoiceBadge').textContent = 'SENT';
+  document.getElementById('invoiceBadge').className = 'invoice-badge sent';
+  addLog('3:01 PM', 'var(--green)', '<strong>✉️ Invoice emailed</strong> to mike.reynolds@gmail.com with PDF + 28 receipt attachments.');
+  setStatus('working', 'AI Working — Syncing invoice to QuickBooks...');
+
+  await wait(800);
+  document.getElementById('qbSync').classList.add('visible');
+  await wait(1200);
+  document.getElementById('qbCheck').style.opacity = '1';
+  document.getElementById('qbText').textContent = 'Synced to QuickBooks ✓';
+  addLog('3:01 PM', 'var(--green)', '<strong>QB ✓ QuickBooks synced:</strong> Invoice → Accounts Receivable. Payment tracking active.');
+  setStatus('success', 'Invoice sent & synced — $' + runningTotal.toLocaleString(undefined, { minimumFractionDigits: 2 }) + ' billed to Mike Reynolds via QuickBooks');
+}
+
+// ─── STEP 5: SUMMARY ───
+async function step5() {
+  setNarration('5', 'All Done', 'Zero data entry. The entire project runs on autopilot.', 'From one typed name to a fully managed, invoiced, QuickBooks-synced project.', 'rose');
+  updateProgress(4, 5, 'Step 5 of 5 · Complete');
+
+  contentArea.innerHTML = '<div style="text-align:center;padding:40px 20px"><div style="width:64px;height:64px;border-radius:50%;background:linear-gradient(135deg,var(--green-dark),var(--green));margin:0 auto 20px;display:flex;align-items:center;justify-content:center;font-size:28px;color:#fff;box-shadow:0 8px 24px rgba(5,150,105,0.2)">✓</div><div style="font-size:22px;font-weight:800;margin-bottom:8px">Project fully automated.</div><div style="font-size:14px;color:var(--text-dim);max-width:400px;margin:0 auto 32px;line-height:1.7">You typed "Mike Reynolds." AI did everything else — profile, timeline, receipts, invoicing, and QuickBooks sync.</div><div style="display:grid;grid-template-columns:repeat(4,1fr);gap:12px;max-width:500px;margin:0 auto"><div style="padding:16px 10px;border-radius:12px;background:rgba(37,99,235,0.06);border:1px solid rgba(37,99,235,0.1)"><div style="font-size:24px;font-weight:900;color:var(--blue)">6</div><div style="font-size:10px;color:var(--text-muted);margin-top:4px;font-weight:600">Fields<br>populated</div></div><div style="padding:16px 10px;border-radius:12px;background:rgba(5,150,105,0.06);border:1px solid rgba(5,150,105,0.1)"><div style="font-size:24px;font-weight:900;color:var(--green)">5</div><div style="font-size:10px;color:var(--text-muted);margin-top:4px;font-weight:600">Gantt<br>phases</div></div><div style="padding:16px 10px;border-radius:12px;background:rgba(217,119,6,0.06);border:1px solid rgba(217,119,6,0.1)"><div style="font-size:24px;font-weight:900;color:var(--amber)">6</div><div style="font-size:10px;color:var(--text-muted);margin-top:4px;font-weight:600">Receipts<br>tracked</div></div><div style="padding:16px 10px;border-radius:12px;background:rgba(124,58,237,0.06);border:1px solid rgba(124,58,237,0.1)"><div style="font-size:24px;font-weight:900;color:var(--purple)">1</div><div style="font-size:10px;color:var(--text-muted);margin-top:4px;font-weight:600">Invoice<br>sent</div></div></div></div>';
+
+  setStatus('success', 'Project "Reynolds — Kitchen & Bath" is running on full autopilot');
+  await wait(2000);
+  document.getElementById('demoCta').style.display = 'block';
+  document.getElementById('demoCta').scrollIntoView({ behavior: 'smooth' });
+}
+
+// ─── RUN ───
+async function runDemo() {
+  document.getElementById('hero-section').style.display = 'none';
+  document.getElementById('demoStage').classList.add('active');
+  document.getElementById('demoProgress').classList.add('active');
+  await step1();
+  await wait(1500);
+  await step2();
+  await wait(1500);
+  await step3();
+  await wait(1500);
+  await step4();
+  await wait(1500);
+  await step5();
+  document.getElementById('demoProgress').classList.remove('active');
+}
+
+document.getElementById('startBtn').addEventListener('click', function() {
+  runDemo();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+});
+</script>
+</body>
+</html>

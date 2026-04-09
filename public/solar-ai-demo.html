@@ -534,7 +534,11 @@
 
   /* ── AI Add-ons ── */
   .addons-section {
+<<<<<<< HEAD
     margin-top: 60px; width: 100%; max-width: 680px;
+=======
+    margin-top: 40px; width: 100%; max-width: 680px;
+>>>>>>> 91528ea (Add interactive demos: Digital Administrator, Digital Bookkeeper, Content Creator)
     opacity: 0; transform: translateY(16px);
     transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1);
   }
@@ -545,22 +549,44 @@
   }
   .addon-card {
     background: #fff; border: 1.5px solid #e2e8f0;
+<<<<<<< HEAD
     border-radius: 14px; padding: 22px 14px 18px;
+=======
+    border-radius: 14px; padding: 20px 16px;
+>>>>>>> 91528ea (Add interactive demos: Digital Administrator, Digital Bookkeeper, Content Creator)
     text-align: center; transition: border-color 0.3s, box-shadow 0.3s;
   }
   .addon-card:hover {
     border-color: #f59e0b;
     box-shadow: 0 4px 16px rgba(245, 158, 11, 0.10);
   }
+<<<<<<< HEAD
   .addon-icon { font-size: 28px; margin-bottom: 8px; line-height: 1.2; display: flex; align-items: center; justify-content: center; height: 36px; }
+=======
+  .addon-icon { font-size: 28px; margin-bottom: 8px; }
+>>>>>>> 91528ea (Add interactive demos: Digital Administrator, Digital Bookkeeper, Content Creator)
   .addon-name {
     font-size: 14px; font-weight: 700; color: #0f172a;
     margin-bottom: 6px;
   }
   .addon-desc {
     font-size: 12px; color: #64748b; line-height: 1.5;
+<<<<<<< HEAD
     font-weight: 400; margin-top: 2px;
   }
+=======
+    font-weight: 400;
+  }
+  .addons-cta-text {
+    text-align: center; margin-top: 20px;
+    font-size: 14px; color: #475569;
+  }
+  .addons-cta-link {
+    color: #f59e0b; font-weight: 700; text-decoration: none;
+    transition: color 0.2s;
+  }
+  .addons-cta-link:hover { color: #f97316; }
+>>>>>>> 91528ea (Add interactive demos: Digital Administrator, Digital Bookkeeper, Content Creator)
 
   /* ── Mobile Responsive ── */
   @media (max-width: 640px) {
@@ -649,14 +675,23 @@
     .pricing-cta { padding: 14px 0; font-size: 16px; }
 
     /* Add-ons mobile */
+<<<<<<< HEAD
     .addons-section { margin-top: 48px; padding: 0 12px; width: 100%; }
     .addons-grid { grid-template-columns: 1fr 1fr; gap: 12px; }
+=======
+    .addons-section { margin-top: 28px; padding: 0 12px; width: 100%; }
+    .addons-grid { grid-template-columns: 1fr 1fr; gap: 10px; }
+>>>>>>> 91528ea (Add interactive demos: Digital Administrator, Digital Bookkeeper, Content Creator)
     .addon-icon { font-size: 24px; }
     .addon-name { font-size: 13px; }
     .addon-desc { font-size: 11px; }
 
     /* Make finish scene scrollable on mobile so pricing is accessible */
+<<<<<<< HEAD
     #demo.scrollable { padding-top: 24px; padding-bottom: 100px; }
+=======
+    #demo.scrollable { padding-top: 24px; padding-bottom: 80px; }
+>>>>>>> 91528ea (Add interactive demos: Digital Administrator, Digital Bookkeeper, Content Creator)
   }
 
   /* Tablet tweaks */
@@ -1030,7 +1065,11 @@
               <li>Permit-ready document generation</li>
               <li>Cancel anytime — no lock-in</li>
             </ul>
+<<<<<<< HEAD
             <a href="/checkout?niche=solar-ai&tier=monthly&hosting=none" class="pricing-cta">Get Started →</a>
+=======
+            <a href="/checkout?niche=solar-ai&tier=monthly&hosting=none" class="pricing-cta" onclick="trackSolarCheckout('monthly')">Get Started →</a>
+>>>>>>> 91528ea (Add interactive demos: Digital Administrator, Digital Bookkeeper, Content Creator)
           </div>
           <div class="pricing-card featured" id="priceYearly">
             <div class="pricing-save-tag">Save $3,000/yr</div>
@@ -1041,7 +1080,11 @@
               <li>6 months free vs. monthly</li>
               <li>Priority onboarding &amp; support</li>
             </ul>
+<<<<<<< HEAD
             <a href="/checkout?niche=solar-ai&tier=annual&hosting=none" class="pricing-cta">Get Started →</a>
+=======
+            <a href="/checkout?niche=solar-ai&tier=annual&hosting=none" class="pricing-cta" onclick="trackSolarCheckout('annual')">Get Started →</a>
+>>>>>>> 91528ea (Add interactive demos: Digital Administrator, Digital Bookkeeper, Content Creator)
           </div>
         </div>
         <p class="pricing-note">All prices in CAD. Pay with PayPal or credit card at checkout.</p>
@@ -1084,6 +1127,10 @@
             <div class="addon-desc">Drip sequences that turn cold leads warm. Automated follow-ups that close deals while you sleep.</div>
           </div>
         </div>
+<<<<<<< HEAD
+=======
+        <p class="addons-cta-text">Interested in any of these? <a href="mailto:contact@zyphlabs.com?subject=Solar%20AI%20Add-Ons%20Inquiry" class="addons-cta-link">Just let us know →</a></p>
+>>>>>>> 91528ea (Add interactive demos: Digital Administrator, Digital Bookkeeper, Content Creator)
       </div>
     </div>
   </div>
@@ -1126,6 +1173,33 @@ function setStep(idx) {
 function showScene(id) {
   document.querySelectorAll('.scene').forEach(s => s.classList.remove('active'));
   $(id).classList.add('active');
+<<<<<<< HEAD
+=======
+  // Track scene view
+  trackSolarScene(id);
+}
+
+function trackSolarScene(scene) {
+  try {
+    fetch('/api/analytics/solar-demo', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ event: 'scene_view', scene: scene }),
+      keepalive: true
+    }).catch(function(){});
+  } catch(e) {}
+}
+
+function trackSolarCheckout(tier) {
+  try {
+    fetch('/api/analytics/solar-demo', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ event: 'checkout_click', tier: tier }),
+      keepalive: true
+    }).catch(function(){});
+  } catch(e) {}
+>>>>>>> 91528ea (Add interactive demos: Digital Administrator, Digital Bookkeeper, Content Creator)
 }
 
 /* Animate SVG element drawing in */
@@ -1465,13 +1539,18 @@ async function playFinishScene() {
   document.body.style.overflow = 'auto';
   $('demo').classList.add('scrollable');
 
+<<<<<<< HEAD
   await wait(300);
+=======
+  await wait(400);
+>>>>>>> 91528ea (Add interactive demos: Digital Administrator, Digital Bookkeeper, Content Creator)
 
   $('finishCheck').classList.add('show');
   await wait(500);
   $('finishText').classList.add('show');
   await wait(400);
   $('finishSub').classList.add('show');
+<<<<<<< HEAD
   await wait(700);
   $('finishExtra').classList.add('show');
   await wait(800);
@@ -1481,6 +1560,17 @@ async function playFinishScene() {
   await wait(400);
   $('pricingSection').classList.add('show');
   await wait(400);
+=======
+  await wait(1200);
+  $('finishExtra').classList.add('show');
+  await wait(1400);
+  $('zyphLogo').classList.add('show');
+  await wait(1000);
+  $('restartBtn').classList.add('show');
+  await wait(600);
+  $('pricingSection').classList.add('show');
+  await wait(800);
+>>>>>>> 91528ea (Add interactive demos: Digital Administrator, Digital Bookkeeper, Content Creator)
   $('addonsSection').classList.add('show');
 }
 

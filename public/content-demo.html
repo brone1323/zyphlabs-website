@@ -1,0 +1,1368 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Content Creator AI Demo - Zyph Labs</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600&family=Outfit:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --bg-light: #f5f7fa;
+            --bg-card: #ffffff;
+            --text-primary: #0f172a;
+            --text-secondary: #64748b;
+            --accent-pink: #db2777;
+            --accent-pink-light: #fd79a8;
+            --border-light: #e2e8f0;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --info: #3b82f6;
+        }
+
+        body {
+            font-family: 'Outfit', sans-serif;
+            background: var(--bg-light);
+            color: var(--text-primary);
+            line-height: 1.6;
+        }
+
+        /* Hero Screen */
+        .demo-container {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+        }
+
+        .hero-screen {
+            text-align: center;
+            max-width: 600px;
+            z-index: 10;
+        }
+
+        .hero-icon {
+            font-size: 4rem;
+            margin-bottom: 2rem;
+            animation: float 3s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        .hero-title {
+            font-size: 3rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            color: var(--text-primary);
+        }
+
+        .hero-subtitle {
+            font-size: 1.25rem;
+            color: var(--text-secondary);
+            margin-bottom: 2rem;
+            font-weight: 400;
+        }
+
+        .hero-cta {
+            background: linear-gradient(135deg, var(--accent-pink), var(--accent-pink-light));
+            color: white;
+            border: none;
+            padding: 1rem 2.5rem;
+            font-size: 1.1rem;
+            font-weight: 600;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+            font-family: 'Outfit', sans-serif;
+        }
+
+        .hero-cta:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(219, 39, 119, 0.3);
+        }
+
+        .hero-cta:active {
+            transform: translateY(0);
+        }
+
+        /* App Demo Screen */
+        .app-demo {
+            display: none;
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .app-demo.active {
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+        }
+
+        /* Top Bar */
+        .demo-topbar {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 1.5rem;
+            background: var(--bg-card);
+            border-radius: 12px 12px 0 0;
+            border-bottom: 1px solid var(--border-light);
+        }
+
+        .app-icon {
+            font-size: 1.5rem;
+        }
+
+        .app-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            flex: 1;
+        }
+
+        .demo-badge {
+            background: var(--accent-pink);
+            color: white;
+            padding: 0.4rem 0.8rem;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        /* App Window */
+        .app-window {
+            background: var(--bg-card);
+            border-radius: 12px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            border: 1px solid var(--border-light);
+        }
+
+        .window-titlebar {
+            background: var(--bg-light);
+            padding: 1rem;
+            border-bottom: 1px solid var(--border-light);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .traffic-light {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            display: inline-block;
+        }
+
+        .traffic-light.red { background: #ff5f57; }
+        .traffic-light.yellow { background: #ffbd2e; }
+        .traffic-light.green { background: #28c940; }
+
+        .window-content {
+            display: flex;
+            height: 600px;
+        }
+
+        .sidebar {
+            width: 200px;
+            background: var(--bg-light);
+            border-right: 1px solid var(--border-light);
+            padding: 2rem 0;
+        }
+
+        .nav-item {
+            padding: 0.75rem 1.5rem;
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.2s;
+            border-left: 3px solid transparent;
+        }
+
+        .nav-item:hover {
+            color: var(--text-primary);
+            background: rgba(219, 39, 119, 0.05);
+        }
+
+        .nav-item.active {
+            color: var(--accent-pink);
+            background: rgba(219, 39, 119, 0.1);
+            border-left-color: var(--accent-pink);
+            font-weight: 600;
+        }
+
+        .main-content {
+            flex: 1;
+            padding: 2rem;
+            overflow-y: auto;
+            background: #fafbfc;
+        }
+
+        /* Step Content */
+        .step-section {
+            display: none;
+        }
+
+        .step-section.active {
+            display: block;
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .step-header {
+            margin-bottom: 1.5rem;
+        }
+
+        .step-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 0.5rem;
+        }
+
+        .step-subtitle {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+        }
+
+        /* Content Calendar */
+        .calendar-grid {
+            display: grid;
+            gap: 1rem;
+        }
+
+        .calendar-day {
+            padding: 1.5rem;
+            background: white;
+            border: 1px solid var(--border-light);
+            border-radius: 8px;
+            transform: translateX(-20px);
+            opacity: 0;
+        }
+
+        .calendar-day.animate {
+            animation: slideInDay 0.5s ease forwards;
+        }
+
+        @keyframes slideInDay {
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        .day-name {
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 0.5rem;
+        }
+
+        .day-content {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            margin-bottom: 0.75rem;
+            line-height: 1.5;
+        }
+
+        .content-tag {
+            display: inline-block;
+            background: var(--accent-pink);
+            color: white;
+            padding: 0.3rem 0.6rem;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+
+        .content-tag.social {
+            background: var(--info);
+        }
+
+        .content-tag.both {
+            background: var(--warning);
+        }
+
+        /* Blog Editor */
+        .blog-editor {
+            background: white;
+            border: 1px solid var(--border-light);
+            border-radius: 8px;
+            padding: 2rem;
+        }
+
+        .editor-toolbar {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 1.5rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid var(--border-light);
+        }
+
+        .editor-btn {
+            padding: 0.5rem 0.75rem;
+            background: var(--bg-light);
+            border: 1px solid var(--border-light);
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: all 0.2s;
+        }
+
+        .editor-btn:hover {
+            background: var(--accent-pink);
+            color: white;
+            border-color: var(--accent-pink);
+        }
+
+        .editor-title {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 1rem;
+            min-height: 2.5rem;
+        }
+
+        .editor-meta {
+            background: var(--bg-light);
+            padding: 1rem;
+            border-radius: 6px;
+            margin-bottom: 1.5rem;
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+        }
+
+        .editor-body {
+            font-size: 1rem;
+            line-height: 1.8;
+            color: var(--text-primary);
+            min-height: 200px;
+        }
+
+        .editor-body p {
+            margin-bottom: 1rem;
+        }
+
+        .typing-cursor {
+            display: inline-block;
+            width: 2px;
+            height: 1.2em;
+            background: var(--accent-pink);
+            animation: blink 0.7s infinite;
+            margin-left: 2px;
+        }
+
+        @keyframes blink {
+            0%, 49%, 100% { opacity: 1; }
+            50%, 99% { opacity: 0; }
+        }
+
+        .seo-badge {
+            display: inline-block;
+            background: var(--success);
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 6px;
+            font-weight: 600;
+            font-size: 0.85rem;
+            margin-top: 1rem;
+        }
+
+        .word-count {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            margin-top: 1rem;
+        }
+
+        /* Image Generation */
+        .image-generator {
+            text-align: center;
+        }
+
+        .image-preview {
+            width: 100%;
+            height: 400px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 3rem;
+            margin-bottom: 1.5rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .image-preview::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+            animation: shimmer 2s infinite;
+        }
+
+        @keyframes shimmer {
+            0% { left: -100%; }
+            100% { left: 100%; }
+        }
+
+        .generation-status {
+            color: var(--text-secondary);
+            margin-bottom: 1rem;
+            font-size: 0.95rem;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 4px;
+            background: var(--border-light);
+            border-radius: 2px;
+            margin-bottom: 1.5rem;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--accent-pink), var(--accent-pink-light));
+            width: 0%;
+            transition: width 0.1s linear;
+        }
+
+        .format-options {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+
+        .format-card {
+            padding: 1rem;
+            background: var(--bg-light);
+            border: 1px solid var(--border-light);
+            border-radius: 6px;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .format-card:hover {
+            border-color: var(--accent-pink);
+            background: rgba(219, 39, 119, 0.05);
+        }
+
+        .format-card.generated {
+            border-color: var(--success);
+            background: rgba(16, 185, 129, 0.05);
+        }
+
+        .format-size {
+            color: var(--text-secondary);
+            font-size: 0.8rem;
+        }
+
+        /* Browser Preview */
+        .browser-window {
+            background: white;
+            border: 1px solid var(--border-light);
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .browser-bar {
+            background: var(--bg-light);
+            padding: 1rem;
+            border-bottom: 1px solid var(--border-light);
+            display: flex;
+            gap: 0.5rem;
+            align-items: center;
+        }
+
+        .browser-btn {
+            width: 24px;
+            height: 24px;
+            background: var(--border-light);
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        .url-bar {
+            flex: 1;
+            background: white;
+            border: 1px solid var(--border-light);
+            padding: 0.5rem 0.75rem;
+            border-radius: 4px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+        }
+
+        .blog-preview {
+            padding: 2rem;
+            max-height: 400px;
+            overflow-y: auto;
+        }
+
+        .blog-preview h1 {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+            color: var(--text-primary);
+        }
+
+        .blog-preview p {
+            color: var(--text-secondary);
+            margin-bottom: 1rem;
+            line-height: 1.8;
+        }
+
+        .publish-badge {
+            background: var(--success);
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 6px;
+            display: inline-block;
+            font-weight: 600;
+            margin-top: 1rem;
+        }
+
+        /* Social Media Mockups */
+        .social-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+        }
+
+        .social-post {
+            background: white;
+            border: 1px solid var(--border-light);
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .social-header {
+            padding: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            border-bottom: 1px solid var(--border-light);
+        }
+
+        .social-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--accent-pink), var(--accent-pink-light));
+        }
+
+        .social-name {
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+
+        .social-time {
+            color: var(--text-secondary);
+            font-size: 0.8rem;
+        }
+
+        .social-image {
+            width: 100%;
+            height: 250px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+
+        .instagram-image {
+            height: 400px;
+            aspect-ratio: 1 / 1;
+        }
+
+        .social-content {
+            padding: 1rem;
+        }
+
+        .social-caption {
+            margin-bottom: 0.75rem;
+            line-height: 1.6;
+            color: var(--text-primary);
+            font-size: 0.95rem;
+        }
+
+        .social-hashtags {
+            color: var(--accent-pink);
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+        }
+
+        .social-engagement {
+            display: flex;
+            gap: 1.5rem;
+            padding: 0.75rem 0;
+            border-top: 1px solid var(--border-light);
+            color: var(--text-secondary);
+            font-size: 0.85rem;
+        }
+
+        .social-engagement span {
+            display: flex;
+            align-items: center;
+            gap: 0.25rem;
+        }
+
+        .scheduled-badge {
+            background: var(--warning);
+            color: white;
+            padding: 0.4rem 0.8rem;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            display: inline-block;
+            margin-top: 0.5rem;
+        }
+
+        /* Narration & Controls */
+        .demo-narration {
+            background: var(--bg-card);
+            padding: 1.5rem;
+            border-radius: 8px;
+            border-left: 4px solid var(--accent-pink);
+            margin-bottom: 1.5rem;
+        }
+
+        .narration-step {
+            display: inline-block;
+            background: var(--accent-pink);
+            color: white;
+            padding: 0.3rem 0.7rem;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            margin-bottom: 0.75rem;
+            margin-right: 0.5rem;
+        }
+
+        .narration-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 0.5rem;
+        }
+
+        .narration-text {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+            line-height: 1.6;
+        }
+
+        /* Activity Log */
+        .activity-log {
+            background: var(--bg-card);
+            border: 1px solid var(--border-light);
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin-top: 1.5rem;
+        }
+
+        .activity-title {
+            font-weight: 600;
+            margin-bottom: 1rem;
+            color: var(--text-primary);
+        }
+
+        .activity-item {
+            display: flex;
+            gap: 1rem;
+            padding: 0.75rem 0;
+            border-bottom: 1px solid var(--border-light);
+            font-size: 0.9rem;
+            opacity: 0;
+        }
+
+        .activity-item:last-child {
+            border-bottom: none;
+        }
+
+        .activity-item.show {
+            animation: slideInActivity 0.3s ease forwards;
+        }
+
+        @keyframes slideInActivity {
+            from {
+                opacity: 0;
+                transform: translateX(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        .activity-time {
+            color: var(--text-secondary);
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.8rem;
+            min-width: 80px;
+        }
+
+        .activity-icon {
+            color: var(--accent-pink);
+            font-weight: 600;
+        }
+
+        .activity-text {
+            color: var(--text-secondary);
+        }
+
+        /* Progress Bar */
+        .demo-progress {
+            display: flex;
+            gap: 0.5rem;
+            margin-top: 2rem;
+        }
+
+        .progress-dot {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: var(--border-light);
+            border: 2px solid transparent;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: var(--text-secondary);
+            transition: all 0.3s;
+        }
+
+        .progress-dot.active {
+            background: var(--accent-pink);
+            color: white;
+            border-color: var(--accent-pink);
+            transform: scale(1.1);
+        }
+
+        .progress-dot.completed {
+            background: var(--success);
+            color: white;
+        }
+
+        /* Final CTA */
+        .final-cta {
+            display: none;
+            text-align: center;
+            padding: 3rem 2rem;
+            background: var(--bg-card);
+            border-radius: 12px;
+            border: 2px solid var(--accent-pink);
+        }
+
+        .final-cta.active {
+            display: block;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .final-title {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            color: var(--text-primary);
+        }
+
+        .final-text {
+            color: var(--text-secondary);
+            margin-bottom: 2rem;
+            font-size: 1.1rem;
+        }
+
+        .cta-button {
+            background: linear-gradient(135deg, var(--accent-pink), var(--accent-pink-light));
+            color: white;
+            border: none;
+            padding: 1rem 2.5rem;
+            font-size: 1.1rem;
+            font-weight: 600;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+            font-family: 'Outfit', sans-serif;
+        }
+
+        .cta-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(219, 39, 119, 0.3);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .window-content {
+                height: auto;
+                flex-direction: column;
+            }
+
+            .sidebar {
+                width: 100%;
+                border-right: none;
+                border-bottom: 1px solid var(--border-light);
+                display: flex;
+                overflow-x: auto;
+                padding: 0;
+            }
+
+            .nav-item {
+                flex-shrink: 0;
+                border-left: none;
+                border-bottom: 3px solid transparent;
+                padding: 1rem 1.5rem;
+            }
+
+            .nav-item.active {
+                border-left: none;
+                border-bottom-color: var(--accent-pink);
+            }
+
+            .main-content {
+                height: auto;
+            }
+
+            .social-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .format-options {
+                grid-template-columns: 1fr;
+            }
+
+            .hero-title {
+                font-size: 2rem;
+            }
+
+            .calendar-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="demo-container">
+        <!-- Hero Screen -->
+        <div class="hero-screen" id="heroScreen">
+            <div class="hero-icon">✍️</div>
+            <h1 class="hero-title">Watch AI build your brand.</h1>
+            <p class="hero-subtitle">See how Content Creator generates a week's worth of blog posts and social media—automatically.</p>
+            <button class="hero-cta" onclick="startDemo()">Launch Demo</button>
+        </div>
+
+        <!-- App Demo -->
+        <div class="app-demo" id="appDemo">
+            <!-- Narration -->
+            <div class="demo-narration">
+                <span class="narration-step" id="stepBadge">Step 1</span>
+                <h3 class="narration-title" id="stepTitle">Content Calendar Generated</h3>
+                <p class="narration-text" id="stepDescription">AI creates a weekly content calendar tailored to your niche and past projects.</p>
+            </div>
+
+            <!-- App Window -->
+            <div class="app-window">
+                <div class="demo-topbar">
+                    <span class="app-icon">✍️</span>
+                    <span class="app-title">Content Creator</span>
+                    <span class="demo-badge">Interactive Demo</span>
+                </div>
+
+                <div class="window-titlebar">
+                    <span class="traffic-light red"></span>
+                    <span class="traffic-light yellow"></span>
+                    <span class="traffic-light green"></span>
+                </div>
+
+                <div class="window-content">
+                    <div class="sidebar">
+                        <div class="nav-item active" data-nav="dashboard">Dashboard</div>
+                        <div class="nav-item" data-nav="blog">Blog Posts</div>
+                        <div class="nav-item" data-nav="social">Social Media</div>
+                        <div class="nav-item" data-nav="images">Images</div>
+                        <div class="nav-item" data-nav="analytics">Analytics</div>
+                        <div class="nav-item" data-nav="settings">Settings</div>
+                    </div>
+
+                    <div class="main-content">
+                        <!-- Step 1: Calendar -->
+                        <div class="step-section active" id="step1">
+                            <div class="step-header">
+                                <h2 class="step-title">Weekly Content Calendar</h2>
+                                <p class="step-subtitle">Automatically generated for Reynolds Contracting</p>
+                            </div>
+                            <div class="calendar-grid" id="calendarGrid"></div>
+                        </div>
+
+                        <!-- Step 2: Blog -->
+                        <div class="step-section" id="step2">
+                            <div class="step-header">
+                                <h2 class="step-title">Blog Post Written</h2>
+                                <p class="step-subtitle">AI generates SEO-optimized content in your voice</p>
+                            </div>
+                            <div class="blog-editor">
+                                <div class="editor-toolbar">
+                                    <button class="editor-btn">B</button>
+                                    <button class="editor-btn">I</button>
+                                    <button class="editor-btn">U</button>
+                                    <button class="editor-btn">Link</button>
+                                </div>
+                                <div class="editor-title" id="blogTitle"></div>
+                                <div class="editor-meta" id="blogMeta"></div>
+                                <div class="editor-body" id="blogBody"></div>
+                                <div id="blogStats"></div>
+                            </div>
+                        </div>
+
+                        <!-- Step 3: Image -->
+                        <div class="step-section" id="step3">
+                            <div class="step-header">
+                                <h2 class="step-title">AI Image Generated</h2>
+                                <p class="step-subtitle">Perfect blog header and social media sizes ready to go</p>
+                            </div>
+                            <div class="image-generator">
+                                <div class="generation-status" id="genStatus"></div>
+                                <div class="progress-bar"><div class="progress-fill" id="genProgress"></div></div>
+                                <div class="image-preview" id="imagePreview">🎨</div>
+                                <div class="format-options" id="formatOptions"></div>
+                            </div>
+                        </div>
+
+                        <!-- Step 4: Publish -->
+                        <div class="step-section" id="step4">
+                            <div class="step-header">
+                                <h2 class="step-title">Published to Website</h2>
+                                <p class="step-subtitle">Blog post live with SEO optimization and social signals</p>
+                            </div>
+                            <div class="browser-window">
+                                <div class="browser-bar">
+                                    <div class="browser-btn"></div>
+                                    <div class="browser-btn"></div>
+                                    <div class="url-bar">www.reynoldscontracting.com/blog/kitchen-renovation-signs</div>
+                                </div>
+                                <div class="blog-preview" id="blogLive">
+                                    <h1>5 Signs Your Kitchen Needs a Renovation</h1>
+                                    <p>Your kitchen is more than just a room—it's the heart of your home. It's where family gathers, meals are created, and memories are made. When your kitchen starts to show its age, it affects not just the look of your home, but the functionality and value too.</p>
+                                    <p><strong>Sign #1: Outdated Cabinets</strong><br>Your kitchen cabinets say a lot about the overall condition of the space. If they're looking worn, the paint is chipping, or the hardware is dated, it's time for an upgrade.</p>
+                                    <div class="publish-badge">Published ✓</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Step 5: Social -->
+                        <div class="step-section" id="step5">
+                            <div class="step-header">
+                                <h2 class="step-title">Posted to Social Media</h2>
+                                <p class="step-subtitle">Multi-platform content ready to engage your audience</p>
+                            </div>
+                            <div class="social-grid">
+                                <div class="social-post">
+                                    <div class="social-header">
+                                        <div class="social-avatar"></div>
+                                        <div style="flex: 1;">
+                                            <div class="social-name">Reynolds Contracting</div>
+                                            <div class="social-time">Just now</div>
+                                        </div>
+                                        <span style="color: var(--text-secondary); font-size: 1.2rem;">f</span>
+                                    </div>
+                                    <div class="social-image"></div>
+                                    <div class="social-content">
+                                        <div class="social-caption">Is your kitchen telling you something? 🏠 Check out our latest blog post on the 5 signs your kitchen needs a renovation. Learn what contractors look for.</div>
+                                        <div class="social-hashtags">#KitchenRenovation #HomeImprovement #Contractor</div>
+                                        <div class="social-engagement">
+                                            <span>👍 248 likes</span>
+                                            <span>💬 32 comments</span>
+                                            <span>↗️ 18 shares</span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="social-post">
+                                    <div class="social-header">
+                                        <div class="social-avatar"></div>
+                                        <div style="flex: 1;">
+                                            <div class="social-name">Reynolds Contracting</div>
+                                            <div class="social-time">Scheduled for 2:00 PM</div>
+                                        </div>
+                                        <span style="color: var(--text-secondary); font-size: 1.2rem;">📷</span>
+                                    </div>
+                                    <div class="social-image instagram-image"></div>
+                                    <div class="social-content">
+                                        <div class="social-caption">Kitchen renovation season is here! 🔨 What's the #1 sign YOUR kitchen needs an update? Comment below! 👇</div>
+                                        <div class="social-hashtags">#kitchen #renovation #beforeandafter #contractor #home</div>
+                                        <div class="scheduled-badge">Scheduled</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Activity Log -->
+            <div class="activity-log">
+                <div class="activity-title">Activity Log</div>
+                <div id="activityLog"></div>
+            </div>
+
+            <!-- Progress -->
+            <div class="demo-progress" id="demoProgress"></div>
+
+            <!-- Final CTA -->
+            <div class="final-cta" id="finalCta">
+                <h2 class="final-title">That's content marketing on autopilot.</h2>
+                <p class="final-text">All your content. Consistent voice. Always publishing. Always growing.</p>
+                <a href="mailto:contact@zyphlabs.com"><button class="cta-button">Get Started with Zyph Labs</button></a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const steps = [
+            {
+                id: 1,
+                title: "Content Calendar Generated",
+                description: "AI creates a weekly content calendar tailored to your niche and past projects.",
+                duration: 5000
+            },
+            {
+                id: 2,
+                title: "Blog Post Written",
+                description: "Watch as AI writes an SEO-optimized article in your voice, complete with meta descriptions and engagement hooks.",
+                duration: 8000
+            },
+            {
+                id: 3,
+                title: "AI Image Generated",
+                description: "Custom images created for every format—blog headers, Facebook posts, Instagram squares, all optimized for engagement.",
+                duration: 6000
+            },
+            {
+                id: 4,
+                title: "Published to Website",
+                description: "Your blog post goes live instantly with automatic sitemap updates and Google notifications.",
+                duration: 4000
+            },
+            {
+                id: 5,
+                title: "Posted to Social Media",
+                description: "AI adapts your content for each platform, scheduling posts for maximum reach and engagement.",
+                duration: 5000
+            }
+        ];
+
+        const calendarData = [
+            { day: 'Monday', content: '5 Signs Your Kitchen Needs a Renovation', type: 'Blog Post' },
+            { day: 'Tuesday', content: 'Before/After Project Photo', type: 'Social' },
+            { day: 'Wednesday', content: 'How to Choose the Right Contractor', type: 'Blog Post' },
+            { day: 'Thursday', content: 'Customer Testimonial Spotlight', type: 'Social' },
+            { day: 'Friday', content: 'Weekend DIY vs. Professional Renovation', type: 'Both' }
+        ];
+
+        const blogContent = {
+            title: "5 Signs Your Kitchen Needs a Renovation",
+            paragraphs: [
+                "Your kitchen is more than just a room—it's the heart of your home. It's where family gathers, meals are created, and memories are made. When your kitchen starts to show its age, it affects not just the look of your home, but the functionality and value too.",
+                "Sign #1: Outdated Cabinets. Your kitchen cabinets say a lot about the overall condition of the space. If they're looking worn, the paint is chipping, or the hardware is dated, it's time for an upgrade. Modern cabinetry not only looks better but provides better storage and organization.",
+                "Sign #2: Failing Appliances. When you're constantly repairing your refrigerator or your oven won't heat evenly, it's a sign that an upgrade is needed. Newer appliances are more energy-efficient, which can save you money on utilities over time.",
+                "Sign #3: Outdated Layout. Kitchen workflows have changed. A modern kitchen should have a good triangle between the sink, stove, and refrigerator. If your kitchen layout is cramped or inefficient, it might be time to reconsider the design."
+            ]
+        };
+
+        let currentStep = 0;
+        let isPlaying = false;
+
+        async function startDemo() {
+            document.getElementById('heroScreen').style.display = 'none';
+            document.getElementById('appDemo').classList.add('active');
+
+            // Create progress dots
+            createProgressDots();
+
+            // Start animation sequence
+            playDemo();
+        }
+
+        function createProgressDots() {
+            const progressContainer = document.getElementById('demoProgress');
+            for (let i = 1; i <= 5; i++) {
+                const dot = document.createElement('div');
+                dot.className = 'progress-dot';
+                if (i === 1) dot.classList.add('active');
+                dot.textContent = i;
+                progressContainer.appendChild(dot);
+            }
+        }
+
+        async function playDemo() {
+            isPlaying = true;
+
+            for (let i = 0; i < steps.length; i++) {
+                currentStep = i;
+                updateUI(i);
+                await runStep(i);
+                await new Promise(resolve => setTimeout(resolve, 1000));
+            }
+
+            // Show final CTA
+            document.getElementById('finalCta').classList.add('active');
+            isPlaying = false;
+        }
+
+        function updateUI(stepIndex) {
+            // Hide all steps
+            document.querySelectorAll('.step-section').forEach(el => el.classList.remove('active'));
+            document.getElementById(`step${stepIndex + 1}`).classList.add('active');
+
+            // Update narration
+            document.getElementById('stepBadge').textContent = `Step ${stepIndex + 1}`;
+            document.getElementById('stepTitle').textContent = steps[stepIndex].title;
+            document.getElementById('stepDescription').textContent = steps[stepIndex].description;
+
+            // Update progress dots
+            document.querySelectorAll('.progress-dot').forEach((dot, idx) => {
+                dot.classList.remove('active', 'completed');
+                if (idx === stepIndex) {
+                    dot.classList.add('active');
+                } else if (idx < stepIndex) {
+                    dot.classList.add('completed');
+                }
+            });
+        }
+
+        async function runStep(stepIndex) {
+            const step = steps[stepIndex];
+
+            switch (stepIndex) {
+                case 0:
+                    await animateCalendar();
+                    addActivity('AI generated weekly content plan based on your niche + recent projects');
+                    break;
+                case 1:
+                    await animateBlogPost();
+                    addActivity('Blog post drafted — 1,247 words, SEO optimized');
+                    break;
+                case 2:
+                    await animateImageGeneration();
+                    addActivity('AI image generated — 3 formats ready');
+                    break;
+                case 3:
+                    await animatePublish();
+                    addActivity('Blog post published to website, sitemap updated, Google notified');
+                    break;
+                case 4:
+                    await animateSocial();
+                    addActivity('Facebook post published, Instagram post scheduled for 2:00 PM');
+                    break;
+            }
+        }
+
+        async function animateCalendar() {
+            const grid = document.getElementById('calendarGrid');
+            grid.innerHTML = '';
+
+            for (let i = 0; i < calendarData.length; i++) {
+                const item = calendarData[i];
+                const card = document.createElement('div');
+                card.className = 'calendar-day';
+
+                const tag = item.type === 'Both' ? 'both' :
+                            item.type === 'Social' ? 'social' : '';
+
+                card.innerHTML = `
+                    <div class="day-name">${item.day}</div>
+                    <div class="day-content">${item.content}</div>
+                    <span class="content-tag ${tag}">${item.type}</span>
+                `;
+
+                grid.appendChild(card);
+
+                // Stagger animation
+                setTimeout(() => card.classList.add('animate'), i * 300);
+                await new Promise(resolve => setTimeout(resolve, 300));
+            }
+
+            await new Promise(resolve => setTimeout(resolve, 1000));
+        }
+
+        async function animateBlogPost() {
+            document.getElementById('blogTitle').innerHTML = '';
+            document.getElementById('blogBody').innerHTML = '';
+            document.getElementById('blogStats').innerHTML = '';
+            document.getElementById('blogMeta').innerHTML = 'Meta description: Discover the key signs that indicate your kitchen needs renovation. Learn from expert contractors...';
+
+            const title = blogContent.title;
+            const titleEl = document.getElementById('blogTitle');
+
+            // Type title
+            await typeText(titleEl, title, 50);
+
+            await new Promise(resolve => setTimeout(resolve, 500));
+
+            const bodyEl = document.getElementById('blogBody');
+
+            // Type first 3 paragraphs
+            for (let i = 0; i < 3; i++) {
+                const p = document.createElement('p');
+                bodyEl.appendChild(p);
+                await typeText(p, blogContent.paragraphs[i], 20);
+                await new Promise(resolve => setTimeout(resolve, 300));
+            }
+
+            // Show word count and SEO
+            const statsEl = document.getElementById('blogStats');
+            statsEl.innerHTML = `
+                <div class="word-count">📊 1,247 words</div>
+                <div class="seo-badge">✓ SEO Score: 94/100</div>
+                <div style="color: var(--success); margin-top: 0.5rem; font-size: 0.9rem;">✓ Written in your voice</div>
+            `;
+
+            await new Promise(resolve => setTimeout(resolve, 1000));
+        }
+
+        async function animateImageGeneration() {
+            const genStatus = document.getElementById('genStatus');
+            const progress = document.getElementById('genProgress');
+            const preview = document.getElementById('imagePreview');
+            const formatOptions = document.getElementById('formatOptions');
+
+            genStatus.textContent = 'Generating image for: Modern kitchen renovation, bright and airy, before and after concept';
+
+            // Animate progress bar
+            for (let i = 0; i <= 100; i += 5) {
+                progress.style.width = i + '%';
+                await new Promise(resolve => setTimeout(resolve, 40));
+            }
+
+            preview.textContent = '✨';
+            await new Promise(resolve => setTimeout(resolve, 500));
+
+            // Show format options
+            const formats = [
+                { name: 'Blog Header', size: '1200×630' },
+                { name: 'Facebook Post', size: '1200×630' },
+                { name: 'Instagram Square', size: '1080×1080' }
+            ];
+
+            formatOptions.innerHTML = '';
+            for (let i = 0; i < formats.length; i++) {
+                const card = document.createElement('div');
+                card.className = 'format-card';
+                card.innerHTML = `
+                    <div>${formats[i].name}</div>
+                    <div class="format-size">${formats[i].size}</div>
+                `;
+                formatOptions.appendChild(card);
+
+                setTimeout(() => {
+                    card.classList.add('generated');
+                }, i * 200);
+
+                await new Promise(resolve => setTimeout(resolve, 200));
+            }
+
+            await new Promise(resolve => setTimeout(resolve, 500));
+        }
+
+        async function animatePublish() {
+            const blogLive = document.getElementById('blogLive');
+            const children = blogLive.children;
+
+            for (let i = 0; i < children.length; i++) {
+                children[i].style.opacity = '0';
+                children[i].style.animation = 'none';
+            }
+
+            for (let i = 0; i < children.length; i++) {
+                children[i].style.animation = `fadeIn 0.5s ease forwards`;
+                children[i].style.animationDelay = `${i * 100}ms`;
+                await new Promise(resolve => setTimeout(resolve, 100));
+            }
+
+            await new Promise(resolve => setTimeout(resolve, 1000));
+        }
+
+        async function animateSocial() {
+            const posts = document.querySelectorAll('#step5 .social-post');
+
+            for (let i = 0; i < posts.length; i++) {
+                posts[i].style.opacity = '0';
+                posts[i].style.transform = 'scale(0.95)';
+            }
+
+            for (let i = 0; i < posts.length; i++) {
+                posts[i].style.animation = `fadeIn 0.4s ease forwards`;
+                posts[i].style.animationDelay = `0s`;
+                posts[i].style.opacity = '1';
+                posts[i].style.transform = 'scale(1)';
+                await new Promise(resolve => setTimeout(resolve, 300));
+            }
+
+            await new Promise(resolve => setTimeout(resolve, 500));
+        }
+
+        async function typeText(element, text, speed = 30) {
+            return new Promise(resolve => {
+                let index = 0;
+
+                function type() {
+                    if (index < text.length) {
+                        element.innerHTML += text[index];
+                        index++;
+                        setTimeout(type, speed);
+                    } else {
+                        resolve();
+                    }
+                }
+
+                type();
+            });
+        }
+
+        function addActivity(message) {
+            const log = document.getElementById('activityLog');
+            const now = new Date();
+            const time = now.toLocaleTimeString('en-US', { hour12: false, hour: '2-digit', minute: '2-digit', second: '2-digit' });
+
+            const item = document.createElement('div');
+            item.className = 'activity-item';
+            item.innerHTML = `
+                <div class="activity-time">${time}</div>
+                <div class="activity-icon">⚡</div>
+                <div class="activity-text">${message}</div>
+            `;
+
+            log.insertBefore(item, log.firstChild);
+
+            // Trigger animation
+            setTimeout(() => item.classList.add('show'), 10);
+        }
+
+        // Initialize progress dots on load
+        window.addEventListener('load', () => {
+            // Demo is ready to start
+        });
+    </script>
+</body>
+</html>
