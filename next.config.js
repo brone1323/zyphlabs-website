@@ -47,7 +47,6 @@ const nextConfig = {
         destination: '/ontario-solar-ai-demo.html',
         permanent: false,
       },
-    ]
-  },
-}
-module.exports = nextConfig
+      {
+        source: '/promotions',
+    

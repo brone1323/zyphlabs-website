@@ -1,0 +1,717 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="/favicon.ico" sizes="any">
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+    <title>Spring Promo — Free Custom Website Design | Zyph Labs</title>
+    <meta name="description" content="Spring 2026 promo: Get a custom website designed for FREE. Choose design-only or full hosting & installation for just $20. Plus AI-powered add-ons.">
+    <meta property="og:title" content="Spring Promo — Free Custom Website Design | Zyph Labs">
+    <meta property="og:description" content="Get a custom website designed for FREE this spring. Plus AI-powered add-ons to supercharge your business.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://www.zyphlabs.com/promotions">
+    <link rel="canonical" href="https://www.zyphlabs.com/promotions">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;600;700;800&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --bg: #ffffff;
+            --bg-subtle: #f9fafb;
+            --bg-muted: #f3f4f6;
+            --border: #e5e7eb;
+            --border-mid: #d1d5db;
+            --text: #111827;
+            --text-2: #374151;
+            --text-3: #6b7280;
+            --blue: #2563eb;
+            --blue-dark: #1d4ed8;
+            --green: #16a34a;
+            --green-light: #f0fdf4;
+            --green-dark: #15803d;
+            --red: #dc2626;
+            --red-light: #fef2f2;
+            --amber: #d97706;
+            --shadow-sm: 0 1px 3px rgba(0,0,0,0.08);
+            --shadow-md: 0 4px 12px rgba(0,0,0,0.08);
+            --shadow-lg: 0 10px 30px rgba(0,0,0,0.10);
+            --r-sm: 8px;
+            --r-md: 12px;
+            --r-lg: 16px;
+            --r-xl: 24px;
+            --font-display: 'Space Grotesk', sans-serif;
+            --font-body: 'Inter', sans-serif;
+            --ease: cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+        html { scroll-behavior: smooth; }
+        body {
+            font-family: var(--font-body);
+            background: var(--bg);
+            color: var(--text);
+            overflow-x: hidden;
+            line-height: 1.65;
+            -webkit-font-smoothing: antialiased;
+        }
+        h1, h2, h3, h4 { font-family: var(--font-display); font-weight: 700; line-height: 1.2; }
+        p { color: var(--text-3); line-height: 1.7; }
+        a { text-decoration: none; color: inherit; }
+
+        /* NAV */
+        .nav {
+            position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+            background: rgba(255,255,255,0.92); backdrop-filter: blur(16px);
+            border-bottom: 1px solid var(--border);
+            padding: 0 1.5rem; height: 56px;
+            display: flex; align-items: center; justify-content: space-between;
+        }
+        .nav-logo { display: flex; align-items: center; gap: 0.5rem; font-family: var(--font-display); font-weight: 700; font-size: 1.05rem; color: var(--text); }
+        .nav-logo .z-icon { width: 28px; height: 28px; border-radius: 6px; background: linear-gradient(135deg, #6c5ce7, #00cec9); display: flex; align-items: center; justify-content: center; color: #fff; font-size: 0.8rem; font-weight: 800; }
+        .nav-back { font-size: 0.85rem; color: var(--text-3); transition: color 0.2s; }
+        .nav-back:hover { color: var(--blue); }
+
+        /* HERO */
+        .hero {
+            padding: 7rem 1.5rem 3rem;
+            text-align: center;
+            background: linear-gradient(180deg, var(--green-light) 0%, var(--bg) 100%);
+            position: relative; overflow: hidden;
+        }
+        .hero::before {
+            content: ''; position: absolute; top: -50%; left: -50%; width: 200%; height: 200%;
+            background: radial-gradient(circle at 50% 30%, rgba(22,163,74,0.06) 0%, transparent 60%);
+            pointer-events: none;
+        }
+        .promo-badge {
+            display: inline-flex; align-items: center; gap: 0.4rem;
+            background: var(--green); color: #fff;
+            padding: 0.4rem 1rem; border-radius: 50px;
+            font-size: 0.78rem; font-weight: 700; letter-spacing: 0.05em;
+            text-transform: uppercase; margin-bottom: 1.2rem;
+            animation: pulse-badge 2s ease-in-out infinite;
+        }
+        @keyframes pulse-badge {
+            0%, 100% { box-shadow: 0 0 0 0 rgba(22,163,74,0.3); }
+            50% { box-shadow: 0 0 0 8px rgba(22,163,74,0); }
+        }
+        .hero h1 { font-size: clamp(2rem, 5.5vw, 3.2rem); margin-bottom: 0.75rem; }
+        .hero h1 .highlight { color: var(--green); }
+        .hero .subtitle { font-size: clamp(1rem, 2.5vw, 1.15rem); max-width: 540px; margin: 0 auto 2rem; }
+
+        /* SECTION */
+        .section { padding: 3rem 1.5rem; max-width: 720px; margin: 0 auto; }
+        .section-label {
+            display: inline-flex; align-items: center; gap: 0.35rem;
+            font-size: 0.75rem; font-weight: 700; text-transform: uppercase;
+            letter-spacing: 0.08em; color: var(--green);
+            margin-bottom: 0.6rem;
+        }
+        .section h2 { font-size: clamp(1.4rem, 4vw, 1.8rem); margin-bottom: 0.4rem; }
+        .section > p { max-width: 560px; margin-bottom: 1.5rem; }
+
+        /* STEP HEADERS */
+        .step-header {
+            display: flex; align-items: center; gap: 0.6rem;
+            margin-bottom: 1.2rem;
+        }
+        .step-num {
+            width: 32px; height: 32px; border-radius: 50%;
+            background: var(--green); color: #fff;
+            font-family: var(--font-display); font-weight: 700; font-size: 0.85rem;
+            display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+        }
+        .step-num.done { background: var(--green); }
+        .step-header h2 { margin-bottom: 0; font-size: 1.2rem; }
+
+        /* DIVIDER */
+        .divider { height: 1px; background: var(--border); max-width: 720px; margin: 0 auto; }
+
+        /* CHOICE ROW — two buttons side by side */
+        .choice-row {
+            display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem;
+            margin-bottom: 1rem;
+        }
+        @media (max-width: 480px) { .choice-row { grid-template-columns: 1fr; } }
+
+        .choice-btn {
+            border: 2px solid var(--border);
+            border-radius: var(--r-md); padding: 1.25rem;
+            text-align: center; cursor: pointer;
+            transition: all 0.2s var(--ease);
+            background: #fff; position: relative;
+        }
+        .choice-btn:hover { border-color: var(--border-mid); box-shadow: var(--shadow-sm); }
+        .choice-btn.selected { border-color: var(--green); background: var(--green-light); }
+        .choice-btn.selected-no { border-color: var(--border-mid); background: var(--bg-muted); }
+        .choice-btn .choice-icon { font-size: 1.5rem; margin-bottom: 0.4rem; }
+        .choice-btn h4 { font-size: 0.95rem; margin-bottom: 0.15rem; }
+        .choice-btn .choice-price { font-family: var(--font-display); font-weight: 700; color: var(--green); font-size: 1.1rem; }
+        .choice-btn .choice-price.free { color: var(--text-3); }
+        .choice-btn .choice-sub { font-size: 0.78rem; color: var(--text-3); margin-top: 0.15rem; }
+        .choice-btn .check-mark {
+            position: absolute; top: 8px; right: 10px;
+            width: 22px; height: 22px; border-radius: 50%;
+            background: var(--green); color: #fff;
+            display: none; align-items: center; justify-content: center;
+            font-size: 0.7rem; font-weight: 700;
+        }
+        .choice-btn.selected .check-mark { display: flex; }
+
+        /* ADDON ROW — horizontal card with add/skip */
+        .addon-row {
+            border: 2px solid var(--border);
+            border-radius: var(--r-md); padding: 1.25rem;
+            margin-bottom: 0.75rem;
+            display: flex; gap: 1rem; align-items: flex-start;
+            transition: all 0.2s var(--ease); background: #fff;
+        }
+        .addon-row.added { border-color: var(--green); background: var(--green-light); }
+        .addon-row.skipped { border-color: var(--border); background: var(--bg-muted); opacity: 0.7; }
+        .addon-row .addon-icon-wrap {
+            width: 44px; height: 44px; border-radius: var(--r-sm);
+            display: flex; align-items: center; justify-content: center;
+            font-size: 1.2rem; flex-shrink: 0;
+        }
+        .addon-row .addon-info { flex: 1; min-width: 0; }
+        .addon-row h4 { font-size: 0.92rem; margin-bottom: 0.2rem; }
+        .addon-row .addon-desc { font-size: 0.82rem; color: var(--text-3); line-height: 1.5; margin-bottom: 0.5rem; }
+        .addon-row .addon-pricing { font-family: var(--font-display); font-weight: 700; font-size: 0.88rem; color: var(--blue); }
+        .addon-row .addon-pricing .annual { font-weight: 500; color: var(--text-3); font-size: 0.78rem; }
+        .addon-row .addon-actions { display: flex; gap: 0.5rem; flex-shrink: 0; align-self: center; }
+
+        .btn-add, .btn-skip {
+            padding: 0.5rem 1rem; border-radius: var(--r-sm);
+            font-size: 0.8rem; font-weight: 600; cursor: pointer;
+            transition: all 0.2s var(--ease); border: 1.5px solid;
+            font-family: var(--font-body);
+        }
+        .btn-add { background: var(--green); color: #fff; border-color: var(--green); }
+        .btn-add:hover { background: var(--green-dark); }
+        .btn-add.active { background: var(--green-dark); box-shadow: 0 0 0 2px rgba(22,163,74,0.3); }
+        .btn-skip { background: #fff; color: var(--text-3); border-color: var(--border-mid); }
+        .btn-skip:hover { background: var(--bg-muted); }
+        .btn-skip.active { background: var(--bg-muted); color: var(--text-2); box-shadow: 0 0 0 2px rgba(0,0,0,0.05); }
+
+        @media (max-width: 540px) {
+            .addon-row { flex-direction: column; }
+            .addon-row .addon-actions { align-self: stretch; }
+            .btn-add, .btn-skip { flex: 1; text-align: center; }
+        }
+
+        /* INCOMPLETE WARNING */
+        .incomplete-warning {
+            background: var(--red-light); border: 1.5px solid rgba(220,38,38,0.3);
+            border-radius: var(--r-sm); padding: 0.75rem 1rem;
+            font-size: 0.85rem; color: var(--red); font-weight: 500;
+            margin-bottom: 1rem; display: none; align-items: center; gap: 0.4rem;
+        }
+        .incomplete-warning.show { display: flex; }
+
+        /* ORDER SUMMARY */
+        .summary-box {
+            background: var(--bg-subtle); border: 1.5px solid var(--border);
+            border-radius: var(--r-lg); padding: 1.5rem;
+            margin-top: 2rem;
+        }
+        .summary-box h3 { font-size: 1.1rem; margin-bottom: 1rem; }
+        .summary-line {
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 0.5rem 0; border-bottom: 1px solid var(--border);
+            font-size: 0.88rem;
+        }
+        .summary-line:last-of-type { border-bottom: none; }
+        .summary-line .name { color: var(--text-2); }
+        .summary-line .price { font-family: var(--font-display); font-weight: 700; color: var(--text); }
+        .summary-total {
+            display: flex; justify-content: space-between; align-items: center;
+            padding-top: 1rem; margin-top: 0.5rem;
+            border-top: 2px solid var(--text);
+        }
+        .summary-total .label { font-family: var(--font-display); font-weight: 700; font-size: 1rem; }
+        .summary-total .amount { font-family: var(--font-display); font-weight: 800; font-size: 1.3rem; color: var(--green); }
+
+        /* CHECKOUT BUTTON */
+        .btn-checkout {
+            width: 100%; padding: 1rem; margin-top: 1.25rem;
+            background: var(--green); color: #fff; border: none;
+            border-radius: var(--r-sm); font-size: 1rem; font-weight: 700;
+            font-family: var(--font-display); cursor: pointer;
+            transition: all 0.25s var(--ease);
+            display: flex; align-items: center; justify-content: center; gap: 0.5rem;
+        }
+        .btn-checkout:hover { background: var(--green-dark); transform: translateY(-1px); box-shadow: var(--shadow-md); }
+        .btn-checkout:disabled { background: var(--border-mid); cursor: not-allowed; transform: none; box-shadow: none; }
+        .btn-checkout .paypal-logo { height: 18px; vertical-align: middle; }
+
+        .free-note {
+            text-align: center; font-size: 0.82rem; color: var(--text-3); margin-top: 0.75rem;
+        }
+
+        /* SUCCESS / CANCELLED STATES */
+        .status-card {
+            max-width: 520px; margin: 8rem auto 4rem; padding: 2.5rem;
+            text-align: center; border-radius: var(--r-lg);
+            border: 2px solid var(--border);
+        }
+        .status-card.success { border-color: var(--green); background: var(--green-light); }
+        .status-card .status-icon { font-size: 3rem; margin-bottom: 1rem; }
+        .status-card h2 { margin-bottom: 0.5rem; }
+        .status-card p { max-width: 400px; margin: 0 auto; }
+
+        /* FOOTER */
+        .footer {
+            text-align: center; padding: 1.5rem;
+            border-top: 1px solid var(--border);
+            font-size: 0.78rem; color: var(--text-3);
+        }
+        .footer a { color: var(--blue); }
+
+        .text-center { text-align: center; }
+    </style>
+</head>
+<body>
+
+<!-- NAV -->
+<div class="nav">
+    <a href="/" class="nav-logo">
+        <div class="z-icon">Z</div>
+        ZYPH LABS
+    </a>
+    <a href="/" class="nav-back">&larr; Back to main site</a>
+</div>
+
+<!-- STATUS SCREENS (hidden by default, shown via JS) -->
+<div id="success-screen" style="display:none;">
+    <div class="status-card success">
+        <div class="status-icon">&#10003;</div>
+        <h2>You're all set!</h2>
+        <p>Thank you for your order. We'll be in touch within 24 hours to get started on your project.</p>
+    </div>
+</div>
+
+<div id="cancelled-screen" style="display:none;">
+    <div class="status-card">
+        <div class="status-icon">&#8617;</div>
+        <h2>Payment Cancelled</h2>
+        <p>No worries — nothing was charged. You can try again anytime.</p>
+    </div>
+</div>
+
+<!-- MAIN CONTENT -->
+<div id="main-content">
+
+<!-- HERO -->
+<section class="hero">
+    <div class="promo-badge">&#127793; Spring 2026 Promo</div>
+    <h1>Get a Custom Website<br>Designed <span class="highlight">for Free</span></h1>
+    <p class="subtitle">We'll design a professional, one-of-a-kind website for your business — completely free. Choose your options below.</p>
+</section>
+
+<!-- STEP 1: FREE DESIGN -->
+<section class="section">
+    <div class="step-header">
+        <div class="step-num">1</div>
+        <h2>Claim Your Free Website Design</h2>
+    </div>
+    <p style="margin-bottom:1rem;">Tell us about your business and we'll design a fully custom, mobile-ready website. No templates. No AI filler. Usually $149–$299 — <strong>free this spring</strong>.</p>
+    <div class="choice-row">
+        <div class="choice-btn selected" id="design-yes" onclick="selectDesign(true)">
+            <div class="check-mark">&#10003;</div>
+            <div class="choice-icon">&#127793;</div>
+            <h4>Yes, I want it!</h4>
+            <div class="choice-price free">FREE</div>
+        </div>
+        <div class="choice-btn" id="design-no" onclick="selectDesign(false)" style="opacity:0.4;pointer-events:none;">
+            <div class="choice-icon">&#128528;</div>
+            <h4>No thanks</h4>
+            <div class="choice-sub">Skip the free design</div>
+        </div>
+    </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- STEP 2: DELIVERY OPTION -->
+<section class="section">
+    <div class="step-header">
+        <div class="step-num">2</div>
+        <h2>How do you want it delivered?</h2>
+    </div>
+    <p style="margin-bottom:1rem;">Get just the design files, or let us handle everything — hosted, installed, and live on your domain for $20.</p>
+
+    <div id="delivery-warning" class="incomplete-warning">&#9888; Please select a delivery option to continue.</div>
+
+    <div class="choice-row">
+        <div class="choice-btn" id="delivery-files" onclick="selectDelivery('files')">
+            <div class="check-mark">&#10003;</div>
+            <div class="choice-icon">&#128196;</div>
+            <h4>Design Files Only</h4>
+            <div class="choice-price free">FREE</div>
+            <div class="choice-sub">Source code, yours to host</div>
+        </div>
+        <div class="choice-btn" id="delivery-hosted" onclick="selectDelivery('hosted')">
+            <div class="check-mark">&#10003;</div>
+            <div class="choice-icon">&#127760;</div>
+            <h4>Hosted &amp; Installed</h4>
+            <div class="choice-price">$20 USD</div>
+            <div class="choice-sub">Domain, SSL, live in 24–48hrs</div>
+        </div>
+    </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- STEP 3: AI ADD-ONS -->
+<section class="section">
+    <div class="step-header">
+        <div class="step-num">3</div>
+        <h2>Add AI-Powered Tools <span style="font-size:0.7em;font-weight:500;color:var(--text-3);">(select for each)</span></h2>
+    </div>
+    <p style="margin-bottom:1rem;">Custom AI tools built to save you time and make you money. You <strong>must</strong> choose <em>Add</em> or <em>No Thanks</em> for each one.</p>
+
+    <div id="addons-warning" class="incomplete-warning">&#9888; Please select Add or No Thanks for every add-on below.</div>
+
+    <!-- Addon 1 -->
+    <div class="addon-row" id="addon-leadgen" data-name="AI Lead Gen (B2B)" data-price="300">
+        <div class="addon-icon-wrap" style="background:#eff6ff;color:#2563eb;">&#127919;</div>
+        <div class="addon-info">
+            <h4>AI Lead Gen <span style="font-weight:400;color:var(--text-3);font-size:0.82rem;">for B2B Business</span></h4>
+            <p class="addon-desc">Our custom AI program feeds you leads every week — businesses in your area that could use your services, delivered straight to you.</p>
+            <div class="addon-pricing">$300 USD/mo <span class="annual">or $2,000/yr (save $1,600)</span></div>
+        </div>
+        <div class="addon-actions">
+            <button class="btn-add" onclick="toggleAddon('leadgen', true)">Add</button>
+            <button class="btn-skip" onclick="toggleAddon('leadgen', false)">No Thanks</button>
+        </div>
+    </div>
+
+    <!-- Addon 2 -->
+    <div class="addon-row" id="addon-pm" data-name="AI Project Manager" data-price="300">
+        <div class="addon-icon-wrap" style="background:#f5f3ff;color:#7c3aed;">&#128203;</div>
+        <div class="addon-info">
+            <h4>AI Project Manager</h4>
+            <p class="addon-desc">Project management that manages itself. Anyone on your team can send updates — hours, milestones, photos — to an email or drive and everything auto-updates. You and your customers always see live progress, budgets, schedules, costs, and constraints.</p>
+            <div class="addon-pricing">$300 USD/mo <span class="annual">or $2,000/yr (save $1,600)</span></div>
+        </div>
+        <div class="addon-actions">
+            <button class="btn-add" onclick="toggleAddon('pm', true)">Add</button>
+            <button class="btn-skip" onclick="toggleAddon('pm', false)">No Thanks</button>
+        </div>
+    </div>
+
+    <!-- Addon 3 -->
+    <div class="addon-row" id="addon-bookkeeper" data-name="AI Bookkeeper" data-price="300">
+        <div class="addon-icon-wrap" style="background:#f0fdf4;color:#16a34a;">&#128218;</div>
+        <div class="addon-info">
+            <h4>AI Bookkeeper</h4>
+            <p class="addon-desc">AI Bookkeeper updates your receipts, payroll, sends invoices, and records all your bookkeeping needs — all from your app and the emails you register.</p>
+            <div class="addon-pricing">$300 USD/mo <span class="annual">or $2,000/yr (save $1,600)</span></div>
+        </div>
+        <div class="addon-actions">
+            <button class="btn-add" onclick="toggleAddon('bookkeeper', true)">Add</button>
+            <button class="btn-skip" onclick="toggleAddon('bookkeeper', false)">No Thanks</button>
+        </div>
+    </div>
+
+    <!-- Addon 4 -->
+    <div class="addon-row" id="addon-assistant" data-name="AI Assistant" data-price="300">
+        <div class="addon-icon-wrap" style="background:#fef3c7;color:#d97706;">&#129302;</div>
+        <div class="addon-info">
+            <h4>AI Assistant</h4>
+            <p class="addon-desc">Your office in an app. Simply give it directions to send invoices, emails, get updates on any information from your emails, your drive, and your bookkeeping. Triple your productivity so you can focus on what matters most.</p>
+            <div class="addon-pricing">$300 USD/mo <span class="annual">or $2,000/yr (save $1,600)</span></div>
+        </div>
+        <div class="addon-actions">
+            <button class="btn-add" onclick="toggleAddon('assistant', true)">Add</button>
+            <button class="btn-skip" onclick="toggleAddon('assistant', false)">No Thanks</button>
+        </div>
+    </div>
+
+    <!-- Addon 5 -->
+    <div class="addon-row" id="addon-solar" data-name="AI Solar Agent" data-price="500">
+        <div class="addon-icon-wrap" style="background:#fff7ed;color:#ea580c;">&#9728;&#65039;</div>
+        <div class="addon-info">
+            <h4>AI Solar Agent</h4>
+            <p class="addon-desc">Your automated program to build customized contracts, drawing packages, and permit applications for your location — just drag and drop your proposal, customer bill, and panel photo.</p>
+            <div class="addon-pricing">$500 USD/mo <span class="annual">or $3,000/yr (save $3,000)</span></div>
+        </div>
+        <div class="addon-actions">
+            <button class="btn-add" onclick="toggleAddon('solar', true)">Add</button>
+            <button class="btn-skip" onclick="toggleAddon('solar', false)">No Thanks</button>
+        </div>
+    </div>
+
+    <!-- Addon 6 -->
+    <div class="addon-row" id="addon-content" data-name="AI Auto Content Creator" data-price="300">
+        <div class="addon-icon-wrap" style="background:#fdf2f8;color:#db2777;">&#9997;&#65039;</div>
+        <div class="addon-info">
+            <h4>AI Auto Content Creator</h4>
+            <p class="addon-desc">Learns your business and what sets you apart, then writes and posts daily to all your platforms with auto-generated images. If you're running one of our websites, it also publishes a daily blog that shares back to your platforms to drive clicks to your site.</p>
+            <div class="addon-pricing">$300 USD/mo <span class="annual">or $2,000/yr (save $1,600)</span></div>
+        </div>
+        <div class="addon-actions">
+            <button class="btn-add" onclick="toggleAddon('content', true)">Add</button>
+            <button class="btn-skip" onclick="toggleAddon('content', false)">No Thanks</button>
+        </div>
+    </div>
+
+    <!-- Addon 7 -->
+    <div class="addon-row" id="addon-fbads" data-name="AI Facebook Ads Manager" data-price="300">
+        <div class="addon-icon-wrap" style="background:#eff6ff;color:#2563eb;">&#128227;</div>
+        <div class="addon-info">
+            <h4>AI Facebook Ads Manager</h4>
+            <p class="addon-desc">Monitors your ad performance and makes adjustments or suggests budget changes for each campaign. Also watches your market to identify what ads are landing — so you can see what's working that you're not doing yet.</p>
+            <div class="addon-pricing">$300 USD/mo <span class="annual">or $2,000/yr (save $1,600)</span></div>
+        </div>
+        <div class="addon-actions">
+            <button class="btn-add" onclick="toggleAddon('fbads', true)">Add</button>
+            <button class="btn-skip" onclick="toggleAddon('fbads', false)">No Thanks</button>
+        </div>
+    </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ORDER SUMMARY -->
+<section class="section">
+    <div class="step-header">
+        <div class="step-num">4</div>
+        <h2>Your Order</h2>
+    </div>
+
+    <div class="summary-box">
+        <h3>Order Summary</h3>
+        <div id="summary-items">
+            <div class="summary-line">
+                <span class="name">Custom Website Design</span>
+                <span class="price">FREE</span>
+            </div>
+        </div>
+        <div class="summary-total">
+            <span class="label">Total (USD)</span>
+            <span class="amount" id="summary-total">$0.00</span>
+        </div>
+    </div>
+
+    <button class="btn-checkout" id="checkout-btn" onclick="handleCheckout()">
+        Pay with PayPal &nbsp;&#128274;
+    </button>
+    <p class="free-note" id="free-note">If your total is $0, we'll send you a short questionnaire to get started.</p>
+
+    <div id="checkout-error" class="incomplete-warning" style="margin-top:1rem;">&#9888; <span id="checkout-error-msg"></span></div>
+</section>
+
+</div><!-- end main-content -->
+
+<!-- FOOTER -->
+<div class="footer">
+    &copy; 2026 <a href="/">Zyph Labs</a>. All rights reserved. All prices in USD.
+</div>
+
+<script>
+    // ===== STATE =====
+    const state = {
+        delivery: null, // 'files' | 'hosted'
+        addons: {} // key: true (add) | false (skip) | undefined (not chosen)
+    };
+
+    const addonKeys = ['leadgen', 'pm', 'bookkeeper', 'assistant', 'solar', 'content', 'fbads'];
+
+    // ===== CHECK FOR RETURN FROM PAYPAL =====
+    (function checkReturn() {
+        const params = new URLSearchParams(window.location.search);
+        const status = params.get('status');
+        const token = params.get('token');
+
+        if (status === 'success' && token) {
+            document.getElementById('main-content').style.display = 'none';
+            document.getElementById('success-screen').style.display = 'block';
+            // Capture the order
+            fetch('/api/paypal/promo-capture', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ orderID: token })
+            }).catch(console.error);
+            return;
+        }
+        if (status === 'cancelled') {
+            document.getElementById('main-content').style.display = 'none';
+            document.getElementById('cancelled-screen').style.display = 'block';
+        }
+    })();
+
+    // ===== DESIGN (always yes, auto-selected) =====
+    function selectDesign(yes) {
+        // Always yes for the promo
+        document.getElementById('design-yes').classList.add('selected');
+    }
+
+    // ===== DELIVERY =====
+    function selectDelivery(option) {
+        state.delivery = option;
+        document.getElementById('delivery-files').classList.remove('selected');
+        document.getElementById('delivery-hosted').classList.remove('selected');
+        document.getElementById('delivery-' + option).classList.add('selected');
+        document.getElementById('delivery-warning').classList.remove('show');
+        updateSummary();
+    }
+
+    // ===== ADDONS =====
+    function toggleAddon(key, add) {
+        state.addons[key] = add;
+        const row = document.getElementById('addon-' + key);
+        const addBtn = row.querySelector('.btn-add');
+        const skipBtn = row.querySelector('.btn-skip');
+
+        row.classList.remove('added', 'skipped');
+        addBtn.classList.remove('active');
+        skipBtn.classList.remove('active');
+
+        if (add) {
+            row.classList.add('added');
+            addBtn.classList.add('active');
+        } else {
+            row.classList.add('skipped');
+            skipBtn.classList.add('active');
+        }
+
+        document.getElementById('addons-warning').classList.remove('show');
+        updateSummary();
+    }
+
+    // ===== SUMMARY =====
+    function updateSummary() {
+        const container = document.getElementById('summary-items');
+        let html = '<div class="summary-line"><span class="name">Custom Website Design</span><span class="price">FREE</span></div>';
+        let total = 0;
+
+        if (state.delivery === 'hosted') {
+            html += '<div class="summary-line"><span class="name">Hosting &amp; Installation</span><span class="price">$20.00</span></div>';
+            total += 20;
+        } else if (state.delivery === 'files') {
+            html += '<div class="summary-line"><span class="name">Design Files Delivery</span><span class="price">FREE</span></div>';
+        }
+
+        addonKeys.forEach(key => {
+            if (state.addons[key] === true) {
+                const row = document.getElementById('addon-' + key);
+                const name = row.dataset.name;
+                const price = parseFloat(row.dataset.price);
+                html += `<div class="summary-line"><span class="name">${name} (monthly)</span><span class="price">$${price.toFixed(2)}</span></div>`;
+                total += price;
+            }
+        });
+
+        container.innerHTML = html;
+        document.getElementById('summary-total').textContent = '$' + total.toFixed(2);
+
+        // Update button text
+        const btn = document.getElementById('checkout-btn');
+        const freeNote = document.getElementById('free-note');
+        if (total === 0) {
+            btn.textContent = 'Get Started — Free';
+            freeNote.style.display = 'block';
+        } else {
+            btn.innerHTML = 'Pay $' + total.toFixed(2) + ' with PayPal \u00a0&#128274;';
+            freeNote.style.display = 'none';
+        }
+    }
+
+    // ===== VALIDATION =====
+    function validate() {
+        let valid = true;
+
+        if (!state.delivery) {
+            document.getElementById('delivery-warning').classList.add('show');
+            document.getElementById('delivery-warning').scrollIntoView({ behavior: 'smooth', block: 'center' });
+            valid = false;
+        }
+
+        const unanswered = addonKeys.filter(k => state.addons[k] === undefined);
+        if (unanswered.length > 0) {
+            document.getElementById('addons-warning').classList.add('show');
+            if (valid) {
+                document.getElementById('addons-warning').scrollIntoView({ behavior: 'smooth', block: 'center' });
+            }
+            // Highlight unanswered rows
+            unanswered.forEach(k => {
+                const row = document.getElementById('addon-' + k);
+                row.style.borderColor = '#dc2626';
+                setTimeout(() => { row.style.borderColor = ''; }, 3000);
+            });
+            valid = false;
+        }
+
+        return valid;
+    }
+
+    // ===== CHECKOUT =====
+    async function handleCheckout() {
+        const errBox = document.getElementById('checkout-error');
+        errBox.classList.remove('show');
+
+        if (!validate()) return;
+
+        // Build items array
+        const items = [];
+
+        if (state.delivery === 'hosted') {
+            items.push({ name: 'Website Hosting & Installation', price: 20 });
+        }
+
+        addonKeys.forEach(key => {
+            if (state.addons[key] === true) {
+                const row = document.getElementById('addon-' + key);
+                items.push({ name: row.dataset.name + ' (Monthly)', price: parseFloat(row.dataset.price) });
+            }
+        });
+
+        // If total is $0, redirect to questionnaire
+        if (items.length === 0) {
+            window.location.href = '/questionnaire';
+            return;
+        }
+
+        // Disable button
+        const btn = document.getElementById('checkout-btn');
+        const origText = btn.innerHTML;
+        btn.disabled = true;
+        btn.textContent = 'Connecting to PayPal...';
+
+        try {
+            const res = await fetch('/api/paypal/promo-checkout', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    items,
+                    returnUrl: window.location.origin + '/promotions?status=success',
+                    cancelUrl: window.location.origin + '/promotions?status=cancelled',
+                })
+            });
+
+            const data = await res.json();
+
+            if (!res.ok || !data.approvalUrl) {
+                throw new Error(data.error || 'Could not connect to PayPal.');
+            }
+
+            // Redirect to PayPal
+            window.location.href = data.approvalUrl;
+
+        } catch (e) {
+            btn.disabled = false;
+            btn.innerHTML = origText;
+            document.getElementById('checkout-error-msg').textContent = e.message || 'Something went wrong. Please try again.';
+            errBox.classList.add('show');
+        }
+    }
+
+    // Init
+    updateSummary();
+</script>
+
+</body>
+</html>
