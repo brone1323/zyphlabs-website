@@ -49,4 +49,10 @@ const nextConfig = {
       },
       {
         source: '/promotions',
-    
+        destination: '/promotions.html',
+        permanent: false,
+      },
+    ]
+  },
+}
+module.exports = nextConfig
