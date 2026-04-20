@@ -1,16 +1,23 @@
 import { notFound } from 'next/navigation'
 import Link from 'next/link'
 import { millerReport, ReportData } from '@/app/report/_data/sample-miller'
+import { hvacSoloAnswers } from '@/app/report/_data/persona-hvac-solo'
+import { generateReport } from '@/app/report/_engine/matcher'
 import SnapshotHeader from '@/components/report/SnapshotHeader'
 import TierNav from '@/components/report/TierNav'
 import TierSection from '@/components/report/TierSection'
 import StartingPoint from '@/components/report/StartingPoint'
 import PrintButton from '@/components/report/PrintButton'
 
-// Simple in-memory registry — the real version will look up reports from a DB
-// based on completed assessments. For now, only the Miller sample is live.
+// Report registry. Two kinds of entries:
+// 1. Hardcoded ReportData (e.g. the original Miller demo — written by hand)
+// 2. AssessmentAnswers run through generateReport() — the real production path
+//
+// Both produce the same ReportData shape so the UI doesn't care which path was used.
+// Future: a third kind, loaded from a database by the assessment pipeline.
 const reports: Record<string, ReportData> = {
   'sample-miller-remodeling': millerReport,
+  'sample-hvac-solo': generateReport(hvacSoloAnswers),
 }
 
 export async function generateStaticParams() {
