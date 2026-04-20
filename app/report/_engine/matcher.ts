@@ -17,7 +17,6 @@ export function generateReport(
   const library = config.library ?? LIBRARY
   const N = config.recsPerTier ?? 5
 
-  // 1. Filter to applicable recs, sort by priority within each tier
   const applicable = library.filter((rec) => rec.triggers(answers))
   const byTier: Record<1 | 2 | 3, LibraryRec[]> = { 1: [], 2: [], 3: [] }
   for (const rec of applicable) byTier[rec.tier].push(rec)
@@ -26,15 +25,12 @@ export function generateReport(
     byTier[tier] = byTier[tier].slice(0, N)
   }
 
-  // 2. Render each picked rec against the answers
   const recommendations: Recommendation[] = [
     ...byTier[1].map((r) => instantiate(r, answers)),
     ...byTier[2].map((r) => instantiate(r, answers)),
     ...byTier[3].map((r) => instantiate(r, answers)),
   ]
 
-  // 3. Pick Top 3 for Starting Point — prioritize high-ROI + low-effort.
-  // Effort multiplier: Easy = 3x, Medium = 1.5x, Big = 1x.
   const effortMult = (e: string) => (e === 'Easy' ? 3 : e === 'Medium' ? 1.5 : 1)
   const allPicked = [...byTier[1], ...byTier[2], ...byTier[3]]
   const topThreeIds = allPicked
@@ -43,10 +39,8 @@ export function generateReport(
     .slice(0, 3)
     .map(({ r }) => r.id)
 
-  // 4. Compute headline numbers
   const { hoursPerWeekRecoverable, dollarsPerMonthRecoverable } = calculateHeadline(answers)
 
-  // 5. Compose the final ReportData
   return {
     id: answers.reportId,
     ownerName: answers.ownerName,
@@ -84,10 +78,6 @@ function instantiate(lib: LibraryRec, a: AssessmentAnswers): Recommendation {
   }
 }
 
-// ─────────────────────────────────────────────────────────────────
-// Headline ROI — the "$X/mo and Y hrs/week sitting on the table" number
-// ─────────────────────────────────────────────────────────────────
-
 export function calculateHeadline(a: AssessmentAnswers): {
   hoursPerWeekRecoverable: number
   dollarsPerMonthRecoverable: string
@@ -95,34 +85,27 @@ export function calculateHeadline(a: AssessmentAnswers): {
   let dollars = 0
   let hours = 0
 
-  // Missed after-hours leads
   dollars += a.leadsLostAfterHoursPerMonth * a.closeRate * a.avgTicket
 
-  // Slow quoting → estimated close rate lift of 5–8pp when quotes are same-day
   if (a.quotingSpeedDays >= 2) {
-    const lift = Math.min((a.quotingSpeedDays - 1) * 0.02, 0.08) // capped at 8pp
+    const lift = Math.min((a.quotingSpeedDays - 1) * 0.02, 0.08)
     dollars += a.leadsPerMonth * lift * a.avgTicket
   }
 
-  // No review asking → ~$3k/mo opportunity at typical volume
   if (!a.asksForReviews && a.googleReviewCount < 100) dollars += 3000
 
-  // Slow lead response → 8–15pp close rate penalty
   if (a.leadResponseTime === 'days') dollars += a.leadsPerMonth * 0.12 * a.avgTicket
   else if (a.leadResponseTime === 'next-day') dollars += a.leadsPerMonth * 0.07 * a.avgTicket
 
-  // No / old website → organic lead opportunity
   if (!a.hasWebsite || a.websiteAgeYears >= 3) dollars += 8000
 
-  // Hours recovery
   if (a.quotingTool === 'excel' || a.quotingTool === 'pen-paper') hours += 6
   if (a.jobMgmtTool === 'group-text' || a.jobMgmtTool === 'whiteboard') hours += 4
   if (a.chasingPayments) hours += 2
-  if (a.crewSize === 1 && a.primaryIntake === 'owner') hours += 4 // phone-tag tax
+  if (a.crewSize === 1 && a.primaryIntake === 'owner') hours += 4
   if (a.clientCommsStyle === 'reactive') hours += 3
-  hours = Math.min(hours, 25) // realism cap
+  hours = Math.min(hours, 25)
 
-  // Format as a "$12k–$18k" range for the UI
   const low = Math.round((dollars * 0.8) / 1000)
   const high = Math.round((dollars * 1.2) / 1000)
 
@@ -131,10 +114,6 @@ export function calculateHeadline(a: AssessmentAnswers): {
     dollarsPerMonthRecoverable: `$${low}k–$${high}k`,
   }
 }
-
-// ─────────────────────────────────────────────────────────────────
-// "What we heard" — one-paragraph synthesis of their situation
-// ─────────────────────────────────────────────────────────────────
 
 export function synthesizeWhatWeHeard(a: AssessmentAnswers): string {
   const crew =
@@ -146,13 +125,17 @@ export function synthesizeWhatWeHeard(a: AssessmentAnswers): string {
       ? `${a.crewSize}-person outfit`
       : `${a.crewSize}-person operation`
 
+  const chasingAmount = a.chasingPaymentsAmount
+    ? '$' + (a.chasingPaymentsAmount / 1000).toFixed(0) + 'k'
+    : 'open money'
+
   const topPain =
     a.wantedTimeBack.includes('quoting') || a.quotingSpeedDays >= 3
       ? `Quotes take ${a.quotingSpeedDays}${a.quotingSpeedDays === 1 ? ' day' : ' days'} out of ${a.quotingTool === 'excel' ? 'Excel' : a.quotingTool === 'pen-paper' ? 'pen and paper' : 'your current process'}`
       : a.afterHoursHandling === 'voicemail'
       ? `after-hours calls hit voicemail and ${a.leadsLostAfterHoursPerMonth} leads/mo slip through`
       : a.chasingPayments
-      ? `invoicing lags the job and you're chasing ${a.chasingPaymentsAmount ? \`$${(a.chasingPaymentsAmount / 1000).toFixed(0)}k\` : 'open money'}`
+      ? `invoicing lags the job and you're chasing ${chasingAmount}`
       : 'the work is good but the systems around it are manual'
 
   const reputationNote =
@@ -167,10 +150,6 @@ export function synthesizeWhatWeHeard(a: AssessmentAnswers): string {
 
   return `${a.ownerFirstName} runs a ${crew} ${a.trade.toLowerCase()} outfit in ${a.location.split(',')[0]} with ${reputationNote}. The work is quality — the bottleneck is everywhere around the work. ${topPain}. ${closer}`
 }
-
-// ─────────────────────────────────────────────────────────────────
-// "What you're doing right" — warm bullets + upsell angle
-// ─────────────────────────────────────────────────────────────────
 
 export function identifyStrengths(a: AssessmentAnswers): string[] {
   const bullets: string[] = []
@@ -193,7 +172,7 @@ export function identifyStrengths(a: AssessmentAnswers): string[] {
     )
   } else if (a.googleReviewCount === 0) {
     bullets.push(
-      'You haven\'t started asking for reviews yet — which is actually an advantage. Zero bad ones to work around.',
+      "You haven't started asking for reviews yet — which is actually an advantage. Zero bad ones to work around.",
     )
   }
 
@@ -209,7 +188,7 @@ export function identifyStrengths(a: AssessmentAnswers): string[] {
     )
   }
 
-  return bullets.slice(0, 3) // keep to 3
+  return bullets.slice(0, 3)
 }
 
 function formatCrewSize(n: number): string {
@@ -218,11 +197,6 @@ function formatCrewSize(n: number): string {
   if (n <= 15) return `${n}-person outfit`
   return `${n}-person operation`
 }
-
-// ─────────────────────────────────────────────────────────────────
-// Social proof — shown on every report for now.
-// Later: pull from a CMS or CRM based on trade type.
-// ─────────────────────────────────────────────────────────────────
 
 export const ZYPH_SOCIAL_PROOF = [
   {
