@@ -48,7 +48,10 @@ export default function SnapshotHeader({ data }: { data: ReportData }) {
           <Stat label="Team size" value={data.crewSize} />
           <Stat label="Location" value={data.location.split('(')[0].trim()} />
           <Stat label="Years in business" value={`${data.yearsInBusiness} years`} />
-          <Stat label="Tier mix" value="5 + 5 + 5" />
+          <Stat
+            label="Tier mix"
+            value={[1, 2, 3].map(t => data.recommendations.filter(r => r.tier === t).length).join(' + ')}
+          />
         </div>
 
         {/* Doing right */}
