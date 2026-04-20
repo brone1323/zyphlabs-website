@@ -5,11 +5,11 @@ import type { AssessmentAnswers, LibraryRec } from './types'
 
 // Helper: compute monthly $ recovered from missed after-hours leads.
 const missedLeadDollars = (a: AssessmentAnswers) =>
-  Math.round(a.leadsLostAfterHoursPerMonth * a.closeRate * a.avgTicket)
+  Math.round((a.leadsLostAfterHoursPerMonth ?? 0) * (a.closeRate ?? 0) * (a.avgTicket ?? 0))
 
 // Helper: dollars from improving close rate by `delta` (e.g. 0.05 = 5 pp).
 const closeRateLiftDollars = (a: AssessmentAnswers, delta: number) =>
-  Math.round(a.leadsPerMonth * delta * a.avgTicket)
+  Math.round((a.leadsPerMonth ?? 0) * delta * (a.avgTicket ?? 0))
 
 export const LIBRARY: LibraryRec[] = [
   // ═══════════════════════════════════════════════════════════════
@@ -26,13 +26,13 @@ export const LIBRARY: LibraryRec[] = [
     setupHours: '30 min',
     cost: 'Free (Google Voice) or $15/mo (OpenPhone)',
     fixes: (a) =>
-      a.leadsLostAfterHoursPerMonth > 0
-        ? `You said ${a.leadsLostAfterHoursPerMonth} leads/month slip through weekend voicemails — that's ~$${Math.round(a.leadsLostAfterHoursPerMonth * 12 * a.closeRate * a.avgTicket / 1000)}k/year at your ticket size.`
+      (a.leadsLostAfterHoursPerMonth ?? 0) > 0
+        ? `You said ${(a.leadsLostAfterHoursPerMonth ?? 0)} leads/month slip through weekend voicemails — that's ~$${Math.round((a.leadsLostAfterHoursPerMonth ?? 0) * 12 * (a.closeRate ?? 0) * (a.avgTicket ?? 0) / 1000)}k/year at your ticket size.`
         : "After-hours calls go to voicemail — a text reply recovers the ones that don't leave a message.",
     roi: (a) => ({
       hoursPerWeek: 0,
       dollarsPerMonth: missedLeadDollars(a) || 2500,
-      summary: `Recover ${a.leadsLostAfterHoursPerMonth || 'missed'} after-hours leads/mo ≈ $${Math.round((missedLeadDollars(a) || 2500) / 1000)}k/mo at your ${Math.round(a.closeRate * 100)}% close rate and $${(a.avgTicket / 1000).toFixed(0)}k ticket`,
+      summary: `Recover ${a.leadsLostAfterHoursPerMonth || 'missed'} after-hours leads/mo ≈ $${Math.round((missedLeadDollars(a) || 2500) / 1000)}k/mo at your ${Math.round((a.closeRate ?? 0) * 100)}% close rate and $${((a.avgTicket ?? 0) / 1000).toFixed(0)}k ticket`,
     }),
     diyGuide: {
       tools: ['Google Voice (free) OR OpenPhone 7-day trial'],
@@ -44,8 +44,8 @@ export const LIBRARY: LibraryRec[] = [
       ],
     },
     cta: null,
-    triggers: (a) => a.afterHoursHandling === 'voicemail' || a.leadsLostAfterHoursPerMonth > 0,
-    priority: (a) => 50 + Math.min(a.leadsLostAfterHoursPerMonth * 10, 40),
+    triggers: (a) => a.afterHoursHandling === 'voicemail' || (a.leadsLostAfterHoursPerMonth ?? 0) > 0,
+    priority: (a) => 50 + Math.min((a.leadsLostAfterHoursPerMonth ?? 0) * 10, 40),
   },
 
   {
@@ -60,8 +60,8 @@ export const LIBRARY: LibraryRec[] = [
     fixes: (a) =>
       `You have ${a.googleReviewCount} Google reviews and ${a.asksForReviews ? 'sometimes ask' : "don't actively ask"} — competitors your size typically have 60+ and they're less qualified.`,
     roi: (a) => ({
-      dollarsPerMonth: 2500 + Math.max(0, 60 - a.googleReviewCount) * 50,
-      summary: `Triple your reviews in 6 months → more calls from Google Maps ≈ $${(2.5 + Math.max(0, 60 - a.googleReviewCount) * 0.05).toFixed(1)}k/mo uplift`,
+      dollarsPerMonth: 2500 + Math.max(0, 60 - (a.googleReviewCount ?? 0)) * 50,
+      summary: `Triple your reviews in 6 months → more calls from Google Maps ≈ $${(2.5 + Math.max(0, 60 - (a.googleReviewCount ?? 0)) * 0.05).toFixed(1)}k/mo uplift`,
     }),
     diyGuide: {
       tools: ['Google Business Profile', 'QR code generator (qr-code-generator.com)'],
@@ -74,7 +74,7 @@ export const LIBRARY: LibraryRec[] = [
       ],
     },
     cta: null,
-    triggers: (a) => a.googleReviewCount < 200,
+    triggers: (a) => (a.googleReviewCount ?? 0) < 200,
     priority: (a) => 40 + (a.asksForReviews ? 0 : 20) + Math.max(0, (60 - a.googleReviewCount) / 2),
   },
 
@@ -88,7 +88,7 @@ export const LIBRARY: LibraryRec[] = [
     setupHours: '20 min',
     cost: 'Free (Calendly free tier)',
     fixes: (a) =>
-      a.crewSize > 1
+      (a.crewSize ?? 1) > 1
         ? 'Site-visit scheduling eats 3+ hrs/week in back-and-forth. Self-serve booking closes that loop instantly.'
         : "Phone tag for site visits is a tax on your billable hours — let customers pick the slot themselves.",
     roi: () => ({
@@ -106,7 +106,7 @@ export const LIBRARY: LibraryRec[] = [
     },
     cta: null,
     triggers: () => true,
-    priority: (a) => 30 + (a.crewSize === 1 ? 15 : 5),
+    priority: (a) => 30 + ((a.crewSize ?? 1) === 1 ? 15 : 5),
   },
 
   {
@@ -120,12 +120,12 @@ export const LIBRARY: LibraryRec[] = [
     cost: 'Free (already on QBO)',
     fixes: (a) =>
       a.chasingPayments
-        ? `You're chasing $${a.chasingPaymentsAmount ? (a.chasingPaymentsAmount / 1000).toFixed(0) + 'k' : 'open invoices'} right now and invoicing lags the job by ${a.invoiceDelayDays} days.`
-        : `Invoicing lags the job by ${a.invoiceDelayDays} days — automated reminders pull cash in faster.`,
+        ? `You're chasing $${(a.chasingPaymentsAmount ?? 0) ? ((a.chasingPaymentsAmount ?? 0) / 1000).toFixed(0) + 'k' : 'open invoices'} right now and invoicing lags the job by ${(a.invoiceDelayDays ?? 0)} days.`
+        : `Invoicing lags the job by ${(a.invoiceDelayDays ?? 0)} days — automated reminders pull cash in faster.`,
     roi: (a) => ({
       hoursPerWeek: 2,
-      dollarsPerMonth: Math.max(1500, (a.chasingPaymentsAmount || 5000) / 4),
-      summary: `Save 2 hrs/week on AR chasing + pull invoice payments 10 days faster ≈ $${Math.round(Math.max(1500, (a.chasingPaymentsAmount || 5000) / 4) / 100) / 10}k/mo cash flow`,
+      dollarsPerMonth: Math.max(1500, ((a.chasingPaymentsAmount ?? 0) || 5000) / 4),
+      summary: `Save 2 hrs/week on AR chasing + pull invoice payments 10 days faster ≈ $${Math.round(Math.max(1500, ((a.chasingPaymentsAmount ?? 0) || 5000) / 4) / 100) / 10}k/mo cash flow`,
     }),
     diyGuide: {
       tools: ['QuickBooks Online'],
@@ -139,7 +139,7 @@ export const LIBRARY: LibraryRec[] = [
     },
     cta: null,
     triggers: (a) => a.accountingTool === 'quickbooks',
-    priority: (a) => 35 + (a.chasingPayments ? 25 : 0) + Math.min(a.invoiceDelayDays, 20),
+    priority: (a) => 35 + (a.chasingPayments ? 25 : 0) + Math.min((a.invoiceDelayDays ?? 0), 20),
   },
 
   {
@@ -152,7 +152,7 @@ export const LIBRARY: LibraryRec[] = [
     setupHours: '1 hr to build template, then 5 min/quote',
     cost: 'Free (ChatGPT free tier) or $20/mo (Plus)',
     fixes: (a) =>
-      `You said quotes take ${a.quotingSpeedDays}${a.quotingSpeedDays === 1 ? ' day' : ' days'} and you do them ${a.quotingTool === 'excel' ? 'in Excel' : a.quotingTool === 'pen-paper' ? 'by hand' : 'manually'} — that's the single biggest thing to offload.`,
+      `You said quotes take ${(a.quotingSpeedDays ?? 0)}${(a.quotingSpeedDays ?? 0) === 1 ? ' day' : ' days'} and you do them ${a.quotingTool === 'excel' ? 'in Excel' : a.quotingTool === 'pen-paper' ? 'by hand' : 'manually'} — that's the single biggest thing to offload.`,
     roi: (a) => ({
       hoursPerWeek: 6,
       dollarsPerMonth: closeRateLiftDollars(a, 0.05),
@@ -169,7 +169,7 @@ export const LIBRARY: LibraryRec[] = [
     },
     cta: null,
     triggers: (a) => a.quotingTool !== 'jobber' && a.quotingTool !== 'buildertrend' && a.quotingTool !== 'procore',
-    priority: (a) => 45 + Math.min(a.quotingSpeedDays * 3, 30) + (a.wantedTimeBack.includes('quoting') ? 15 : 0),
+    priority: (a) => 45 + Math.min((a.quotingSpeedDays ?? 0) * 3, 30) + (a.wantedTimeBack.includes('quoting') ? 15 : 0),
   },
 
   {
@@ -261,8 +261,8 @@ export const LIBRARY: LibraryRec[] = [
       '2-hour live training session for you + office',
     ],
     cta: 'calendly-scope',
-    triggers: (a) => a.crewSize >= 2 && (['group-text', 'whiteboard', 'none'].includes(a.jobMgmtTool)),
-    priority: (a) => 50 + Math.min(a.crewSize * 2, 20) + (a.wantedTimeBack.includes('scheduling') ? 10 : 0),
+    triggers: (a) => (a.crewSize ?? 1) >= 2 && (['group-text', 'whiteboard', 'none'].includes(a.jobMgmtTool)),
+    priority: (a) => 50 + Math.min((a.crewSize ?? 1) * 2, 20) + (a.wantedTimeBack.includes('scheduling') ? 10 : 0),
   },
 
   {
@@ -288,7 +288,7 @@ export const LIBRARY: LibraryRec[] = [
       'Monthly review-performance email for the first 3 months',
     ],
     cta: 'calendly-scope',
-    triggers: (a) => a.googleReviewCount < 100 && a.crewSize >= 1,
+    triggers: (a) => (a.googleReviewCount ?? 0) < 100 && a.crewSize >= 1,
     priority: (a) => 40 + Math.max(0, (60 - a.googleReviewCount) / 2) + (a.asksForReviews ? 0 : 10),
   },
 
@@ -304,7 +304,7 @@ export const LIBRARY: LibraryRec[] = [
     fixes: (a) =>
       !a.hasWebsite
         ? "You don't have a website — you're invisible to anyone who Googles you before calling."
-        : `Your site is ${a.websiteAgeYears} years old — design and SEO standards have moved since.`,
+        : `Your site is ${(a.websiteAgeYears ?? 0)} years old — design and SEO standards have moved since.`,
     roi: () => ({
       dollarsPerMonth: 6000,
       summary: '40% more inbound leads from Google within 60 days ≈ $6k/mo',
@@ -317,8 +317,8 @@ export const LIBRARY: LibraryRec[] = [
       'Basic analytics dashboard',
     ],
     cta: 'calendly-scope',
-    triggers: (a) => !a.hasWebsite || a.websiteAgeYears >= 2,
-    priority: (a) => 45 + (a.websiteAgeYears >= 3 ? 15 : 0) + (!a.hasWebsite ? 25 : 0),
+    triggers: (a) => !a.hasWebsite || (a.websiteAgeYears ?? 0) >= 2,
+    priority: (a) => 45 + ((a.websiteAgeYears ?? 0) >= 3 ? 15 : 0) + (!a.hasWebsite ? 25 : 0),
   },
 
   {
@@ -373,7 +373,7 @@ export const LIBRARY: LibraryRec[] = [
     ],
     cta: 'calendly-scope',
     triggers: (a) => !a.runsAds.includes('lsa') && a.segment !== 'commercial',
-    priority: (a) => 35 + (a.leadsPerMonth < 20 ? 15 : 0),
+    priority: (a) => 35 + ((a.leadsPerMonth ?? 0) < 20 ? 15 : 0),
   },
 
   {
@@ -400,7 +400,7 @@ export const LIBRARY: LibraryRec[] = [
       'Integration with Google reviews',
     ],
     cta: 'calendly-scope',
-    triggers: (a) => a.crewSize >= 2 && a.afterHoursHandling === 'voicemail',
+    triggers: (a) => (a.crewSize ?? 1) >= 2 && a.afterHoursHandling === 'voicemail',
     priority: () => 35,
   },
 
@@ -414,7 +414,7 @@ export const LIBRARY: LibraryRec[] = [
     setupHours: '6–8 hrs + 1 hr training',
     cost: '$900 setup + $79–$199/mo',
     fixes: (a) =>
-      a.crewSize === 1
+      (a.crewSize ?? 1) === 1
         ? "You're the owner, dispatcher, tech, and bookkeeper. Housecall Pro takes 3 of those jobs and automates them."
         : 'Built for service trades — better fit than Jobber for HVAC/plumbing/electrical.',
     roi: () => ({
@@ -430,8 +430,8 @@ export const LIBRARY: LibraryRec[] = [
       '1-hour live training',
     ],
     cta: 'calendly-scope',
-    triggers: (a) => a.tradeCategory === 'trades' && a.crewSize <= 3,
-    priority: (a) => 45 + (a.crewSize === 1 ? 15 : 0),
+    triggers: (a) => a.tradeCategory === 'trades' && (a.crewSize ?? 1) <= 3,
+    priority: (a) => 45 + ((a.crewSize ?? 1) === 1 ? 15 : 0),
   },
 
   {
@@ -473,7 +473,7 @@ export const LIBRARY: LibraryRec[] = [
     setupHours: '16 hrs over 2 weeks',
     cost: '$2,000 + software license',
     fixes: (a) =>
-      `You're doing takeoffs ${a.quotingTool === 'pen-paper' ? 'by hand' : 'in Excel'} on $${(a.avgTicket / 1000).toFixed(0)}k+ jobs — takeoff software pays for itself in the first month.`,
+      `You're doing takeoffs ${a.quotingTool === 'pen-paper' ? 'by hand' : 'in Excel'} on $${((a.avgTicket ?? 0) / 1000).toFixed(0)}k+ jobs — takeoff software pays for itself in the first month.`,
     roi: () => ({
       hoursPerWeek: 8,
       dollarsPerMonth: 5000,
@@ -487,9 +487,9 @@ export const LIBRARY: LibraryRec[] = [
     ],
     cta: 'calendly-scope',
     triggers: (a) =>
-      a.avgTicket >= 30000 &&
+      (a.avgTicket ?? 0) >= 30000 &&
       (a.quotingTool === 'excel' || a.quotingTool === 'pen-paper'),
-    priority: (a) => 30 + Math.min((a.avgTicket - 30000) / 5000, 30),
+    priority: (a) => 30 + Math.min(((a.avgTicket ?? 0) - 30000) / 5000, 30),
   },
 
   // ═══════════════════════════════════════════════════════════════
@@ -507,13 +507,13 @@ export const LIBRARY: LibraryRec[] = [
     cost: '$6,500 build + $200/mo',
     priceAnchor: 'Typical agency build: $18k–$25k · Us: $6,500 · Pays back in 2 months',
     fixes: (a) =>
-      a.leadsLostAfterHoursPerMonth > 0
-        ? `You said ${a.leadsLostAfterHoursPerMonth} leads/mo go to voicemail. This is your after-hours insurance policy AND your front desk.`
+      (a.leadsLostAfterHoursPerMonth ?? 0) > 0
+        ? `You said ${(a.leadsLostAfterHoursPerMonth ?? 0)} leads/mo go to voicemail. This is your after-hours insurance policy AND your front desk.`
         : 'The AI is both your after-hours safety net and a full-time intake person — without the $50k salary.',
     roi: (a) => ({
-      hoursPerWeek: a.crewSize > 1 ? 8 : 5,
+      hoursPerWeek: (a.crewSize ?? 1) > 1 ? 8 : 5,
       dollarsPerMonth: missedLeadDollars(a) + 4000,
-      summary: `Recover all after-hours leads + offload ${a.crewSize > 1 ? 8 : 5} hrs/week of phone intake ≈ $${Math.round((missedLeadDollars(a) + 4000) / 1000)}k/mo + $${Math.round(missedLeadDollars(a) * 12 / 1000)}k/yr from missed-lead recovery`,
+      summary: `Recover all after-hours leads + offload ${(a.crewSize ?? 1) > 1 ? 8 : 5} hrs/week of phone intake ≈ $${Math.round((missedLeadDollars(a) + 4000) / 1000)}k/mo + $${Math.round(missedLeadDollars(a) * 12 / 1000)}k/yr from missed-lead recovery`,
     }),
     whatYouGet: [
       "Custom AI agent trained on your services, service area, pricing tiers",
@@ -524,8 +524,8 @@ export const LIBRARY: LibraryRec[] = [
       'Monthly tuning for the first 6 months',
     ],
     cta: 'calendly-strategy',
-    triggers: (a) => a.afterHoursHandling === 'voicemail' || a.leadsLostAfterHoursPerMonth > 0 || a.primaryIntake === 'owner',
-    priority: (a) => 60 + Math.min(a.leadsLostAfterHoursPerMonth * 8, 30),
+    triggers: (a) => a.afterHoursHandling === 'voicemail' || (a.leadsLostAfterHoursPerMonth ?? 0) > 0 || a.primaryIntake === 'owner',
+    priority: (a) => 60 + Math.min((a.leadsLostAfterHoursPerMonth ?? 0) * 8, 30),
   },
 
   {
@@ -539,11 +539,11 @@ export const LIBRARY: LibraryRec[] = [
     cost: '$12,000 one-time',
     priceAnchor: 'Typical agency build: $30k–$50k · Us: $12,000 · Pays back in 4 months',
     fixes: (a) =>
-      `Quoting takes you ${a.quotingSpeedDays} days currently. This is the answer — not a tool, YOUR tool, trained on how you actually price.`,
+      `Quoting takes you ${(a.quotingSpeedDays ?? 0)} days currently. This is the answer — not a tool, YOUR tool, trained on how you actually price.`,
     roi: (a) => ({
       hoursPerWeek: 8,
       dollarsPerMonth: closeRateLiftDollars(a, 0.1),
-      summary: `Cut quoting from ${a.quotingSpeedDays}d → 10 min. Faster quotes win more jobs ≈ $${(closeRateLiftDollars(a, 0.1) / 1000).toFixed(1)}k/mo uplift + 8 hrs/week back`,
+      summary: `Cut quoting from ${(a.quotingSpeedDays ?? 0)}d → 10 min. Faster quotes win more jobs ≈ $${(closeRateLiftDollars(a, 0.1) / 1000).toFixed(1)}k/mo uplift + 8 hrs/week back`,
     }),
     whatYouGet: [
       'Web app where you upload photos + dictate scope',
@@ -554,8 +554,8 @@ export const LIBRARY: LibraryRec[] = [
       '6 months of free tuning as your pricing evolves',
     ],
     cta: 'calendly-strategy',
-    triggers: (a) => a.quotingSpeedDays >= 2 && a.avgTicket >= 5000,
-    priority: (a) => 45 + Math.min(a.quotingSpeedDays * 4, 20) + (a.wantedTimeBack.includes('quoting') ? 15 : 0),
+    triggers: (a) => (a.quotingSpeedDays ?? 0) >= 2 && (a.avgTicket ?? 0) >= 5000,
+    priority: (a) => 45 + Math.min((a.quotingSpeedDays ?? 0) * 4, 20) + (a.wantedTimeBack.includes('quoting') ? 15 : 0),
   },
 
   {
@@ -584,7 +584,7 @@ export const LIBRARY: LibraryRec[] = [
       'Payment portal integrated with QBO',
     ],
     cta: 'calendly-strategy',
-    triggers: (a) => a.crewSize >= 4 && a.segment !== 'commercial',
+    triggers: (a) => (a.crewSize ?? 1) >= 4 && a.segment !== 'commercial',
     priority: (a) => 35 + (a.clientCommsStyle === 'reactive' ? 20 : 0),
   },
 
@@ -601,7 +601,7 @@ export const LIBRARY: LibraryRec[] = [
     fixes: (a) =>
       !a.hasWebsite
         ? "No website = invisible on Google. This fixes that in 60 days."
-        : `Your current site is ${a.websiteAgeYears} years old and doesn't show up for "${a.trade.toLowerCase().split(' ')[0]} ${a.location.split(',')[0]}." This makes it rank in 60 days.`,
+        : `Your current site is ${(a.websiteAgeYears ?? 0)} years old and doesn't show up for "${a.trade.toLowerCase().split(' ')[0]} ${a.location.split(',')[0]}." This makes it rank in 60 days.`,
     roi: () => ({
       dollarsPerMonth: 15000,
       summary: 'From near-zero organic leads to 8–12/mo within 6 months ≈ $15k/mo',
@@ -616,8 +616,8 @@ export const LIBRARY: LibraryRec[] = [
       'Monthly SEO performance report',
     ],
     cta: 'calendly-strategy',
-    triggers: (a) => !a.hasWebsite || a.websiteAgeYears >= 3,
-    priority: (a) => 40 + (a.websiteAgeYears >= 5 ? 20 : 0) + (!a.hasWebsite ? 25 : 0),
+    triggers: (a) => !a.hasWebsite || (a.websiteAgeYears ?? 0) >= 3,
+    priority: (a) => 40 + ((a.websiteAgeYears ?? 0) >= 5 ? 20 : 0) + (!a.hasWebsite ? 25 : 0),
   },
 
   {
@@ -647,8 +647,8 @@ export const LIBRARY: LibraryRec[] = [
       '12 months of free iteration',
     ],
     cta: 'calendly-strategy',
-    triggers: (a) => a.crewSize >= 8,
-    priority: (a) => 30 + Math.min(a.crewSize, 30),
+    triggers: (a) => (a.crewSize ?? 1) >= 8,
+    priority: (a) => 30 + Math.min((a.crewSize ?? 1), 30),
   },
 
   {
@@ -676,8 +676,8 @@ export const LIBRARY: LibraryRec[] = [
       'Tagging for trade/neighborhood/referral source',
     ],
     cta: 'calendly-strategy',
-    triggers: (a) => a.officeSize >= 1 || a.crewSize >= 3,
-    priority: (a) => 30 + (a.leadsPerMonth >= 15 ? 10 : 0),
+    triggers: (a) => (a.officeSize ?? 0) >= 1 || (a.crewSize ?? 1) >= 3,
+    priority: (a) => 30 + ((a.leadsPerMonth ?? 0) >= 15 ? 10 : 0),
   },
 
   {
@@ -691,7 +691,7 @@ export const LIBRARY: LibraryRec[] = [
     cost: '$7,500 build + $150/mo',
     priceAnchor: 'Typical bookkeeper: $800–$1,500/mo · This AI: $150/mo · Payback: 1 month',
     fixes: (a) =>
-      a.officeSize <= 1
+      (a.officeSize ?? 0) <= 1
         ? "You're doing the books between everything else — this takes it off your plate without the cost of a bookkeeper."
         : 'Office staff spend half their week on receipt-chasing and reconciliation. This kills that forever.',
     roi: () => ({
@@ -708,7 +708,7 @@ export const LIBRARY: LibraryRec[] = [
     ],
     cta: 'calendly-strategy',
     triggers: (a) => a.accountingTool === 'quickbooks' || a.accountingTool === 'xero' || a.accountingTool === 'spreadsheet',
-    priority: (a) => 25 + (a.officeSize <= 1 ? 15 : 0),
+    priority: (a) => 25 + ((a.officeSize ?? 0) <= 1 ? 15 : 0),
   },
 
   {
@@ -722,7 +722,7 @@ export const LIBRARY: LibraryRec[] = [
     cost: '$11,000 build + $250/mo',
     priceAnchor: 'Typical custom app: $40k+ · Us: $11,000 · Pays back in 8 months',
     fixes: (a) =>
-      a.crewSize === 1
+      (a.crewSize ?? 1) === 1
         ? "As a solo operator, every minute in an app-switching tax compounds. One unified tool removes that."
         : 'Built for small teams where everyone does a bit of everything — one place for scheduling, quoting, invoicing, and field notes.',
     roi: () => ({
@@ -739,8 +739,8 @@ export const LIBRARY: LibraryRec[] = [
       'Simple P&L dashboard',
     ],
     cta: 'calendly-strategy',
-    triggers: (a) => a.crewSize <= 3 && a.tradeCategory === 'trades',
-    priority: (a) => 35 + (a.crewSize === 1 ? 15 : 0),
+    triggers: (a) => (a.crewSize ?? 1) <= 3 && a.tradeCategory === 'trades',
+    priority: (a) => 35 + ((a.crewSize ?? 1) === 1 ? 15 : 0),
   },
 
   {
@@ -768,8 +768,8 @@ export const LIBRARY: LibraryRec[] = [
       'Monthly tuning for the first 6 months',
     ],
     cta: 'calendly-strategy',
-    triggers: (a) => a.crewSize <= 3 && (a.afterHoursHandling === 'voicemail' || a.primaryIntake === 'owner'),
-    priority: (a) => 50 + (a.crewSize === 1 ? 15 : 0) + Math.min(a.leadsLostAfterHoursPerMonth * 3, 15),
+    triggers: (a) => (a.crewSize ?? 1) <= 3 && (a.afterHoursHandling === 'voicemail' || a.primaryIntake === 'owner'),
+    priority: (a) => 50 + ((a.crewSize ?? 1) === 1 ? 15 : 0) + Math.min(a.leadsLostAfterHoursPerMonth * 3, 15),
   },
 
   {
@@ -783,7 +783,7 @@ export const LIBRARY: LibraryRec[] = [
     cost: '$5,500 + $100/mo',
     priceAnchor: 'Typical value vs. a full-time SDR: $60k/yr salary replaced',
     fixes: (a) =>
-      `You're getting ${a.leadsPerMonth} leads/mo at a ${Math.round(a.closeRate * 100)}% close rate. Half your quoting time is going to jobs that were never going to book.`,
+      `You're getting ${(a.leadsPerMonth ?? 0)} leads/mo at a ${Math.round((a.closeRate ?? 0) * 100)}% close rate. Half your quoting time is going to jobs that were never going to book.`,
     roi: (a) => ({
       hoursPerWeek: 6,
       dollarsPerMonth: closeRateLiftDollars(a, 0.15),
@@ -796,7 +796,7 @@ export const LIBRARY: LibraryRec[] = [
       'Weekly re-training on deals you won vs. lost',
     ],
     cta: 'calendly-strategy',
-    triggers: (a) => a.leadsPerMonth >= 15 && a.closeRate < 0.3,
-    priority: (a) => 30 + (a.closeRate < 0.2 ? 15 : 0) + Math.min(a.leadsPerMonth / 2, 15),
+    triggers: (a) => (a.leadsPerMonth ?? 0) >= 15 && (a.closeRate ?? 0) < 0.3,
+    priority: (a) => 30 + ((a.closeRate ?? 0) < 0.2 ? 15 : 0) + Math.min((a.leadsPerMonth ?? 0) / 2, 15),
   },
 ]
