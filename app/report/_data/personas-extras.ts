@@ -104,7 +104,7 @@ export const shopifyAnswers: AssessmentAnswers = {
   returnRate: 0.12,
   adSpendPct: 0.35,
   fulfillment: '3pl',
-  leadSources: ['google', 'meta', 'tiktok', 'email'],
+  leadSources: ['google', 'social-organic'],
   avgTicket: 85,
   leadsPerMonth: 2400,
   closeRate: 0.025,
