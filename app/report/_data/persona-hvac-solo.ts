@@ -1,11 +1,7 @@
 import type { AssessmentAnswers } from '@/app/report/_engine/types'
 
 // Sample persona: Jake, solo HVAC service tech in Saskatoon.
-// Demonstrates a completely different assessment shape from Miller Remodeling:
-// - solo operator (not 8-person crew)
-// - service/repair trade (not remodeling)
-// - smaller ticket, higher volume
-// - no office staff, no job management software
+// Industry: trades. Revenue model: per-visit (service calls).
 
 export const hvacSoloAnswers: AssessmentAnswers = {
   reportId: 'sample-hvac-solo',
@@ -14,12 +10,17 @@ export const hvacSoloAnswers: AssessmentAnswers = {
 
   company: 'Reeves HVAC',
   trade: 'Residential HVAC service, repair, install',
-  tradeCategory: 'trades',
-  segment: 'residential',
+  industry: 'trades',
+  customerType: 'consumer',
+  revenueModel: 'per-visit',
   yearsInBusiness: 6,
-  crewSize: 1,
+  teamSize: 1,
   officeSize: 0,
   location: 'Saskatoon, SK',
+  topPain: 'paperwork + answering calls while on jobs',
+
+  tradeCategory: 'trades',
+  segment: 'residential',
 
   leadSources: ['google', 'referrals', 'repeat'],
   primaryIntake: 'owner',
@@ -48,8 +49,14 @@ export const hvacSoloAnswers: AssessmentAnswers = {
   asksForReviews: false,
   runsAds: [],
 
+  maintenancePct: 0.2,
+  truckCount: 1,
+  onCallRotation: false,
+
   wantedTimeBack: ['paperwork', 'phone-calls'],
   keepsUpAtNight: ['missing-calls-while-on-jobs', 'slow-season-cash-flow'],
   leavingMoneyOnTable: ['missed-leads', 'no-maintenance-plans', 'no-website'],
   softwareThatFlopped: [],
+
+  crewSize: 1,
 }
