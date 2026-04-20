@@ -2,6 +2,15 @@ import { notFound } from 'next/navigation'
 import Link from 'next/link'
 import { millerReport, ReportData } from '@/app/report/_data/sample-miller'
 import { hvacSoloAnswers } from '@/app/report/_data/persona-hvac-solo'
+import {
+  dentalAnswers,
+  lawFirmAnswers,
+  shopifyAnswers,
+  cafeAnswers,
+  agencyAnswers,
+  saasAnswers,
+  photographerAnswers,
+} from '@/app/report/_data/personas-extras'
 import { generateReport } from '@/app/report/_engine/matcher'
 import SnapshotHeader from '@/components/report/SnapshotHeader'
 import TierNav from '@/components/report/TierNav'
@@ -9,15 +18,16 @@ import TierSection from '@/components/report/TierSection'
 import StartingPoint from '@/components/report/StartingPoint'
 import PrintButton from '@/components/report/PrintButton'
 
-// Report registry. Two kinds of entries:
-// 1. Hardcoded ReportData (e.g. the original Miller demo — written by hand)
-// 2. AssessmentAnswers run through generateReport() — the real production path
-//
-// Both produce the same ReportData shape so the UI doesn't care which path was used.
-// Future: a third kind, loaded from a database by the assessment pipeline.
 const reports: Record<string, ReportData> = {
   'sample-miller-remodeling': millerReport,
   'sample-hvac-solo': generateReport(hvacSoloAnswers),
+  'sample-dental-practice': generateReport(dentalAnswers),
+  'sample-law-firm': generateReport(lawFirmAnswers),
+  'sample-shopify-brand': generateReport(shopifyAnswers),
+  'sample-coffee-shop': generateReport(cafeAnswers),
+  'sample-marketing-agency': generateReport(agencyAnswers),
+  'sample-saas-startup': generateReport(saasAnswers),
+  'sample-photographer': generateReport(photographerAnswers),
 }
 
 export async function generateStaticParams() {
@@ -33,7 +43,6 @@ export default function ReportPage({ params }: { params: { id: string } }) {
 
   return (
     <>
-      {/* Minimal report chrome — Zyph wordmark only */}
       <header className="bg-white border-b border-slate-200 print:hidden">
         <div className="max-w-5xl mx-auto px-6 py-4 flex items-center justify-between">
           <Link href="/" className="flex items-center gap-2 group">
@@ -63,7 +72,6 @@ export default function ReportPage({ params }: { params: { id: string } }) {
       <TierSection tier={3} recs={data.recommendations} startIndex={1 + tier1Recs.length + tier2Recs.length} />
       <StartingPoint data={data} />
 
-      {/* Minimal report footer */}
       <footer className="report-footer bg-slate-950 text-slate-400 py-10 print:hidden">
         <div className="max-w-5xl mx-auto px-6 flex flex-col md:flex-row gap-4 items-center justify-between text-sm">
           <div className="flex items-center gap-2">
