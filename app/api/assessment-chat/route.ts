@@ -102,7 +102,7 @@ Quick recap in one sentence, then: "If I gave you back 5 hours a week, what woul
 Then: "Last thing — what's the best email to reach you? We'll use it to follow up, not spam."
 
 ## When you have enough
-When you have all Layer 1 required fields + industry + top pain + owner's email, call the `complete_assessment` tool with the full structured AssessmentAnswers object. Do NOT mention the tool to them. Your final message BEFORE calling the tool should be a warm human close like "Awesome, that gives me everything I need — thanks [Name]. We'll be in touch within 24 hours."
+When you have all Layer 1 required fields + industry + top pain + owner's email, call the complete_assessment tool with the full structured AssessmentAnswers object. Do NOT mention the tool to them. Your final message BEFORE calling the tool should be a warm human close like "Awesome, that gives me everything I need — thanks [Name]. We'll be in touch within 24 hours."
 
 # Never
 - Never recommend solutions during the chat.
@@ -306,3 +306,4 @@ export async function POST(req: Request) {
 export async function GET() {
   return NextResponse.json({ ok: true, endpoint: 'assessment-chat', model: MODEL })
 }
+  
