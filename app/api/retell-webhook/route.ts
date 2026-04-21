@@ -1,6 +1,6 @@
 // POST /api/retell-webhook — called by Retell when an assessment call ends.
-// We extract AssessmentAnswers from the transcript via OpenAI, generate the
-// report URL (stateless — answers encoded in the URL), and email the link.
+// Extracts AssessmentAnswers from the transcript via Anthropic Claude,
+// generates the report URL (stateless — answers encoded in URL), emails the link.
 
 import { NextResponse } from 'next/server'
 import { Resend } from 'resend'
@@ -10,8 +10,8 @@ import { encodeAnswers } from '@/app/report/_engine/encoding'
 export const runtime = 'nodejs'
 export const dynamic = 'force-dynamic'
 
-const RESEND_FROM = process.env.RESEND_FROM || 'Zyph Labs <reports@zyphlabs.com>'
-const OPENAI_KEY = process.env.OPENAI_API_KEY
+const RESEND_FROM = process.env.RESEND_FROM || 'Zyph Labs <onboarding@resend.dev>'
+const ANTHROPIC_KEY = process.env.ANTHROPIC_API_KEY
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://zyphlabs.com'
 const RESEND_KEY = process.env.RESEND_API_KEY
 
@@ -40,32 +40,38 @@ export async function POST(req: Request) {
     answers = await extractAnswers(transcript, call)
   } catch (err) {
     console.error('[retell-webhook] extraction failed', err)
-    return NextResponse.json({ error: 'extraction failed' }, { status: 500 })
+    return NextResponse.json({ error: 'extraction failed', detail: String(err).slice(0, 300) }, { status: 500 })
   }
 
   const encoded = encodeAnswers(answers)
   const reportUrl = `${SITE_URL}/report/dynamic?data=${encoded}`
 
   const email = extractEmailFromTranscript(transcript)
+  let emailResult: any = null
   if (email && RESEND_KEY) {
     try {
-      await sendReportEmail({ to: email, firstName: answers.ownerFirstName, company: answers.company, reportUrl })
+      emailResult = await sendReportEmail({ to: email, firstName: answers.ownerFirstName, company: answers.company, reportUrl })
     } catch (err) {
       console.error('[retell-webhook] email send failed', err)
+      emailResult = { error: String(err).slice(0, 200) }
     }
   }
 
   return NextResponse.json({
     ok: true,
     reportUrl,
-    emailed: !!(email && RESEND_KEY),
+    email,
+    emailed: !!(email && RESEND_KEY && !emailResult?.error),
+    emailResult,
   })
 }
 
 async function extractAnswers(transcript: string, call: any): Promise<AssessmentAnswers> {
-  if (!OPENAI_KEY) throw new Error('OPENAI_API_KEY not set')
+  if (!ANTHROPIC_KEY) throw new Error('ANTHROPIC_API_KEY not set')
 
-  const extractionPrompt = `You are an extraction engine. Read the assessment transcript below (a recorded call between a Zyph Labs agent and a business owner) and produce a single JSON object conforming EXACTLY to the AssessmentAnswers schema.
+  const systemPrompt = 'You are a precise data extraction engine. Output strictly valid JSON matching the requested schema. No markdown, no commentary outside the JSON.'
+
+  const userPrompt = `Read the assessment transcript below (a recorded call between a Zyph Labs agent and a business owner) and produce a single JSON object conforming EXACTLY to the AssessmentAnswers schema.
 
 RULES:
 - Output ONLY valid JSON. No markdown, no commentary.
@@ -74,24 +80,13 @@ RULES:
 - Classify industry to one of: project-based, appointment-based, retail, ecommerce, professional-services, b2b-saas, trades, creative.
 - Generate a URL-safe reportId like "firstname-lastname-yyyymmdd".
 
-SCHEMA (TypeScript):
+SCHEMA:
 type Industry = 'project-based' | 'appointment-based' | 'retail' | 'ecommerce' | 'professional-services' | 'b2b-saas' | 'trades' | 'creative'
 type CustomerType = 'consumer' | 'business' | 'both'
 type RevenueModel = 'per-project' | 'per-visit' | 'subscription' | 'transactional' | 'hourly'
 
 REQUIRED:
-  reportId: string (url-safe slug, e.g. 'dan-miller-20260420')
-  ownerName: string
-  ownerFirstName: string
-  company: string
-  trade: string (plain-English description)
-  industry: Industry
-  customerType: CustomerType
-  revenueModel: RevenueModel
-  yearsInBusiness: number
-  teamSize: number (1=solo, 2-5, 6-15, 16+)
-  location: string
-  topPain: string (free-text summary of their biggest time sink)
+  reportId, ownerName, ownerFirstName, company, trade, industry, customerType, revenueModel, yearsInBusiness (number), teamSize (number), location, topPain
 
 OPTIONAL (include only if stated):
   leadSources, primaryIntake, afterHoursHandling, leadsLostAfterHoursPerMonth, leadResponseTime, leadsPerMonth, closeRate, avgTicket
@@ -109,36 +104,39 @@ OPTIONAL (include only if stated):
 
 TRANSCRIPT:
 ---
-${transcript.slice(0, 12000)}
+${transcript.slice(0, 15000)}
 ---
 
-Output the AssessmentAnswers JSON now:`
+Output only the AssessmentAnswers JSON object.`
 
-  const resp = await fetch('https://api.openai.com/v1/chat/completions', {
+  const resp = await fetch('https://api.anthropic.com/v1/messages', {
     method: 'POST',
     headers: {
-      Authorization: `Bearer ${OPENAI_KEY}`,
-      'Content-Type': 'application/json',
+      'x-api-key': ANTHROPIC_KEY,
+      'anthropic-version': '2023-06-01',
+      'content-type': 'application/json',
     },
     body: JSON.stringify({
-      model: 'gpt-4o-mini',
-      messages: [
-        { role: 'system', content: 'You are a precise data extraction engine. Output strictly valid JSON matching the requested schema. No explanatory text.' },
-        { role: 'user', content: extractionPrompt },
-      ],
-      response_format: { type: 'json_object' },
-      temperature: 0,
+      model: 'claude-haiku-4-5-20251001',
+      max_tokens: 2000,
+      system: systemPrompt,
+      messages: [{ role: 'user', content: userPrompt }],
     }),
   })
 
   if (!resp.ok) {
     const txt = await resp.text()
-    throw new Error(`OpenAI ${resp.status}: ${txt.slice(0, 200)}`)
+    throw new Error(`Anthropic ${resp.status}: ${txt.slice(0, 300)}`)
   }
 
   const json = await resp.json()
-  const content = json?.choices?.[0]?.message?.content
-  if (!content) throw new Error('no content from OpenAI')
+  let content = json?.content?.[0]?.text
+  if (!content) throw new Error('no content from Anthropic')
+
+  // Claude sometimes wraps JSON in ```json ... ``` even when asked not to.
+  const jsonMatch = content.match(/\{[\s\S]*\}/)
+  if (!jsonMatch) throw new Error('no JSON object in response: ' + content.slice(0, 200))
+  content = jsonMatch[0]
 
   const answers = JSON.parse(content) as AssessmentAnswers
 
@@ -213,5 +211,5 @@ zyphlabs.com`
 }
 
 export async function GET() {
-  return NextResponse.json({ ok: true, endpoint: 'retell-webhook' })
+  return NextResponse.json({ ok: true, endpoint: 'retell-webhook', model: 'claude-haiku-4-5' })
 }
