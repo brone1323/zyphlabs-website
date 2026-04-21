@@ -1,4 +1,5 @@
 /** @type {import('next').NextConfig} */
+// bump for env vars
 const nextConfig = {
   typescript: { ignoreBuildErrors: true },
   eslint: { ignoreDuringBuilds: true },
