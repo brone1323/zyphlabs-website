@@ -12,7 +12,7 @@ import { Resend } from 'resend'
 import type { AssessmentAnswers } from '@/app/report/_engine/types'
 import { encodeAnswers } from '@/app/report/_engine/encoding'
 
-const RESEND_FROM = process.env.RESEND_FROM || 'Zyph Labs <onboarding@resend.dev>'
+const RESEND_FROM = process.env.RESEND_FROM || 'Zyph Labs <reports@zyphlabs.com>'
 const RESEND_KEY = process.env.RESEND_API_KEY
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://www.zyphlabs.com'
 const INTERNAL_NOTIFY_TO = process.env.INTERNAL_NOTIFY_TO || 'alex@zyphlabs.com'
@@ -199,3 +199,4 @@ export function extractEmailFromText(text: string): string | null {
   const match = text.match(/[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}/)
   return match?.[0] ?? null
 }
+ 
