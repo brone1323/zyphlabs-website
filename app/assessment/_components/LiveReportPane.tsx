@@ -25,7 +25,7 @@ export default function LiveReportPane({ report, finished }: { report: ReportV2 
   const [analyzing, setAnalyzing] = useState<SectionKey | null>(null)
   const scrollRef = useRef<HTMLDivElement>(null)
 
-  // Each time readiness expands, reveal the newly-ready sections one at a time
+  // Reveal newly-ready sections one at a time
   useEffect(() => {
     if (!report?.readiness) return
     const ready = new Set<SectionKey>()
@@ -51,20 +51,43 @@ export default function LiveReportPane({ report, finished }: { report: ReportV2 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [report?.readiness?.businessProfile, report?.readiness?.whereYouStand, report?.readiness?.whatsEatingYourWeek, report?.readiness?.opportunities, report?.readiness?.whatHappensNext])
 
-  // Auto-scroll to new content
+  // Auto-scroll to latest reveal during the build...
   useEffect(() => {
+    if (finished) return
     const el = scrollRef.current
     if (el) el.scrollTop = el.scrollHeight
-  }, [revealed, analyzing])
+  }, [revealed, analyzing, finished])
+
+  // ...but once submitted, snap to the top so user sees their report from the start.
+  useEffect(() => {
+    if (!finished) return
+    const el = scrollRef.current
+    if (!el) return
+    // Small delay so the "ready" banner renders before we scroll.
+    const t = setTimeout(() => { el.scrollTop = 0 }, 100)
+    return () => clearTimeout(t)
+  }, [finished])
 
   const showStaticPlaceholder = !report && revealed.size === 0 && !analyzing
-  const showWarmup = !!report && revealed.size === 0 && !analyzing
+  const showWarmup = !!report && revealed.size === 0 && !analyzing && !finished
 
   return (
     <div className="h-full bg-slate-50 overflow-y-auto" ref={scrollRef}>
-      <header className="bg-white border-b border-slate-200 px-5 sm:px-8 py-4 sticky top-0 z-10">
+      {finished && (
+        <div className="bg-gradient-to-r from-[#6c5ce7] to-[#00cec9] text-white px-5 sm:px-8 py-4 sticky top-0 z-20 shadow-sm">
+          <div className="flex items-center gap-3">
+            <div className="w-9 h-9 rounded-full bg-white/20 flex items-center justify-center text-lg">&#10003;</div>
+            <div className="flex-1">
+              <p className="text-[11px] uppercase tracking-widest text-white/80">Report ready</p>
+              <p className="text-base sm:text-lg font-bold" style={{ fontFamily: 'Space Grotesk, sans-serif' }}>Your report is ready for viewing</p>
+            </div>
+          </div>
+        </div>
+      )}
+
+      <header className={`bg-white border-b border-slate-200 px-5 sm:px-8 py-4 ${finished ? '' : 'sticky top-0 z-10'}`}>
         <p className="text-[11px] uppercase tracking-widest text-slate-500">Your Business Intelligence Report</p>
-        <p className="text-base sm:text-lg font-bold text-slate-900 mt-0.5" style={{ fontFamily: 'Space Grotesk, sans-serif' }}>{report?.company || 'Building in real time…'}</p>
+        <p className="text-base sm:text-lg font-bold text-slate-900 mt-0.5" style={{ fontFamily: 'Space Grotesk, sans-serif' }}>{report?.company || 'Building in real time\u2026'}</p>
       </header>
 
       <div className="max-w-2xl mx-auto px-4 sm:px-6 pb-12">
@@ -101,7 +124,7 @@ export default function LiveReportPane({ report, finished }: { report: ReportV2 
         {report && revealed.has('opportunities') && <SectionWrap><AutomationOpportunities data={report} /></SectionWrap>}
         {report && revealed.has('whatHappensNext') && <SectionWrap><WhatHappensNext data={report} /></SectionWrap>}
 
-        {analyzing && (
+        {analyzing && !finished && (
           <div className="py-8 px-4 text-slate-500 flex items-center gap-3 text-sm">
             <div className="flex gap-1">
               <Dot delay="0s" />
@@ -113,10 +136,10 @@ export default function LiveReportPane({ report, finished }: { report: ReportV2 
         )}
 
         {finished && revealed.size >= SECTION_ORDER.length && (
-          <div className="mt-8 rounded-2xl bg-gradient-to-br from-[#6c5ce7] to-[#00cec9] p-6 text-white text-center">
-            <div className="text-2xl mb-2">&#127881;</div>
-            <p className="font-bold text-lg mb-1" style={{ fontFamily: 'Space Grotesk, sans-serif' }}>Your report is ready</p>
-            <p className="text-white/90 text-sm">A copy is on its way to your inbox. Our team will follow up within 24 hours.</p>
+          <div className="mt-8 rounded-2xl border-2 border-[#6c5ce7]/30 bg-white p-6 text-center">
+            <p className="text-[11px] uppercase tracking-widest text-[#6c5ce7] mb-1">Everything&apos;s above</p>
+            <p className="font-bold text-lg text-slate-900 mb-2" style={{ fontFamily: 'Space Grotesk, sans-serif' }}>Scroll back to the top to read your report</p>
+            <p className="text-sm text-slate-600">A copy just hit your inbox too. When you&apos;re ready, the purchase and booking buttons above are live.</p>
           </div>
         )}
       </div>

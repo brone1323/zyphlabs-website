@@ -82,17 +82,17 @@ export const OFFERINGS: Record<Industry, IndustryOffering> = {
   'project-based': {
     tier1: {
       free: {
-        toolName: 'Google Voice',
-        toolUrl: 'https://voice.google.com',
-        oneLiner: 'Free second phone line with custom after-hours greeting.',
-        why: "Won't recover the call, but at least the caller hears a professional greeting telling them when you'll call back instead of ringing out.",
+        toolName: 'Fathom',
+        toolUrl: 'https://fathom.video/?ref=zyphlabs',
+        oneLiner: 'Free AI notetaker that records every Zoom/Meet/Teams call, writes the summary, and pulls out the action items.',
+        why: "Most of the friction in your week starts as a phone or video call \u2014 quotes, bookings, customer issues, crew check-ins. Fathom captures every one of those calls and spits out a follow-up checklist in plain English. Half-automated: the capture is done for you, you still decide what to act on.",
         free: true,
       },
       paid: {
         rate: '$100/hr, 1-hour minimum',
         tasks: [
+          'Configure Fathom to auto-share call summaries into Slack or email',
           'Get you set up properly on Jobber or Housecall Pro',
-          'Configure your Google Business Profile + review request flow',
           'Build a job costing / margin tracking spreadsheet wired to QuickBooks',
         ],
       },
@@ -218,18 +218,18 @@ export const OFFERINGS: Record<Industry, IndustryOffering> = {
   'appointment-based': {
     tier1: {
       free: {
-        toolName: 'Calendly + Square Appointments',
-        toolUrl: 'https://calendly.com',
-        oneLiner: 'Free booking page + automated SMS reminders.',
-        why: "Calendly's free tier covers one-call scheduling; Square adds reminders. Gets you 60% of the way there before any AI.",
+        toolName: 'Fathom',
+        toolUrl: 'https://fathom.video/?ref=zyphlabs',
+        oneLiner: 'Free AI notetaker that records every Zoom/Meet/Teams call, writes the summary, and pulls out the action items.',
+        why: "Most of the friction in your week starts as a phone or video call \u2014 quotes, bookings, customer issues, crew check-ins. Fathom captures every one of those calls and spits out a follow-up checklist in plain English. Half-automated: the capture is done for you, you still decide what to act on.",
         free: true,
       },
       paid: {
         rate: '$100/hr, 1-hour minimum',
         tasks: [
-          'Configure Calendly/Square with your services, buffers, and working hours',
+          'Configure Fathom + route summaries into your booking system',
+          'Set up Calendly/Square with your services, buffers, and working hours',
           'Design your intake form (medical/legal/liability as needed)',
-          'Set up the reminder cadence that actually reduces no-shows',
         ],
       },
     },
@@ -353,17 +353,17 @@ export const OFFERINGS: Record<Industry, IndustryOffering> = {
   'retail': {
     tier1: {
       free: {
-        toolName: 'Square Loyalty + Google Business Posts',
-        toolUrl: 'https://squareup.com/us/en/loyalty',
-        oneLiner: 'Free loyalty program + weekly Google posts to stay top of search.',
-        why: "Square Loyalty is free on Square POS; Google Business posts are free and push you above competitors. Both stack with any automation you add later.",
+        toolName: 'Fathom',
+        toolUrl: 'https://fathom.video/?ref=zyphlabs',
+        oneLiner: 'Free AI notetaker that records every Zoom/Meet/Teams call, writes the summary, and pulls out the action items.',
+        why: "Most of the friction in your week starts as a phone or video call \u2014 quotes, bookings, customer issues, crew check-ins. Fathom captures every one of those calls and spits out a follow-up checklist in plain English. Half-automated: the capture is done for you, you still decide what to act on.",
         free: true,
       },
       paid: {
         rate: '$100/hr, 1-hour minimum',
         tasks: [
+          'Configure Fathom for supplier + vendor calls',
           'Configure Square POS properly (menu, modifiers, taxes, tips)',
-          'Set up Square Loyalty with a reward that actually drives repeat visits',
           'Optimize your Google Business Profile + post schedule',
         ],
       },
@@ -487,18 +487,18 @@ export const OFFERINGS: Record<Industry, IndustryOffering> = {
   'ecommerce': {
     tier1: {
       free: {
-        toolName: 'Klaviyo Free Tier',
-        toolUrl: 'https://www.klaviyo.com/pricing',
-        oneLiner: 'Free up to 250 contacts — enough to run a real cart-recovery + welcome flow.',
-        why: "Cart recovery alone recovers 5-10% of abandoned revenue. Free tier covers early-stage stores until volume justifies an upgrade.",
+        toolName: 'Fathom',
+        toolUrl: 'https://fathom.video/?ref=zyphlabs',
+        oneLiner: 'Free AI notetaker that records every Zoom/Meet/Teams call, writes the summary, and pulls out the action items.',
+        why: "Most of the friction in your week starts as a phone or video call \u2014 quotes, bookings, customer issues, crew check-ins. Fathom captures every one of those calls and spits out a follow-up checklist in plain English. Half-automated: the capture is done for you, you still decide what to act on.",
         free: true,
       },
       paid: {
         rate: '$100/hr, 1-hour minimum',
         tasks: [
+          'Configure Fathom for CS + supplier calls',
           'Install + configure Shopify apps (reviews, cart recovery, returns)',
           'Build your Klaviyo welcome + cart recovery + post-purchase flows',
-          'Set up a returns workflow that matches how your team actually works',
         ],
       },
     },
@@ -621,17 +621,17 @@ export const OFFERINGS: Record<Industry, IndustryOffering> = {
   'professional-services': {
     tier1: {
       free: {
-        toolName: 'Calendly + HoneyBook Free Trial',
-        toolUrl: 'https://calendly.com',
-        oneLiner: 'Free scheduling + 7-day HoneyBook trial for proposals, contracts, invoicing in one place.',
-        why: "Calendly is free forever for basic booking; HoneyBook's free trial is enough to see if proposal/contract/invoice-in-one fits how you work. Most firms discover they actually need it.",
+        toolName: 'Fathom',
+        toolUrl: 'https://fathom.video/?ref=zyphlabs',
+        oneLiner: 'Free AI notetaker that records every Zoom/Meet/Teams call, writes the summary, and pulls out the action items.',
+        why: "Most of the friction in your week starts as a phone or video call \u2014 quotes, bookings, customer issues, crew check-ins. Fathom captures every one of those calls and spits out a follow-up checklist in plain English. Half-automated: the capture is done for you, you still decide what to act on.",
         free: true,
       },
       paid: {
         rate: '$100/hr, 1-hour minimum',
         tasks: [
+          'Configure Fathom to auto-draft matter notes + action items per call',
           'Build your engagement letter templates in HoneyBook or Dubsado',
-          'Configure your intake form with the right conflict-check fields',
           'Set up your QBO/Xero with retainers + trust accounting rules',
         ],
       },
@@ -756,17 +756,17 @@ export const OFFERINGS: Record<Industry, IndustryOffering> = {
   'b2b-saas': {
     tier1: {
       free: {
-        toolName: 'HubSpot Free CRM',
-        toolUrl: 'https://www.hubspot.com/products/get-started-free',
-        oneLiner: 'Forever-free CRM with deal pipeline, email tracking, and meeting scheduler built in.',
-        why: "HubSpot free is enough to run disciplined deal stages + sequences before you need anything custom. Most startups outgrow it naturally — and when they do, the AI layer sits on top of it.",
+        toolName: 'Fathom',
+        toolUrl: 'https://fathom.video/?ref=zyphlabs',
+        oneLiner: 'Free AI notetaker that records every Zoom/Meet/Teams call, writes the summary, and pulls out the action items.',
+        why: "Most of the friction in your week starts as a phone or video call \u2014 quotes, bookings, customer issues, crew check-ins. Fathom captures every one of those calls and spits out a follow-up checklist in plain English. Half-automated: the capture is done for you, you still decide what to act on.",
         free: true,
       },
       paid: {
         rate: '$100/hr, 1-hour minimum',
         tasks: [
+          'Configure Fathom to auto-tag calls by deal stage + rep',
           'Configure HubSpot / Pipedrive properly (pipelines, stages, automation)',
-          'Build your email sequences + lifecycle stage mapping',
           'Wire up lead-routing rules that actually work for your team shape',
         ],
       },
@@ -891,18 +891,18 @@ export const OFFERINGS: Record<Industry, IndustryOffering> = {
   'trades': {
     tier1: {
       free: {
-        toolName: 'Google Voice + OpsGenie Free',
-        toolUrl: 'https://voice.google.com',
-        oneLiner: 'Free second line + on-call rotation tool so you\'re not the only number answering at 2am.',
-        why: "Before you automate, get the phone off your own number. Google Voice handles routing; OpsGenie's free tier handles rotation — so you and your techs aren't all getting every emergency call.",
+        toolName: 'Fathom',
+        toolUrl: 'https://fathom.video/?ref=zyphlabs',
+        oneLiner: 'Free AI notetaker that records every Zoom/Meet/Teams call, writes the summary, and pulls out the action items.',
+        why: "Most of the friction in your week starts as a phone or video call \u2014 quotes, bookings, customer issues, crew check-ins. Fathom captures every one of those calls and spits out a follow-up checklist in plain English. Half-automated: the capture is done for you, you still decide what to act on.",
         free: true,
       },
       paid: {
         rate: '$100/hr, 1-hour minimum',
         tasks: [
+          'Configure Fathom for dispatch + customer callbacks',
           'Configure Jobber or Housecall Pro for your workflow',
           'Set up OpsGenie on-call rotation with escalation rules',
-          'Build your quick-invoice flow so the crew can invoice from the truck',
         ],
       },
     },
@@ -1026,17 +1026,17 @@ export const OFFERINGS: Record<Industry, IndustryOffering> = {
   'creative': {
     tier1: {
       free: {
-        toolName: 'HoneyBook Free Trial + Pixieset Free Tier',
-        toolUrl: 'https://www.honeybook.com',
-        oneLiner: 'HoneyBook trial for inquiries/contracts/invoicing; Pixieset free tier for client galleries.',
-        why: "These two cover 80% of creative business admin out of the box. Most shooters are cobbling it together with 5 tools — consolidate first, then automate.",
+        toolName: 'Fathom',
+        toolUrl: 'https://fathom.video/?ref=zyphlabs',
+        oneLiner: 'Free AI notetaker that records every Zoom/Meet/Teams call, writes the summary, and pulls out the action items.',
+        why: "Most of the friction in your week starts as a phone or video call \u2014 quotes, bookings, customer issues, crew check-ins. Fathom captures every one of those calls and spits out a follow-up checklist in plain English. Half-automated: the capture is done for you, you still decide what to act on.",
         free: true,
       },
       paid: {
         rate: '$100/hr, 1-hour minimum',
         tasks: [
+          'Configure Fathom to capture every discovery + review call as a creative brief',
           'Configure HoneyBook / Dubsado with your service packages + workflows',
-          'Set up Pixieset / Pic-Time gallery delivery + proofing',
           'Build your template bank (inquiry replies, proposals, contracts, pre-shoot prep)',
         ],
       },

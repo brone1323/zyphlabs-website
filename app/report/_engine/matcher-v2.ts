@@ -289,24 +289,25 @@ export function generateReportV2(a: Partial<AssessmentAnswers> & { _toolStack?: 
   // Q8: toolStack
   // Q9: wantedTimeBack
   // Q10: ownerEmail (unlocks CTAs)
-  const hasQ1_5 = !!(a.company && a.industry && a.teamSize && a.customerType && a.revenueModel)
-  const hasQ6 = !!(a.topPain || (a as any)._painTag)
-  const hasQ7 = !!(a as any)._painDetailA
+  // Q1 ownerName, Q2 businessNameAndTrade, Q3 industry, Q4 teamSize, Q5 customerType,
+  // Q6 revenueModel, Q7 topPain, Q8 toolStack, Q9 wantedTimeBack, Q10 ownerEmail.
+  const hasThroughQ6 = !!(a.company && a.industry && a.teamSize && a.customerType && a.revenueModel)
+  const hasQ7 = !!(a.topPain || (a as any)._painTag)
   const hasQ8 = !!a._toolStack
   const hasQ9 = !!((a as any).wantedTimeBack && (Array.isArray((a as any).wantedTimeBack) ? (a as any).wantedTimeBack.length : true))
   const hasQ10 = !!a.ownerEmail
 
   // Tier 2 cards pace in: Q6 reveals 1, Q7 reveals 2nd+3rd, Q8 caps at 4.
-  const tier2CountShown = !hasQ6 ? 0 : !hasQ7 ? Math.min(1, tier2Cards.length) : !hasQ8 ? Math.min(3, tier2Cards.length) : Math.min(4, tier2Cards.length)
+  const tier2CountShown = !hasQ7 ? 0 : !hasQ8 ? Math.min(2, tier2Cards.length) : !hasQ9 ? Math.min(3, tier2Cards.length) : Math.min(4, tier2Cards.length)
 
   const readiness = {
-    businessProfile: hasQ1_5,
+    businessProfile: hasThroughQ6,
     whereYouStand: !!(a.company && (a.trade || a.industry)),
     whatsEatingYourWeek: !!(a.industry && a.teamSize && a.topPain),
-    tier1: hasQ1_5,                                         // appears after Q5 — orientation first
+    tier1: hasThroughQ6,                                   // appears after Q6 — orientation first
     tier2CountShown,
-    tier3: hasQ6 && tier2Cards.length >= 2,                 // Tier 3 shows once bundle math is meaningful
-    opportunities: hasQ1_5 || (hasQ6 && tier2Cards.length > 0),  // LiveReportPane trigger
+    tier3: hasQ7 && tier2Cards.length >= 2,                 // Tier 3 shows once bundle math is meaningful
+    opportunities: hasThroughQ6 || (hasQ7 && tier2Cards.length > 0),  // LiveReportPane trigger
     whatHappensNext: hasQ9,                                  // personalized by wantedTimeBack
     ctasUnlocked: hasQ10,                                   // email required to enable purchase CTAs
   }
