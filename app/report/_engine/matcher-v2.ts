@@ -1,17 +1,12 @@
-// generateReportV2 — produces the new 5-section report shape.
-// Deterministic: no LLM required. Pulls from offerings tables.
-// Supports partial AssessmentAnswers for the live-build UI (readiness flags
-// tell the UI which sections to reveal).
-//
-// v2.1 (2026-04-22): removed fake industry benchmarks from the "What we're
-// picking up" section — every observation is now grounded in what the user
-// actually said. No fabricated numbers.
+// generateReportV2 — deterministic, no LLM. Produces the v2.2 report shape.
+// Supports partial AssessmentAnswers for the live-build UI via readiness flags.
+// All paid offerings come from offerings.ts per Brian's spec.
 
 import type { AssessmentAnswers, Industry } from './types'
 import type {
-  ReportV2, BenchmarkLine, QuickWinCard, FullSystemCard, QuestionsCallCard,
+  ReportV2, BenchmarkLine, Tier1Card, Tier2Card, Tier3Card, QuestionsCallCard,
 } from './types-v2'
-import { getOffering } from './offerings'
+import { OFFERINGS, getOffering, painSignals, matchTier2, sumTier2 } from './offerings'
 
 const INDUSTRY_PHRASE: Record<Industry, string> = {
   'project-based':         'project-based business',
@@ -38,17 +33,47 @@ function teamSizeBandLabel(n: number): string {
   return 'larger organization'
 }
 
+function aOrAn(word: string): string {
+  return /^[aeiou]/i.test(word) ? 'an' : 'a'
+}
+
 function truncate(s: string, n: number): string {
   if (!s) return ''
   return s.length <= n ? s : s.slice(0, n - 1) + '\u2026'
 }
 
-export function generateReportV2(a: Partial<AssessmentAnswers>): ReportV2 {
+function fmtMoney(n: number): string {
+  if (n >= 1000) return `$${Math.round(n / 100) / 10}k`
+  return `$${n}`
+}
+
+function fmtDollars(n: number): string {
+  return `$${n.toLocaleString('en-US')}`
+}
+
+// Merge a user's tool stack (free-text) with the offer's integration hints.
+function mergeIntegrations(offerIntegrations: string[], userStack: string): string[] {
+  if (!userStack) return offerIntegrations
+  const tokens = userStack
+    .split(/[,+/]| and |;|\n/)
+    .map((t) => t.trim())
+    .filter((t) => t && t.length < 40)
+  const merged = [...offerIntegrations]
+  for (const tok of tokens) {
+    if (!merged.some((m) => m.toLowerCase().includes(tok.toLowerCase()) || tok.toLowerCase().includes(m.toLowerCase()))) {
+      merged.push(tok)
+    }
+  }
+  return merged.slice(0, 6)
+}
+
+export function generateReportV2(a: Partial<AssessmentAnswers> & { _toolStack?: string; _painTag?: string }): ReportV2 {
   const industry = (a.industry ?? 'project-based') as Industry
   const teamSize = Number(a.teamSize ?? 1)
   const ownerFirstName = a.ownerFirstName || a.ownerName?.split(' ')[0] || 'there'
   const company = a.company || 'Your Business'
   const trade = a.trade || 'your business'
+  const industryPhrase = INDUSTRY_PHRASE[industry]
 
   const howPaidPhrase: Record<string, string> = {
     'per-project': 'by the project',
@@ -60,29 +85,28 @@ export function generateReportV2(a: Partial<AssessmentAnswers>): ReportV2 {
   const paid = howPaidPhrase[a.revenueModel ?? 'per-project'] ?? 'by the project'
   const customer = a.customerType === 'business' ? 'businesses' : a.customerType === 'both' ? 'a mix of consumers and businesses' : 'consumers'
 
-  // Section 1 — Business Profile
+  // ─── Section 1 — Business Profile ─────────────────────────────────
   const businessProfile = {
     paragraph:
       `${company} is a ${formatTeamSize(teamSize)} ${trade} \u2014 ` +
-      `${/^[aeiou]/i.test(INDUSTRY_PHRASE[industry]) ? 'an' : 'a'} ${INDUSTRY_PHRASE[industry]} serving ${customer}, paid ${paid}. ` +
+      `${aOrAn(industryPhrase)} ${industryPhrase} serving ${customer}, paid ${paid}. ` +
       `The work is quality. The systems around the work are what we look at next.`,
     stats: [
-      { label: 'Industry', value: INDUSTRY_PHRASE[industry] },
+      { label: 'Industry', value: industryPhrase },
       { label: 'Team size', value: formatTeamSize(teamSize) },
       { label: 'Revenue model', value: paid.charAt(0).toUpperCase() + paid.slice(1) },
       { label: 'Main customer', value: customer.charAt(0).toUpperCase() + customer.slice(1) },
     ],
   }
 
-  // Section 2 — "What we're picking up" (honest observations only)
-  // Every line is derived from something the user actually said.
+  // ─── Section 2 — What We're Picking Up (honest observations only) ──
   const whereYouStand: BenchmarkLine[] = []
 
   if (a.company && a.trade) {
     whereYouStand.push({
       label: 'From what you told us',
       value: `${company} \u2014 ${trade}`,
-      youAre: a.industry ? `Filed as ${INDUSTRY_PHRASE[industry]}` : 'Classifying the shape of your business next\u2026',
+      youAre: a.industry ? `Filed as ${industryPhrase}` : 'Classifying the shape of your business next\u2026',
       tone: 'neutral',
     })
   }
@@ -91,7 +115,7 @@ export function generateReportV2(a: Partial<AssessmentAnswers>): ReportV2 {
     whereYouStand.push({
       label: 'Team signal',
       value: `${formatTeamSize(teamSize)} \u2014 ${teamSizeBandLabel(teamSize)}`,
-      youAre: `At this size in an ${INDUSTRY_PHRASE[industry]}, the owner is usually still the bottleneck on at least 2\u20133 recurring tasks.`,
+      youAre: `At this size in ${aOrAn(industryPhrase)} ${industryPhrase}, the owner is usually still the bottleneck on at least 2\u20133 recurring tasks.`,
       tone: 'neutral',
     })
   }
@@ -119,56 +143,160 @@ export function generateReportV2(a: Partial<AssessmentAnswers>): ReportV2 {
     })
   }
 
-  // Section 3 — What's Eating Your Week (only populate when we have the pain)
+  if (a._toolStack) {
+    whereYouStand.push({
+      label: 'Your current tool stack',
+      value: truncate(a._toolStack, 90),
+      youAre: `We'll wire the automations below into these \u2014 not replace them.`,
+      tone: 'neutral',
+    })
+  }
+
+  if ((a as any).wantedTimeBack && (Array.isArray((a as any).wantedTimeBack) ? (a as any).wantedTimeBack.length : true)) {
+    const wantStr = Array.isArray((a as any).wantedTimeBack) ? (a as any).wantedTimeBack[0] : (a as any).wantedTimeBack
+    const WANT_LABEL: Record<string, string> = {
+      'chasing-payments': 'chasing payments',
+      'answering-calls': 'answering the phone',
+      'quoting': 'writing quotes',
+      'admin': 'admin + paperwork',
+      'marketing': 'marketing + social',
+      'being-bottleneck': 'being the bottleneck for everything',
+    }
+    whereYouStand.push({
+      label: 'If we gave you 5 hours back',
+      value: `You\u2019d stop ${WANT_LABEL[wantStr] || wantStr}`,
+      youAre: 'Ranking the recommendations below by how directly they free that up.',
+      tone: 'win',
+    })
+  }
+
+  // ─── Section 3 — What's Eating Your Week ──────────────────────────
   const statedPain = a.topPain || ''
   const whatsEatingYourWeek = {
     statedPain,
     quantifiedLeak: statedPain
-      ? `Hours/week and $/month recoverable \u2014 we\u2019ll quantify in the strategy call with your real numbers.`
+      ? `We\u2019ll size the hours/week and $/month recoverable with you on the strategy call \u2014 using your real numbers, not ours.`
       : '',
     narrative: statedPain
-      ? `You told us: "${truncate(statedPain, 120)}". The recommendations below are ordered biggest-impact-first, specifically for the shape of business you just described.`
+      ? `You told us: "${truncate(statedPain, 120)}". The recommendations below are ordered biggest-impact-first for the shape of business you described.`
       : '',
   }
 
-  // Section 4 — Automation Opportunities
-  const offering = getOffering(industry)
+  // ─── Section 4 — Automation Opportunities (stacked) ──────────────
 
-  const quickWin: QuickWinCard = {
-    ...offering.tier2,
-    cta: { label: 'Get This Automation', href: `/checkout/tier-2?industry=${industry}` },
+  // Tier 1 — DIY free tool + paid setup
+  const offering = getOffering(industry)
+  const tier1: Tier1Card = {
+    kind: 'tier-1',
+    free: {
+      toolName: offering.tier1.free.toolName,
+      toolUrl: offering.tier1.free.toolUrl,
+      oneLiner: offering.tier1.free.oneLiner,
+      why: offering.tier1.free.why,
+      isFree: offering.tier1.free.free,
+    },
+    paid: {
+      rate: offering.tier1.paid.rate,
+      tasks: offering.tier1.paid.tasks,
+    },
+    paidCta: { label: 'Book Setup Help \u2014 $100/hr', href: '/checkout/tier-1-setup' },
   }
 
-  const fullSystem: FullSystemCard = {
-    ...offering.tier3,
+  // Tier 2 — matched picks
+  const signals = painSignals({
+    topPain: a.topPain,
+    painTag: (a as any)._painTag,
+    wantedTimeBack: (a as any).wantedTimeBack,
+  })
+  const picks = matchTier2(industry, signals)
+  const tier2Cards: Tier2Card[] = picks.map((o) => ({
+    kind: 'tier-2',
+    id: o.id,
+    title: o.title,
+    pitch: o.pitch,
+    whatItDoes: o.whatItDoes,
+    integratesWith: mergeIntegrations(o.integratesWith, a._toolStack || ''),
+    priceBand: `${fmtDollars(o.price)} + ${fmtDollars(o.retainer)}/mo`,
+    price: o.price,
+    retainer: o.retainer,
+    timeToLive: o.timeToLive,
+    expectedImpact: o.expectedImpact,
+    cta: { label: 'Get This Automation', href: `/checkout/tier-2?offeringId=${o.id}` },
+  }))
+
+  // Tier 3 — Full System with bundle math
+  const tier2Sum = sumTier2(picks)
+  const tier3: Tier3Card = {
+    kind: 'tier-3',
+    title: offering.tier3.title,
+    pitch: offering.tier3.pitch,
+    pipeline: offering.tier3.pipeline,
+    brain: offering.tier3.brain,
+    priceBand: `${fmtMoney(offering.tier3.buildPrice)} + ${fmtMoney(offering.tier3.retainer)}/mo`,
+    buildPrice: offering.tier3.buildPrice,
+    retainer: offering.tier3.retainer,
+    timeToLive: offering.tier3.timeToLive,
+    expectedImpact: offering.tier3.expectedImpact,
+    bundleMath: picks.length >= 2 ? {
+      tier2Sum,
+      tier2Names: picks.map((p) => p.title),
+      narrative: `Instead of ${fmtDollars(tier2Sum)} for the ${picks.length} automations above, get all of them plus the Brain for ${fmtMoney(offering.tier3.buildPrice)} + ${fmtMoney(offering.tier3.retainer)}/mo. One build, four weeks, one connected system.`,
+    } : undefined,
     cta: { label: 'Book a 30-min Strategy Session', href: '/book/strategy' },
   }
 
   const questionsCall: QuestionsCallCard = {
     kind: 'questions',
     title: 'Still figuring it out?',
-    pitch: "Let's talk it through. 15 minutes, no pitch \u2014 just a direct conversation about what would move the needle for you.",
+    pitch: "15 minutes, no pitch \u2014 just a direct conversation about what would move the needle for you.",
     cta: { label: 'Book a 15-min Questions Call', href: '/book/questions' },
   }
 
-  // Section 5 — What Happens Next
+  // ─── Section 5 — What Happens Next (personalized by wantedTimeBack) ──
+  const wantStr = Array.isArray((a as any).wantedTimeBack) ? (a as any).wantedTimeBack[0] : (a as any).wantedTimeBack
+  const personalized = wantStr
+    ? ` The automations above are ordered so the one that frees you from ${wantStr.replace(/-/g, ' ')} is first.`
+    : ''
   const whatHappensNext = {
     paragraph:
       `${ownerFirstName}, here's how this usually goes. ` +
       `If one of the automations above feels like the obvious next step \u2014 book a strategy call and we'll scope it in 30 minutes. ` +
-      `If you're still sizing it up, the 15-minute questions call exists for exactly that. ` +
+      `If you're still sizing it up, the 15-minute questions call exists for exactly that.${personalized} ` +
       `Either way, we'll build this for you, not hand you a config.`,
     signoff: '\u2014 Alex, Zyph Labs',
   }
 
-  // Readiness (for live-build UI) — every section only shows when ALL the
-  // fields it uses have been explicitly answered (no fabricated defaults).
+  // ─── Readiness (staged to pace Q1-Q10) ────────────────────────────
+  // Q1: company + trade
+  // Q2: industry
+  // Q3: teamSize
+  // Q4: customerType
+  // Q5: revenueModel
+  // Q6: topPain + painTag
+  // Q7: painDetailA (adds context)
+  // Q8: toolStack
+  // Q9: wantedTimeBack
+  // Q10: ownerEmail (unlocks CTAs)
+  const hasQ1_5 = !!(a.company && a.industry && a.teamSize && a.customerType && a.revenueModel)
+  const hasQ6 = !!(a.topPain || (a as any)._painTag)
+  const hasQ7 = !!(a as any)._painDetailA
+  const hasQ8 = !!a._toolStack
+  const hasQ9 = !!((a as any).wantedTimeBack && (Array.isArray((a as any).wantedTimeBack) ? (a as any).wantedTimeBack.length : true))
+  const hasQ10 = !!a.ownerEmail
+
+  // Tier 2 cards pace in: Q6 reveals 1, Q7 reveals 2nd+3rd, Q8 caps at 4.
+  const tier2CountShown = !hasQ6 ? 0 : !hasQ7 ? Math.min(1, tier2Cards.length) : !hasQ8 ? Math.min(3, tier2Cards.length) : Math.min(4, tier2Cards.length)
+
   const readiness = {
-    businessProfile: !!(a.company && a.industry && a.teamSize && a.customerType && a.revenueModel),  // after Q5
-    whereYouStand: !!(a.company && (a.trade || a.industry)),          // starts populating at Q1
-    whatsEatingYourWeek: !!(a.industry && a.teamSize && a.topPain),   // + Q6
-    opportunities: !!(a.industry && a.topPain),                        // + Q6
-    whatHappensNext: !!(a.industry && a.topPain),                      // + Q6
+    businessProfile: hasQ1_5,
+    whereYouStand: !!(a.company && (a.trade || a.industry)),
+    whatsEatingYourWeek: !!(a.industry && a.teamSize && a.topPain),
+    tier1: hasQ1_5,                                         // appears after Q5 — orientation first
+    tier2CountShown,
+    tier3: hasQ6 && tier2Cards.length >= 2,                 // Tier 3 shows once bundle math is meaningful
+    opportunities: hasQ1_5 || (hasQ6 && tier2Cards.length > 0),  // LiveReportPane trigger
+    whatHappensNext: hasQ9,                                  // personalized by wantedTimeBack
+    ctasUnlocked: hasQ10,                                   // email required to enable purchase CTAs
   }
 
   return {
@@ -183,7 +311,7 @@ export function generateReportV2(a: Partial<AssessmentAnswers>): ReportV2 {
     businessProfile,
     whereYouStand,
     whatsEatingYourWeek,
-    opportunities: { quickWin, fullSystem, questionsCall },
+    opportunities: { tier1, tier2Cards, tier3, questionsCall },
     whatHappensNext,
     readiness,
   }

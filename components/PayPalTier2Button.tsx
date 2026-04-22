@@ -7,10 +7,12 @@ const clientId = (process.env.NEXT_PUBLIC_PAYPAL_CLIENT_ID || '').trim()
 
 function Inner({
   industry,
+  offeringId,
   customerEmail,
   onSuccess,
 }: {
   industry: string
+  offeringId?: string
   customerEmail?: string
   onSuccess: (orderID: string) => void
 }) {
@@ -20,14 +22,14 @@ function Inner({
   if (isPending) {
     return (
       <div className="min-h-[90px] flex items-center justify-center rounded-xl bg-slate-100 border border-slate-200">
-        <p className="text-slate-500 text-sm">Loading PayPal…</p>
+        <p className="text-slate-500 text-sm">Loading PayPal&hellip;</p>
       </div>
     )
   }
   if (isRejected) {
     return (
       <div className="rounded-xl bg-amber-50 border border-amber-200 p-4">
-        <p className="text-amber-900 text-sm">PayPal didn't load. Email <a href="mailto:alex@zyphlabs.com" className="underline">alex@zyphlabs.com</a> and we'll invoice you directly.</p>
+        <p className="text-amber-900 text-sm">PayPal didn&apos;t load. Email <a href="mailto:alex@zyphlabs.com" className="underline">alex@zyphlabs.com</a> and we&apos;ll invoice you directly.</p>
       </div>
     )
   }
@@ -48,7 +50,7 @@ function Inner({
             const res = await fetch('/api/paypal/tier-2-create-order', {
               method: 'POST',
               headers: { 'Content-Type': 'application/json' },
-              body: JSON.stringify({ industry, customerEmail }),
+              body: JSON.stringify({ industry, offeringId, customerEmail }),
             })
             const data = await res.json()
             if (!res.ok) throw new Error(data.error || 'Could not start checkout')
@@ -80,13 +82,14 @@ function Inner({
 
 export default function PayPalTier2Button(props: {
   industry: string
+  offeringId?: string
   customerEmail?: string
   onSuccess: (orderID: string) => void
 }) {
   if (!clientId) {
     return (
       <div className="rounded-xl p-4 bg-amber-50 border border-amber-200 text-sm text-amber-900">
-        PayPal isn't configured yet. Email <a href="mailto:alex@zyphlabs.com" className="underline">alex@zyphlabs.com</a> and we'll invoice you directly.
+        PayPal isn&apos;t configured yet. Email <a href="mailto:alex@zyphlabs.com" className="underline">alex@zyphlabs.com</a> and we&apos;ll invoice you directly.
       </div>
     )
   }

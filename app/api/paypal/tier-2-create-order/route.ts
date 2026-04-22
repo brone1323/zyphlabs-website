@@ -1,10 +1,11 @@
 // POST /api/paypal/tier-2-create-order
 // Creates a PayPal order for a Tier 2 (Single Automation) purchase.
-// Body: { industry: Industry, customerEmail?: string }
-// Price comes from the LOW end of the offering's priceBand.
+// Body: { industry?: Industry, offeringId?: string, customerEmail?: string }
+// Price = offer.price from offerings.ts (the specific automation picked).
 
 import { NextRequest, NextResponse } from 'next/server'
-import { getOffering } from '@/app/report/_engine/offerings'
+import { OFFERINGS } from '@/app/report/_engine/offerings'
+import type { Tier2Offer } from '@/app/report/_engine/offerings'
 import type { Industry } from '@/app/report/_engine/types'
 
 const PAYPAL_API =
@@ -28,26 +29,35 @@ async function getAccessToken(): Promise<string> {
   return data.access_token
 }
 
-// Parse "$3k–$4k" → { low: 3000, high: 4000 }
-function parseBand(band: string): { low: number; high: number } {
-  const nums = Array.from(band.matchAll(/\$([\d.]+)k?/gi)).map((m) => {
-    const n = parseFloat(m[1])
-    return band.toLowerCase().includes('k') ? n * 1000 : n
-  })
-  const low = nums[0] ?? 2500
-  const high = nums[1] ?? low + 1000
-  return { low, high }
+function findOfferById(id: string): { offer: Tier2Offer; industry: Industry } | null {
+  for (const [industry, offering] of Object.entries(OFFERINGS)) {
+    const offer = offering.tier2Menu.find((o) => o.id === id)
+    if (offer) return { offer, industry: industry as Industry }
+  }
+  return null
 }
 
 export async function POST(request: NextRequest) {
   try {
-    const { industry, customerEmail } = await request.json()
-    if (!industry) return NextResponse.json({ error: 'missing industry' }, { status: 400 })
+    const { industry, offeringId, customerEmail } = await request.json()
 
-    const offering = getOffering(industry as Industry)
-    const tier2 = offering.tier2
-    const { low } = parseBand(tier2.priceBand)
-    const amount = low.toFixed(2)
+    let offer: Tier2Offer | null = null
+    let resolvedIndustry: Industry | null = null
+
+    if (offeringId) {
+      const hit = findOfferById(offeringId)
+      if (hit) { offer = hit.offer; resolvedIndustry = hit.industry }
+    } else if (industry && OFFERINGS[industry as Industry]) {
+      // Legacy: pick first offer in the industry menu
+      resolvedIndustry = industry as Industry
+      offer = OFFERINGS[resolvedIndustry].tier2Menu[0] ?? null
+    }
+
+    if (!offer || !resolvedIndustry) {
+      return NextResponse.json({ error: 'missing or unknown offering' }, { status: 400 })
+    }
+
+    const amount = offer.price.toFixed(2)
 
     const accessToken = await getAccessToken()
 
@@ -55,8 +65,8 @@ export async function POST(request: NextRequest) {
       intent: 'CAPTURE',
       purchase_units: [
         {
-          custom_id: JSON.stringify({ kind: 'zyph-tier-2', industry, customerEmail: customerEmail || null }),
-          description: `Zyph Labs — ${tier2.title} (Tier 2 Automation)`,
+          custom_id: JSON.stringify({ kind: 'zyph-tier-2', industry: resolvedIndustry, offeringId: offer.id, customerEmail: customerEmail || null }),
+          description: `Zyph Labs \u2014 ${offer.title} (Tier 2 Automation)`,
           amount: {
             currency_code: 'CAD',
             value: amount,
@@ -66,10 +76,10 @@ export async function POST(request: NextRequest) {
           },
           items: [
             {
-              name: tier2.title.slice(0, 127),
+              name: offer.title.slice(0, 127),
               quantity: '1',
               unit_amount: { currency_code: 'CAD', value: amount },
-              description: (tier2.pitch || '').slice(0, 127),
+              description: (offer.pitch || '').slice(0, 127),
             },
           ],
         },
@@ -94,7 +104,7 @@ export async function POST(request: NextRequest) {
     }
 
     const data = await res.json()
-    return NextResponse.json({ orderID: data.id, amount, currency: 'CAD' })
+    return NextResponse.json({ orderID: data.id, amount, currency: 'CAD', offeringId: offer.id })
   } catch (e) {
     console.error('[tier-2-create-order] error', e)
     return NextResponse.json(
@@ -105,5 +115,5 @@ export async function POST(request: NextRequest) {
 }
 
 export async function GET() {
-  return NextResponse.json({ ok: true, endpoint: 'tier-2-create-order' })
+  return NextResponse.json({ ok: true, endpoint: 'tier-2-create-order', version: 2 })
 }
