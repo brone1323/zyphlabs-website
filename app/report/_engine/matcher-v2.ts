@@ -33,6 +33,11 @@ function fmtDollar(n: number): string {
   return `$${n}`
 }
 
+function truncate(s: string, n: number): string {
+  if (!s) return ''
+  return s.length <= n ? s : s.slice(0, n - 1) + '\u2026'
+}
+
 export function generateReportV2(a: Partial<AssessmentAnswers>): ReportV2 {
   const industry = (a.industry ?? 'project-based') as Industry
   const teamSize = Number(a.teamSize ?? 1)
@@ -42,7 +47,6 @@ export function generateReportV2(a: Partial<AssessmentAnswers>): ReportV2 {
   const bench = getBenchmarks(a)
   const band = sizeBand(teamSize)
 
-  // ─── Section 1 — Business Profile ──────────────────────────────
   const howPaidPhrase: Record<string, string> = {
     'per-project': 'by the project',
     'per-visit': 'by the visit',
@@ -55,7 +59,7 @@ export function generateReportV2(a: Partial<AssessmentAnswers>): ReportV2 {
 
   const businessProfile = {
     paragraph:
-      `${company} is a ${formatTeamSize(teamSize)} ${trade.toLowerCase()} — ` +
+      `${company} is a ${formatTeamSize(teamSize)} ${trade.toLowerCase()} \u2014 ` +
       `a ${INDUSTRY_PHRASE[industry]} serving ${customer}, paid ${paid}. ` +
       `The work is quality. The systems around the work are what we look at next.`,
     stats: [
@@ -66,18 +70,15 @@ export function generateReportV2(a: Partial<AssessmentAnswers>): ReportV2 {
     ],
   }
 
-  // ─── Section 2 — Where You Stand ────────────────────────────────
   const whereYouStand: BenchmarkLine[] = []
-
-  // Review count vs benchmark
-  const theirReviews = a.googleReviewCount ?? null
+  const theirReviews = (a as any).googleReviewCount ?? null
   if (theirReviews != null) {
     const delta = theirReviews - bench.googleReviews
     whereYouStand.push({
       label: `Businesses your size in ${INDUSTRY_PHRASE[industry]}s average`,
       value: `${bench.googleReviews} Google reviews`,
       youAre: `You mentioned ${theirReviews}`,
-      gap: delta < 0 ? `${Math.abs(delta)}-review gap we can close in 60 days` : 'You\'re ahead of the average',
+      gap: delta < 0 ? `${Math.abs(delta)}-review gap we can close in 60 days` : "You're ahead of the average",
       tone: delta < 0 ? 'gap' : 'win',
     })
   } else {
@@ -88,16 +89,14 @@ export function generateReportV2(a: Partial<AssessmentAnswers>): ReportV2 {
     })
   }
 
-  // Lead response time
   whereYouStand.push({
     label: 'The top 20% of businesses in your industry respond to new leads in',
     value: `under ${bench.topQuartileResponseMinutes} minutes`,
-    youAre: a.leadResponseTime ? `You mentioned "${a.leadResponseTime}"` : undefined,
-    gap: a.leadResponseTime && a.leadResponseTime !== 'minutes' ? 'Closing this gap alone typically recovers 8–15% of lost leads' : undefined,
-    tone: a.leadResponseTime === 'minutes' ? 'win' : 'gap',
+    youAre: (a as any).leadResponseTime ? `You mentioned "${(a as any).leadResponseTime}"` : undefined,
+    gap: (a as any).leadResponseTime && (a as any).leadResponseTime !== 'minutes' ? 'Closing this gap alone typically recovers 8\u201315% of lost leads' : undefined,
+    tone: (a as any).leadResponseTime === 'minutes' ? 'win' : 'gap',
   })
 
-  // Pain frequency
   whereYouStand.push({
     label: `${bench.painShareTop1.sharePct}% of ${INDUSTRY_PHRASE[industry]} owners say`,
     value: `"${bench.painShareTop1.pain}" is their #1 time drain`,
@@ -105,26 +104,22 @@ export function generateReportV2(a: Partial<AssessmentAnswers>): ReportV2 {
     tone: 'neutral',
   })
 
-  // Revenue recovery estimate
   whereYouStand.push({
     label: `Businesses your size that automate this recover an average of`,
     value: `${fmtDollar(bench.avgRecoveryWhenAutomated)}/month`,
     tone: 'win',
   })
 
-  // ─── Section 3 — What's Eating Your Week ────────────────────────
   const statedPain = a.topPain || `${bench.painShareTop1.pain}`
-  const quantifiedLeak = `~${fmtDollar(bench.avgRecoveryWhenAutomated)}/month in recoverable revenue + 6–12 hrs/week of owner time`
   const whatsEatingYourWeek = {
     statedPain,
-    quantifiedLeak,
+    quantifiedLeak: `~${fmtDollar(bench.avgRecoveryWhenAutomated)}/month in recoverable revenue + 6\u201312 hrs/week of owner time`,
     narrative:
       `You told us: "${truncate(statedPain, 90)}". ` +
-      `Owners who fix this recover an average of ${fmtDollar(bench.avgRecoveryWhenAutomated)}/month or 6–12 hrs/week. ` +
-      `The recommendations below are ordered by biggest-impact-first — specifically for your shape of business.`,
+      `Owners who fix this recover an average of ${fmtDollar(bench.avgRecoveryWhenAutomated)}/month or 6\u201312 hrs/week. ` +
+      `The recommendations below are ordered by biggest-impact-first \u2014 specifically for your shape of business.`,
   }
 
-  // ─── Section 4 — Automation Opportunities ───────────────────────
   const offering = getOffering(industry)
 
   const quickWin: QuickWinCard = {
@@ -140,28 +135,26 @@ export function generateReportV2(a: Partial<AssessmentAnswers>): ReportV2 {
   const questionsCall: QuestionsCallCard = {
     kind: 'questions',
     title: 'Still figuring it out?',
-    pitch: 'Let\'s talk it through. 15 minutes, no pitch — just a direct conversation about what would move the needle for you.',
+    pitch: "Let's talk it through. 15 minutes, no pitch \u2014 just a direct conversation about what would move the needle for you.",
     cta: { label: 'Book a 15-min Questions Call', href: '/book/questions' },
   }
 
-  // ─── Section 5 — What Happens Next ──────────────────────────────
   const whatHappensNext = {
     paragraph:
-      `${ownerFirstName}, here\'s how this usually goes. ` +
-      `If one of the automations above feels like the obvious next step — book a strategy call and we\'ll scope it in 30 minutes. ` +
-      `If you\'re still sizing it up, the 15-minute questions call exists for exactly that. ` +
-      `Either way, we\'ll build this for you, not hand you a config.`,
-    signoff: '— Alex, Zyph Labs',
+      `${ownerFirstName}, here's how this usually goes. ` +
+      `If one of the automations above feels like the obvious next step \u2014 book a strategy call and we'll scope it in 30 minutes. ` +
+      `If you're still sizing it up, the 15-minute questions call exists for exactly that. ` +
+      `Either way, we'll build this for you, not hand you a config.`,
+    signoff: '\u2014 Alex, Zyph Labs',
   }
 
-  // ─── Readiness (for live-build UI) ──────────────────────────────
-  // Staged so each question visibly moves the report forward.
+  // Readiness (for live-build UI) — staged so each question moves the report
   const readiness = {
-    businessProfile: !!(a.company && a.industry),                                // Q1 + Q2
-    whereYouStand: !!(a.industry && a.teamSize && a.customerType),              // Q2 + Q3 + Q4
-    whatsEatingYourWeek: !!(a.industry && a.teamSize && a.topPain),             // + Q6
-    opportunities: !!(a.industry && a.topPain),                                  // + Q6
-    whatHappensNext: !!(a.industry && a.topPain),                                // + Q6
+    businessProfile: !!(a.company && a.industry),                     // Q1 + Q2
+    whereYouStand: !!(a.industry && a.teamSize && a.customerType),    // Q2 + Q3 + Q4
+    whatsEatingYourWeek: !!(a.industry && a.teamSize && a.topPain),   // + Q6
+    opportunities: !!(a.industry && a.topPain),                        // + Q6
+    whatHappensNext: !!(a.industry && a.topPain),                      // + Q6
   }
 
   return {
@@ -176,4 +169,8 @@ export function generateReportV2(a: Partial<AssessmentAnswers>): ReportV2 {
     businessProfile,
     whereYouStand,
     whatsEatingYourWeek,
-    
+    opportunities: { quickWin, fullSystem, questionsCall },
+    whatHappensNext,
+    readiness,
+  }
+}
