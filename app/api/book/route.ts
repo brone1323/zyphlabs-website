@@ -76,7 +76,7 @@ export async function POST(req: NextRequest) {
     `Booked via zyphlabs.com/book/${type}.`,
   ].filter(Boolean).join('\n')
 
-  const calendarWebhook = process.env.CALENDAR_WEBHOOK_URL
+  const calendarWebhook = process.env.CALENDAR_WEBHOOK_URL || 'https://script.google.com/macros/s/AKfycbwjHFUn6GLut5miYgBS4P6ITfHZLB_zVWg-cmtwHPDK34Su6GnNd7psf6TjSuYPMQ1-/exec'
   let calendarResult: any = { skipped: 'no CALENDAR_WEBHOOK_URL' }
   if (calendarWebhook) {
     try {
