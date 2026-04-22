@@ -141,8 +141,8 @@ export function toAssessmentAnswers(raw: Record<string, any>): any {
 
   return {
     reportId: `web-${Date.now()}`,
-    ownerName: raw.ownerName || (company ? company + ' owner' : undefined),
-    ownerFirstName: (raw.ownerName || '').split(' ')[0] || 'there',
+    ownerName: raw.ownerName || undefined,
+    ownerFirstName: raw.ownerName ? raw.ownerName.split(' ')[0] : undefined,
     company: company || undefined,
     trade: trade || undefined,
     industry: raw.industry || undefined,
