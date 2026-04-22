@@ -1,88 +1,33 @@
+'use client'
+
 import Link from 'next/link'
-
-const services = [
-  { href: '/services/contractors', label: 'Contractors & Trades' },
-  { href: '/services/ecommerce', label: 'E-Commerce Stores' },
-  { href: '/services/real-estate', label: 'Realtors & Real Estate' },
-  { href: '/services/law-firms', label: 'Law Firms & Attorneys' },
-]
-
-const company = [
-  { href: '/how-it-works', label: 'How It Works' },
-  { href: '/hosting', label: 'Managed Hosting' },
-  { href: '/portfolio', label: 'Portfolio' },
-  { href: 'mailto:alex@zyphlabs.com', label: 'Contact Us' },
-]
+import { usePathname } from 'next/navigation'
 
 export default function Footer() {
+  const pathname = usePathname() || ''
+
+  // Hide global footer on assessment + report pages
+  if (pathname.startsWith('/assessment') || pathname.startsWith('/report')) return null
+
   return (
     <footer className="relative border-t border-white/5 bg-[#0a0a0f]">
-      {/* Top gradient line */}
       <div className="section-divider" />
-
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-12">
-          {/* Brand */}
-          <div className="md:col-span-2">
-            <div className="flex items-center gap-2.5 mb-4">
-              <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-[#6c5ce7] to-[#00cec9] flex items-center justify-center">
-                <span className="text-white font-bold text-sm" style={{ fontFamily: 'Space Grotesk, sans-serif' }}>Z</span>
-              </div>
-              <span className="font-bold text-lg tracking-wide text-white" style={{ fontFamily: 'Space Grotesk, sans-serif' }}>
-                ZYPH <span className="gradient-text">LABS</span>
-              </span>
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6">
+          <div className="flex items-center gap-2.5">
+            <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-[#6c5ce7] to-[#00cec9] flex items-center justify-center">
+              <span className="text-white font-bold text-sm" style={{ fontFamily: 'Space Grotesk, sans-serif' }}>Z</span>
             </div>
-            <p className="text-[#8888aa] text-sm leading-relaxed max-w-sm mb-6">
-              We build it. We host it. We maintain it. Professional websites for growing businesses —
-              from first click to fully live, with zero technical headaches.
-            </p>
-            <div className="flex items-center gap-3 text-xs text-[#8888aa]">
-              <span className="flex items-center gap-1.5">
-                <span className="w-1.5 h-1.5 rounded-full bg-[#00cec9] inline-block" />
-                Secure checkout via PayPal
-              </span>
-              <span>·</span>
-              <span>Cancel hosting anytime</span>
-            </div>
+            <span className="font-bold text-lg tracking-wide text-white" style={{ fontFamily: 'Space Grotesk, sans-serif' }}>
+              ZYPH <span className="gradient-text">LABS</span>
+            </span>
           </div>
 
-          {/* Services */}
-          <div>
-            <h3 className="text-sm font-semibold text-white mb-4 uppercase tracking-wider" style={{ fontFamily: 'Space Grotesk, sans-serif' }}>
-              Services
-            </h3>
-            <ul className="space-y-2.5">
-              {services.map((s) => (
-                <li key={s.href}>
-                  <Link href={s.href} className="text-sm text-[#8888aa] hover:text-[#a29bfe] transition-colors">
-                    {s.label}
-                  </Link>
-                </li>
-              ))}
-            </ul>
+          <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4 sm:gap-8 text-sm text-[#8888aa]">
+            <Link href="/assessment" className="hover:text-white transition-colors">Free Assessment</Link>
+            <a href="mailto:alex@zyphlabs.com" className="hover:text-white transition-colors">alex@zyphlabs.com</a>
+            <span className="text-[#555577] text-xs">© {new Date().getFullYear()} Zyph Labs</span>
           </div>
-
-          {/* Company */}
-          <div>
-            <h3 className="text-sm font-semibold text-white mb-4 uppercase tracking-wider" style={{ fontFamily: 'Space Grotesk, sans-serif' }}>
-              Company
-            </h3>
-            <ul className="space-y-2.5">
-              {company.map((c) => (
-                <li key={c.href}>
-                  <Link href={c.href} className="text-sm text-[#8888aa] hover:text-[#a29bfe] transition-colors">
-                    {c.label}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </div>
-        </div>
-
-        {/* Bottom bar */}
-        <div className="mt-12 pt-8 border-t border-white/5 flex flex-col sm:flex-row justify-between items-center gap-4 text-xs text-[#555577]">
-          <p>© {new Date().getFullYear()} Zyph Labs. All rights reserved.</p>
-          <p>Built with Next.js · Hosted on Vercel · Payments by PayPal</p>
         </div>
       </div>
     </footer>
