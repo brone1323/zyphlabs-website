@@ -146,7 +146,7 @@ zyphlabs.com`
 }
 
 // ─────────────────────────────────────────────────────────────────
-// Google Sheet append
+// Google Sheet append (completion)
 // ─────────────────────────────────────────────────────────────────
 
 export async function appendToSheet(opts: {
@@ -154,11 +154,14 @@ export async function appendToSheet(opts: {
   answers: AssessmentAnswers
   callerEmail: string | null
   reportUrl: string
+  sessionId?: string
 }) {
   if (!SHEETS_WEBHOOK_URL) return { skipped: 'no SHEETS_WEBHOOK_URL' }
 
-  const { source, answers, callerEmail, reportUrl } = opts
+  const { source, answers, callerEmail, reportUrl, sessionId } = opts
   const row = {
+    type: 'completion',
+    sessionId: sessionId || '',
     timestamp: new Date().toISOString(),
     source,
     name: answers.ownerName,
@@ -188,6 +191,61 @@ export async function appendToSheet(opts: {
 }
 
 // ─────────────────────────────────────────────────────────────────
+// Google Sheet progress upsert (partial sessions)
+// Keyed by sessionId so each prospect is ONE row that evolves as they
+// answer. If they bail at Q4, the row stays at Q4 until they come back
+// or timeout.
+// ─────────────────────────────────────────────────────────────────
+
+export async function progressToSheet(opts: {
+  sessionId: string
+  currentQuestion: number
+  totalQuestions: number
+  lastField?: string
+  raw: Record<string, any>
+}) {
+  if (!SHEETS_WEBHOOK_URL) return { skipped: 'no SHEETS_WEBHOOK_URL' }
+
+  const { sessionId, currentQuestion, totalQuestions, lastField, raw } = opts
+  const businessPart = (raw.businessNameAndTrade || '').split(/[\u2014\u2013-]/)
+  const company = (businessPart[0] || '').trim()
+  const trade = (businessPart.slice(1).join(' \u2014 ') || raw.businessNameAndTrade || '').trim()
+
+  const payload = {
+    type: 'progress',
+    sessionId,
+    currentQuestion,
+    totalQuestions,
+    lastField: lastField || '',
+    status: 'in-progress',
+    name: raw.ownerName || '',
+    company: company || '',
+    trade: trade || '',
+    industry: raw.industry || '',
+    teamSize: raw.teamSize || '',
+    customerType: raw.customerType || '',
+    revenueModel: raw.revenueModel || '',
+    topPain: raw.topPain || raw.painTag || '',
+    toolStack: raw.toolStack || '',
+    wantedTimeBack: raw.wantedTimeBack || '',
+    email: raw.ownerEmail || '',
+    rawJson: JSON.stringify(raw),
+    timestamp: new Date().toISOString(),
+  }
+
+  const resp = await fetch(SHEETS_WEBHOOK_URL, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(payload),
+  })
+  if (!resp.ok) {
+    const txt = await resp.text()
+    throw new Error(`Sheets progress ${resp.status}: ${txt.slice(0, 200)}`)
+  }
+  return await resp.json().catch(() => ({ ok: true }))
+}
+
+// ─────────────────────────────────────────────────────────────────
 // Helpers
 // ─────────────────────────────────────────────────────────────────
 
@@ -199,4 +257,3 @@ export function extractEmailFromText(text: string): string | null {
   const match = text.match(/[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}/)
   return match?.[0] ?? null
 }
- 

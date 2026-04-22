@@ -8,10 +8,38 @@ import LiveReportPane from './_components/LiveReportPane'
 import { generateReportV2 } from '@/app/report/_engine/matcher-v2'
 import type { ReportV2 } from '@/app/report/_engine/types-v2'
 
+// Stable UUID per browser session. Used as the key for the progress tracker
+// so each prospect shows up as ONE row in the Sheet that evolves as they
+// answer, rather than a new row per question advance.
+function makeSessionId(): string {
+  try {
+    if (typeof crypto !== 'undefined' && typeof (crypto as any).randomUUID === 'function') {
+      return (crypto as any).randomUUID()
+    }
+  } catch {}
+  return `s-${Date.now()}-${Math.random().toString(36).slice(2, 10)}`
+}
+
+// Fire-and-forget progress ping. We don't await — the user's UX must not be
+// gated on the Sheet round-trip. Errors swallowed; worst case we miss a ping.
+function pingProgress(body: unknown) {
+  try {
+    fetch('/api/assessment-progress', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(body),
+      keepalive: true, // survives tab close on modern browsers
+    }).catch(() => {})
+  } catch {}
+}
+
 export default function AssessmentPage() {
   const [raw, setRaw] = useState<Record<string, any>>({})
   const [index, setIndex] = useState(0)
   const [submitted, setSubmitted] = useState(false)
+
+  // Generated once, stays stable for this tab's life.
+  const sessionId = useMemo(() => makeSessionId(), [])
 
   const total = QUESTIONS.length
   const currentQ = QUESTIONS[index]
@@ -34,7 +62,18 @@ export default function AssessmentPage() {
     const next = { ...raw, ...values }
     setRaw(next)
 
-    // Last question — submit
+    // Fire a progress ping for EVERY advance (including the final one). The
+    // "In Progress" sheet tab upserts by sessionId so each prospect stays as
+    // one row that updates as they move through the flow.
+    pingProgress({
+      sessionId,
+      currentQuestion: index + 1,
+      totalQuestions: total,
+      lastField: currentQ?.field || '',
+      raw: next,
+    })
+
+    // Last question — submit the completion
     if (index + 1 >= total) {
       setSubmitted(true)
       try {
@@ -42,7 +81,7 @@ export default function AssessmentPage() {
         await fetch('/api/assessment-submit', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ answers, email: next.ownerEmail }),
+          body: JSON.stringify({ answers, email: next.ownerEmail, sessionId }),
         })
       } catch (err) {
         console.error('submit failed', err)

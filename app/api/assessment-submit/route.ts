@@ -1,6 +1,6 @@
 // POST /api/assessment-submit — final handler for web-chat / /assessment completions.
 //
-// Request: { answers: AssessmentAnswers, email?: string }
+// Request: { answers: AssessmentAnswers, email?: string, sessionId?: string }
 // Response: { ok: true, reportUrl, notifyResult, callerResult, sheetResult }
 
 import { NextResponse } from 'next/server'
@@ -26,6 +26,8 @@ export async function POST(req: Request) {
     (typeof body?.ownerEmail === 'string' && body.ownerEmail.trim()) ||
     extractEmailFromText(JSON.stringify(answers)) || null
 
+  const sessionId = typeof body?.sessionId === 'string' ? body.sessionId : undefined
+
   const reportUrl = buildReportUrl(answers)
 
   const notifyResult = await notifyInternal({
@@ -42,12 +44,12 @@ export async function POST(req: Request) {
     : { skipped: 'no caller email' }
 
   const sheetResult = await appendToSheet({
-    source: 'web', answers, callerEmail: email, reportUrl,
+    source: 'web', answers, callerEmail: email, reportUrl, sessionId,
   }).catch((err) => ({ error: String(err).slice(0, 200) }))
 
   return NextResponse.json({ ok: true, reportUrl, email, notifyResult, callerResult, sheetResult })
 }
 
 export async function GET() {
-  return NextResponse.json({ ok: true, endpoint: 'assessment-submit', version: 2 })
+  return NextResponse.json({ ok: true, endpoint: 'assessment-submit', version: 3 })
 }
