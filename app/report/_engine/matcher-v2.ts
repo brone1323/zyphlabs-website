@@ -1,13 +1,16 @@
 // generateReportV2 — produces the new 5-section report shape.
-// Deterministic: no LLM required. Pulls from benchmarks + offerings tables.
-// Supports partial AssessmentAnswers for the live-build UI (readiness flags tell
-// the UI which sections to reveal).
+// Deterministic: no LLM required. Pulls from offerings tables.
+// Supports partial AssessmentAnswers for the live-build UI (readiness flags
+// tell the UI which sections to reveal).
+//
+// v2.1 (2026-04-22): removed fake industry benchmarks from the "What we're
+// picking up" section — every observation is now grounded in what the user
+// actually said. No fabricated numbers.
 
 import type { AssessmentAnswers, Industry } from './types'
 import type {
   ReportV2, BenchmarkLine, QuickWinCard, FullSystemCard, QuestionsCallCard,
 } from './types-v2'
-import { getBenchmarks, sizeBand } from './benchmarks'
 import { getOffering } from './offerings'
 
 const INDUSTRY_PHRASE: Record<Industry, string> = {
@@ -28,9 +31,11 @@ function formatTeamSize(n: number): string {
   return `${n}-person organization`
 }
 
-function fmtDollar(n: number): string {
-  if (n >= 1000) return `$${Math.round(n / 100) / 10}k`
-  return `$${n}`
+function teamSizeBandLabel(n: number): string {
+  if (n <= 1) return 'solo'
+  if (n <= 5) return 'small team'
+  if (n <= 15) return 'mid-size operation'
+  return 'larger organization'
 }
 
 function truncate(s: string, n: number): string {
@@ -44,8 +49,6 @@ export function generateReportV2(a: Partial<AssessmentAnswers>): ReportV2 {
   const ownerFirstName = a.ownerFirstName || a.ownerName?.split(' ')[0] || 'there'
   const company = a.company || 'Your Business'
   const trade = a.trade || 'your business'
-  const bench = getBenchmarks(a)
-  const band = sizeBand(teamSize)
 
   const howPaidPhrase: Record<string, string> = {
     'per-project': 'by the project',
@@ -57,6 +60,7 @@ export function generateReportV2(a: Partial<AssessmentAnswers>): ReportV2 {
   const paid = howPaidPhrase[a.revenueModel ?? 'per-project'] ?? 'by the project'
   const customer = a.customerType === 'business' ? 'businesses' : a.customerType === 'both' ? 'a mix of consumers and businesses' : 'consumers'
 
+  // Section 1 — Business Profile
   const businessProfile = {
     paragraph:
       `${company} is a ${formatTeamSize(teamSize)} ${trade.toLowerCase()} \u2014 ` +
@@ -70,56 +74,64 @@ export function generateReportV2(a: Partial<AssessmentAnswers>): ReportV2 {
     ],
   }
 
+  // Section 2 — "What we're picking up" (honest observations only)
+  // Every line is derived from something the user actually said.
   const whereYouStand: BenchmarkLine[] = []
-  const theirReviews = (a as any).googleReviewCount ?? null
-  if (theirReviews != null) {
-    const delta = theirReviews - bench.googleReviews
+
+  if (a.company && a.trade) {
     whereYouStand.push({
-      label: `Businesses your size in ${INDUSTRY_PHRASE[industry]}s average`,
-      value: `${bench.googleReviews} Google reviews`,
-      youAre: `You mentioned ${theirReviews}`,
-      gap: delta < 0 ? `${Math.abs(delta)}-review gap we can close in 60 days` : "You're ahead of the average",
-      tone: delta < 0 ? 'gap' : 'win',
-    })
-  } else {
-    whereYouStand.push({
-      label: `Businesses your size in ${INDUSTRY_PHRASE[industry]}s average`,
-      value: `${bench.googleReviews} Google reviews`,
+      label: 'From what you told us',
+      value: `${company} \u2014 ${trade}`,
+      youAre: a.industry ? `Filed as ${INDUSTRY_PHRASE[industry]}` : 'Classifying the shape of your business next\u2026',
       tone: 'neutral',
     })
   }
 
-  whereYouStand.push({
-    label: 'The top 20% of businesses in your industry respond to new leads in',
-    value: `under ${bench.topQuartileResponseMinutes} minutes`,
-    youAre: (a as any).leadResponseTime ? `You mentioned "${(a as any).leadResponseTime}"` : undefined,
-    gap: (a as any).leadResponseTime && (a as any).leadResponseTime !== 'minutes' ? 'Closing this gap alone typically recovers 8\u201315% of lost leads' : undefined,
-    tone: (a as any).leadResponseTime === 'minutes' ? 'win' : 'gap',
-  })
-
-  whereYouStand.push({
-    label: `${bench.painShareTop1.sharePct}% of ${INDUSTRY_PHRASE[industry]} owners say`,
-    value: `"${bench.painShareTop1.pain}" is their #1 time drain`,
-    youAre: a.topPain ? `You told us: "${truncate(a.topPain, 70)}"` : undefined,
-    tone: 'neutral',
-  })
-
-  whereYouStand.push({
-    label: `Businesses your size that automate this recover an average of`,
-    value: `${fmtDollar(bench.avgRecoveryWhenAutomated)}/month`,
-    tone: 'win',
-  })
-
-  const statedPain = a.topPain || `${bench.painShareTop1.pain}`
-  const whatsEatingYourWeek = {
-    statedPain,
-    quantifiedLeak: `~${fmtDollar(bench.avgRecoveryWhenAutomated)}/month in recoverable revenue + 6\u201312 hrs/week of owner time`,
-    narrative:
-      `You told us: "${truncate(statedPain, 90)}". ` +
-      `Owners who fix this recover an average of ${fmtDollar(bench.avgRecoveryWhenAutomated)}/month or 6\u201312 hrs/week. ` +
-      `The recommendations below are ordered by biggest-impact-first \u2014 specifically for your shape of business.`,
+  if (a.teamSize && a.industry) {
+    whereYouStand.push({
+      label: 'Team signal',
+      value: `${formatTeamSize(teamSize)} \u2014 ${teamSizeBandLabel(teamSize)}`,
+      youAre: `At this size in a ${INDUSTRY_PHRASE[industry]}, the owner is usually still the bottleneck on at least 2\u20133 recurring tasks.`,
+      tone: 'neutral',
+    })
   }
 
+  if (a.customerType && a.revenueModel) {
+    whereYouStand.push({
+      label: 'Revenue shape',
+      value: `${paid.charAt(0).toUpperCase() + paid.slice(1)}, serving ${customer}`,
+      youAre:
+        a.revenueModel === 'per-project' ? 'Cash flow moves in lumps \u2014 quoting speed + follow-up rigor compound here.' :
+        a.revenueModel === 'per-visit' ? 'Cash flow follows appointment density \u2014 no-shows and gaps compound.' :
+        a.revenueModel === 'subscription' ? 'Retention math dominates \u2014 churn and upgrade triggers matter most.' :
+        a.revenueModel === 'transactional' ? 'Volume + basket-size compound \u2014 repeat purchase triggers matter most.' :
+        'Utilization is the lever \u2014 non-billable admin hours are the silent leak.',
+      tone: 'neutral',
+    })
+  }
+
+  if (a.topPain) {
+    whereYouStand.push({
+      label: 'What you named as the main drain',
+      value: `"${truncate(a.topPain, 110)}"`,
+      youAre: `This is exactly the kind of friction we quantify and fix below.`,
+      tone: 'gap',
+    })
+  }
+
+  // Section 3 — What's Eating Your Week (only populate when we have the pain)
+  const statedPain = a.topPain || ''
+  const whatsEatingYourWeek = {
+    statedPain,
+    quantifiedLeak: statedPain
+      ? `Hours/week and $/month recoverable \u2014 we\u2019ll quantify in the strategy call with your real numbers.`
+      : '',
+    narrative: statedPain
+      ? `You told us: "${truncate(statedPain, 120)}". The recommendations below are ordered biggest-impact-first, specifically for the shape of business you just described.`
+      : '',
+  }
+
+  // Section 4 — Automation Opportunities
   const offering = getOffering(industry)
 
   const quickWin: QuickWinCard = {
@@ -139,6 +151,7 @@ export function generateReportV2(a: Partial<AssessmentAnswers>): ReportV2 {
     cta: { label: 'Book a 15-min Questions Call', href: '/book/questions' },
   }
 
+  // Section 5 — What Happens Next
   const whatHappensNext = {
     paragraph:
       `${ownerFirstName}, here's how this usually goes. ` +
@@ -151,7 +164,7 @@ export function generateReportV2(a: Partial<AssessmentAnswers>): ReportV2 {
   // Readiness (for live-build UI) — staged so each question moves the report
   const readiness = {
     businessProfile: !!(a.company && a.industry),                     // Q1 + Q2
-    whereYouStand: !!(a.industry && a.teamSize && a.customerType),    // Q2 + Q3 + Q4
+    whereYouStand: !!(a.company && (a.trade || a.industry)),          // starts populating at Q1
     whatsEatingYourWeek: !!(a.industry && a.teamSize && a.topPain),   // + Q6
     opportunities: !!(a.industry && a.topPain),                        // + Q6
     whatHappensNext: !!(a.industry && a.topPain),                      // + Q6

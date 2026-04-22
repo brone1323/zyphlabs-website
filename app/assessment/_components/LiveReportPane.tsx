@@ -14,7 +14,7 @@ const SECTION_ORDER: SectionKey[] = ['businessProfile', 'whereYouStand', 'whatsE
 
 const SECTION_LABEL: Record<SectionKey, string> = {
   businessProfile: 'Building your business profile',
-  whereYouStand: 'Pulling industry benchmarks',
+  whereYouStand: 'Reading the signal in your answers',
   whatsEatingYourWeek: 'Sizing the leak',
   opportunities: 'Matching automation opportunities',
   whatHappensNext: 'Finalizing your report',
