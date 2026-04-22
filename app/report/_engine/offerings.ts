@@ -202,7 +202,7 @@ export const OFFERINGS: Record<Industry, IndustryOffering> = {
         'Collections nudges escalate in your voice',
       ],
       brain: {
-        summary: "Knows every job's margin, every crew's efficiency, every customer's payment behavior. Remembers your family schedule.",
+        summary: "One interface that ties every system you already use \u2014 calls, inbox, calendar, books, projects, contracts, payments, team activity \u2014 into a single place. It runs task management, customer updates, inquiry replies, contract tracking, project profitability, cash flow, and employee performance side by side. Role-based access means your team sees only what they need; you see it all.",
         examples: [
           '"You quoted $42k, closed $18k. Henderson\'s margin tracking low — talk to the cabinet sub."',
           '"Rick\'s crew is 20% more efficient than Kyle\'s on kitchens."',
@@ -337,7 +337,7 @@ export const OFFERINGS: Record<Industry, IndustryOffering> = {
         'AR + insurance chase runs in the background',
       ],
       brain: {
-        summary: "Knows every client's history, sensitivities, no-show risk, lifetime value. Remembers your buffer preferences and Friday blocks.",
+        summary: "One interface that ties every system you already use \u2014 calls, inbox, calendar, books, projects, contracts, payments, team activity \u2014 into a single place. It runs task management, customer updates, inquiry replies, contract tracking, project profitability, cash flow, and employee performance side by side. Role-based access means your team sees only what they need; you see it all.",
         examples: [
           '"47 clients seen this week, $12.4k revenue, no-shows down to 8%."',
           '"Three long-term clients haven\'t rebooked in 90 days — reach-outs drafted."',
@@ -471,7 +471,7 @@ export const OFFERINGS: Record<Industry, IndustryOffering> = {
         'Weekly brief lands Sunday night in your voice',
       ],
       brain: {
-        summary: "Knows every regular's order, birthday, spend. Knows which staff sells more, which SKUs die by daypart, what weather does to foot traffic.",
+        summary: "One interface that ties every system you already use \u2014 calls, inbox, calendar, books, projects, contracts, payments, team activity \u2014 into a single place. It runs task management, customer updates, inquiry replies, contract tracking, project profitability, cash flow, and employee performance side by side. Role-based access means your team sees only what they need; you see it all.",
         examples: [
           '"Revenue $18.2k, up 4%. Tuesday dinner is soft — consider a promo."',
           '"Linda hasn\'t been in 3 weeks, winback drafted."',
@@ -605,7 +605,7 @@ export const OFFERINGS: Record<Industry, IndustryOffering> = {
         'Weekly brief on LTV trends, channel performance, product velocity',
       ],
       brain: {
-        summary: "Knows every customer's LTV trajectory, which products drive repeat orders, which channels attract loyalists vs one-and-done.",
+        summary: "One interface that ties every system you already use \u2014 calls, inbox, calendar, books, projects, contracts, payments, team activity \u2014 into a single place. It runs task management, customer updates, inquiry replies, contract tracking, project profitability, cash flow, and employee performance side by side. Role-based access means your team sees only what they need; you see it all.",
         examples: [
           '"$47k revenue, 4.2% refunds. Cedar soap has 2.1x LTV — push in next ad set."',
           '"Three VIPs haven\'t ordered in 90 days — winback drafted."',
@@ -740,7 +740,7 @@ export const OFFERINGS: Record<Industry, IndustryOffering> = {
         'Weekly partner brief drops Sunday night',
       ],
       brain: {
-        summary: "Knows every client's matter history, payment behavior, communication style, relationship depth. Remembers conflict rules, jurisdictional quirks, partner routing.",
+        summary: "One interface that ties every system you already use \u2014 calls, inbox, calendar, books, projects, contracts, payments, team activity \u2014 into a single place. It runs task management, customer updates, inquiry replies, contract tracking, project profitability, cash flow, and employee performance side by side. Role-based access means your team sees only what they need; you see it all.",
         examples: [
           '"$38k billed, 62% realization. Three clients past 60-day AR — nudges drafted."',
           '"Johnson matter is 11 days since contact — usual cadence is 7."',
@@ -875,7 +875,7 @@ export const OFFERINGS: Record<Industry, IndustryOffering> = {
         'Weekly founder/VP brief on pipeline + retention health',
       ],
       brain: {
-        summary: "Knows every account's usage, engagement, sentiment, renewal risk, expansion signal. Knows rep close rates by segment, CSM retention rates.",
+        summary: "One interface that ties every system you already use \u2014 calls, inbox, calendar, books, projects, contracts, payments, team activity \u2014 into a single place. It runs task management, customer updates, inquiry replies, contract tracking, project profitability, cash flow, and employee performance side by side. Role-based access means your team sees only what they need; you see it all.",
         examples: [
           '"Pipeline $420k, closed $68k. Acme usage dropped 40% — churn risk flagged."',
           '"Three mid-market deals stalled at legal — MSA amendment drafted."',
@@ -1010,7 +1010,7 @@ export const OFFERINGS: Record<Industry, IndustryOffering> = {
         'Weekly brief on tech utilization, routes, margin',
       ],
       brain: {
-        summary: "Knows every tech's strengths, every neighborhood's typical issues, every customer's service history. Remembers your rate rules + overtime policies.",
+        summary: "One interface that ties every system you already use \u2014 calls, inbox, calendar, books, projects, contracts, payments, team activity \u2014 into a single place. It runs task management, customer updates, inquiry replies, contract tracking, project profitability, cash flow, and employee performance side by side. Role-based access means your team sees only what they need; you see it all.",
         examples: [
           '"47 calls this week, 94% response under 2hrs. Rick is at 63 hrs — rotate next week."',
           '"Glenora had 4 water heater calls — aging cohort, postcard campaign?"',
@@ -1145,7 +1145,7 @@ export const OFFERINGS: Record<Industry, IndustryOffering> = {
         'Weekly brief on pipeline, edit queue, anniversary rebooks',
       ],
       brain: {
-        summary: "Knows every client's style preferences, deliverable expectations, revision tolerance. Respects your edit-week protection + capacity limits.",
+        summary: "One interface that ties every system you already use \u2014 calls, inbox, calendar, books, projects, contracts, payments, team activity \u2014 into a single place. It runs task management, customer updates, inquiry replies, contract tracking, project profitability, cash flow, and employee performance side by side. Role-based access means your team sees only what they need; you see it all.",
         examples: [
           '"Booked $14k, delivered 3 projects. Edit queue is 2 galleries deep — Friday blocked for catch-up."',
           '"Hendersons\' anniversary next month, rebook nudge drafted."',

@@ -78,6 +78,14 @@ export default function AssessmentPage() {
           </Link>
         </div>
 
+        {!submitted && index === 0 && (
+          <div className="px-6 sm:px-10 pt-20 pb-2 lg:pt-24">
+            <div className="inline-block rounded-full px-3 py-1 text-[11px] uppercase tracking-widest text-[#00cec9] bg-[#00cec9]/10 border border-[#00cec9]/20 mb-3">The Zyph philosophy</div>
+            <p className="text-[#ccccdd] text-sm leading-relaxed italic">
+              &ldquo;If it&rsquo;s done on a computer by a human, let us manage it with AI to give the human more time.&rdquo;
+            </p>
+          </div>
+        )}
         {!submitted ? (
           <QuestionPane
             q={currentQ}
@@ -94,6 +102,9 @@ export default function AssessmentPage() {
               <h2 className="text-2xl sm:text-3xl font-bold mb-3" style={{ fontFamily: 'Space Grotesk, sans-serif' }}>You&apos;re all set.</h2>
               <p className="text-[#ccccdd] leading-relaxed mb-6">Your report finished building on the right. A copy is on its way to your inbox, and our team will follow up within 24 hours.</p>
               <Link href="/" className="inline-block bg-gradient-to-r from-[#6c5ce7] to-[#00cec9] text-white font-semibold rounded-2xl px-6 py-3 hover:scale-[1.02] active:scale-[0.98] transition-transform">Back to homepage</Link>
+              <p className="mt-8 text-[#00cec9] text-sm italic leading-relaxed border-l-2 border-[#00cec9]/40 pl-4">
+                If it&rsquo;s done on a computer by a human, let us manage it with AI to give the human more time.
+              </p>
             </div>
           </div>
         )}
