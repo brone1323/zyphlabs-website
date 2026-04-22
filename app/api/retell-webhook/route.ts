@@ -36,7 +36,11 @@ export async function POST(req: Request) {
   }
 
   const reportUrl = buildReportUrl(answers)
-  const callerEmail = extractEmailFromText(transcript)
+  // Prefer Haiku-extracted email (handles spoken "at"/"dot" in voice transcripts),
+  // fall back to regex on raw transcript for cases where caller typed it or said it cleanly.
+  const callerEmail =
+    ((answers as any).ownerEmail && String((answers as any).ownerEmail).trim()) ||
+    extractEmailFromText(transcript)
 
   const notifyResult = await notifyInternal({
     source: 'retell', answers, callerEmail, reportUrl,
@@ -66,7 +70,9 @@ async function extractAnswersFromTranscript(transcript: string, call: any): Prom
   const systemPrompt = 'You are a precise data extraction engine. Output strictly valid JSON matching the schema. No markdown.'
   const userPrompt = `Read the call transcript and produce a single AssessmentAnswers JSON object.
 
-SCHEMA required fields: reportId, ownerName, ownerFirstName, company, trade, industry (one of: project-based, appointment-based, retail, ecommerce, professional-services, b2b-saas, trades, creative), customerType (consumer/business/both), revenueModel (per-project/per-visit/subscription/transactional/hourly), yearsInBusiness, teamSize, location, topPain.
+SCHEMA required fields: reportId, ownerName, ownerFirstName, ownerEmail, company, trade, industry (one of: project-based, appointment-based, retail, ecommerce, professional-services, b2b-saas, trades, creative), customerType (consumer/business/both), revenueModel (per-project/per-visit/subscription/transactional/hourly), yearsInBusiness, teamSize, location, topPain.
+
+EMAIL EXTRACTION NOTE: callers often speak email addresses aloud using "at" for @ and "dot" for "." (e.g. "brian at solardev dot ca" → "brian@solardev.ca"). Reconstruct the literal email address in ownerEmail. If no email was provided, set ownerEmail to an empty string "".
 
 TRANSCRIPT:
 ---
@@ -99,17 +105,4 @@ Output only the JSON object.`
 
   answers.reportId = answers.reportId || `retell-${call.call_id || Date.now()}`
   answers.ownerFirstName = answers.ownerFirstName || answers.ownerName?.split(' ')[0] || 'there'
-  answers.industry = (answers.industry || 'project-based') as Industry
-  answers.customerType = (answers.customerType || 'consumer') as AssessmentAnswers['customerType']
-  answers.revenueModel = (answers.revenueModel || 'per-project') as AssessmentAnswers['revenueModel']
-  answers.teamSize = Number(answers.teamSize) || 1
-  answers.yearsInBusiness = Number(answers.yearsInBusiness) || 0
-  return answers
-}
-
-export async function GET() {
-  return NextResponse.json({
-    ok: true, endpoint: 'retell-webhook', model: 'claude-haiku-4-5', version: 5,
-    behavior: 'per-spec: internal notify + caller email + sheets',
-  })
-}
+  answers.industry = (answers.industry || 'project-based') as Indust
