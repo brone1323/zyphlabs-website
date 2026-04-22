@@ -46,7 +46,7 @@ function Tier1CardView({ card, ctasUnlocked }: { card: Tier1Card; ctasUnlocked: 
         Try {card.free.toolName} yourself
       </h3>
       <p className="text-sm text-slate-700 mb-2"><strong>What it is:</strong> {card.free.oneLiner}</p>
-      <p className="text-sm text-slate-700 mb-3"><strong>Why we\u2019d start here:</strong> {card.free.why}</p>
+      <p className="text-sm text-slate-700 mb-3"><strong>Why we&rsquo;d start here:</strong> {card.free.why}</p>
       {card.free.toolUrl && (
         <a href={card.free.toolUrl} target="_blank" rel="noreferrer" className="text-sm font-semibold text-[#6c5ce7] hover:underline inline-block mb-4">
           Open {card.free.toolName} &rarr;

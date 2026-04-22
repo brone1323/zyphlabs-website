@@ -70,7 +70,19 @@ function mergeIntegrations(offerIntegrations: string[], userStack: string): stri
 export function generateReportV2(a: Partial<AssessmentAnswers> & { _toolStack?: string; _painTag?: string }): ReportV2 {
   const industry = (a.industry ?? 'project-based') as Industry
   const teamSize = Number(a.teamSize ?? 1)
-  const ownerFirstName = a.ownerFirstName || a.ownerName?.split(' ')[0] || 'there'
+  // Pull first name from ownerName OR the email's local part (humanize `bri@…` → `Bri`).
+  function firstFromEmail(e?: string): string | undefined {
+    if (!e) return undefined
+    const local = e.split('@')[0] || ''
+    const token = local.split(/[._\-+]/)[0] || ''
+    if (!token || /^\d+$/.test(token) || token.length < 2) return undefined
+    return token.charAt(0).toUpperCase() + token.slice(1)
+  }
+  const ownerFirstName =
+    a.ownerFirstName ||
+    a.ownerName?.split(' ')[0] ||
+    firstFromEmail(a.ownerEmail) ||
+    'there'
   const company = a.company || 'Your Business'
   const trade = a.trade || 'your business'
   const industryPhrase = INDUSTRY_PHRASE[industry]

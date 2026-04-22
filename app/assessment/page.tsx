@@ -91,7 +91,7 @@ export default function AssessmentPage() {
           <div className="flex-1 flex flex-col justify-center px-6 sm:px-10 py-8">
             <div className="max-w-md">
               <div className="w-12 h-12 rounded-full bg-gradient-to-br from-[#6c5ce7] to-[#00cec9] flex items-center justify-center text-white text-xl mb-4">&#10003;</div>
-              <h2 className="text-2xl sm:text-3xl font-bold mb-3" style={{ fontFamily: 'Space Grotesk, sans-serif' }}>You&apos;re all set, {(raw.businessNameAndTrade || '').split(/[\s\u2014\u2013-]/)[0] || 'friend'}.</h2>
+              <h2 className="text-2xl sm:text-3xl font-bold mb-3" style={{ fontFamily: 'Space Grotesk, sans-serif' }}>You&apos;re all set.</h2>
               <p className="text-[#ccccdd] leading-relaxed mb-6">Your report finished building on the right. A copy is on its way to your inbox, and our team will follow up within 24 hours.</p>
               <Link href="/" className="inline-block bg-gradient-to-r from-[#6c5ce7] to-[#00cec9] text-white font-semibold rounded-2xl px-6 py-3 hover:scale-[1.02] active:scale-[0.98] transition-transform">Back to homepage</Link>
             </div>
