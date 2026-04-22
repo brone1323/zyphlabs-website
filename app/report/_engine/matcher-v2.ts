@@ -91,7 +91,7 @@ export function generateReportV2(a: Partial<AssessmentAnswers>): ReportV2 {
     whereYouStand.push({
       label: 'Team signal',
       value: `${formatTeamSize(teamSize)} \u2014 ${teamSizeBandLabel(teamSize)}`,
-      youAre: `At this size in a ${INDUSTRY_PHRASE[industry]}, the owner is usually still the bottleneck on at least 2\u20133 recurring tasks.`,
+      youAre: `At this size in an ${INDUSTRY_PHRASE[industry]}, the owner is usually still the bottleneck on at least 2\u20133 recurring tasks.`,
       tone: 'neutral',
     })
   }
