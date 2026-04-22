@@ -161,9 +161,10 @@ export function generateReportV2(a: Partial<AssessmentAnswers>): ReportV2 {
     signoff: '\u2014 Alex, Zyph Labs',
   }
 
-  // Readiness (for live-build UI) — staged so each question moves the report
+  // Readiness (for live-build UI) — every section only shows when ALL the
+  // fields it uses have been explicitly answered (no fabricated defaults).
   const readiness = {
-    businessProfile: !!(a.company && a.industry),                     // Q1 + Q2
+    businessProfile: !!(a.company && a.industry && a.teamSize && a.customerType && a.revenueModel),  // after Q5
     whereYouStand: !!(a.company && (a.trade || a.industry)),          // starts populating at Q1
     whatsEatingYourWeek: !!(a.industry && a.teamSize && a.topPain),   // + Q6
     opportunities: !!(a.industry && a.topPain),                        // + Q6
