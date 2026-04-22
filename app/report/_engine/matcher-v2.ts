@@ -155,13 +155,13 @@ export function generateReportV2(a: Partial<AssessmentAnswers>): ReportV2 {
   }
 
   // ─── Readiness (for live-build UI) ──────────────────────────────
-  const hasCore = !!(a.company && a.industry && a.teamSize && a.customerType && a.revenueModel)
+  // Staged so each question visibly moves the report forward.
   const readiness = {
-    businessProfile: hasCore,
-    whereYouStand: hasCore,
-    whatsEatingYourWeek: hasCore && !!a.topPain,
-    opportunities: hasCore && !!a.topPain,
-    whatHappensNext: hasCore && !!a.topPain,
+    businessProfile: !!(a.company && a.industry),                                // Q1 + Q2
+    whereYouStand: !!(a.industry && a.teamSize && a.customerType),              // Q2 + Q3 + Q4
+    whatsEatingYourWeek: !!(a.industry && a.teamSize && a.topPain),             // + Q6
+    opportunities: !!(a.industry && a.topPain),                                  // + Q6
+    whatHappensNext: !!(a.industry && a.topPain),                                // + Q6
   }
 
   return {
@@ -176,13 +176,4 @@ export function generateReportV2(a: Partial<AssessmentAnswers>): ReportV2 {
     businessProfile,
     whereYouStand,
     whatsEatingYourWeek,
-    opportunities: { quickWin, fullSystem, questionsCall },
-    whatHappensNext,
-    readiness,
-  }
-}
-
-function truncate(s: string, n: number): string {
-  if (!s) return ''
-  return s.length <= n ? s : s.slice(0, n - 1) + '…'
-}
+    

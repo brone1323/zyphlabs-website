@@ -57,7 +57,8 @@ export default function LiveReportPane({ report, finished }: { report: ReportV2 
     if (el) el.scrollTop = el.scrollHeight
   }, [revealed, analyzing])
 
-  const showPlaceholder = revealed.size === 0 && !analyzing
+  const showStaticPlaceholder = !report && revealed.size === 0 && !analyzing
+  const showWarmup = !!report && revealed.size === 0 && !analyzing
 
   return (
     <div className="h-full bg-slate-50 overflow-y-auto" ref={scrollRef}>
@@ -67,12 +68,30 @@ export default function LiveReportPane({ report, finished }: { report: ReportV2 
       </header>
 
       <div className="max-w-2xl mx-auto px-4 sm:px-6 pb-12">
-        {showPlaceholder && (
+        {showStaticPlaceholder && (
           <div className="text-center py-20 text-slate-400">
             <div className="w-16 h-16 mx-auto rounded-full bg-gradient-to-br from-[#6c5ce7]/20 to-[#00cec9]/20 flex items-center justify-center mb-4">
               <div className="w-3 h-3 rounded-full bg-[#6c5ce7] animate-pulse" />
             </div>
             <p className="text-sm">Start answering to watch your report build in real time.</p>
+          </div>
+        )}
+
+        {showWarmup && (
+          <div className="py-12 px-4">
+            <div className="flex items-center gap-3 text-slate-700 text-sm mb-4">
+              <div className="flex gap-1">
+                <Dot delay="0s" />
+                <Dot delay="0.15s" />
+                <Dot delay="0.3s" />
+              </div>
+              <span className="italic">Analyzing {report?.company || 'your business'}&hellip;</span>
+            </div>
+            <div className="text-xs text-slate-500 pl-9 space-y-1.5">
+              <p>&bull; Parsing what you do</p>
+              <p>&bull; Ready to pull industry benchmarks</p>
+              <p>&bull; Ready to size the leak in your week</p>
+            </div>
           </div>
         )}
 
@@ -89,13 +108,13 @@ export default function LiveReportPane({ report, finished }: { report: ReportV2 
               <Dot delay="0.15s" />
               <Dot delay="0.3s" />
             </div>
-            <span className="italic">{SECTION_LABEL[analyzing]}…</span>
+            <span className="italic">{SECTION_LABEL[analyzing]}&hellip;</span>
           </div>
         )}
 
         {finished && revealed.size >= SECTION_ORDER.length && (
           <div className="mt-8 rounded-2xl bg-gradient-to-br from-[#6c5ce7] to-[#00cec9] p-6 text-white text-center">
-            <div className="text-2xl mb-2">🎉</div>
+            <div className="text-2xl mb-2">&#127881;</div>
             <p className="font-bold text-lg mb-1" style={{ fontFamily: 'Space Grotesk, sans-serif' }}>Your report is ready</p>
             <p className="text-white/90 text-sm">A copy is on its way to your inbox. Our team will follow up within 24 hours.</p>
           </div>
