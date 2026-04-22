@@ -63,8 +63,8 @@ export function generateReportV2(a: Partial<AssessmentAnswers>): ReportV2 {
   // Section 1 — Business Profile
   const businessProfile = {
     paragraph:
-      `${company} is a ${formatTeamSize(teamSize)} ${trade.toLowerCase()} \u2014 ` +
-      `a ${INDUSTRY_PHRASE[industry]} serving ${customer}, paid ${paid}. ` +
+      `${company} is a ${formatTeamSize(teamSize)} ${trade} \u2014 ` +
+      `${/^[aeiou]/i.test(INDUSTRY_PHRASE[industry]) ? 'an' : 'a'} ${INDUSTRY_PHRASE[industry]} serving ${customer}, paid ${paid}. ` +
       `The work is quality. The systems around the work are what we look at next.`,
     stats: [
       { label: 'Industry', value: INDUSTRY_PHRASE[industry] },
