@@ -1,4 +1,4 @@
-// Deterministic question flow — 10 questions total, spec-lean.
+// Deterministic question flow — 11 questions total, spec-lean.
 // Classification happens via the industry-select question instead of LLM inference.
 
 import type { Industry } from '@/app/report/_engine/types'
@@ -12,18 +12,27 @@ export type Question =
   | { id: string; kind: 'email'; label: string; field: string; sublabel?: string }
 
 export const QUESTIONS: Question[] = [
-  // Q1 — Business name + what you do
+  // Q1 — Owner's first name (personalization on the report)
   {
     id: 'q1',
+    kind: 'text',
+    label: "First, what should we call you?",
+    placeholder: 'e.g. Brian',
+    field: 'ownerName',
+    sublabel: "Your first name is plenty \u2014 we'll use it on your report.",
+  },
+  // Q2 — Business name + what you do
+  {
+    id: 'q2',
     kind: 'text',
     label: "What's the name of your business and what do you do?",
     placeholder: 'e.g. Miller Electric \u2014 residential electrical, Calgary',
     field: 'businessNameAndTrade',
     sublabel: "Just a sentence or two \u2014 we'll figure out your industry from this.",
   },
-  // Q2 — Industry
+  // Q3 — Industry
   {
-    id: 'q2',
+    id: 'q3',
     kind: 'buttons',
     label: "Which of these sounds most like your business?",
     field: 'industry',
@@ -38,9 +47,9 @@ export const QUESTIONS: Question[] = [
       { value: 'creative',              label: 'Creative (photo, video, design)', emoji: '\uD83C\uDFA8' },
     ],
   },
-  // Q3 — Team size
+  // Q4 — Team size
   {
-    id: 'q3',
+    id: 'q4',
     kind: 'buttons',
     label: 'How big is the team?',
     field: 'teamSize',
@@ -51,9 +60,9 @@ export const QUESTIONS: Question[] = [
       { value: '25',  label: '16+ people' },
     ],
   },
-  // Q4 — Customer type
+  // Q5 — Customer type
   {
-    id: 'q4',
+    id: 'q5',
     kind: 'buttons',
     label: 'Main customer',
     field: 'customerType',
@@ -63,9 +72,9 @@ export const QUESTIONS: Question[] = [
       { value: 'both',     label: 'A mix' },
     ],
   },
-  // Q5 — Revenue model
+  // Q6 — Revenue model
   {
-    id: 'q5',
+    id: 'q6',
     kind: 'buttons',
     label: 'How do people pay you?',
     field: 'revenueModel',
@@ -77,9 +86,9 @@ export const QUESTIONS: Question[] = [
       { value: 'hourly',        label: 'By the hour' },
     ],
   },
-  // Q6 — Biggest pain
+  // Q7 — Biggest pain
   {
-    id: 'q6',
+    id: 'q7',
     kind: 'text+tags',
     label: "What's eating your time or driving you nuts right now?",
     field: 'topPain',
@@ -87,27 +96,27 @@ export const QUESTIONS: Question[] = [
     placeholder: 'Tell it straight \u2014 what are you sick of doing yourself?',
     tags: ['Missed calls', 'Quoting', 'Chasing money', 'Reviews / marketing', 'Admin / paperwork', 'Staff / team', 'Other'],
   },
-  // Q7 — Pain deep-dive A
+  // Q8 — Pain deep-dive A
   {
-    id: 'q7',
+    id: 'q8',
     kind: 'text',
     label: 'One follow-up on that',
     field: 'painDetailA',
     placeholder: 'Just a quick note \u2014 specifics help us size the impact',
     sublabel: 'Example: "leads from 7pm onward go to voicemail, maybe 15 a month"',
   },
-  // Q8 — Tool stack
+  // Q9 — Tool stack
   {
-    id: 'q8',
+    id: 'q9',
     kind: 'text',
     label: 'Quick tool check \u2014 what are you running today?',
     field: 'toolStack',
     placeholder: 'e.g. Jobber + QuickBooks + Gmail',
     sublabel: "Whatever comes to mind. Helps us see what we'd plug into.",
   },
-  // Q9 — What would you stop doing
+  // Q10 — What would you stop doing
   {
-    id: 'q9',
+    id: 'q10',
     kind: 'buttons',
     label: 'If I gave you 5 hours back a week \u2014 what would you stop doing yourself?',
     field: 'wantedTimeBack',
@@ -120,9 +129,9 @@ export const QUESTIONS: Question[] = [
       { value: 'being-bottleneck',   label: 'Being the bottleneck for everything' },
     ],
   },
-  // Q10 — Email
+  // Q11 — Email
   {
-    id: 'q10',
+    id: 'q11',
     kind: 'email',
     label: "Last one \u2014 where should we send your report?",
     field: 'ownerEmail',
@@ -131,9 +140,8 @@ export const QUESTIONS: Question[] = [
 ]
 
 // Maps raw form answers to the AssessmentAnswers schema.
-// IMPORTANT: leave fields undefined when the user hasn't answered yet so
-// matcher-v2's readiness checks (a.industry && a.teamSize, etc.) correctly
-// gate which observations are shown. Display fallbacks live in matcher-v2.
+// Fields left undefined when the user hasn't answered yet so matcher-v2's
+// readiness checks correctly gate live-build observations.
 export function toAssessmentAnswers(raw: Record<string, any>): any {
   const tradeParts = (raw.businessNameAndTrade || '').split(/[\u2014\u2013-]/)
   const company = (tradeParts[0] || '').trim() || (raw.businessNameAndTrade ? 'Your Business' : '')

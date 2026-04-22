@@ -211,7 +211,7 @@ export function generateReportV2(a: Partial<AssessmentAnswers> & { _toolStack?: 
       rate: offering.tier1.paid.rate,
       tasks: offering.tier1.paid.tasks,
     },
-    paidCta: { label: 'Book Setup Help \u2014 $100/hr', href: '/checkout/tier-1-setup' },
+    paidCta: { label: 'Book Setup Help \u2014 $100/hr', href: '/book/setup' },
   }
 
   // Tier 2 — matched picks
