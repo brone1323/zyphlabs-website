@@ -249,4 +249,5 @@ const labelSm: React.CSSProperties = {
   letterSpacing: 1.5,
   textTransform: 'uppercase',
   color: 'var(--text-secondary)',
-  fontWeight
+  fontWeight: 700,
+}
