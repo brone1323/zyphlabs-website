@@ -15,9 +15,15 @@ export default function QuestionPane({
 }) {
   const [text, setText] = useState('')
   const [tag, setTag] = useState('')
+  const [checked, setChecked] = useState<Set<string>>(new Set())
   const inputRef = useRef<HTMLInputElement | HTMLTextAreaElement | null>(null)
 
-  useEffect(() => { setText(''); setTag(''); inputRef.current?.focus() }, [q.id])
+  useEffect(() => {
+    setText('')
+    setTag('')
+    setChecked(new Set())
+    inputRef.current?.focus()
+  }, [q.id])
 
   function submit(overrides?: Record<string, any>) {
     const payload: Record<string, any> = { ...overrides }
@@ -27,7 +33,19 @@ export default function QuestionPane({
       payload[q.field] = text.trim()
       if (tag) payload[(q as any).tagField] = tag
     }
+    if (q.kind === 'checkboxes') {
+      payload[q.field] = Array.from(checked)
+    }
     onSubmit(payload)
+  }
+
+  function toggleCheck(value: string) {
+    setChecked((prev) => {
+      const next = new Set(prev)
+      if (next.has(value)) next.delete(value)
+      else next.add(value)
+      return next
+    })
   }
 
   return (
@@ -53,7 +71,7 @@ export default function QuestionPane({
                   onClick={() => submit()}
                   disabled={!text.trim()}
                   className="mt-4 bg-gradient-to-r from-[#6c5ce7] to-[#00cec9] text-white font-semibold rounded-2xl px-6 py-3 hover:scale-[1.02] active:scale-[0.98] transition-transform disabled:opacity-40 disabled:cursor-not-allowed"
-                >Continue →</button>
+                >Continue &rarr;</button>
               </>
             )}
 
@@ -67,10 +85,45 @@ export default function QuestionPane({
                   >
                     {o.emoji && <span className="text-lg">{o.emoji}</span>}
                     <span className="flex-1">{o.label}</span>
-                    <span className="text-[#6c5ce7] opacity-0 group-hover:opacity-100">→</span>
+                    <span className="text-[#6c5ce7] opacity-0 group-hover:opacity-100">&rarr;</span>
                   </button>
                 ))}
               </div>
+            )}
+
+            {q.kind === 'checkboxes' && (
+              <>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+                  {q.options.map((o) => {
+                    const isOn = checked.has(o.value)
+                    return (
+                      <button
+                        key={o.value}
+                        onClick={() => toggleCheck(o.value)}
+                        className={`text-left border rounded-2xl px-4 py-3 text-[14px] font-medium transition-colors flex items-center gap-2.5 ${
+                          isOn
+                            ? 'bg-[#6c5ce7]/15 border-[#6c5ce7] text-white'
+                            : 'bg-white/5 border-white/15 text-[#ccccdd] hover:bg-white/10 hover:border-[#6c5ce7]/40'
+                        }`}
+                      >
+                        <span className={`w-5 h-5 rounded-md border flex items-center justify-center text-[11px] transition-colors ${
+                          isOn ? 'bg-[#6c5ce7] border-[#6c5ce7] text-white' : 'border-white/30'
+                        }`}>{isOn && '\u2713'}</span>
+                        {o.emoji && <span className="text-base">{o.emoji}</span>}
+                        <span className="flex-1">{o.label}</span>
+                      </button>
+                    )
+                  })}
+                </div>
+                <button
+                  onClick={() => submit()}
+                  disabled={checked.size === 0}
+                  className="mt-5 bg-gradient-to-r from-[#6c5ce7] to-[#00cec9] text-white font-semibold rounded-2xl px-6 py-3 hover:scale-[1.02] active:scale-[0.98] transition-transform disabled:opacity-40 disabled:cursor-not-allowed"
+                >Continue &rarr;</button>
+                {checked.size > 0 && (
+                  <p className="mt-2 text-[11px] text-[#8888aa]">{checked.size} selected</p>
+                )}
+              </>
             )}
 
             {q.kind === 'text+tags' && (
@@ -100,7 +153,7 @@ export default function QuestionPane({
                   onClick={() => submit()}
                   disabled={!text.trim() && !tag}
                   className="mt-4 bg-gradient-to-r from-[#6c5ce7] to-[#00cec9] text-white font-semibold rounded-2xl px-6 py-3 hover:scale-[1.02] active:scale-[0.98] transition-transform disabled:opacity-40 disabled:cursor-not-allowed"
-                >Continue →</button>
+                >Continue &rarr;</button>
               </>
             )}
           </div>
@@ -112,7 +165,7 @@ export default function QuestionPane({
           onClick={onBack}
           disabled={!canGoBack}
           className="text-sm text-[#666688] disabled:opacity-30 disabled:cursor-not-allowed hover:text-[#a29bfe] transition-colors"
-        >← Back</button>
+        >&larr; Back</button>
         <div className="flex gap-1">
           {Array.from({ length: total }).map((_, i) => (
             <div key={i} className={`h-1 w-6 rounded-full transition-colors ${i <= index ? 'bg-[#6c5ce7]' : 'bg-white/10'}`} />

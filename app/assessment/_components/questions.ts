@@ -6,6 +6,7 @@ import type { Industry } from '@/app/report/_engine/types'
 export type Question =
   | { id: string; kind: 'text'; label: string; placeholder?: string; field: string; sublabel?: string }
   | { id: string; kind: 'buttons'; label: string; field: string; options: { value: string; label: string; emoji?: string }[]; sublabel?: string }
+  | { id: string; kind: 'checkboxes'; label: string; field: string; options: { value: string; label: string; emoji?: string }[]; sublabel?: string }
   | { id: string; kind: 'stepper'; label: string; field: string; min: number; max: number; suffix?: string; sublabel?: string }
   | { id: string; kind: 'number-band'; label: string; field: string; bands: { value: string; label: string }[]; sublabel?: string }
   | { id: string; kind: 'text+tags'; label: string; field: string; placeholder?: string; tagField: string; tags: string[]; sublabel?: string }
@@ -84,38 +85,43 @@ export const QUESTIONS: Question[] = [
       { value: 'hourly',        label: 'By the hour' },
     ],
   },
-  // Q7 — Biggest pain
+  // Q7 — Project management tools (multi-select)
   {
     id: 'q7',
-    kind: 'text+tags',
-    label: "What's eating your time or driving you nuts right now?",
-    field: 'topPain',
-    tagField: 'painTag',
-    placeholder: 'Tell it straight \u2014 what are you sick of doing yourself?',
-    tags: ['Missed calls', 'Quoting', 'Chasing money', 'Reviews / marketing', 'Admin / paperwork', 'Staff / team', 'Other'],
+    kind: 'checkboxes',
+    label: "How do you manage your projects so everyone on your team and your customer knows what\u2019s going on?",
+    field: 'projectMgmtTools',
+    sublabel: "Check all that apply.",
+    options: [
+      { value: 'crm',          label: 'CRM',                  emoji: '\uD83D\uDCC7' },
+      { value: 'excel',        label: 'Excel',                emoji: '\uD83D\uDCCA' },
+      { value: 'email',        label: 'Email',                emoji: '\u2709\uFE0F' },
+      { value: 'phone',        label: 'Phone calls',          emoji: '\uD83D\uDCDE' },
+      { value: 'sms',          label: 'Text / SMS',           emoji: '\uD83D\uDCAC' },
+      { value: 'spreadsheets', label: 'Shared spreadsheets',  emoji: '\uD83D\uDCD1' },
+      { value: 'whiteboard',   label: 'Whiteboard / paper',   emoji: '\uD83D\uDCDD' },
+      { value: 'other',        label: 'Other',                emoji: '\u2795' },
+    ],
   },
-  // Q8 — Tool stack
+  // Q8 — Time spent dealing with this info
   {
     id: 'q8',
     kind: 'text',
-    label: 'Quick tool check \u2014 what are you running today?',
-    field: 'toolStack',
-    placeholder: 'e.g. Jobber + QuickBooks + Gmail',
-    sublabel: "Whatever comes to mind. Helps us see what we'd plug into.",
+    label: "How much time does your team spend in a week dealing with this information \u2014 inputs, calls, emails, updates?",
+    field: 'infoHoursPerWeek',
+    placeholder: 'e.g. 15 hours/week',
+    sublabel: "A rough estimate across the whole team is fine.",
   },
-  // Q9 — What would you stop doing
+  // Q9 — Interest level
   {
     id: 'q9',
     kind: 'buttons',
-    label: 'If I gave you 5 hours back a week \u2014 what would you stop doing yourself?',
-    field: 'wantedTimeBack',
+    label: "If we could give you 90% of that time back \u2014 plus real-time visibility of progress, costs, and margins \u2014 so your team can focus on selling, managing, or anything else, would you be interested?",
+    field: 'interestLevel',
     options: [
-      { value: 'chasing-payments',   label: 'Chasing payments' },
-      { value: 'answering-calls',    label: 'Answering calls' },
-      { value: 'quoting',            label: 'Writing quotes' },
-      { value: 'admin',              label: 'Admin / paperwork' },
-      { value: 'marketing',          label: 'Marketing / social' },
-      { value: 'being-bottleneck',   label: 'Being the bottleneck for everything' },
+      { value: 'yes',   label: "Yes \u2014 let\u2019s talk",      emoji: '\u2705' },
+      { value: 'maybe', label: 'Maybe \u2014 tell me more',       emoji: '\uD83E\uDD14' },
+      { value: 'no',    label: 'Not right now',                    emoji: '\u23F8\uFE0F' },
     ],
   },
   // Q10 — Email
@@ -151,5 +157,8 @@ export function toAssessmentAnswers(raw: Record<string, any>): any {
     ownerEmail: raw.ownerEmail || '',
     _toolStack: raw.toolStack,
     _painTag: raw.painTag,
+    _projectMgmtTools: Array.isArray(raw.projectMgmtTools) ? raw.projectMgmtTools : [],
+    _infoHoursPerWeek: raw.infoHoursPerWeek || '',
+    _interestLevel: raw.interestLevel || '',
   }
 }

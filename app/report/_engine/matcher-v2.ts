@@ -164,21 +164,57 @@ export function generateReportV2(a: Partial<AssessmentAnswers> & { _toolStack?: 
     })
   }
 
-  if ((a as any).wantedTimeBack && (Array.isArray((a as any).wantedTimeBack) ? (a as any).wantedTimeBack.length : true)) {
-    const wantStr = Array.isArray((a as any).wantedTimeBack) ? (a as any).wantedTimeBack[0] : (a as any).wantedTimeBack
-    const WANT_LABEL: Record<string, string> = {
-      'chasing-payments': 'chasing payments',
-      'answering-calls': 'answering the phone',
-      'quoting': 'writing quotes',
-      'admin': 'admin + paperwork',
-      'marketing': 'marketing + social',
-      'being-bottleneck': 'being the bottleneck for everything',
+  // Q7 — tools used for project management (multi-select)
+  const toolsList: string[] = Array.isArray((a as any)._projectMgmtTools) ? (a as any)._projectMgmtTools : []
+  if (toolsList.length > 0) {
+    const TOOL_LABEL: Record<string, string> = {
+      crm: 'CRM', excel: 'Excel', email: 'Email', phone: 'Phone calls',
+      sms: 'Text/SMS', spreadsheets: 'Shared spreadsheets',
+      whiteboard: 'Whiteboard/paper', other: 'Other',
     }
+    const pretty = toolsList.map((t) => TOOL_LABEL[t] || t).join(', ')
     whereYouStand.push({
-      label: 'If we gave you 5 hours back',
-      value: `You\u2019d stop ${WANT_LABEL[wantStr] || wantStr}`,
-      youAre: 'Ranking the recommendations below by how directly they free that up.',
+      label: 'How info moves through your business',
+      value: pretty,
+      youAre: toolsList.length >= 3
+        ? `That\u2019s ${toolsList.length} separate places the team has to check to stay in sync. Every hop eats minutes and drops context.`
+        : `Fewer channels is good. The question is whether each one is current, and who owns keeping it current.`,
+      tone: toolsList.length >= 4 ? 'gap' : 'neutral',
+    })
+  }
+
+  // Q8 — hours per week spent on information handling
+  const hoursStr = (a as any)._infoHoursPerWeek as string | undefined
+  if (hoursStr) {
+    const hourMatch = /(\d+(?:\.\d+)?)/.exec(String(hoursStr))
+    const hrs = hourMatch ? Number(hourMatch[1]) : 0
+    const annualHrs = hrs * 50
+    const loadedCost = Math.round(annualHrs * 45)
+    whereYouStand.push({
+      label: 'Time your team spends on that information flow',
+      value: hrs > 0 ? `${hrs} hrs/week` : String(hoursStr),
+      youAre: hrs > 0
+        ? `That\u2019s ~${annualHrs.toLocaleString()} hrs a year on coordinating rather than building, selling, or serving. At a ~$45/hr loaded cost that\u2019s roughly $${loadedCost.toLocaleString()} of annual operational drag.`
+        : 'We\u2019ll use this to size the leak in the section below.',
+      tone: 'gap',
+    })
+  }
+
+  // Q9 — interest level (flavors the What Happens Next section)
+  const interest = (a as any)._interestLevel as string | undefined
+  if (interest === 'yes') {
+    whereYouStand.push({
+      label: 'You said this is worth exploring',
+      value: 'Yes \u2014 let\u2019s talk',
+      youAre: 'Good. The next section lays out exactly what we\u2019d do, in order.',
       tone: 'win',
+    })
+  } else if (interest === 'maybe') {
+    whereYouStand.push({
+      label: 'You said maybe',
+      value: 'Tell me more',
+      youAre: 'Fair. The opportunities below are sized so you can start with the smallest win and see if it holds.',
+      tone: 'neutral',
     })
   }
 
@@ -215,11 +251,26 @@ export function generateReportV2(a: Partial<AssessmentAnswers> & { _toolStack?: 
   }
 
   // Tier 2 — matched picks
-  const signals = painSignals({
+  // Pain signals: derive from new Q7 tools + fall back to legacy fields.
+  const tools: string[] = Array.isArray((a as any)._projectMgmtTools) ? (a as any)._projectMgmtTools : []
+  const TOOL_PAIN: Record<string, string[]> = {
+    crm:          ['admin', 'being-bottleneck'],
+    excel:        ['admin', 'being-bottleneck'],
+    email:        ['admin', 'being-bottleneck', 'chasing-money'],
+    phone:        ['missed-calls', 'being-bottleneck'],
+    sms:          ['admin', 'missed-calls'],
+    spreadsheets: ['admin', 'being-bottleneck'],
+    whiteboard:   ['admin'],
+    other:        ['admin'],
+  }
+  const derivedPain = new Set<string>()
+  for (const t of tools) (TOOL_PAIN[t] || []).forEach((p) => derivedPain.add(p))
+  const legacySignals = painSignals({
     topPain: a.topPain,
     painTag: (a as any)._painTag,
     wantedTimeBack: (a as any).wantedTimeBack,
   })
+  const signals = Array.from(new Set([...legacySignals, ...Array.from(derivedPain)])) as any[]
   const picks = matchTier2(industry, signals)
   const tier2Cards: Tier2Card[] = picks.map((o) => ({
     kind: 'tier-2',
@@ -294,9 +345,9 @@ export function generateReportV2(a: Partial<AssessmentAnswers> & { _toolStack?: 
   // Q1 ownerName, Q2 businessNameAndTrade, Q3 industry, Q4 teamSize, Q5 customerType,
   // Q6 revenueModel, Q7 topPain, Q8 toolStack, Q9 wantedTimeBack, Q10 ownerEmail.
   const hasThroughQ6 = !!(a.company && a.industry && a.teamSize && a.customerType && a.revenueModel)
-  const hasQ7 = !!(a.topPain || (a as any)._painTag)
-  const hasQ8 = !!a._toolStack
-  const hasQ9 = !!((a as any).wantedTimeBack && (Array.isArray((a as any).wantedTimeBack) ? (a as any).wantedTimeBack.length : true))
+  const hasQ7 = Array.isArray((a as any)._projectMgmtTools) && (a as any)._projectMgmtTools.length > 0
+  const hasQ8 = !!((a as any)._infoHoursPerWeek && String((a as any)._infoHoursPerWeek).trim())
+  const hasQ9 = !!((a as any)._interestLevel && String((a as any)._interestLevel).trim())
   const hasQ10 = !!a.ownerEmail
 
   // Tier 2 cards pace in: Q6 reveals 1, Q7 reveals 2nd+3rd, Q8 caps at 4.
