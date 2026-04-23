@@ -56,6 +56,7 @@ export interface AssessmentAnswers {
   reportId: string
   ownerName: string
   ownerFirstName: string
+  ownerEmail?: string // caller/owner email — captured at Q10 on web or spoken on phone
   company: string
   trade: string
   industry: Industry

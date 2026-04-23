@@ -1263,7 +1263,7 @@ export function painSignals(raw: {
       case 'being-bottleneck': tags.add('being-bottleneck'); break
     }
   }
-  return [...tags]
+  return Array.from(tags)
 }
 
 // Pick 2-4 Tier 2 offers from the industry menu based on pain signals.
