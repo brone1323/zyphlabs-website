@@ -1,8 +1,10 @@
 // POST /api/retell-webhook — called by Retell when an assessment call ends.
 //
-// v6 behavior (2026-04-22):
+// v7 behavior (2026-04-23):
 // - Extracts AssessmentAnswers from transcript via Anthropic Claude Haiku
-// - Schema now includes ownerEmail (Haiku reconstructs spoken "at"/"dot" emails)
+// - Schema includes new Q7 (project mgmt tools), Q8 (hours/week on info), Q9 (interest level)
+// - Schema includes ownerEmail (Haiku reconstructs spoken "at"/"dot" emails)
+// - Industry list reduced to 6 (dropped project-based, b2b-saas)
 // - Internal notification + caller email + Sheet append via shared pipeline
 
 import { NextResponse } from 'next/server'
@@ -37,8 +39,6 @@ export async function POST(req: Request) {
   }
 
   const reportUrl = buildReportUrl(answers)
-  // Prefer Haiku-extracted email (handles spoken "at"/"dot" in voice transcripts),
-  // fall back to regex on raw transcript for cases where caller typed it or said it cleanly.
   const callerEmail =
     ((answers as any).ownerEmail && String((answers as any).ownerEmail).trim()) ||
     extractEmailFromText(transcript)
@@ -71,7 +71,20 @@ async function extractAnswersFromTranscript(transcript: string, call: any): Prom
   const systemPrompt = 'You are a precise data extraction engine. Output strictly valid JSON matching the schema. No markdown.'
   const userPrompt = `Read the call transcript and produce a single AssessmentAnswers JSON object.
 
-SCHEMA required fields: reportId, ownerName, ownerFirstName, ownerEmail, company, trade, industry (one of: project-based, appointment-based, retail, ecommerce, professional-services, b2b-saas, trades, creative), customerType (consumer/business/both), revenueModel (per-project/per-visit/subscription/transactional/hourly), yearsInBusiness, teamSize, location, topPain.
+SCHEMA required fields:
+- reportId, ownerName, ownerFirstName, ownerEmail
+- company, trade
+- industry (one of: trades, appointment-based, retail, ecommerce, professional-services, creative)
+- customerType (consumer | business | both)
+- revenueModel (per-project | per-visit | subscription | transactional | hourly)
+- yearsInBusiness, teamSize, location, topPain
+
+NEW FIELDS (from the Q7-Q9 flow):
+- projectMgmtTools: array of strings from ["crm","excel","email","phone","sms","spreadsheets","whiteboard","other"] — which tools the caller named when asked how they keep their team and customers in sync on projects. Include every tool they mentioned.
+- infoHoursPerWeek: free-text string of how many hours/week the team spends on information handling (e.g. "15 hours/week" or "about 20"). Empty string if not stated.
+- interestLevel: "yes" | "maybe" | "no" — when asked "would you be interested in getting 90% of that time back with real-time visibility of progress/costs/margins?" capture their stance. Default to "maybe" if they were receptive but non-committal. Default to "" if not asked.
+
+INDUSTRY MAPPING NOTE: construction/GC/remodel/plumbing/HVAC/electrical all map to "trades". Do not output "project-based" or "b2b-saas" — those are not valid values anymore.
 
 EMAIL EXTRACTION NOTE: callers often speak email addresses aloud using "at" for @ and "dot" for "." (e.g. "brian at solardev dot ca" -> "brian@solardev.ca"). Reconstruct the literal email address in ownerEmail. If no email was provided, set ownerEmail to an empty string "".
 
@@ -102,21 +115,31 @@ Output only the JSON object.`
   if (!content) throw new Error('no content from Anthropic')
   const m = content.match(/\{[\s\S]*\}/)
   if (!m) throw new Error('no JSON in response')
-  const answers = JSON.parse(m[0]) as AssessmentAnswers
+  const raw = JSON.parse(m[0]) as any
 
-  answers.reportId = answers.reportId || `retell-${call.call_id || Date.now()}`
-  answers.ownerFirstName = answers.ownerFirstName || answers.ownerName?.split(' ')[0] || 'there'
-  answers.industry = (answers.industry || 'project-based') as Industry
-  answers.customerType = (answers.customerType || 'consumer') as AssessmentAnswers['customerType']
-  answers.revenueModel = (answers.revenueModel || 'per-project') as AssessmentAnswers['revenueModel']
-  answers.teamSize = Number(answers.teamSize) || 1
-  answers.yearsInBusiness = Number(answers.yearsInBusiness) || 0
-  return answers
+  // Normalize defaults
+  raw.reportId = raw.reportId || `retell-${call.call_id || Date.now()}`
+  raw.ownerFirstName = raw.ownerFirstName || raw.ownerName?.split(' ')[0] || 'there'
+  // Map legacy industry names that Haiku might still output
+  if (raw.industry === 'project-based' || raw.industry === 'b2b-saas') raw.industry = 'trades'
+  raw.industry = (raw.industry || 'trades') as Industry
+  raw.customerType = (raw.customerType || 'consumer')
+  raw.revenueModel = (raw.revenueModel || 'per-project')
+  raw.teamSize = Number(raw.teamSize) || 1
+  raw.yearsInBusiness = Number(raw.yearsInBusiness) || 0
+
+  // Copy new Q7/Q8/Q9 fields into the underscore-prefixed shape the matcher reads.
+  const tools = Array.isArray(raw.projectMgmtTools) ? raw.projectMgmtTools : []
+  ;(raw as any)._projectMgmtTools = tools
+  ;(raw as any)._infoHoursPerWeek = raw.infoHoursPerWeek || ''
+  ;(raw as any)._interestLevel = raw.interestLevel || ''
+
+  return raw as AssessmentAnswers
 }
 
 export async function GET() {
   return NextResponse.json({
-    ok: true, endpoint: 'retell-webhook', model: 'claude-haiku-4-5', version: 6,
-    behavior: 'v6: ownerEmail from spoken voice + internal notify + caller email + sheets',
+    ok: true, endpoint: 'retell-webhook', model: 'claude-haiku-4-5', version: 7,
+    behavior: 'v7: Q7-Q9 (tools/hours/interest) extraction + 6 industries (no project-based/b2b-saas)',
   })
 }
