@@ -1,13 +1,16 @@
 'use client'
 
 import { useState, useMemo } from 'react'
-import type { Demo, DemoOutputPreview } from '@/lib/demos/types'
+import type { DemoOutputPreview } from '@/lib/demos/types'
+import { getDemoBySlug } from '@/lib/demos/registry'
 
 interface Props {
-  demo: Demo
+  demoSlug: string
 }
 
-export default function DemoPlayer({ demo }: Props) {
+export default function DemoPlayer({ demoSlug }: Props) {
+  const demo = getDemoBySlug(demoSlug)
+  if (!demo) return null
   const [values, setValues] = useState<Record<string, string>>(() => {
     const initial: Record<string, string> = {}
     demo.inputFields.forEach((f) => {
@@ -382,9 +385,4 @@ const inputStyle: React.CSSProperties = {
   fontFamily: 'inherit',
 }
 
-const statusBoxStyle: React.CSSProperties = {
-  padding: '10px 14px',
-  border: '1px solid',
-  borderRadius: 8,
-  fontSize: 13,
-}
+const sta

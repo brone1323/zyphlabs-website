@@ -137,7 +137,7 @@ export default function DemoDetail({ params }: PageProps) {
       </div>
 
       {/* Player */}
-      <DemoPlayer demo={demo} />
+      <DemoPlayer demoSlug={demo.slug} />
 
       {/* Related */}
       {related.length > 0 && (
@@ -249,5 +249,4 @@ const labelSm: React.CSSProperties = {
   letterSpacing: 1.5,
   textTransform: 'uppercase',
   color: 'var(--text-secondary)',
-  fontWeight: 700,
-}
+  fontWeight
