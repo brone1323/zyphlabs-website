@@ -1,6 +1,9 @@
 // POST /api/retell-webhook — called by Retell when an assessment call ends.
 //
-// v7 behavior (2026-04-23):
+// v8 behavior (2026-04-23):
+// - Processes ONLY `call_analyzed` events. Previously v7 also processed `call_ended`,
+//   which fired BEFORE Retell finished analysis and resulted in duplicate notifications
+//   (one with a blank/partial trade field, one with full analysis). One call = one notify now.
 // - Extracts AssessmentAnswers from transcript via Anthropic Claude Haiku
 // - Schema includes new Q7 (project mgmt tools), Q8 (hours/week on info), Q9 (interest level)
 // - Schema includes ownerEmail (Haiku reconstructs spoken "at"/"dot" emails)
@@ -23,7 +26,9 @@ export async function POST(req: Request) {
   try { payload = await req.json() } catch { return NextResponse.json({ error: 'invalid JSON' }, { status: 400 }) }
 
   const event = payload?.event
-  if (event !== 'call_analyzed' && event !== 'call_ended') {
+  // Only process call_analyzed (has full Retell analysis). Ignore call_ended and all
+  // other events — call_ended fires before analysis and would cause duplicate processing.
+  if (event !== 'call_analyzed') {
     return NextResponse.json({ ignored: event }, { status: 200 })
   }
 
@@ -139,7 +144,7 @@ Output only the JSON object.`
 
 export async function GET() {
   return NextResponse.json({
-    ok: true, endpoint: 'retell-webhook', model: 'claude-haiku-4-5', version: 7,
-    behavior: 'v7: Q7-Q9 (tools/hours/interest) extraction + 6 industries (no project-based/b2b-saas)',
+    ok: true, endpoint: 'retell-webhook', model: 'claude-haiku-4-5', version: 8,
+    behavior: 'v8: call_analyzed-only (no more duplicate processing) + Q7-Q9 extraction + 6 industries',
   })
 }
