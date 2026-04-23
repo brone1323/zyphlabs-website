@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Zyph Labs — Demo Index</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background: #0b1120;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    color: #e5e7eb;
+    padding: 48px 24px;
+    min-height: 100vh;
+  }
+  .wrap { max-width: 1000px; margin: 0 auto; }
+  .header { text-align: center; margin-bottom: 48px; }
+  h1 { font-size: 32px; color: #f9fafb; margin-bottom: 8px; }
+  .subtitle { color: #9ca3af; font-size: 15px; }
+  .tagline {
+    color: #a78bfa;
+    font-size: 13px;
+    font-style: italic;
+    margin-top: 12px;
+  }
+  .industry {
+    background: #111827;
+    border: 1px solid #1f2937;
+    border-radius: 14px;
+    padding: 24px;
+    margin-bottom: 24px;
+  }
+  .industry-name {
+    font-size: 13px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: #60a5fa;
+    margin-bottom: 14px;
+    font-weight: 600;
+  }
+  .brain-row { margin-bottom: 12px; }
+  .demo-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 10px;
+  }
+  a.demo-link {
+    display: block;
+    padding: 12px 14px;
+    background: #1f2937;
+    border: 1px solid #374151;
+    border-radius: 8px;
+    color: #e5e7eb;
+    text-decoration: none;
+    font-size: 13px;
+    transition: all 0.15s;
+  }
+  a.demo-link:hover {
+    background: #374151;
+    border-color: #60a5fa;
+    color: #f9fafb;
+  }
+  a.brain-link {
+    display: block;
+    padding: 14px 16px;
+    background: #1e1b4b;
+    border: 1px solid #6d28d9;
+    border-radius: 8px;
+    color: #e5e7eb;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 14px;
+    transition: all 0.15s;
+  }
+  a.brain-link:hover {
+    background: #312e81;
+    border-color: #a78bfa;
+  }
+  .badge {
+    float: right;
+    font-size: 10px;
+    letter-spacing: 1px;
+    color: #a78bfa;
+    font-weight: 700;
+  }
+</style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="header">
+      <h1>Zyph Labs — Demo Portfolio</h1>
+      <p class="subtitle">45 animated pipeline demos across 6 industries</p>
+      <p class="tagline">Automated information transfer — so your people can be far more effective.</p>
+    </div>
+
+    <div class="industry">
+      <div class="industry-name">Field Services</div>
+      <div class="brain-row">
+        <a class="brain-link" href="field-services/field-10-the-brain.html">The Brain — Full System <span class="badge">TIER 3</span></a>
+      </div>
+      <div class="demo-grid">
+        <a class="demo-link" href="field-services/field-1-task-tracker.html">1. Autonomous Task Tracker</a>
+        <a class="demo-link" href="field-services/field-2-receptionist.html">2. AI Receptionist</a>
+        <a class="demo-link" href="field-services/field-3-quote-agent.html">3. AI Quote + Follow-Up</a>
+        <a class="demo-link" href="field-services/field-4-collections.html">4. AI Collections Agent</a>
+        <a class="demo-link" href="field-services/field-5-review-harvester.html">5. AI Review Harvester</a>
+        <a class="demo-link" href="field-services/field-6-dispatch-triage.html">6. AI Dispatch Triage</a>
+        <a class="demo-link" href="field-services/field-7-eta-portal.html">7. AI Customer ETA Portal</a>
+        <a class="demo-link" href="field-services/field-8-instant-invoice.html">8. AI Instant-Invoice</a>
+        <a class="demo-link" href="field-services/field-9-maintenance-plan.html">9. AI Maintenance Plan</a>
+      </div>
+    </div>
+
+    <div class="industry">
+      <div class="industry-name">Appointment-based</div>
+      <div class="brain-row">
+        <a class="brain-link" href="appointment/appt-7-the-brain.html">The Brain — Practice System <span class="badge">TIER 3</span></a>
+      </div>
+      <div class="demo-grid">
+        <a class="demo-link" href="appointment/appt-1-booking-concierge.html">1. AI Booking Concierge</a>
+        <a class="demo-link" href="appointment/appt-2-no-show-defender.html">2. AI No-Show Defender</a>
+        <a class="demo-link" href="appointment/appt-3-rebooking-agent.html">3. AI Rebooking Agent</a>
+        <a class="demo-link" href="appointment/appt-4-insurance-billing.html">4. AI Insurance / Billing Chaser</a>
+        <a class="demo-link" href="appointment/appt-5-post-visit-followup.html">5. AI Post-Visit Follow-Up</a>
+        <a class="demo-link" href="appointment/appt-6-review-harvester.html">6. AI Review Harvester</a>
+      </div>
+    </div>
+
+    <div class="industry">
+      <div class="industry-name">Retail</div>
+      <div class="brain-row">
+        <a class="brain-link" href="retail/retail-7-the-brain.html">The Brain — Retail System <span class="badge">TIER 3</span></a>
+      </div>
+      <div class="demo-grid">
+        <a class="demo-link" href="retail/retail-1-customer-concierge.html">1. AI Customer Concierge</a>
+        <a class="demo-link" href="retail/retail-2-winback-agent.html">2. AI Winback Agent</a>
+        <a class="demo-link" href="retail/retail-3-inventory-reorder.html">3. AI Inventory & Reorder</a>
+        <a class="demo-link" href="retail/retail-4-schedule-optimizer.html">4. AI Schedule Optimizer</a>
+        <a class="demo-link" href="retail/retail-5-social-drafter.html">5. AI Social Content Drafter</a>
+        <a class="demo-link" href="retail/retail-6-review-harvester.html">6. AI Review Harvester</a>
+      </div>
+    </div>
+
+    <div class="industry">
+      <div class="industry-name">E-commerce</div>
+      <div class="brain-row">
+        <a class="brain-link" href="ecommerce/ecom-7-the-brain.html">The Brain — E-Commerce System <span class="badge">TIER 3</span></a>
+      </div>
+      <div class="demo-grid">
+        <a class="demo-link" href="ecommerce/ecom-1-customer-service.html">1. AI Customer Service</a>
+        <a class="demo-link" href="ecommerce/ecom-2-return-triage.html">2. AI Return / Exchange Triage</a>
+        <a class="demo-link" href="ecommerce/ecom-3-winback.html">3. AI Winback Agent</a>
+        <a class="demo-link" href="ecommerce/ecom-4-review-harvester.html">4. AI Review Harvester</a>
+        <a class="demo-link" href="ecommerce/ecom-5-fulfillment-exception.html">5. AI Fulfillment Handler</a>
+        <a class="demo-link" href="ecommerce/ecom-6-ad-copy-drafter.html">6. AI Ad-Copy Drafter</a>
+      </div>
+    </div>
+
+    <div class="industry">
+      <div class="industry-name">Professional Services</div>
+      <div class="brain-row">
+        <a class="brain-link" href="professional-services/prosvc-7-the-brain.html">The Brain — Firm System <span class="badge">TIER 3</span></a>
+      </div>
+      <div class="demo-grid">
+        <a class="demo-link" href="professional-services/prosvc-1-intake-qualification.html">1. AI Intake + Qualification</a>
+        <a class="demo-link" href="professional-services/prosvc-2-engagement-letter.html">2. AI Engagement Letter Drafter</a>
+        <a class="demo-link" href="professional-services/prosvc-3-time-capture.html">3. AI Time Capture</a>
+        <a class="demo-link" href="professional-services/prosvc-4-collections.html">4. AI Collections Agent</a>
+        <a class="demo-link" href="professional-services/prosvc-5-relationship-reminder.html">5. AI Relationship Reminder</a>
+        <a class="demo-link" href="professional-services/prosvc-6-document-nudger.html">6. AI Document Nudger</a>
+      </div>
+    </div>
+
+    <div class="industry">
+      <div class="industry-name">Creative</div>
+      <div class="brain-row">
+        <a class="brain-link" href="creative/creative-7-the-brain.html">The Brain — Studio System <span class="badge">TIER 3</span></a>
+      </div>
+      <div class="demo-grid">
+        <a class="demo-link" href="creative/creative-1-inquiry-proposal.html">1. AI Inquiry + Proposal</a>
+        <a class="demo-link" href="creative/creative-2-contract-deposit.html">2. AI Contract + Deposit Flow</a>
+        <a class="demo-link" href="creative/creative-3-pre-shoot.html">3. AI Pre-Shoot Questionnaire</a>
+        <a class="demo-link" href="creative/creative-4-gallery-delivery.html">4. AI Gallery Delivery + Proofing</a>
+        <a class="demo-link" href="creative/creative-5-rebooking.html">5. AI Rebooking Agent</a>
+        <a class="demo-link" href="creative/creative-6-testimonial-harvester.html">6. AI Testimonial Harvester</a>
+      </div>
+    </div>
+
+  </div>
+</body>
+</html>

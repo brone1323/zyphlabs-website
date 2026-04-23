@@ -52,6 +52,7 @@ export interface Tier2Card {
   timeToLive: string
   expectedImpact: string
   cta: { label: string; href: string }   // /checkout/tier-2?offeringId=X
+  demoUrl?: string               // path to animated HTML demo, opens in new tab
 }
 
 // ─── Tier 3 — Full System with bundle math ──────────────────────────
@@ -76,6 +77,7 @@ export interface Tier3Card {
     narrative: string            // "Instead of $8.3k for the three above, get all of them + the Brain for $18k."
   }
   cta: { label: string; href: string }   // strategy call
+  demoUrl?: string               // path to "Brain" full-system demo, opens in new tab
 }
 
 // ─── Questions call ─────────────────────────────────────────────────

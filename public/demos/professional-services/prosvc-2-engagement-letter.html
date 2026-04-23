@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>AI Engagement Letter Drafter — Pipeline Demo</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background: #0b1120;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    color: #e5e7eb;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+  }
+  .wrap { width: 100%; max-width: 900px; }
+  .header { text-align: center; margin-bottom: 28px; }
+  .tag {
+    display: inline-block;
+    font-size: 11px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: #60a5fa;
+    background: rgba(96, 165, 250, 0.1);
+    padding: 6px 12px;
+    border-radius: 999px;
+    margin-bottom: 12px;
+  }
+  h1 { font-size: 28px; font-weight: 600; color: #f9fafb; margin-bottom: 6px; }
+  .subtitle { color: #9ca3af; font-size: 14px; }
+  .tagline {
+    color: #a78bfa;
+    font-size: 13px;
+    font-style: italic;
+    margin-top: 10px;
+    letter-spacing: 0.3px;
+  }
+  .pipeline {
+    background: #111827;
+    border: 1px solid #1f2937;
+    border-radius: 16px;
+    padding: 36px 24px;
+    position: relative;
+    overflow: hidden;
+  }
+  svg { width: 100%; height: 360px; display: block; }
+  .node-box { fill: #1f2937; stroke: #374151; stroke-width: 1.5; }
+  .node-label { fill: #e5e7eb; font-size: 12px; font-weight: 500; text-anchor: middle; }
+  .node-sub { fill: #9ca3af; font-size: 10px; text-anchor: middle; }
+  .ai-core { fill: #1e3a8a; stroke: #60a5fa; stroke-width: 2; }
+  .ai-glow {
+    fill: none; stroke: #60a5fa; stroke-width: 2; opacity: 0;
+    animation: pulse 3s ease-in-out infinite;
+  }
+  @keyframes pulse {
+    0%, 100% { opacity: 0; r: 48; }
+    50% { opacity: 0.4; r: 64; }
+  }
+  .ai-label { fill: #dbeafe; font-size: 13px; font-weight: 600; text-anchor: middle; }
+  .pipe { fill: none; stroke: #374151; stroke-width: 2; stroke-dasharray: 4 4; }
+  .packet { fill: #60a5fa; filter: drop-shadow(0 0 6px rgba(96, 165, 250, 0.6)); }
+  .packet-out { fill: #34d399; filter: drop-shadow(0 0 6px rgba(52, 211, 153, 0.6)); }
+  .p1 { animation: flowIn1 6s linear infinite; }
+  .p2 { animation: flowIn2 6s linear infinite; animation-delay: 2s; }
+  .p3 { animation: flowIn3 6s linear infinite; animation-delay: 4s; }
+  .out1 { animation: flowOut1 6s linear infinite; animation-delay: 1.5s; }
+  .out2 { animation: flowOut2 6s linear infinite; animation-delay: 3.5s; }
+  @keyframes flowIn1 {
+    0% { transform: translate(0, 0); opacity: 0; } 10% { opacity: 1; }
+    45% { transform: translate(190px, 45px); opacity: 1; } 55% { opacity: 0; } 100% { opacity: 0; }
+  }
+  @keyframes flowIn2 {
+    0% { transform: translate(0, 0); opacity: 0; } 10% { opacity: 1; }
+    45% { transform: translate(190px, 0px); opacity: 1; } 55% { opacity: 0; } 100% { opacity: 0; }
+  }
+  @keyframes flowIn3 {
+    0% { transform: translate(0, 0); opacity: 0; } 10% { opacity: 1; }
+    45% { transform: translate(190px, -45px); opacity: 1; } 55% { opacity: 0; } 100% { opacity: 0; }
+  }
+  @keyframes flowOut1 {
+    0% { transform: translate(0, 0); opacity: 0; } 10% { opacity: 1; }
+    45% { transform: translate(190px, -30px); opacity: 1; } 55% { opacity: 0; } 100% { opacity: 0; }
+  }
+  @keyframes flowOut2 {
+    0% { transform: translate(0, 0); opacity: 0; } 10% { opacity: 1; }
+    45% { transform: translate(190px, 30px); opacity: 1; } 55% { opacity: 0; } 100% { opacity: 0; }
+  }
+  .legend {
+    display: flex; justify-content: center; gap: 24px;
+    margin-top: 20px; font-size: 11px; color: #9ca3af;
+  }
+  .legend-item { display: flex; align-items: center; gap: 6px; }
+  .dot { width: 8px; height: 8px; border-radius: 50%; }
+  .dot-in { background: #60a5fa; }
+  .dot-out { background: #34d399; }
+  .bubble-caller { fill: #374151; stroke: #4b5563; stroke-width: 1; }
+  .bubble-ai { fill: #1e3a8a; stroke: #60a5fa; stroke-width: 1; }
+  .bubble-text { fill: #f9fafb; font-size: 10px; }
+  .bubble-label { fill: #9ca3af; font-size: 9px; font-weight: 600; letter-spacing: 1px; }
+  .convo-group { opacity: 0; }
+  .convo-1 { animation: convoShow 12s ease-in-out infinite; }
+  .convo-2 { animation: convoShow 12s ease-in-out infinite; animation-delay: 3s; }
+  .convo-3 { animation: convoShow 12s ease-in-out infinite; animation-delay: 6s; }
+  .convo-4 { animation: convoShow 12s ease-in-out infinite; animation-delay: 9s; }
+  @keyframes convoShow {
+    0%   { opacity: 0; transform: translateY(8px); }
+    4%   { opacity: 1; transform: translateY(0); }
+    22%  { opacity: 1; transform: translateY(0); }
+    26%  { opacity: 0; transform: translateY(-8px); }
+    100% { opacity: 0; transform: translateY(-8px); }
+  }
+</style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="header">
+      <div class="tag">Professional Services · Tier 2</div>
+      <h1>AI Engagement Letter Drafter</h1>
+      <p class="subtitle">Takes intake call transcript + your firm templates, drafts the engagement letter in partner voice for review.</p>
+      <p class="tagline">Automated information transfer — so your people can be far more effective.</p>
+    </div>
+    <div class="pipeline">
+      <svg viewBox="0 0 820 360" xmlns="http://www.w3.org/2000/svg">
+        
+        <g>
+          <rect class="node-box" x="30" y="40" width="160" height="50" rx="8"/>
+          <text class="node-label" x="110" y="62">Intake transcript</text>
+          <text class="node-sub" x="110" y="78">From the call</text>
+        </g>
+<g>
+          <rect class="node-box" x="30" y="155" width="160" height="50" rx="8"/>
+          <text class="node-label" x="110" y="177">Template library</text>
+          <text class="node-sub" x="110" y="193">By matter type</text>
+        </g>
+<g>
+          <rect class="node-box" x="30" y="270" width="160" height="50" rx="8"/>
+          <text class="node-label" x="110" y="292">Partner voice</text>
+          <text class="node-sub" x="110" y="308">Tone · phrasing · terms</text>
+        </g>
+
+          <path class="pipe" d="M 190 65 Q 300 65 380 135"/>
+          <path class="pipe" d="M 190 180 L 380 180"/>
+          <path class="pipe" d="M 190 295 Q 300 295 380 225"/>
+
+          <circle class="ai-glow" cx="410" cy="180" r="48"/>
+          <circle class="ai-core" cx="410" cy="180" r="48"/>
+          <text class="ai-label" x="410" y="176">Engagement</text>
+          <text class="ai-label" x="410" y="192">Drafter</text>
+
+          <path class="pipe" d="M 440 150 Q 540 110 630 110"/>
+          <path class="pipe" d="M 440 210 Q 540 250 630 250"/>
+
+        <g>
+          <rect class="node-box" x="630" y="85" width="160" height="50" rx="8"/>
+          <text class="node-label" x="710" y="107">Drafted letter</text>
+          <text class="node-sub" x="710" y="123">In partner's voice</text>
+        </g>
+<g>
+          <rect class="node-box" x="630" y="225" width="160" height="50" rx="8"/>
+          <text class="node-label" x="710" y="247">Unusual terms flagged</text>
+          <text class="node-sub" x="710" y="263">For extra review</text>
+        </g>
+
+          <circle class="packet p1" cx="190" cy="65" r="5"/>
+          <circle class="packet p2" cx="190" cy="180" r="5"/>
+          <circle class="packet p3" cx="190" cy="295" r="5"/>
+          <circle class="packet-out out1" cx="440" cy="140" r="5"/>
+          <circle class="packet-out out2" cx="440" cy="220" r="5"/>
+        
+      </svg>
+      <div class="legend">
+        <div class="legend-item"><span class="dot dot-in"></span> Input signals</div>
+        <div class="legend-item"><span class="dot dot-out"></span> AI output</div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

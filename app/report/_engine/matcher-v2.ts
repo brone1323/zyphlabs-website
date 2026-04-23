@@ -68,7 +68,7 @@ function mergeIntegrations(offerIntegrations: string[], userStack: string): stri
 }
 
 export function generateReportV2(a: Partial<AssessmentAnswers> & { _toolStack?: string; _painTag?: string }): ReportV2 {
-  const industry = (a.industry ?? 'project-based') as Industry
+  const industry = (a.industry ?? 'trades') as Industry
   const teamSize = Number(a.teamSize ?? 1)
   // Pull first name from ownerName OR the email's local part (humanize `bri@…` → `Bri`).
   function firstFromEmail(e?: string): string | undefined {
@@ -234,6 +234,7 @@ export function generateReportV2(a: Partial<AssessmentAnswers> & { _toolStack?: 
     timeToLive: o.timeToLive,
     expectedImpact: o.expectedImpact,
     cta: { label: 'Get This Automation', href: `/checkout/tier-2?offeringId=${o.id}` },
+    demoUrl: o.demoUrl,
   }))
 
   // Tier 3 — Full System with bundle math
@@ -255,6 +256,7 @@ export function generateReportV2(a: Partial<AssessmentAnswers> & { _toolStack?: 
       narrative: `Instead of ${fmtDollars(tier2Sum)} for the ${picks.length} automations above, get all of them plus the Brain for ${fmtMoney(offering.tier3.buildPrice)} + ${fmtMoney(offering.tier3.retainer)}/mo. One build, four weeks, one connected system.`,
     } : undefined,
     cta: { label: 'Book a 30-min Strategy Session', href: '/book/strategy' },
+    demoUrl: offering.tier3.demoUrl,
   }
 
   const questionsCall: QuestionsCallCard = {

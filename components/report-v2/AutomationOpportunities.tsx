@@ -107,9 +107,21 @@ function Tier2CardView({ card, ctasUnlocked }: { card: Tier2Card; ctasUnlocked: 
 
       <p className="text-sm text-slate-700 mb-4"><strong>Expected impact:</strong> {card.expectedImpact}</p>
 
-      <CtaButton href={card.cta.href} enabled={ctasUnlocked} variant="primary">
-        {card.cta.label}
-      </CtaButton>
+      <div className="flex flex-wrap items-center gap-3">
+        <CtaButton href={card.cta.href} enabled={ctasUnlocked} variant="primary">
+          {card.cta.label}
+        </CtaButton>
+        {card.demoUrl && (
+          <a
+            href={card.demoUrl}
+            target="_blank"
+            rel="noreferrer"
+            className="inline-flex items-center gap-1.5 text-sm font-semibold text-[#6c5ce7] hover:underline"
+          >
+            <span aria-hidden="true">&#9655;</span> See how it works
+          </a>
+        )}
+      </div>
     </div>
   )
 }
@@ -161,9 +173,21 @@ function Tier3CardView({ card, ctasUnlocked }: { card: Tier3Card; ctasUnlocked: 
 
       <p className="text-sm text-slate-200 mb-4"><strong className="text-white">Expected impact:</strong> {card.expectedImpact}</p>
 
-      <CtaButton href={card.cta.href} enabled={ctasUnlocked} variant="tier3">
-        {card.cta.label}
-      </CtaButton>
+      <div className="flex flex-wrap items-center gap-3">
+        <CtaButton href={card.cta.href} enabled={ctasUnlocked} variant="tier3">
+          {card.cta.label}
+        </CtaButton>
+        {card.demoUrl && (
+          <a
+            href={card.demoUrl}
+            target="_blank"
+            rel="noreferrer"
+            className="inline-flex items-center gap-1.5 text-sm font-semibold text-[#00cec9] hover:underline"
+          >
+            <span aria-hidden="true">&#9655;</span> See how the Brain works
+          </a>
+        )}
+      </div>
     </div>
   )
 }
