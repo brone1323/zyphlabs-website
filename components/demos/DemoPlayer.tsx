@@ -10,9 +10,9 @@ interface Props {
 
 export default function DemoPlayer({ demoSlug }: Props) {
   const demo = getDemoBySlug(demoSlug)
-  if (!demo) return null
   const [values, setValues] = useState<Record<string, string>>(() => {
     const initial: Record<string, string> = {}
+    if (!demo) return initial
     demo.inputFields.forEach((f) => {
       initial[f.key] = f.defaultValue ?? ''
     })
@@ -37,12 +37,15 @@ export default function DemoPlayer({ demoSlug }: Props) {
   }
 
   const previewOutputs = useMemo(() => {
+    if (!demo) return null
     try {
       return demo.generateOutput(values, demo.business)
     } catch (e) {
       return null
     }
   }, [values, demo])
+
+  if (!demo) return null
 
   const handleRun = async () => {
     setStatus('running')
@@ -385,4 +388,9 @@ const inputStyle: React.CSSProperties = {
   fontFamily: 'inherit',
 }
 
-const sta
+const statusBoxStyle: React.CSSProperties = {
+  padding: '10px 14px',
+  border: '1px solid',
+  borderRadius: 8,
+  fontSize: 13,
+}
