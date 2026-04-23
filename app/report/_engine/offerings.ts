@@ -102,7 +102,7 @@ export const OFFERINGS: Record<Industry, IndustryOffering> = {
     tier2Menu: [
       {
         id: 'project-ai-receptionist',
-        demoUrl: '/demos/field-services/field-2-receptionist.html',
+        demoUrl: '/demos/ai-receptionist-construction',
         title: 'AI Receptionist',
         pitch: 'Answers your phone 24/7, qualifies the lead, books the estimate, and texts you within 60 seconds.',
         whatItDoes: [
@@ -118,7 +118,7 @@ export const OFFERINGS: Record<Industry, IndustryOffering> = {
       },
       {
         id: 'project-ai-quote',
-        demoUrl: '/demos/field-services/field-3-quote-agent.html',
+        demoUrl: '/demos/ai-quote-construction',
         title: 'AI Quote + Follow-Up Agent',
         pitch: 'Voice or photo in, polished quote out — in your voice. Auto-nudges quotes that go cold at 3/7/14 days.',
         whatItDoes: [
@@ -134,7 +134,7 @@ export const OFFERINGS: Record<Industry, IndustryOffering> = {
       },
       {
         id: 'project-ai-task-tracker',
-        demoUrl: '/demos/field-services/field-1-task-tracker.html',
+        demoUrl: '/demos/task-tracker-construction',
         title: 'Autonomous Task Tracker',
         pitch: "Reads crew check-ins and proactively updates customers ('on track for Friday') and you ('Henderson inspection slipping').",
         whatItDoes: [
@@ -150,7 +150,7 @@ export const OFFERINGS: Record<Industry, IndustryOffering> = {
       },
       {
         id: 'project-ai-collections',
-        demoUrl: '/demos/field-services/field-4-collections.html',
+        demoUrl: '/demos/ai-collections-construction',
         title: 'AI Collections Agent',
         pitch: 'Watches your AR and writes escalating payment nudges in your voice at 7/14/30 days.',
         whatItDoes: [
@@ -166,7 +166,7 @@ export const OFFERINGS: Record<Industry, IndustryOffering> = {
       },
       {
         id: 'project-ai-review',
-        demoUrl: '/demos/field-services/field-5-review-harvester.html',
+        demoUrl: '/demos/review-harvester-construction',
         title: 'AI Review Harvester',
         pitch: 'Job closeout triggers a personalized review ask in your voice — referencing the actual work and tech name.',
         whatItDoes: [
@@ -182,7 +182,7 @@ export const OFFERINGS: Record<Industry, IndustryOffering> = {
       },
       {
         id: 'project-ai-oncall',
-        demoUrl: '/demos/field-services/field-6-dispatch-triage.html',
+        demoUrl: '/demos/on-call-triage-construction',
         title: 'AI On-Call Triage',
         pitch: 'After-hours call → urgency classification → wakes the on-call tech for P1 only. Books P2/P3 for next business day.',
         whatItDoes: [
@@ -245,7 +245,7 @@ export const OFFERINGS: Record<Industry, IndustryOffering> = {
     tier2Menu: [
       {
         id: 'appt-ai-booking',
-        demoUrl: '/demos/appointment/appt-1-booking-concierge.html',
+        demoUrl: '/demos/booking-concierge-appt',
         title: 'AI Booking Concierge',
         pitch: '24/7 front-desk agent that takes calls, SMS, and DMs — checks your calendar, books real appointments, sends intake forms.',
         whatItDoes: [
@@ -261,7 +261,7 @@ export const OFFERINGS: Record<Industry, IndustryOffering> = {
       },
       {
         id: 'appt-ai-noshow',
-        demoUrl: '/demos/appointment/appt-2-no-show-defender.html',
+        demoUrl: '/demos/no-show-defender',
         title: 'AI No-Show Defender',
         pitch: 'Risk-scores appointments from history. High-risk bookings get extra reminder touchpoints in your voice.',
         whatItDoes: [
@@ -277,7 +277,7 @@ export const OFFERINGS: Record<Industry, IndustryOffering> = {
       },
       {
         id: 'appt-ai-rebook',
-        demoUrl: '/demos/appointment/appt-3-rebooking-agent.html',
+        demoUrl: '/demos/rebooking-appt',
         title: 'AI Rebooking Agent',
         pitch: 'Waits the right interval (6wk cleaning, 8wk cut, weekly therapy) then nudges them to rebook in your voice.',
         whatItDoes: [
@@ -293,7 +293,7 @@ export const OFFERINGS: Record<Industry, IndustryOffering> = {
       },
       {
         id: 'appt-ai-billing',
-        demoUrl: '/demos/appointment/appt-4-insurance-billing.html',
+        demoUrl: '/demos/insurance-chaser',
         title: 'AI Insurance / Billing Chaser',
         pitch: 'Watches your AR and handles follow-up calls and emails to insurance companies + patients.',
         whatItDoes: [
@@ -309,7 +309,7 @@ export const OFFERINGS: Record<Industry, IndustryOffering> = {
       },
       {
         id: 'appt-ai-followup',
-        demoUrl: '/demos/appointment/appt-5-post-visit-followup.html',
+        demoUrl: '/demos/post-visit-followup',
         title: 'AI Post-Visit Follow-Up',
         pitch: 'Personalized "how are you feeling?" check-ins in your voice. Captures sentiment, flags concerns, surfaces testimonials.',
         whatItDoes: [
@@ -325,7 +325,7 @@ export const OFFERINGS: Record<Industry, IndustryOffering> = {
       },
       {
         id: 'appt-ai-review',
-        demoUrl: '/demos/appointment/appt-6-review-harvester.html',
+        demoUrl: '/demos/review-harvester-appt',
         title: 'AI Review Harvester',
         pitch: 'Review ask at peak sentiment moment post-visit. Draft replies for one-tap approval.',
         whatItDoes: [
@@ -387,7 +387,7 @@ export const OFFERINGS: Record<Industry, IndustryOffering> = {
     tier2Menu: [
       {
         id: 'retail-ai-concierge',
-        demoUrl: '/demos/retail/retail-1-customer-concierge.html',
+        demoUrl: '/demos/customer-concierge-retail',
         title: 'AI Customer Concierge',
         pitch: 'Handles DMs, web chat, "are you open?" calls, menu questions, reservation + catering inquiries.',
         whatItDoes: [
@@ -403,7 +403,7 @@ export const OFFERINGS: Record<Industry, IndustryOffering> = {
       },
       {
         id: 'retail-ai-winback',
-        demoUrl: '/demos/retail/retail-2-winback-agent.html',
+        demoUrl: '/demos/winback-retail',
         title: 'AI Winback Agent',
         pitch: 'Monitors POS for lapsed regulars. Personalized winback in your voice ("Haven\'t seen you in 6 weeks, your usual oat latte\'s on us").',
         whatItDoes: [
@@ -419,7 +419,7 @@ export const OFFERINGS: Record<Industry, IndustryOffering> = {
       },
       {
         id: 'retail-ai-inventory',
-        demoUrl: '/demos/retail/retail-3-inventory-reorder.html',
+        demoUrl: '/demos/inventory-retail',
         title: 'AI Inventory & Reorder Assistant',
         pitch: 'Reads POS, flags low stock before runout, drafts reorder emails to suppliers.',
         whatItDoes: [
@@ -435,7 +435,7 @@ export const OFFERINGS: Record<Industry, IndustryOffering> = {
       },
       {
         id: 'retail-ai-schedule',
-        demoUrl: '/demos/retail/retail-4-schedule-optimizer.html',
+        demoUrl: '/demos/schedule-optimizer-retail',
         title: 'AI Staff Schedule Optimizer',
         pitch: 'Reads historical foot traffic patterns, proposes weekly schedule, flags mismatches.',
         whatItDoes: [
@@ -451,7 +451,7 @@ export const OFFERINGS: Record<Industry, IndustryOffering> = {
       },
       {
         id: 'retail-ai-social',
-        demoUrl: '/demos/retail/retail-5-social-drafter.html',
+        demoUrl: '/demos/social-drafter-retail',
         title: 'AI Social Content Drafter',
         pitch: 'Weekly Google Business posts + Instagram captions in your voice. Photo input → captioned draft.',
         whatItDoes: [
@@ -467,7 +467,7 @@ export const OFFERINGS: Record<Industry, IndustryOffering> = {
       },
       {
         id: 'retail-ai-review',
-        demoUrl: '/demos/retail/retail-6-review-harvester.html',
+        demoUrl: '/demos/review-harvester-retail',
         title: 'AI Review Harvester',
         pitch: 'Post-transaction review ask via SMS/email. Drafted replies + bad-review escalation.',
         whatItDoes: [
@@ -528,7 +528,7 @@ export const OFFERINGS: Record<Industry, IndustryOffering> = {
     tier2Menu: [
       {
         id: 'ecom-ai-cs',
-        demoUrl: '/demos/ecommerce/ecom-1-customer-service.html',
+        demoUrl: '/demos/cs-agent-ecommerce',
         title: 'AI Customer Service Agent',
         pitch: 'Handles 60-80% of tickets (WISMO, returns, sizing, exchanges) across email, chat, and Instagram DM.',
         whatItDoes: [
@@ -544,7 +544,7 @@ export const OFFERINGS: Record<Industry, IndustryOffering> = {
       },
       {
         id: 'ecom-ai-returns',
-        demoUrl: '/demos/ecommerce/ecom-2-return-triage.html',
+        demoUrl: '/demos/return-triage',
         title: 'AI Return / Exchange Triage',
         pitch: 'Routes returns by type (regret buyer vs defective) with different workflows. Auto-approves low-risk, escalates edge cases.',
         whatItDoes: [
@@ -560,7 +560,7 @@ export const OFFERINGS: Record<Industry, IndustryOffering> = {
       },
       {
         id: 'ecom-ai-winback',
-        demoUrl: '/demos/ecommerce/ecom-3-winback.html',
+        demoUrl: '/demos/winback-ecommerce',
         title: 'AI Winback Agent',
         pitch: 'Personalized winback sequences based on actual purchase history + browse behavior.',
         whatItDoes: [
@@ -576,7 +576,7 @@ export const OFFERINGS: Record<Industry, IndustryOffering> = {
       },
       {
         id: 'ecom-ai-review',
-        demoUrl: '/demos/ecommerce/ecom-4-review-harvester.html',
+        demoUrl: '/demos/review-harvester-ecommerce',
         title: 'AI Review Harvester',
         pitch: 'Post-delivery + 14-day review asks. Product-specific. Reply drafting for one-tap approval.',
         whatItDoes: [
@@ -592,7 +592,7 @@ export const OFFERINGS: Record<Industry, IndustryOffering> = {
       },
       {
         id: 'ecom-ai-fulfillment',
-        demoUrl: '/demos/ecommerce/ecom-5-fulfillment-exception.html',
+        demoUrl: '/demos/fulfillment-handler',
         title: 'AI Fulfillment Exception Handler',
         pitch: 'Watches for late packages, address issues, lost shipments. Proactively contacts the customer before they complain.',
         whatItDoes: [
@@ -608,7 +608,7 @@ export const OFFERINGS: Record<Industry, IndustryOffering> = {
       },
       {
         id: 'ecom-ai-ads',
-        demoUrl: '/demos/ecommerce/ecom-6-ad-copy-drafter.html',
+        demoUrl: '/demos/ad-copy-drafter',
         title: 'AI Ad-Copy + Creative Drafter',
         pitch: 'Pulls winning-product data, drafts ad variants in brand voice for review.',
         whatItDoes: [
@@ -669,7 +669,7 @@ export const OFFERINGS: Record<Industry, IndustryOffering> = {
     tier2Menu: [
       {
         id: 'pro-ai-intake',
-        demoUrl: '/demos/professional-services/prosvc-1-intake-qualification.html',
+        demoUrl: '/demos/intake-professional',
         title: 'AI Intake + Qualification Agent',
         pitch: '24/7 inbound handling. Qualifies service type, budget, urgency, conflict check. Books the intake call. Sends prep materials.',
         whatItDoes: [
@@ -685,7 +685,7 @@ export const OFFERINGS: Record<Industry, IndustryOffering> = {
       },
       {
         id: 'pro-ai-engagement',
-        demoUrl: '/demos/professional-services/prosvc-2-engagement-letter.html',
+        demoUrl: '/demos/engagement-letter-drafter',
         title: 'AI Engagement Letter Drafter',
         pitch: 'Takes intake call transcript + your firm templates → drafts the engagement letter in partner voice for review.',
         whatItDoes: [
@@ -701,7 +701,7 @@ export const OFFERINGS: Record<Industry, IndustryOffering> = {
       },
       {
         id: 'pro-ai-time',
-        demoUrl: '/demos/professional-services/prosvc-3-time-capture.html',
+        demoUrl: '/demos/time-capture',
         title: 'AI Time Capture Agent',
         pitch: 'Reads your calendar, comms, and document activity → proposes daily time entries for partner review.',
         whatItDoes: [
@@ -717,7 +717,7 @@ export const OFFERINGS: Record<Industry, IndustryOffering> = {
       },
       {
         id: 'pro-ai-collections',
-        demoUrl: '/demos/professional-services/prosvc-4-collections.html',
+        demoUrl: '/demos/collections-professional',
         title: 'AI Collections Agent',
         pitch: 'Watches AR. Drafts escalating nudges in partner voice. Flags sensitive clients for personal touch.',
         whatItDoes: [
@@ -733,7 +733,7 @@ export const OFFERINGS: Record<Industry, IndustryOffering> = {
       },
       {
         id: 'pro-ai-relationship',
-        demoUrl: '/demos/professional-services/prosvc-5-relationship-reminder.html',
+        demoUrl: '/demos/relationship-touch',
         title: 'AI Relationship Touch Reminder',
         pitch: 'Tracks last-contact cadence per client. Nudges the partner when relationships go cold. Drafts the check-in message.',
         whatItDoes: [
@@ -749,7 +749,7 @@ export const OFFERINGS: Record<Industry, IndustryOffering> = {
       },
       {
         id: 'pro-ai-docs',
-        demoUrl: '/demos/professional-services/prosvc-6-document-nudger.html',
+        demoUrl: '/demos/doc-request-nudger',
         title: 'AI Document Request Nudger',
         pitch: 'Tracks outstanding client docs, auto-nudges in partner voice with specifics.',
         whatItDoes: [
@@ -946,7 +946,7 @@ export const OFFERINGS: Record<Industry, IndustryOffering> = {
     tier2Menu: [
       {
         id: 'trades-ai-dispatch',
-        demoUrl: '/demos/field-services/field-6-dispatch-triage.html',
+        demoUrl: '/demos/dispatch-triage',
         title: 'AI Dispatch Triage',
         pitch: 'Incoming call → urgency assessment → wakes the on-call tech for P1 only.',
         whatItDoes: [
@@ -962,7 +962,7 @@ export const OFFERINGS: Record<Industry, IndustryOffering> = {
       },
       {
         id: 'trades-ai-eta',
-        demoUrl: '/demos/field-services/field-7-eta-portal.html',
+        demoUrl: '/demos/eta-portal',
         title: 'AI Customer ETA Portal',
         pitch: '"Rick is 20 min out" tracking page pulled from truck GPS or tech phone. The Domino\'s tracker effect.',
         whatItDoes: [
@@ -978,7 +978,7 @@ export const OFFERINGS: Record<Industry, IndustryOffering> = {
       },
       {
         id: 'trades-ai-invoice',
-        demoUrl: '/demos/field-services/field-8-instant-invoice.html',
+        demoUrl: '/demos/instant-invoice',
         title: 'AI Instant-Invoice Agent',
         pitch: 'Job complete → photos + parts + voice note captured → invoice drafted + payment link sent within 30 minutes.',
         whatItDoes: [
@@ -994,7 +994,7 @@ export const OFFERINGS: Record<Industry, IndustryOffering> = {
       },
       {
         id: 'trades-ai-maintenance',
-        demoUrl: '/demos/field-services/field-9-maintenance-plan.html',
+        demoUrl: '/demos/maintenance-plan',
         title: 'AI Maintenance Plan Converter',
         pitch: 'Post-service, pitches a maintenance plan in your voice at the peak sentiment moment.',
         whatItDoes: [
@@ -1010,7 +1010,7 @@ export const OFFERINGS: Record<Industry, IndustryOffering> = {
       },
       {
         id: 'trades-ai-review',
-        demoUrl: '/demos/field-services/field-5-review-harvester.html',
+        demoUrl: '/demos/review-harvester-field',
         title: 'AI Review Harvester',
         pitch: 'Post-service review ask when stress just resolved. Reply drafting + bad-review escalation.',
         whatItDoes: [
@@ -1026,7 +1026,7 @@ export const OFFERINGS: Record<Industry, IndustryOffering> = {
       },
       {
         id: 'trades-ai-collections',
-        demoUrl: '/demos/field-services/field-4-collections.html',
+        demoUrl: '/demos/collections-field',
         title: 'AI Collections Agent',
         pitch: 'Payment chase for unpaid invoices, escalating in your voice.',
         whatItDoes: [
@@ -1088,7 +1088,7 @@ export const OFFERINGS: Record<Industry, IndustryOffering> = {
     tier2Menu: [
       {
         id: 'creative-ai-inquiry',
-        demoUrl: '/demos/creative/creative-1-inquiry-proposal.html',
+        demoUrl: '/demos/inquiry-proposal',
         title: 'AI Inquiry + Proposal Agent',
         pitch: '24/7 inbound handling. Qualifies date, scope, budget. Drafts proposal in your voice from your template library.',
         whatItDoes: [
@@ -1104,7 +1104,7 @@ export const OFFERINGS: Record<Industry, IndustryOffering> = {
       },
       {
         id: 'creative-ai-contract',
-        demoUrl: '/demos/creative/creative-2-contract-deposit.html',
+        demoUrl: '/demos/contract-deposit',
         title: 'AI Contract + Deposit Flow',
         pitch: 'Proposal accepted → auto-contract + deposit request + calendar lock.',
         whatItDoes: [
@@ -1120,7 +1120,7 @@ export const OFFERINGS: Record<Industry, IndustryOffering> = {
       },
       {
         id: 'creative-ai-preshoot',
-        demoUrl: '/demos/creative/creative-3-pre-shoot.html',
+        demoUrl: '/demos/pre-shoot',
         title: 'AI Pre-Shoot Questionnaire Agent',
         pitch: 'Client intake form auto-sent + mood board builder + logistics confirmation.',
         whatItDoes: [
@@ -1136,7 +1136,7 @@ export const OFFERINGS: Record<Industry, IndustryOffering> = {
       },
       {
         id: 'creative-ai-gallery',
-        demoUrl: '/demos/creative/creative-4-gallery-delivery.html',
+        demoUrl: '/demos/gallery-delivery',
         title: 'AI Gallery Delivery + Proofing',
         pitch: 'Post-shoot gallery delivery with proof/revision tracking. Drafts delivery notes in your voice.',
         whatItDoes: [
@@ -1152,7 +1152,7 @@ export const OFFERINGS: Record<Industry, IndustryOffering> = {
       },
       {
         id: 'creative-ai-rebook',
-        demoUrl: '/demos/creative/creative-5-rebooking.html',
+        demoUrl: '/demos/rebooking-creative',
         title: 'AI Rebooking Agent',
         pitch: 'Anniversary nudges, refresh-cycle reminders (corporate headshots, annual family shoots) in your voice.',
         whatItDoes: [
@@ -1168,7 +1168,7 @@ export const OFFERINGS: Record<Industry, IndustryOffering> = {
       },
       {
         id: 'creative-ai-testimonial',
-        demoUrl: '/demos/creative/creative-6-testimonial-harvester.html',
+        demoUrl: '/demos/testimonial-harvester',
         title: 'AI Testimonial Harvester',
         pitch: 'Testimonial ask at delivery peak. Drafts reply + testimonial usage requests.',
         whatItDoes: [
