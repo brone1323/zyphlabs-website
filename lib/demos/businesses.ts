@@ -1,16 +1,16 @@
 import type { DemoBusiness } from './types'
 
 // Fictional businesses — one per industry. Reused across every demo in that
-// industry to build a consistent narrative. Chosen to feel like real local
-// operators, not corporate stock.
+// industry to build a consistent narrative. US-based (our target market is
+// California and Texas plus surrounding states).
 
 export const HENDERSON_HVAC: DemoBusiness = {
   name: 'Henderson HVAC & Heating',
-  tagline: 'Family-owned HVAC serving greater Edmonton since 2008',
+  tagline: 'Family-owned HVAC serving the Dallas-Fort Worth metroplex since 2008',
   industry: 'construction',
   ownerName: 'Rick Henderson',
   ownerVoice: 'Direct, warm, no-BS. Uses short sentences. Says "we\'ll take care of it" a lot.',
-  city: 'Edmonton, AB',
+  city: 'Dallas, TX',
 }
 
 export const AURORA_DENTAL: DemoBusiness = {
@@ -19,7 +19,7 @@ export const AURORA_DENTAL: DemoBusiness = {
   industry: 'appointment',
   ownerName: 'Dr. Priya Shah',
   ownerVoice: 'Calm, reassuring, uses patients\' first names. Avoids medical jargon.',
-  city: 'Calgary, AB',
+  city: 'Sacramento, CA',
 }
 
 export const CEDAR_VALLEY_CAFE: DemoBusiness = {
@@ -28,16 +28,16 @@ export const CEDAR_VALLEY_CAFE: DemoBusiness = {
   industry: 'retail',
   ownerName: 'Marcus Ellis',
   ownerVoice: 'Casual, playful, uses emoji sparingly. Always signs off "see you soon, M".',
-  city: 'Canmore, AB',
+  city: 'Boulder, CO',
 }
 
 export const CEDAR_SOAP_CO: DemoBusiness = {
   name: 'Cedar Soap Co.',
-  tagline: 'Handcrafted small-batch soap + skincare from the Rockies',
+  tagline: 'Handcrafted small-batch soap + skincare from the high desert',
   industry: 'ecommerce',
   ownerName: 'Lena Okafor',
-  ownerVoice: 'Thoughtful, storytelling, ingredient-forward. Often mentions "our little studio in Banff".',
-  city: 'Banff, AB',
+  ownerVoice: 'Thoughtful, storytelling, ingredient-forward. Often mentions "our little studio in Bend".',
+  city: 'Bend, OR',
 }
 
 export const WHITMAN_ROSS: DemoBusiness = {
@@ -46,7 +46,7 @@ export const WHITMAN_ROSS: DemoBusiness = {
   industry: 'professional',
   ownerName: 'David Whitman',
   ownerVoice: 'Formal but human. Plain English, no legalese. Signs "Regards, David".',
-  city: 'Vancouver, BC',
+  city: 'San Francisco, CA',
 }
 
 export const NIMBUS_DATA: DemoBusiness = {
@@ -55,7 +55,7 @@ export const NIMBUS_DATA: DemoBusiness = {
   industry: 'saas',
   ownerName: 'Jordan Kim',
   ownerVoice: 'Confident, specific, leans on numbers. Opens with context, closes with a clear ask.',
-  city: 'Toronto, ON',
+  city: 'Austin, TX',
 }
 
 export const PEAK_PLUMBING: DemoBusiness = {
@@ -64,7 +64,7 @@ export const PEAK_PLUMBING: DemoBusiness = {
   industry: 'field',
   ownerName: 'Tom Delaney',
   ownerVoice: 'Plain-spoken tradesperson. Says "we\'ll have a tech out shortly" and means it.',
-  city: 'Red Deer, AB',
+  city: 'Houston, TX',
 }
 
 export const ALDER_ASH_STUDIO: DemoBusiness = {
@@ -73,7 +73,7 @@ export const ALDER_ASH_STUDIO: DemoBusiness = {
   industry: 'creative',
   ownerName: 'Maya Petrov',
   ownerVoice: 'Warm, observational, a little poetic. Often references specific details from the shoot.',
-  city: 'Kelowna, BC',
+  city: 'Sonoma, CA',
 }
 
 export const BUSINESSES: Record<string, DemoBusiness> = {

@@ -55,9 +55,9 @@ export const BOOKING_CONCIERGE_APPT: Demo = {
       description: 'Calls at 9:42pm, never been in before',
       values: {
         patientName: 'Jason Okafor',
-        patientPhone: '(403) 555-0117',
+        patientPhone: '(916) 555-0117',
         reason: 'new',
-        insurance: 'Alberta Blue Cross — group 88210',
+        insurance: 'Anthem Blue Cross — group 88210',
         provider: 'any',
       },
     },
@@ -66,9 +66,9 @@ export const BOOKING_CONCIERGE_APPT: Demo = {
       description: 'Routine cleaning, wants same hygienist as last time',
       values: {
         patientName: 'Sofia Reyes',
-        patientPhone: '(403) 555-0148',
+        patientPhone: '(916) 555-0148',
         reason: 'cleaning',
-        insurance: 'Sun Life',
+        insurance: 'Delta Dental',
         provider: 'kendra',
       },
     },
@@ -77,9 +77,9 @@ export const BOOKING_CONCIERGE_APPT: Demo = {
       description: 'Pain started overnight, wants emergency slot',
       values: {
         patientName: 'Michael Chen',
-        patientPhone: '(403) 555-0163',
+        patientPhone: '(916) 555-0163',
         reason: 'pain',
-        insurance: 'Pacific Blue Cross',
+        insurance: 'Blue Shield of California',
         provider: 'any',
       },
     },
@@ -119,7 +119,7 @@ AI also sent:
         type: 'sms',
         recipient: `${v.patientName} · ${v.patientPhone}`,
         channelLabel: 'Booking confirmation',
-        body: `Hi ${first}! Aurora Family Dental here 🦷\n\nYou\'re booked: ${slot} with ${providerName}.\n📍 4820 Kensington Rd NW — parking in back off 49 St\n📋 Quick intake (5 min): https://aurora.dentalforms.link/${first.toLowerCase()}\n\nReply STOP to cancel, or text us any questions.\n— Dr. Shah & team`,
+        body: `Hi ${first}! Aurora Family Dental here 🦷\n\nYou\'re booked: ${slot} with ${providerName}.\n📍 1820 Alhambra Blvd — parking in back off Folsom Blvd\n📋 Quick intake (5 min): https://aurora.dentalforms.link/${first.toLowerCase()}\n\nReply STOP to cancel, or text us any questions.\n— Dr. Shah & team`,
       },
       {
         type: 'dashboard',
@@ -178,7 +178,7 @@ export const NO_SHOW_DEFENDER: Demo = {
       description: '3 misses in last year + filling appointment',
       values: {
         patientName: 'Ben Parker',
-        patientPhone: '(403) 555-0135',
+        patientPhone: '(916) 555-0135',
         appointmentTime: 'Friday 2:30pm — filling #19',
         historyNoShows: '3',
         riskFactors: 'big',
@@ -189,7 +189,7 @@ export const NO_SHOW_DEFENDER: Demo = {
       description: 'New patient, high drop-off risk at the starting gate',
       values: {
         patientName: 'Jason Okafor',
-        patientPhone: '(403) 555-0117',
+        patientPhone: '(916) 555-0117',
         appointmentTime: 'Tuesday 10:00am — NP exam + cleaning',
         historyNoShows: '0',
         riskFactors: 'new',
@@ -200,7 +200,7 @@ export const NO_SHOW_DEFENDER: Demo = {
       description: 'Never misses, routine cleaning — baseline reminder only',
       values: {
         patientName: 'Sofia Reyes',
-        patientPhone: '(403) 555-0148',
+        patientPhone: '(916) 555-0148',
         appointmentTime: 'Wednesday 10:30am — cleaning',
         historyNoShows: '0',
         riskFactors: 'none',
@@ -240,7 +240,7 @@ export const NO_SHOW_DEFENDER: Demo = {
                 type: 'sms' as const,
                 recipient: `${v.patientName} · ${v.patientPhone}`,
                 channelLabel: 'Morning-of check-in',
-                body: `Morning ${first}! Today at ${v.appointmentTime.split(' — ')[0]}. Parking in the back off 49 St — plenty of spots. Text if you need anything.`,
+                body: `Morning ${first}! Today at ${v.appointmentTime.split(' — ')[0]}. Parking in the back off Folsom Blvd — plenty of spots. Text if you need anything.`,
               },
             ]
           : [
@@ -316,7 +316,7 @@ export const REBOOKING_APPT: Demo = {
       description: 'Regular patient due for her next cleaning',
       values: {
         patientName: 'Sofia Reyes',
-        patientPhone: '(403) 555-0148',
+        patientPhone: '(916) 555-0148',
         lastVisitDate: 'October 24',
         lastVisitType: 'cleaning + exam',
         recallInterval: '6mo',
@@ -327,7 +327,7 @@ export const REBOOKING_APPT: Demo = {
       description: 'Tighter cadence, Dr. wants them back sooner',
       values: {
         patientName: 'Harold Chen',
-        patientPhone: '(403) 555-0178',
+        patientPhone: '(916) 555-0178',
         lastVisitDate: 'January 15',
         lastVisitType: 'perio maintenance',
         recallInterval: '3mo',
@@ -366,7 +366,7 @@ export const INSURANCE_CHASER: Demo = {
   tier2Price: '$3,500 build + $300/mo',
   buildTime: '2 weeks',
   description:
-    'Insurance AR is where practices bleed money. The agent watches every claim, politely but firmly follows up with insurers (Alberta Blue Cross, Sun Life, Pacific Blue Cross), and chases patient co-pays with the right tone for each personality.',
+    'Insurance AR is where practices bleed money. The agent watches every claim, politely but firmly follows up with insurers (Anthem Blue Cross, Delta Dental, Blue Shield of California), and chases patient co-pays with the right tone for each personality.',
   howItWorks: [
     'Reads claim submissions + payment postings',
     'Day 14 no payment → polite email to insurer with claim #',
@@ -393,24 +393,24 @@ export const INSURANCE_CHASER: Demo = {
   ],
   scenarios: [
     {
-      label: 'Alberta Blue Cross — 14 days',
+      label: 'Anthem Blue Cross — 14 days',
       description: 'Standard claim, first follow-up to the insurer',
       values: {
         patientName: 'Sofia Reyes',
-        insurer: 'Alberta Blue Cross',
-        claimNum: 'ABC-2026-88412',
+        insurer: 'Anthem Blue Cross',
+        claimNum: 'ANT-2026-88412',
         claimAmount: '420',
         copayAmount: '60',
         stage: '14',
       },
     },
     {
-      label: 'Sun Life — 30 days, escalate',
+      label: 'Delta Dental — 30 days, escalate',
       description: 'Still unpaid, now drafts escalation email + patient side',
       values: {
         patientName: 'Harold Chen',
-        insurer: 'Sun Life',
-        claimNum: 'SL-42098771',
+        insurer: 'Delta Dental',
+        claimNum: 'DD-42098771',
         claimAmount: '780',
         copayAmount: '140',
         stage: '30',
@@ -418,9 +418,9 @@ export const INSURANCE_CHASER: Demo = {
     },
   ],
   brainHook:
-    'The Brain learns each insurer\'s behavior: Alberta Blue Cross historically pays in 18 days, so day-14 nudges are gentle. Sun Life pays at 25+ and has a known pattern of rejecting X-rays coded as diagnostic — the Brain pre-flags claims likely to hit that rejection.',
+    'The Brain learns each insurer\'s behavior: Anthem Blue Cross historically pays in 18 days, so day-14 nudges are gentle. Delta Dental pays at 25+ and has a known pattern of rejecting X-rays coded as diagnostic — the Brain pre-flags claims likely to hit that rejection.',
   generateOutput: (v, biz) => {
-    const amt = (n: string) => Number(n || 0).toLocaleString('en-CA', { style: 'currency', currency: 'CAD' })
+    const amt = (n: string) => Number(n || 0).toLocaleString('en-US', { style: 'currency', currency: 'USD' })
     const first = v.patientName.split(' ')[0]
 
     if (v.stage === '14') {
@@ -439,7 +439,7 @@ Happy to re-submit documentation if needed. Thanks,
 
 Aurora Family Dental
 Billing Dept.
-4820 Kensington Rd NW, Calgary`,
+1820 Alhambra Blvd, Sacramento`,
         },
       ]
     }
@@ -453,7 +453,7 @@ Billing Dept.
 Duration: 8 min 42s on hold + 2 min 14s with agent.
 
 AI agent:
-  "Hi, I\'m calling from Aurora Family Dental in Calgary about claim ${v.claimNum} for ${v.patientName}. It\'s been 21 days since submission, can you give me a status?"
+  "Hi, I\'m calling from Aurora Family Dental in Sacramento about claim ${v.claimNum} for ${v.patientName}. It\'s been 21 days since submission, can you give me a status?"
 
 ${v.insurer} agent:
   "Let me pull that up. Ok I see it — it\'s in review, pending verification of the patient\'s secondary coverage."
@@ -490,7 +490,7 @@ Timeline:
   Day 25: second email, no response
   Day 30: escalation.
 
-Recommended action: call Sheila (${v.insurer} supervisor line), use ref # from day-21 call: SL-REF-884112.
+Recommended action: call Sheila (${v.insurer} supervisor line), use ref # from day-21 call: DD-REF-884112.
 
 Patient co-pay of ${amt(v.copayAmount)} is still outstanding as well — draft nudge ready.`,
       },
@@ -555,7 +555,7 @@ export const POST_VISIT_FOLLOWUP: Demo = {
       description: 'Parent brought their 4-year-old for first dental visit',
       values: {
         patientName: 'Amira Okafor (daughter of Jason)',
-        patientPhone: '(403) 555-0117',
+        patientPhone: '(916) 555-0117',
         visitType: 'First pediatric visit (age 4)',
         visitDate: 'Tuesday',
         patientResponse: 'good',
@@ -566,7 +566,7 @@ export const POST_VISIT_FOLLOWUP: Demo = {
       description: 'Adult molar extraction yesterday, checking on pain',
       values: {
         patientName: 'Ben Parker',
-        patientPhone: '(403) 555-0135',
+        patientPhone: '(916) 555-0135',
         visitType: 'Molar extraction (#19)',
         visitDate: 'Yesterday',
         patientResponse: 'sore',
@@ -577,7 +577,7 @@ export const POST_VISIT_FOLLOWUP: Demo = {
       description: 'Patient replies with a complication — instant alert to Dr. Shah',
       values: {
         patientName: 'Harold Chen',
-        patientPhone: '(403) 555-0178',
+        patientPhone: '(916) 555-0178',
         visitType: 'Root canal, tooth #14',
         visitDate: 'Monday',
         patientResponse: 'concern',
@@ -699,7 +699,7 @@ export const REVIEW_HARVESTER_APPT: Demo = {
       description: 'Kid\'s first visit, parent beaming',
       values: {
         patientName: 'Jason Okafor (parent of Amira)',
-        patientPhone: '(403) 555-0117',
+        patientPhone: '(916) 555-0117',
         visitType: 'Pediatric first visit',
         hygienistOrDr: 'Kendra + Dr. Shah',
         sentiment: 'positive',
@@ -710,7 +710,7 @@ export const REVIEW_HARVESTER_APPT: Demo = {
       description: 'Routine 6-month with Kendra',
       values: {
         patientName: 'Sofia Reyes',
-        patientPhone: '(403) 555-0148',
+        patientPhone: '(916) 555-0148',
         visitType: 'Cleaning + exam',
         hygienistOrDr: 'Kendra',
         sentiment: 'positive',

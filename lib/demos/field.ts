@@ -44,7 +44,7 @@ export const DISPATCH_TRIAGE: Demo = {
       description: 'Water pouring out, midnight, panic',
       values: {
         callerName: 'Sarah Bayliss',
-        callerPhone: '(403) 555-0122',
+        callerPhone: '(713) 555-0122',
         issueReported: 'Water pouring out from behind my washing machine. Main shutoff is stuck. Basement is filling.',
         containmentStatus: 'flooding',
       },
@@ -54,7 +54,7 @@ export const DISPATCH_TRIAGE: Demo = {
       description: 'Slow leak, customer has a bucket under it',
       values: {
         callerName: 'Marcus Abel',
-        callerPhone: '(403) 555-0158',
+        callerPhone: '(713) 555-0158',
         issueReported: 'Toilet tank is leaking from the bottom. Caught in a bucket, maybe half a cup an hour. Annoying but not urgent.',
         containmentStatus: 'contained',
       },
@@ -64,7 +64,7 @@ export const DISPATCH_TRIAGE: Demo = {
       description: 'Kitchen faucet dripping, no rush',
       values: {
         callerName: 'Yvonne Patel',
-        callerPhone: '(403) 555-0181',
+        callerPhone: '(713) 555-0181',
         issueReported: 'Kitchen faucet has been dripping for like two months, finally getting around to calling.',
         containmentStatus: 'drip',
       },
@@ -196,8 +196,8 @@ export const ETA_PORTAL: Demo = {
       description: 'Initial dispatch notification',
       values: {
         customerName: 'Sarah Bayliss',
-        customerPhone: '(403) 555-0122',
-        address: '3921 Taylor Ave',
+        customerPhone: '(713) 555-0122',
+        address: '3921 Westheimer Rd',
         techName: 'Jake',
         jobType: 'Emergency leak repair',
         etaState: 'dispatched',
@@ -208,8 +208,8 @@ export const ETA_PORTAL: Demo = {
       description: 'Late-stage update',
       values: {
         customerName: 'Marcus Abel',
-        customerPhone: '(403) 555-0158',
-        address: '1218 Centre St',
+        customerPhone: '(713) 555-0158',
+        address: '1218 Richmond Ave',
         techName: 'Luis',
         jobType: 'Toilet repair',
         etaState: 'near',
@@ -238,7 +238,7 @@ export const ETA_PORTAL: Demo = {
   ━━━━━━━━━━━━━━━━━━━━━━━━
 
   ETA: 18 minutes
-  Currently: Heading south on Gaetz Ave
+  Currently: Heading south on Westheimer Rd
   [LIVE MAP — updating every 2 min]
 
   Coming for: Emergency leak repair
@@ -325,7 +325,7 @@ export const INSTANT_INVOICE: Demo = {
   howItWorks: [
     'Tech finishes job, records a 30-sec voice note + uploads photos',
     'Agent transcribes, identifies parts + labor, matches to price book',
-    'Drafts the invoice with GST, warranty text, pay link',
+    'Drafts the invoice with sales tax, warranty text, pay link',
     'Texts invoice to customer within 30 min of job done',
     'Tracks time-to-pay per invoice — usually < 48 hrs when sent this fast',
   ],
@@ -379,7 +379,7 @@ Quick invoice for the work ${v.techName} did today. Before/after photos attached
   Parts ........................................ $${isEmerg ? '22.00' : '20.00'}
   ───────────────────────
   Subtotal ..................................... $${isEmerg ? '372.00' : '285.00'}
-  GST 5% ....................................... $${(total * 0.05).toFixed(2)}
+  Sales tax 8.25% .............................. $${(total * 0.0825).toFixed(2)}
   TOTAL ........................................ $${(total * 1.05).toFixed(2)}
 
   Pay link (takes 30 seconds): https://pay.peakpl.link/inv-${Math.floor(Math.random() * 90000 + 10000)}
@@ -517,7 +517,7 @@ export const REVIEW_HARVESTER_FIELD: Demo = {
       description: 'Jake came at midnight, stopped the flood',
       values: {
         customerName: 'Sarah Bayliss',
-        customerPhone: '(403) 555-0122',
+        customerPhone: '(713) 555-0122',
         techName: 'Jake',
         jobSummary: 'Emergency burst-line repair at midnight',
         sentiment: 'positive',
@@ -542,7 +542,7 @@ export const REVIEW_HARVESTER_FIELD: Demo = {
         type: 'sms',
         recipient: `${v.customerName} · ${v.customerPhone}`,
         channelLabel: 'Review ask (90 min after)',
-        body: `Hi ${first} — Tom from Peak. Just checking in that everything\'s dry and calm now after Jake\'s visit.\n\nIf you\'d drop a quick Google review, it means the world to a small crew like us:\n→ g.page/peak-plumbing-reddeer/review\n\nEither way, glad Jake got there fast.\n— Tom`,
+        body: `Hi ${first} — Tom from Peak. Just checking in that everything\'s dry and calm now after Jake\'s visit.\n\nIf you\'d drop a quick Google review, it means the world to a small crew like us:\n→ g.page/peak-plumbing-houston/review\n\nEither way, glad Jake got there fast.\n— Tom`,
       },
       {
         type: 'email',
@@ -603,7 +603,7 @@ export const COLLECTIONS_FIELD: Demo = {
     'The Brain knows Marcus has referred us 4 times in the past year — so the nudge stays warm and doesn\'t threaten late fees until day 30+. High-value referrers get a softer ladder.',
   generateOutput: (v, biz) => {
     const first = v.customerName.split(' ')[0]
-    const amt = Number(v.invoiceAmount).toLocaleString('en-CA', { style: 'currency', currency: 'CAD' })
+    const amt = Number(v.invoiceAmount).toLocaleString('en-US', { style: 'currency', currency: 'USD' })
     return [
       {
         type: 'email',

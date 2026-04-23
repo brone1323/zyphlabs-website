@@ -84,18 +84,18 @@ export const CS_AGENT_ECOMM: Demo = {
           subject: `Your Cedar + Juniper set — shipping update`,
           body: `Hi ${first}!
 
-Thanks for the nudge — ${v.orderNumber || 'your order'} is packed and leaving our little Banff studio today. Canada Post is picking up around 3pm, and you\'ll get a tracking number automatically once it\'s scanned.
+Thanks for the nudge — ${v.orderNumber || 'your order'} is packed and leaving our little Bend studio today. USPS is picking up around 3pm, and you\'ll get a tracking number automatically once it\'s scanned.
 
 Couple notes on timing:
-  • AB/BC: usually 2–3 business days from pickup
-  • Elsewhere in Canada: 4–6 days
+  • OR/WA: usually 2–3 business days from pickup
+  • Elsewhere in the US: 4–6 days
   • Our postal outlet is slower on Fridays, so we bumped this one to Monday pickup to avoid the weekend slowdown
 
 The Cedar + Juniper bars are fresh — cut Tuesday — so they\'ve had a good cure. Let me know how they treat you.
 
 Warmly,
 Lena
-Cedar Soap Co. · banff`,
+Cedar Soap Co. · bend`,
         },
         {
           type: 'dashboard',
@@ -380,7 +380,7 @@ export const WINBACK_ECOMM: Demo = {
     },
   ],
   brainHook:
-    'The Brain remembers Priya\'s order shipped to an address in Victoria, not her billing address in Toronto — classic gift pattern. The winback skips "run out?" messaging and instead pitches: "Mother\'s Day is in 3 weeks, want me to hold a gift box with your name on it?"',
+    'The Brain remembers Priya\'s order shipped to an address in Portland, not her billing address in Seattle — classic gift pattern. The winback skips "run out?" messaging and instead pitches: "Mother\'s Day is in 3 weeks, want me to hold a gift box with your name on it?"',
   generateOutput: (v, biz) => {
     const first = v.customerName.split(' ')[0]
     const isGift = v.expectedRunout.toLowerCase().includes('gift')
@@ -401,7 +401,7 @@ Reply with "hold one" and we\'ll set it up. Or "no thanks" and I\'ll stop buggin
 
 Warmly,
 Lena
-Cedar Soap Co. · our little studio in banff`
+Cedar Soap Co. · our little studio in bend`
           : `Hi ${first},
 
 Quick note from the studio — your cedar + juniper bars were cut back in February and would typically last a person 8–10 weeks of daily showers. Got me thinking you might be down to a sliver by now 🪵
@@ -496,7 +496,7 @@ Thanks ${first},
         body: `"Opened the box and the smell alone was worth it — warm, piney, not perfumey. Lathers beautifully and doesn\'t leave my skin tight. I\'m ordering the 4-pack."
 
 DRAFT REPLY:
-"Thank you ${first} — the cedar this batch came from a windfall up by Lake Minnewanka, you could smell the whole studio while the soap was curing. So glad you loved it. — Lena"
+"Thank you ${first} — the cedar this batch came from a windfall up by Deschutes River, you could smell the whole studio while the soap was curing. So glad you loved it. — Lena"
 
 [ Approve & post ] [ Edit ]`,
       },
@@ -521,7 +521,7 @@ export const FULFILLMENT_HANDLER: Demo = {
     'Flags: stalled 3+ days, returned to sender, delivery exception, wrong address',
     'Drafts proactive outreach in Lena\'s voice ("heads up, your package is…")',
     'For lost shipments → auto-approves reship without asking',
-    'Dashboards the exception rate per carrier (Canada Post vs Purolator)',
+    'Dashboards the exception rate per carrier (USPS vs Purolator)',
   ],
   inputFields: [
     { key: 'customerName', label: 'Customer', type: 'text' },
@@ -543,11 +543,11 @@ export const FULFILLMENT_HANDLER: Demo = {
   scenarios: [
     {
       label: 'Stalled 4 days',
-      description: 'Scanned in Toronto, no update since',
+      description: 'Scanned in Phoenix, no update since',
       values: {
         customerName: 'Andy Romano',
         orderNumber: '#28104',
-        lastTrackingEvent: 'Received at Toronto sort facility',
+        lastTrackingEvent: 'Received at Portland sort facility',
         daysStalled: '4',
         exceptionType: 'stalled',
       },
@@ -565,7 +565,7 @@ export const FULFILLMENT_HANDLER: Demo = {
     },
   ],
   brainHook:
-    'The Brain notices patterns — if Purolator has 4x our normal exception rate this week in the BC interior, it pre-emptively flags all in-flight shipments in that region and bumps them to priority if we re-ship.',
+    'The Brain notices patterns — if Purolator has 4x our normal exception rate this week in the Pacific Northwest, it pre-emptively flags all in-flight shipments in that region and bumps them to priority if we re-ship.',
   generateOutput: (v, biz) => {
     const first = v.customerName.split(' ')[0]
 
@@ -577,7 +577,7 @@ export const FULFILLMENT_HANDLER: Demo = {
           subject: `heads up on your cedar soap order (${v.orderNumber})`,
           body: `Hi ${first},
 
-Just noticed your package has been sitting at the Toronto sort facility for 4 days without a tracking update — a little longer than we\'d expect. Canada Post usually moves things in 24–48 hrs.
+Just noticed your package has been sitting at the Portland sort facility for 4 days without a tracking update — a little longer than we\'d expect. USPS usually moves things in 24–48 hrs.
 
 I\'ve opened a trace with them. In the meantime, here\'s what I\'m doing:
   1. Giving them until end of day Monday to move it
@@ -601,7 +601,7 @@ Lena`,
           subject: `your package came back to us — address hiccup?`,
           body: `Hi ${first},
 
-Canada Post returned your order to our studio today — they flagged the address as undeliverable. Looking at the label, the postal code reads "V5X 6AZ" which doesn\'t match the street address you gave.
+USPS returned your order to our studio today — they flagged the address as undeliverable. Looking at the label, the postal code reads "97701-A" which doesn\'t match the street address you gave.
 
 Can you reply with the correct postal code and I\'ll reship tomorrow? No extra cost, obviously.
 
@@ -694,7 +694,7 @@ export const AD_COPY_DRAFTER: Demo = {
 BODY:
 our cedar + juniper bar starts with ethically sourced cedarwood oil and juniper berries — warm, piney, nothing synthetic. lathers soft, rinses clean, won\'t dry you out.
 
-cured 6 weeks in a banff garage. made by two people.
+cured 6 weeks in a bend garage. made by two people.
 
 CTA: "try the 2-pack →"
 VISUAL: top-down of fresh-cut bars on the butcher block, steam from the cure rack visible. Natural light. No filter.`,
@@ -702,7 +702,7 @@ VISUAL: top-down of fresh-cut bars on the butcher block, steam from the cure rac
         {
           type: 'multi-channel',
           channelLabel: 'Meta ad — Variant B (studio story)',
-          body: `HOOK: "made in a 400 sq ft studio in banff, by two people."
+          body: `HOOK: "made in a 400 sq ft studio in bend, by two people."
 
 BODY:
 no factory, no contract manufacturer, no "artisan-inspired" marketing language. just two sisters, a cold-process saponification setup, and an obsession with cedar.

@@ -24,7 +24,7 @@ export const AI_RECEPTIONIST_CONSTRUCTION: Demo = {
   ],
   inputFields: [
     { key: 'callerName', label: 'Caller name', type: 'text', placeholder: 'Jane Mitchell' },
-    { key: 'callerPhone', label: 'Caller phone', type: 'phone', placeholder: '(780) 555-0142' },
+    { key: 'callerPhone', label: 'Caller phone', type: 'phone', placeholder: '(214) 555-0142' },
     { key: 'address', label: 'Service address', type: 'text' },
     { key: 'issue', label: 'Issue described', type: 'textarea' },
     {
@@ -40,13 +40,13 @@ export const AI_RECEPTIONIST_CONSTRUCTION: Demo = {
   ],
   scenarios: [
     {
-      label: 'Emergency: no heat at -18°C',
+      label: 'Emergency: no heat at 72°FF',
       description: 'Classic after-hours P1 call on a cold January evening',
       values: {
         callerName: 'Jane Mitchell',
-        callerPhone: '(780) 555-0142',
-        address: '14212 97 St NW, Edmonton',
-        issue: 'Furnace just stopped. Blowing cold air only. House is 16° and dropping. Two kids at home.',
+        callerPhone: '(214) 555-0142',
+        address: '4412 Swiss Ave, Dallas',
+        issue: 'Furnace just stopped. Blowing cold air only. House is 61°F and dropping. Two kids at home.',
         urgency: 'P1',
       },
     },
@@ -55,8 +55,8 @@ export const AI_RECEPTIONIST_CONSTRUCTION: Demo = {
       description: 'Existing customer wants to book their fall maintenance',
       values: {
         callerName: 'Carl Burroughs',
-        callerPhone: '(780) 555-0198',
-        address: '9820 Ada Blvd NW, Edmonton',
+        callerPhone: '(214) 555-0198',
+        address: '6218 Llano Ave, Dallas',
         issue: 'Annual furnace tune-up. Had one last year with Kyle, happy to book him again if available.',
         urgency: 'P3',
       },
@@ -66,9 +66,9 @@ export const AI_RECEPTIONIST_CONSTRUCTION: Demo = {
       description: 'Mid-summer, customer wants someone tomorrow',
       values: {
         callerName: 'Priya Lal',
-        callerPhone: '(780) 555-0167',
-        address: '11007 Saskatchewan Dr, Edmonton',
-        issue: 'AC running but not cooling. Upstairs is 29°. Not dying but miserable. Can wait till tomorrow.',
+        callerPhone: '(214) 555-0167',
+        address: '3318 Greenville Ave, Dallas',
+        issue: 'AC running but not cooling. Upstairs is 84°F. Not dying but miserable. Can wait till tomorrow.',
         urgency: 'P2',
       },
     },
@@ -89,7 +89,7 @@ export const AI_RECEPTIONIST_CONSTRUCTION: Demo = {
       {
         type: 'call-summary',
         channelLabel: 'Call transcript summary',
-        body: `Incoming call — ${new Date().toLocaleString('en-CA', { timeZone: 'America/Edmonton' })}
+        body: `Incoming call — ${new Date().toLocaleString('en-US', { timeZone: 'America/Chicago' })}
 
 Caller: ${v.callerName}
 Phone: ${v.callerPhone}
@@ -105,7 +105,7 @@ AI said: "You're good, ${v.callerName.split(' ')[0]} — ${v.urgency === 'P1' ? 
       },
       {
         type: 'sms',
-        recipient: `${biz.ownerName} (Rick) · (780) 555-0100`,
+        recipient: `${biz.ownerName} (Rick) · (214) 555-0100`,
         channelLabel: v.urgency === 'P1' ? 'URGENT SMS to Rick' : 'SMS to Rick',
         body: `${v.urgency === 'P1' ? '🚨 P1 — ' : ''}${v.callerName} · ${v.address}\n${v.issue.slice(0, 120)}${v.issue.length > 120 ? '…' : ''}\nBooked: ${slot}\nTap to call: ${v.callerPhone}\n${v.urgency === 'P1' ? 'Dispatching Kyle — he\'s 22 min out. Confirm?' : 'Pushed to Jobber. You don\'t need to do anything unless you want to.'}`,
       },
@@ -152,7 +152,7 @@ export const AI_QUOTE_CONSTRUCTION: Demo = {
         customerName: 'Derek and Amanda Foster',
         customerEmail: 'dfoster@example.ca',
         scope:
-          'Ok so Foster job, 1964 bungalow in Glenora. Existing furnace is a Carrier 58MCA, probably 18 years old, single-stage, 80% efficient. Recommending we replace with the Lennox SL280V, two-stage. HRV is original, we\'ll do the Venmar AVS, 100 CFM. Ductwork is fine, no mods needed. One day install with Kyle and Mark. Gas line is good. Electrical fine. Call it out as ready by Friday. Pricing standard residential retrofit.',
+          'Ok so Foster job, 1964 bungalow in Highland Park. Existing furnace is a Carrier 58MCA, probably 18 years old, single-stage, 80% efficient. Recommending we replace with the Lennox SL280V, two-stage. HRV is original, we\'ll do the Venmar AVS, 100 CFM. Ductwork is fine, no mods needed. One day install with Kyle and Mark. Gas line is good. Electrical fine. Call it out as ready by Friday. Pricing standard residential retrofit.',
         photos: 'IMG_4421.jpg (existing furnace), IMG_4422.jpg (HRV), IMG_4424.jpg (electrical panel)',
       },
     },
@@ -163,7 +163,7 @@ export const AI_QUOTE_CONSTRUCTION: Demo = {
         customerName: 'Priya Lal',
         customerEmail: 'priya@example.ca',
         scope:
-          'Lal job, Saskatchewan Dr. Furnace is a 2019 Lennox, good for AC add-on. Recommend the Lennox ML14XC1, 3 ton, matches the house size. Outside unit goes on the south wall near the existing hose bib. Lineset run is about 14 feet, easy. Electrical has capacity. Half-day install. Priya wants it before July.',
+          'Lal job, Greenville Ave. Furnace is a 2019 Lennox, good for AC add-on. Recommend the Lennox ML14XC1, 3 ton, matches the house size. Outside unit goes on the south wall near the existing hose bib. Lineset run is about 14 feet, easy. Electrical has capacity. Half-day install. Priya wants it before July.',
         photos: 'IMG_4510.jpg (furnace nameplate), IMG_4512.jpg (proposed outdoor location)',
       },
     },
@@ -197,7 +197,7 @@ PRICING
   Commissioning                      $   180
   —————
   Subtotal                           $6,750
-  GST (5%)                           $   337.50
+  TAX (8.25%) ........ $557.63
   TOTAL                              $7,087.50
 
 ASSUMPTIONS
@@ -214,7 +214,7 @@ WARRANTY
 TIMING
   If you say yes by Friday, we can have it in before the cold snap next week.
 
-Just reply to this email or text me directly at (780) 555-0100 — either works.
+Just reply to this email or text me directly at (214) 555-0100 — either works.
 
 Thanks,
 Rick
@@ -294,7 +294,7 @@ export const TASK_TRACKER_CONSTRUCTION: Demo = {
       values: {
         jobName: 'Henderson Kitchen Retrofit',
         customerName: 'Deborah Henderson',
-        customerPhone: '(780) 555-0181',
+        customerPhone: '(214) 555-0181',
         plannedFinish: 'Friday, Apr 26',
         status: 'on-track',
         notes: 'Day 2 of 4. Demo complete, rough plumbing done this morning. Kyle + Mark back tomorrow for finish.',
@@ -306,7 +306,7 @@ export const TASK_TRACKER_CONSTRUCTION: Demo = {
       values: {
         jobName: 'Foster Furnace Install',
         customerName: 'Derek Foster',
-        customerPhone: '(780) 555-0163',
+        customerPhone: '(214) 555-0163',
         plannedFinish: 'Friday, Apr 26',
         status: 'material',
         notes:
@@ -319,7 +319,7 @@ export const TASK_TRACKER_CONSTRUCTION: Demo = {
       values: {
         jobName: 'Lal AC Install',
         customerName: 'Priya Lal',
-        customerPhone: '(780) 555-0167',
+        customerPhone: '(214) 555-0167',
         plannedFinish: 'Tomorrow',
         status: 'crew',
         notes: 'Kyle was supposed to finish Lal AC this afternoon. P1 no-heat call came in, diverting Kyle. Mark can finish Lal Saturday morning.',
@@ -344,7 +344,7 @@ export const TASK_TRACKER_CONSTRUCTION: Demo = {
       ownerMsg = `🟠 ${v.jobName}: 3-day slip. Material ETA Thurs 3pm. New finish: Mon PM. Customer draft ready — one-tap approve below. Also: Lennox rep not answering since yesterday, want me to escalate?`
     } else if (v.status === 'crew') {
       channelLabel = 'Crew pulled — reschedule note'
-      customerMsg = `Hi ${firstName} — bad news and good news. Kyle got pulled to a no-heat emergency (somebody\'s kids with a 16° house, had to go), so he can\'t finish your AC today. Good news: Mark can wrap it Saturday morning, and I\'ll knock $150 off for the hassle.\n\nLet me know Saturday works and I\'ll confirm Mark for 8am.\n\n— Rick`
+      customerMsg = `Hi ${firstName} — bad news and good news. Kyle got pulled to a no-heat emergency (somebody\'s kids with a 61°F house, had to go), so he can\'t finish your AC today. Good news: Mark can wrap it Saturday morning, and I\'ll knock $150 off for the hassle.\n\nLet me know Saturday works and I\'ll confirm Mark for 8am.\n\n— Rick`
       ownerMsg = `🟠 Lal AC pushed to Saturday. Draft to customer offers $150 discount — tap to approve or adjust. Mark confirmed available 8am Sat. No conflict with his Saturday plans (checked calendar).`
     } else {
       channelLabel = 'Change-order awaiting decision'
@@ -358,7 +358,7 @@ export const TASK_TRACKER_CONSTRUCTION: Demo = {
         channelLabel: 'Rick\'s morning dashboard',
         body: `═══════════════════════════════════════
   HENDERSON HVAC — TODAY\'S JOBS
-  ${new Date().toLocaleDateString('en-CA', { weekday: 'long', month: 'short', day: 'numeric' })}
+  ${new Date().toLocaleDateString('en-US', { weekday: 'long', month: 'short', day: 'numeric' })}
 ═══════════════════════════════════════
 
   ${v.status === 'on-track' ? '🟢' : v.status === 'co-pending' ? '🟡' : '🟠'}  ${v.jobName}
@@ -477,7 +477,7 @@ export const AI_COLLECTIONS_CONSTRUCTION: Demo = {
     'The Brain knows Henderson always pays at 35–45 days and isn\'t a risk — so its day-7 nudge is extra soft ("hope the job went well, invoice is ready whenever"). Clearview has been paying at 40 days for 3 years — the Brain would suggest skipping the nudge entirely. New customers get firmer language earlier.',
   generateOutput: (v, biz) => {
     const firstName = v.customerName.split(' ')[0]
-    const amt = Number(v.amount || 0).toLocaleString('en-CA', { style: 'currency', currency: 'CAD' })
+    const amt = Number(v.amount || 0).toLocaleString('en-US', { style: 'currency', currency: 'USD' })
     let subj = ''
     let body = ''
     let ownerNote = ''
@@ -510,7 +510,7 @@ Pay link: https://pay.zyph.link/hen/${v.invoiceNum}
 
 Hate to have to send this one. Invoice ${v.invoiceNum} (${amt}) is at 21 days — per our terms, a 1.5% late fee kicks in at 30 days.
 
-If something changed on your end, just give me a call at (780) 555-0100 and we\'ll work something out. I\'d rather know than guess.
+If something changed on your end, just give me a call at (214) 555-0100 and we\'ll work something out. I\'d rather know than guess.
 
 Pay link: https://pay.zyph.link/hen/${v.invoiceNum}
 
@@ -522,14 +522,14 @@ Pay link: https://pay.zyph.link/hen/${v.invoiceNum}
 
 This is a final notice on invoice ${v.invoiceNum} for ${amt}, now 30+ days overdue.
 
-If we don\'t hear back in the next 7 days, we\'ll be forwarding this to collections and adding the 1.5% monthly late fee going forward. I\'d really rather not go that route — a quick call to (780) 555-0100 fixes this in 5 minutes.
+If we don\'t hear back in the next 7 days, we\'ll be forwarding this to collections and adding the 1.5% monthly late fee going forward. I\'d really rather not go that route — a quick call to (214) 555-0100 fixes this in 5 minutes.
 
 Pay link: https://pay.zyph.link/hen/${v.invoiceNum}
 
 Regards,
 Rick Henderson
 Henderson HVAC & Heating`
-      ownerNote = `🔴 ${v.customerName} — 30d final notice drafted. RECOMMEND: personal call from you today. Their number is (780) 555-xxxx. Calendar blocked 2–2:15pm for you to make the call.`
+      ownerNote = `🔴 ${v.customerName} — 30d final notice drafted. RECOMMEND: personal call from you today. Their number is (214) 555-xxxx. Calendar blocked 2–2:15pm for you to make the call.`
     }
 
     return [
@@ -591,9 +591,9 @@ export const REVIEW_HARVESTER_CONSTRUCTION: Demo = {
       description: 'Kyle saved them from a frozen night — peak positive moment',
       values: {
         customerName: 'Jane Mitchell',
-        customerPhone: '(780) 555-0142',
+        customerPhone: '(214) 555-0142',
         techName: 'Kyle',
-        jobSummary: 'Emergency furnace repair at -18°C, got heat back in 90 minutes',
+        jobSummary: 'Emergency furnace repair at 72°FF, got heat back in 90 minutes',
         sentiment: 'happy',
       },
     },
@@ -602,7 +602,7 @@ export const REVIEW_HARVESTER_CONSTRUCTION: Demo = {
       description: 'Annual maintenance, nothing dramatic',
       values: {
         customerName: 'Carl Burroughs',
-        customerPhone: '(780) 555-0198',
+        customerPhone: '(214) 555-0198',
         techName: 'Mark',
         jobSummary: 'Annual furnace tune-up, replaced filter and cleaned flame sensor',
         sentiment: 'neutral',
@@ -613,7 +613,7 @@ export const REVIEW_HARVESTER_CONSTRUCTION: Demo = {
       description: 'Customer was unhappy about the cleanup — Rick needs to know',
       values: {
         customerName: 'Derek Foster',
-        customerPhone: '(780) 555-0163',
+        customerPhone: '(214) 555-0163',
         techName: 'Kyle',
         jobSummary: 'Furnace + HRV replacement',
         sentiment: 'unhappy',
@@ -708,9 +708,9 @@ export const ON_CALL_TRIAGE_CONSTRUCTION: Demo = {
       label: 'Outside temperature',
       type: 'select',
       options: [
-        { label: 'Below -10°C', value: 'freezing' },
-        { label: '-10 to +5°C', value: 'cold' },
-        { label: 'Above 5°C', value: 'mild' },
+        { label: 'Below 14°F', value: 'freezing' },
+        { label: '-10 to 40°F', value: 'cold' },
+        { label: 'Above 40°F', value: 'mild' },
         { label: 'Summer — heat wave', value: 'hot' },
       ],
     },
@@ -726,12 +726,12 @@ export const ON_CALL_TRIAGE_CONSTRUCTION: Demo = {
   ],
   scenarios: [
     {
-      label: 'P1 — no heat, -18°C, kids',
+      label: 'P1 — no heat, 72°FF, kids',
       description: 'The textbook page-Rick scenario',
       values: {
         callerName: 'Jane Mitchell',
-        callerPhone: '(780) 555-0142',
-        issue: 'Furnace just stopped. Blowing cold. House is 16° and dropping. Two kids under 5 at home.',
+        callerPhone: '(214) 555-0142',
+        issue: 'Furnace just stopped. Blowing cold. House is 61°F and dropping. Two kids under 5 at home.',
         outsideTemp: 'freezing',
         occupants: 'vulnerable',
       },
@@ -741,7 +741,7 @@ export const ON_CALL_TRIAGE_CONSTRUCTION: Demo = {
       description: 'Annoying but not dangerous tonight',
       values: {
         callerName: 'Mike Flores',
-        callerPhone: '(780) 555-0175',
+        callerPhone: '(214) 555-0175',
         issue:
           'Small drip from the PRV on the hot water tank, maybe a cup an hour into a bucket. Not flooding, just annoying. Can wait till morning.',
         outsideTemp: 'mild',
@@ -753,7 +753,7 @@ export const ON_CALL_TRIAGE_CONSTRUCTION: Demo = {
       description: 'Squeaky furnace, wants it fixed ASAP but no safety issue',
       values: {
         callerName: 'Paige Alvarez',
-        callerPhone: '(780) 555-0190',
+        callerPhone: '(214) 555-0190',
         issue: 'Furnace making a squealing noise when it kicks on. Still heating fine. Driving me crazy.',
         outsideTemp: 'mild',
         occupants: 'none',
@@ -786,7 +786,7 @@ export const ON_CALL_TRIAGE_CONSTRUCTION: Demo = {
 
 Caller: ${v.callerName} (${v.callerPhone})
 Issue: ${v.issue}
-Outside: ${v.outsideTemp === 'freezing' ? 'below -10°C' : v.outsideTemp}
+Outside: ${v.outsideTemp === 'freezing' ? 'below 14°F' : v.outsideTemp}
 Occupants: ${vulnerable ? 'vulnerable (kids/elderly/medical)' : 'adults only'}
 
 AI decision logic:
@@ -803,7 +803,7 @@ AI said to caller:
           type: 'sms',
           recipient: 'Kyle (on-call tech)',
           channelLabel: 'Tech page',
-          body: `🚨 P1 — Mitchell residence, 14212 97 St NW\nNo heat, -18° outside, 2 kids under 5.\nETA target 35 min.\nPhone: ${v.callerPhone}\nHistory: existing customer, Lennox G50UH installed 2019.\nReply Y to accept dispatch.`,
+          body: `🚨 P1 — Mitchell residence, 4412 Swiss Ave\nNo heat, 72°FF outside, 2 kids under 5.\nETA target 35 min.\nPhone: ${v.callerPhone}\nHistory: existing customer, Lennox G50UH installed 2019.\nReply Y to accept dispatch.`,
         },
         {
           type: 'sms',

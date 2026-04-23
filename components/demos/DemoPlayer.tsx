@@ -8,7 +8,7 @@ interface Props {
   demoSlug: string
 }
 
-type Phase = 'idle' | 'typing-inputs' | 'streaming-outputs' | 'done'
+type Phase = 'idle' | 'waiting-scroll' | 'typing-inputs' | 'streaming-outputs' | 'done'
 
 export default function DemoPlayer({ demoSlug }: Props) {
   const demo = getDemoBySlug(demoSlug)
@@ -18,17 +18,50 @@ export default function DemoPlayer({ demoSlug }: Props) {
   const [viewerEmail, setViewerEmail] = useState('')
   const [status, setStatus] = useState<'idle' | 'running' | 'sent' | 'error'>('idle')
   const [errMsg, setErrMsg] = useState<string | null>(null)
-  const [phase, setPhase] = useState<Phase>('idle')
+  const [phase, setPhase] = useState<Phase>('waiting-scroll')
   const [visibleOutputCount, setVisibleOutputCount] = useState(0)
   const [outputReveal, setOutputReveal] = useState<Record<number, number>>({})
   const [activeTypingField, setActiveTypingField] = useState<string | null>(null)
   const [replayTick, setReplayTick] = useState(0)
+  const [hasStarted, setHasStarted] = useState(false)
 
   const cancelledRef = useRef(false)
   const userTouchedRef = useRef(false)
   const runCountRef = useRef(0)
+  const containerRef = useRef<HTMLDivElement | null>(null)
+
+  // Scroll trigger: start the demo when it enters the viewport
+  useEffect(() => {
+    if (hasStarted) return
+    if (typeof window === 'undefined') return
+    const el = containerRef.current
+    if (!el) return
+
+    // If already in view on mount, kick off immediately
+    const rect = el.getBoundingClientRect()
+    if (rect.top < window.innerHeight * 0.85 && rect.bottom > 0) {
+      setHasStarted(true)
+      return
+    }
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        for (const entry of entries) {
+          if (entry.isIntersecting) {
+            setHasStarted(true)
+            observer.disconnect()
+            break
+          }
+        }
+      },
+      { root: null, rootMargin: '0px 0px -15% 0px', threshold: 0.15 },
+    )
+    observer.observe(el)
+    return () => observer.disconnect()
+  }, [hasStarted])
 
   useEffect(() => {
+    if (!hasStarted) return
     if (!demo) return
     const scn = demo.scenarios[activeScenarioIdx]
     if (!scn) return
@@ -54,7 +87,7 @@ export default function DemoPlayer({ demoSlug }: Props) {
       })
       setValues(initBlanks)
 
-      await sleep(280)
+      await sleep(420)
       if (isCancelled()) return
 
       for (const key of orderedKeys) {
@@ -63,15 +96,16 @@ export default function DemoPlayer({ demoSlug }: Props) {
         for (let i = 1; i <= target.length; i++) {
           if (isCancelled()) return
           setValues((v) => ({ ...v, [key]: target.slice(0, i) }))
-          const base = target.length > 180 ? 4 : target.length > 80 ? 8 : 18
+          // Slower, more readable typing speeds
+          const base = target.length > 220 ? 8 : target.length > 100 ? 16 : 32
           await sleep(base)
         }
         setActiveTypingField(null)
-        await sleep(180)
+        await sleep(320)
         if (isCancelled()) return
       }
 
-      await sleep(320)
+      await sleep(500)
       if (isCancelled()) return
 
       setPhase('streaming-outputs')
@@ -86,11 +120,12 @@ export default function DemoPlayer({ demoSlug }: Props) {
         if (isCancelled()) return
         setVisibleOutputCount(idx + 1)
         setOutputReveal((r) => ({ ...r, [idx]: 0 }))
-        await sleep(320)
+        await sleep(500)
 
         const bodyLen = outs[idx].body?.length ?? 0
-        const totalDurMs = Math.min(1400, Math.max(500, bodyLen * 4))
-        const steps = 45
+        // Slower stream — cap longer but still readable
+        const totalDurMs = Math.min(2600, Math.max(900, bodyLen * 7))
+        const steps = 50
         const stepMs = totalDurMs / steps
         for (let s = 1; s <= steps; s++) {
           if (isCancelled()) return
@@ -99,7 +134,7 @@ export default function DemoPlayer({ demoSlug }: Props) {
           await sleep(stepMs)
         }
         setOutputReveal((r) => ({ ...r, [idx]: bodyLen }))
-        await sleep(240)
+        await sleep(420)
       }
       if (isCancelled()) return
       setPhase('done')
@@ -110,11 +145,12 @@ export default function DemoPlayer({ demoSlug }: Props) {
       cancelledRef.current = true
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [demo, activeScenarioIdx, replayTick])
+  }, [demo, activeScenarioIdx, replayTick, hasStarted])
 
   const skipToEnd = () => {
     if (!demo) return
     cancelledRef.current = true
+    if (!hasStarted) setHasStarted(true)
     const scn = demo.scenarios[activeScenarioIdx]
     if (!scn) return
     setValues(scn.values)
@@ -135,11 +171,13 @@ export default function DemoPlayer({ demoSlug }: Props) {
 
   const replay = () => {
     userTouchedRef.current = false
+    if (!hasStarted) setHasStarted(true)
     setReplayTick((t) => t + 1)
   }
 
   const applyScenario = (idx: number) => {
     userTouchedRef.current = false
+    if (!hasStarted) setHasStarted(true)
     if (idx === activeScenarioIdx) {
       replay()
       return
@@ -150,6 +188,7 @@ export default function DemoPlayer({ demoSlug }: Props) {
   const handleFieldEdit = (key: string, value: string) => {
     userTouchedRef.current = true
     cancelledRef.current = true
+    if (!hasStarted) setHasStarted(true)
     setValues((v) => ({ ...v, [key]: value }))
     setPhase('done')
     if (demo) {
@@ -208,7 +247,7 @@ export default function DemoPlayer({ demoSlug }: Props) {
   }
 
   return (
-    <div style={{ display: 'grid', gap: 24 }}>
+    <div ref={containerRef} style={{ display: 'grid', gap: 24 }}>
       <div
         style={{
           display: 'flex',
@@ -338,10 +377,30 @@ export default function DemoPlayer({ demoSlug }: Props) {
 
         <div style={cardStyle}>
           <div style={sectionHeader}>
-            {phase === 'streaming-outputs' ? 'AI generating…' : phase === 'done' ? 'Output' : 'Output (waiting…)'}
+            {phase === 'streaming-outputs'
+              ? 'AI generating…'
+              : phase === 'done'
+                ? 'Output'
+                : phase === 'waiting-scroll'
+                  ? 'Output (scroll to start)'
+                  : 'Output (waiting…)'}
           </div>
           <div style={{ marginTop: 14, display: 'grid', gap: 12 }}>
-            {phase === 'typing-inputs' || phase === 'idle' ? (
+            {phase === 'waiting-scroll' ? (
+              <div
+                style={{
+                  padding: '24px 16px',
+                  color: 'var(--text-secondary)',
+                  fontSize: 13,
+                  background: 'rgba(255,255,255,0.02)',
+                  border: '1px dashed var(--border-subtle)',
+                  borderRadius: 10,
+                  textAlign: 'center',
+                }}
+              >
+                ↓ scroll down to start the live demo
+              </div>
+            ) : phase === 'typing-inputs' || phase === 'idle' ? (
               <div
                 style={{
                   padding: '24px 16px',
@@ -499,23 +558,13 @@ export default function DemoPlayer({ demoSlug }: Props) {
           }
         }
         @keyframes demo-cursor-blink {
-          0%, 49% {
-            opacity: 1;
-          }
-          50%, 100% {
-            opacity: 0;
-          }
+          0%, 49% { opacity: 1; }
+          50%, 100% { opacity: 0; }
         }
         @keyframes demo-pulse {
-          0% {
-            box-shadow: 0 0 0 0 currentColor;
-          }
-          70% {
-            box-shadow: 0 0 0 8px rgba(0, 0, 0, 0);
-          }
-          100% {
-            box-shadow: 0 0 0 0 rgba(0, 0, 0, 0);
-          }
+          0% { box-shadow: 0 0 0 0 currentColor; }
+          70% { box-shadow: 0 0 0 8px rgba(0, 0, 0, 0); }
+          100% { box-shadow: 0 0 0 0 rgba(0, 0, 0, 0); }
         }
       `}</style>
     </div>
@@ -574,14 +623,7 @@ function OutputCard({
           {badge}
         </span>
         {streaming && !isFullyShown && (
-          <span
-            style={{
-              fontSize: 10,
-              color: 'var(--teal)',
-              letterSpacing: 1,
-              marginLeft: 'auto',
-            }}
-          >
+          <span style={{ fontSize: 10, color: 'var(--teal)', letterSpacing: 1, marginLeft: 'auto' }}>
             ● generating
           </span>
         )}
@@ -589,14 +631,10 @@ function OutputCard({
       {(output.recipient || output.subject) && (
         <div style={{ fontSize: 12, color: 'var(--text-secondary)', marginBottom: 8, lineHeight: 1.5 }}>
           {output.recipient && (
-            <div>
-              <strong style={{ color: 'var(--text-primary)' }}>To:</strong> {output.recipient}
-            </div>
+            <div><strong style={{ color: 'var(--text-primary)' }}>To:</strong> {output.recipient}</div>
           )}
           {output.subject && (
-            <div>
-              <strong style={{ color: 'var(--text-primary)' }}>Subject:</strong> {output.subject}
-            </div>
+            <div><strong style={{ color: 'var(--text-primary)' }}>Subject:</strong> {output.subject}</div>
           )}
         </div>
       )}
@@ -636,7 +674,9 @@ function LiveDot({ phase }: { phase: Phase }) {
         ? '#a29bfe'
         : phase === 'done'
           ? '#10b981'
-          : '#64748b'
+          : phase === 'waiting-scroll'
+            ? '#64748b'
+            : '#64748b'
   return (
     <span
       style={{
@@ -654,6 +694,8 @@ function LiveDot({ phase }: { phase: Phase }) {
 
 function phaseLabel(p: Phase): string {
   switch (p) {
+    case 'waiting-scroll':
+      return 'Scroll to start'
     case 'typing-inputs':
       return 'Agent is filling the form'
     case 'streaming-outputs':
@@ -667,6 +709,8 @@ function phaseLabel(p: Phase): string {
 
 function phaseHint(p: Phase): string {
   switch (p) {
+    case 'waiting-scroll':
+      return 'Scroll down so the demo is in view and the agent will start typing for you'
     case 'typing-inputs':
       return 'Watch on the left — the agent is ingesting the customer scenario'
     case 'streaming-outputs':
@@ -681,18 +725,12 @@ function phaseHint(p: Phase): string {
 function channelBadge(type: string, label?: string): string {
   if (label) return label
   switch (type) {
-    case 'email':
-      return 'Email'
-    case 'sms':
-      return 'SMS'
-    case 'dashboard':
-      return 'Dashboard'
-    case 'call-summary':
-      return 'Call summary'
-    case 'multi-channel':
-      return 'Multi-channel'
-    default:
-      return type
+    case 'email': return 'Email'
+    case 'sms': return 'SMS'
+    case 'dashboard': return 'Dashboard'
+    case 'call-summary': return 'Call summary'
+    case 'multi-channel': return 'Multi-channel'
+    default: return type
   }
 }
 

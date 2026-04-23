@@ -48,7 +48,7 @@ export const INTAKE_PROFESSIONAL: Demo = {
         company: 'Brooks Holdings Ltd.',
         callerEmail: 'tbrooks@brooks-holdings.example.com',
         matterType: 'cre',
-        context: 'Buying a $3.2M commercial property in Burnaby. Closing in 45 days. Need representation on the purchase.',
+        context: 'Buying a $3.2M commercial property in Oakland. Closing in 45 days. Need representation on the purchase.',
       },
     },
     {
@@ -105,7 +105,7 @@ Matter: ${v.matterType}
 Potential conflict: inquiry references "Clearview" — active client matter on file.
 
 No partner call booked. Graceful decline email queued.
-Suggested referrals: Harper & Finch LLP (contract, Vancouver), Liang Legal (Burnaby).`,
+Suggested referrals: Harper & Finch LLP (contract, San Francisco), Liang Legal (Oakland).`,
         },
       ]
     }
@@ -131,7 +131,7 @@ Context: ${v.context}
 
 Qualification:
   • Type fit: ✓ (firm does this work)
-  • Jurisdiction: ✓ BC
+  • Jurisdiction: ✓ CA
   • Conflict check: ✓ clear
   • Est. fees: ${dollar}
   • Urgency: ${v.context.toLowerCase().includes('day') || v.context.toLowerCase().includes('week') ? 'high' : 'normal'}
@@ -163,7 +163,7 @@ Whitman & Ross LLP`,
         type: 'dashboard',
         channelLabel: `${partner}\'s prep dashboard`,
         body: `TUESDAY 2:00PM — ${v.callerName} intake
-  Matter: ${v.matterType === 'cre' ? 'Commercial RE purchase, $3.2M, Burnaby' : v.matterType === 'incorp' ? 'Incorporation, consulting business, 3-wk timeline' : 'Contract review'}
+  Matter: ${v.matterType === 'cre' ? 'Commercial RE purchase, $3.2M, Oakland' : v.matterType === 'incorp' ? 'Incorporation, consulting business, 3-wk timeline' : 'Contract review'}
   Referred by: ${v.callerName === 'Trevor Brooks' ? 'Jane Kurtzman — warm context' : 'Direct inbound'}
   Fee range: ${dollar}
   Conflict check: clear
@@ -216,7 +216,7 @@ export const ENGAGEMENT_LETTER: Demo = {
       values: {
         clientName: 'Brooks Holdings Ltd.',
         matterType: 'cre',
-        scopeSummary: 'Represent purchaser in $3.2M commercial property acquisition in Burnaby, BC. Includes title review, agreement of purchase and sale, closing. Not including zoning or environmental review unless separately engaged.',
+        scopeSummary: 'Represent purchaser in $3.2M commercial property acquisition in Oakland, CA. Includes title review, agreement of purchase and sale, closing. Not including zoning or environmental review unless separately engaged.',
         feeStructure: 'Flat fee $8,500 + disbursements',
       },
     },
@@ -224,7 +224,7 @@ export const ENGAGEMENT_LETTER: Demo = {
   brainHook:
     'The Brain applies David\'s specific preferences: he likes to include a "we\'ll tell you upfront if scope changes" paragraph, he wants all limitations in a dedicated "what this engagement does not include" section, and he signs "David" not "David W. Whitman" for existing client relationships.',
   generateOutput: (v, biz) => {
-    const today = new Date().toLocaleDateString('en-CA', { year: 'numeric', month: 'long', day: 'numeric' })
+    const today = new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })
     return [
       {
         type: 'email',
@@ -240,7 +240,7 @@ export const ENGAGEMENT_LETTER: Demo = {
           <ul>
             <li>Zoning or land-use review</li>
             <li>Environmental due diligence</li>
-            <li>Tax advice beyond GST/PTT allocation</li>
+            <li>Tax advice beyond sales tax and transfer tax allocation</li>
             <li>Post-closing disputes (separate retainer if needed)</li>
           </ul>
           <h3 style="color:#0f172a">Fees</h3>
@@ -326,7 +326,7 @@ export const TIME_CAPTURE: Demo = {
 Total billable: 6.4 hrs · Non-billable: 1.2 hrs
 
 ─── BROOKS HOLDINGS — $3.2M COMMERCIAL ACQUISITION ───
-  0.75  09:00–09:45  Intake consultation; scope alignment for $3.2M Burnaby purchase
+  0.75  09:00–09:45  Intake consultation; scope alignment for $3.2M Oakland purchase
   1.20  09:50–11:00  Title search review; drafted follow-up questions to vendor counsel (12 emails)
   ─────────
   1.95 hrs · $878.00
@@ -424,7 +424,7 @@ export const COLLECTIONS_PROFESSIONAL: Demo = {
   brainHook:
     'The Brain remembers Jane Kurtzman is an 8-year client with a consistent pattern of paying at day 30–35. Her "21 days overdue" is actually "normal for Jane". The Brain suggests skipping the 14-day nudge and only sending at day 30 — and phrasing it as "just circling back" rather than "you\'re overdue".',
   generateOutput: (v, biz) => {
-    const amt = Number(v.amount || 0).toLocaleString('en-CA', { style: 'currency', currency: 'CAD' })
+    const amt = Number(v.amount || 0).toLocaleString('en-US', { style: 'currency', currency: 'USD' })
     const first = v.clientName.split(' ')[0]
 
     if (v.clientTier === 'referral') {
@@ -594,8 +594,8 @@ export const DOC_REQUEST_NUDGER: Demo = {
       description: 'Brooks Holdings CRE purchase, getting tight',
       values: {
         clientName: 'Brooks Holdings Ltd.',
-        matterName: 'Commercial acquisition — 1100 Willingdon Ave, Burnaby',
-        itemsMissing: '• Corporate resolution authorizing purchase (signed by directors)\n• GST registration number\n• Wire transfer confirmation for deposit ($320k)',
+        matterName: 'Commercial acquisition — 1455 Market St, Oakland',
+        itemsMissing: '• Corporate resolution authorizing purchase (signed by directors)\n• EIN / tax ID registration\n• Wire transfer confirmation for deposit ($320k)',
         daysElapsed: '7',
         closingDate: 'May 5 (10 days away)',
       },
@@ -609,7 +609,7 @@ export const DOC_REQUEST_NUDGER: Demo = {
       {
         type: 'email',
         recipient: v.clientName,
-        subject: `Quick request — three items for the Burnaby closing`,
+        subject: `Quick request — three items for the Oakland closing`,
         body: `Dear ${first === 'Brooks' ? 'Trevor' : first},
 
 Hope things are going well. Quick note on the ${v.matterName.split(' — ')[0]} — I\'ve got three items outstanding that I\'ll need to close on time. Combining them into one email so I\'m not pestering you piecemeal:
@@ -635,7 +635,7 @@ David`,
   ✓ Tenancy agreements
   ✓ Insurance binder
   ✗ Corporate resolution
-  ✗ GST registration
+  ✗ EIN registration
   ✗ Wire confirmation for final deposit
 
   Nudge sent today. Next: May 1 (final reminder) if nothing back.

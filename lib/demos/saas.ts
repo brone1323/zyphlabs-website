@@ -417,7 +417,7 @@ export const CHURN_RISK: Demo = {
   brainHook:
     'The Brain knows Priya (the champion user) posted on LinkedIn 3 weeks ago about joining a new company. It combines that external signal with the usage drop to surface: "champion gone + usage crater = classic departure-induced churn. The save play is to re-onboard Anita, who\'s been the secondary user."',
   generateOutput: (v, biz) => {
-    const arr = Number(v.contractValue || 0).toLocaleString('en-CA', { style: 'currency', currency: 'CAD' })
+    const arr = Number(v.contractValue || 0).toLocaleString('en-US', { style: 'currency', currency: 'USD' })
     return [
       {
         type: 'dashboard',

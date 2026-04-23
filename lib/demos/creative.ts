@@ -89,8 +89,8 @@ I want to be transparent: a 350-guest, multi-event wedding needs a photographer 
 I\'d rather tell you that now than take the booking and disappoint you.
 
 Two photographers I\'d trust with your day:
-  → Anand Patel (Calgary) — specializes in large Indian weddings, 8 years in: anandpatel.photo
-  → Selvi & Co. (Vancouver) — team of 3, does 3-day coverage: selvico.com
+  → Anand Patel (San Jose, CA) — specializes in large Indian weddings, 8 years in: anandpatel.photo
+  → Selvi & Co. (Los Angeles) — team of 3, does 3-day coverage: selvico.com
 
 Wishing you a beautiful August.
 
@@ -116,7 +116,7 @@ Your date (June 12) is open and that hour of afternoon is soft and golden on mos
   • 2 hours of coverage — ceremony + portraits after
   • 60–90 edited images delivered in 3 weeks
   • Print release included
-  • $1,750 + GST
+  • $1,750 + tax
 
 The only upsell I\'d mention: a one-hour hike-portrait add-on for $400 if you want to wander off into the trees after the ceremony. Most people end up wanting those shots more than the ceremony ones.
 
@@ -155,7 +155,7 @@ THE SEPTEMBER PACKAGE — Sep 19
   • 2x engagement session beforehand (value $800, included)
   • Sneak-peek gallery delivered within 48 hrs
 
-  Total: $6,200 + GST · $1,500 retainer to book · balance 30 days before
+  Total: $6,200 + tax · $1,500 retainer to book · balance 30 days before
 
 ━━━━━━━━━━━━━━━━━━━━━━━━
 
@@ -166,7 +166,7 @@ I\'d really love to photograph your wedding.
 Warmly,
 Maya
 Alder & Ash Studio
-(250) 555-0112`,
+(707) 555-0112`,
       },
       {
         type: 'dashboard',
@@ -229,8 +229,8 @@ export const CONTRACT_DEPOSIT: Demo = {
     'The Brain routes deposit receipts into an automated "you\'re officially booked" sequence — but it also schedules a human-feeling personal check-in 30 days before the wedding, where Maya sends one image from a past wedding with "thinking of you, can\'t wait for Sept".',
   generateOutput: (v, biz) => {
     const first = v.clientName.split(' ')[0]
-    const total = Number(v.totalFee).toLocaleString('en-CA', { style: 'currency', currency: 'CAD' })
-    const deposit = Number(v.depositAmount).toLocaleString('en-CA', { style: 'currency', currency: 'CAD' })
+    const total = Number(v.totalFee).toLocaleString('en-US', { style: 'currency', currency: 'USD' })
+    const deposit = Number(v.depositAmount).toLocaleString('en-US', { style: 'currency', currency: 'USD' })
     return [
       {
         type: 'email',

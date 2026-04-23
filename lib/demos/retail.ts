@@ -147,7 +147,7 @@ DRAFT REPLY (your voice):
         type: 'sms',
         recipient: `${v.customerName} (via ${channelLabel(v.channel)})`,
         channelLabel: `Generic friendly reply · ${channelLabel(v.channel)}`,
-        body: `Hey! Thanks for reaching out. I\'ve logged your message and we\'ll reply today. If it\'s urgent you can call us at (403) 555-0150.\n\n— M (auto-assist)`,
+        body: `Hey! Thanks for reaching out. I\'ve logged your message and we\'ll reply today. If it\'s urgent you can call us at (303) 555-0150.\n\n— M (auto-assist)`,
       },
     ]
   },
@@ -189,7 +189,7 @@ export const WINBACK_RETAIL: Demo = {
       description: 'Normally in twice a week, hasn\'t been in 6 weeks',
       values: {
         customerName: 'Linda Tran',
-        customerPhone: '(403) 555-0188',
+        customerPhone: '(303) 555-0188',
         usualOrder: 'Oat matcha + almond croissant',
         avgFrequency: '2x / week',
         lastVisit: '6 weeks ago',
@@ -200,7 +200,7 @@ export const WINBACK_RETAIL: Demo = {
       description: 'Saturday brunch family, missed 3 weekends in a row',
       values: {
         customerName: 'The Koskinen family',
-        customerPhone: '(403) 555-0171',
+        customerPhone: '(303) 555-0171',
         usualOrder: 'Big brunch — avocado toast × 2, kids\' pancake, 2 flat whites',
         avgFrequency: 'Every Saturday',
         lastVisit: '3 weekends ago',
@@ -307,7 +307,7 @@ Running low on ${v.sku.toLowerCase()}, need to reorder before the weekend. Let\'
 
   • ${v.sku} × 2 cases
 
-Deliver to the usual back door off 49 St, or I can swing by Tuesday if pickup is faster.
+Deliver to the usual back door off Walnut St, or I can swing by Tuesday if pickup is faster.
 
 Let me know ETA and total, thanks!
 
@@ -346,10 +346,10 @@ export const SCHEDULE_OPTIMIZER: Demo = {
   scenarios: [
     {
       label: 'Long-weekend forecast',
-      description: 'Victoria Day weekend, busy Saturday expected',
+      description: 'Memorial Day weekend, busy Saturday expected',
       values: {
         weekLabel: 'May 16–22',
-        weatherForecast: 'Sat sunny 22°C, Sun cloudy 16°, Mon holiday 24°',
+        weatherForecast: 'Sat sunny 75°F, Sun cloudy 61°F, Mon holiday 78°F',
         eventOverlay: 'Sat: farmers\' market at the park (draws traffic). Mon: holiday closure for most shops — we stay open.',
         targetLaborPct: '26%',
       },
@@ -389,7 +389,7 @@ Total hours: 178 · Projected labor cost: $3,860 (26.1% of forecast rev)`,
 
 Draft schedule for May 16–22 attached. A few notes:
   • Sat is farmers\' market + forecast sunny — we\'ll likely be slammed 9–12.
-  • Monday is Victoria Day — we\'re open, most shops aren\'t, expect a coffee surge 10–2.
+  • Monday is Memorial Day — we\'re open, most shops aren\'t, expect a coffee surge 10–2.
   • Let me know by Thursday if anything needs adjusting.
 
 Jen — you\'re on for a 2-hour extra Sat morning if you can swing it, flag me if not.
@@ -481,7 +481,7 @@ export const SOCIAL_DRAFTER: Demo = {
         channelLabel: 'Google Business post',
         body:
           v.goal === 'traffic'
-            ? `Fresh almond croissants just out of the oven — available from 7am until they sell out (usually 11am). Stop in for your morning coffee + a croissant warm from the bake.\n\nDog-friendly patio, free WiFi, open till 4pm today.\n\n📍 512 8th Ave — 2 min from the bridge`
+            ? `Fresh almond croissants just out of the oven — available from 7am until they sell out (usually 11am). Stop in for your morning coffee + a croissant warm from the bake.\n\nDog-friendly patio, free WiFi, open till 4pm today.\n\n📍 1930 Pearl St — 2 min from Pearl Street Mall`
             : v.goal === 'event'
               ? `Live Music This Saturday 🎸\nEllis + Lane acoustic set, 2–5pm on the patio. No cover, family-friendly, dogs welcome.\n\nWe\'ll have the full brunch menu until 2:30. Reservations not needed but if it\'s sunny, come early!`
               : `Quiet weekday vibes this week — our patio is open, espresso is hot, and we pulled the darker pour-over back for spring. See you soon.`,
@@ -542,7 +542,7 @@ export const REVIEW_HARVESTER_RETAIL: Demo = {
       description: 'Koskinens came in Saturday, had a great time',
       values: {
         customerName: 'The Koskinen family',
-        customerPhone: '(403) 555-0171',
+        customerPhone: '(303) 555-0171',
         orderItems: 'Avocado toast ×2, kids pancake, 2 flat whites',
         visitContext: 'weekend',
       },
@@ -552,7 +552,7 @@ export const REVIEW_HARVESTER_RETAIL: Demo = {
       description: 'Came for the acoustic set Saturday afternoon',
       values: {
         customerName: 'Mel Archer',
-        customerPhone: '(403) 555-0184',
+        customerPhone: '(303) 555-0184',
         orderItems: 'Oat latte × 2, cinnamon roll to share',
         visitContext: 'event',
       },
@@ -580,7 +580,7 @@ export const REVIEW_HARVESTER_RETAIL: Demo = {
         channelLabel: '(When review posts) Reply drafted',
         subject: `${first} left a 5-star — reply drafted`,
         body: `Review:
-"Best patio in Canmore for Saturday brunch. Pancakes are kid-approved, avocado toast is real. Acoustic set was a bonus. We\'ll be back."
+"Best patio in Boulder for Saturday brunch. Pancakes are kid-approved, avocado toast is real. Acoustic set was a bonus. We\'ll be back."
 
 DRAFT REPLY:
 "thanks ${first} — kids-approved means a lot, tell them we\'ll hide an extra strawberry next time. see you soon, M"
