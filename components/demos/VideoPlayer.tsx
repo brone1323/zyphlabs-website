@@ -110,7 +110,7 @@ export default function VideoPlayer({ demoSlug }: Props) {
       if (isCancelled()) return
 
       // Phase 5: Outro (3.5s)
-      setPhase('outro')
+      setPhase("outro"); if (typeof window !== "undefined") { (window as any).__zyphDone = true; }
       // Stay on outro indefinitely; the recording script will stop the recording
     }
 
