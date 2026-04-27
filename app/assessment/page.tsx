@@ -162,6 +162,37 @@ const SCRIPT = `
     return wrap;
   }
 
+  // Privacy-friendly funnel tracking. No PII. Each event is a synthetic path
+  // pushed through the existing /api/analytics/track endpoint so it shows up
+  // in /admin/analytics next to normal pageview counts.
+  const assessSession = 'asmt-' + Math.random().toString(36).slice(2) + Date.now().toString(36);
+  let trackedSkip = false;
+  function sizeBucket(total) {
+    if (total <= 5) return 'small';
+    if (total <= 20) return 'medium';
+    return 'large';
+  }
+  function track(eventPath) {
+    try {
+      const referrer = (function() {
+        try { return document.referrer ? new URL(document.referrer).hostname : 'direct'; }
+        catch (e) { return 'direct'; }
+      })();
+      fetch('/api/analytics/track', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          type: 'enter',
+          path: eventPath,
+          referrer: referrer,
+          sessionId: assessSession,
+          timestamp: Date.now(),
+        }),
+        keepalive: true,
+      }).catch(function() {});
+    } catch (e) {}
+  }
+
   function buildSilhouetteStage(stageEl, counters, state) {
     stageEl.innerHTML = '';
     counters.forEach(c => {
@@ -199,6 +230,7 @@ const SCRIPT = `
     b.addEventListener('click', () => {
       state.industry = ind.id;
       state.shape = ind.shape;
+      track('/assessment/step-1-industry-' + ind.id);
       setupHeadcount();
       goto(2);
     });
@@ -231,6 +263,10 @@ const SCRIPT = `
   }
 
   $('#headcount-next').addEventListener('click', () => {
+    const total = (state.counts.office || 0) + (state.counts.field || 0);
+    const bucket = sizeBucket(total);
+    track('/assessment/step-2-' + state.shape + '-' + bucket);
+    track('/assessment/profile-' + state.industry + '-' + bucket);
     setupNarrative();
     goto(3);
   });
@@ -301,6 +337,10 @@ const SCRIPT = `
   root.addEventListener('click', (e) => {
     if (typingState.active && !e.target.closest('button, a')) {
       typingState.skip = true;
+      if (!trackedSkip) {
+        trackedSkip = true;
+        track('/assessment/skip-clicked');
+      }
     }
   });
 
@@ -407,9 +447,11 @@ const SCRIPT = `
     await typeText(p4, 'And we know — at the conservative low end — we can save your team 30% of their time.');
 
     cont.classList.add('on');
+    track('/assessment/step-3-narrative-' + state.shape);
   }
 
   $('#continue-1-btn').addEventListener('click', () => {
+    track('/assessment/step-3-continue-clicked');
     setupCTA();
     goto(4);
   });
@@ -443,6 +485,16 @@ const SCRIPT = `
 
     await wait(500);
     $('#cta-block').style.display = 'block';
+    track('/assessment/step-4-completed-' + state.shape);
+
+    // Wire Calendly click tracking once the CTA is visible.
+    const ctaLink = $('#cta-block a[href*="calendly.com"]');
+    if (ctaLink && !ctaLink.dataset.trackBound) {
+      ctaLink.dataset.trackBound = '1';
+      ctaLink.addEventListener('click', () => {
+        track('/assessment/cta-calendly-clicked');
+      });
+    }
   }
 })();
 `;
