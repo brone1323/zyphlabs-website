@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" data-theme="light">
+<html lang="en" data-theme="light" data-palette="cool">
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
@@ -32,28 +32,109 @@
     --shadow: 0 1px 2px rgba(0,0,0,0.18), 0 8px 28px rgba(0,0,0,0.22);
     --chart-grid: rgba(232, 220, 198, 0.07);
   }
-    :root[data-theme="light"] {
-    --bg: #f6f1e7;                  /* warm paper */
-    --surface: #fbf7ee;
-    --surface-2: #efe8d8;
-    --surface-3: #e6dec9;
-    --border: rgba(28, 24, 20, 0.10);
-    --text: #1c1814;                /* deep ink */
-    --text-dim: #5a5247;
-    --text-faint: #8a7f6e;
-    --accent: #9c6b1f;              /* deep amber, like aged brass */
-    --accent-hover: #b07a26;
-    --accent-soft: rgba(156,107,31,0.10);
-    --accent-2: #5d6e54;            /* forest moss */
-    --accent-2-hover: #6f8264;
-    --accent-2-soft: rgba(93,110,84,0.12);
-    --success: #5d6e54;
-    --warn: #9c6b1f;
+      :root[data-theme="light"] {
+    /* defaults to cool palette; overridden by data-palette */
+    --bg: #eceef0;
+    --surface: #f4f5f7;
+    --surface-2: #e3e5e8;
+    --surface-3: #d4d7db;
+    --border: rgba(28, 30, 34, 0.10);
+    --text: #1f2226;
+    --text-dim: #545961;
+    --text-faint: #888d96;
+    --accent: #4a6478;
+    --accent-hover: #5b7488;
+    --accent-soft: rgba(74,100,120,0.10);
+    --accent-2: #6b7480;
+    --accent-2-hover: #7c8590;
+    --accent-2-soft: rgba(107,116,128,0.12);
+    --success: #5a7a64;
+    --warn: #a07840;
     --danger: #9c4a3a;
-    --info: #4f6770;
-    --purple: #6b5a78;
-    --shadow: 0 1px 2px rgba(28,24,20,0.04), 0 6px 18px rgba(28,24,20,0.06);
-    --chart-grid: rgba(28, 24, 20, 0.07);
+    --info: #4a6478;
+    --purple: #6e6478;
+    --shadow: 0 1px 2px rgba(28,30,34,0.04), 0 6px 18px rgba(28,30,34,0.05);
+    --chart-grid: rgba(28, 30, 34, 0.07);
+  }
+
+  /* Palette A — Cool Newsprint (current default; reading-room cool grey) */
+  :root[data-theme="light"][data-palette="cool"] {
+    --bg: #eceef0; --surface: #f4f5f7; --surface-2: #e3e5e8; --surface-3: #d4d7db;
+    --border: rgba(28, 30, 34, 0.10);
+    --text: #1f2226; --text-dim: #545961; --text-faint: #888d96;
+    --accent: #4a6478; --accent-hover: #5b7488; --accent-soft: rgba(74,100,120,0.10);
+    --accent-2: #6b7480; --accent-2-soft: rgba(107,116,128,0.12);
+    --shadow: 0 1px 2px rgba(28,30,34,0.04), 0 6px 18px rgba(28,30,34,0.05);
+    --chart-grid: rgba(28, 30, 34, 0.07);
+  }
+
+  /* Palette B — Warm Newsprint (NYT-feel, warm grey, restrained rust) */
+  :root[data-theme="light"][data-palette="warm"] {
+    --bg: #efece6; --surface: #f5f3ee; --surface-2: #e6e2d9; --surface-3: #d8d3c7;
+    --border: rgba(36, 30, 22, 0.10);
+    --text: #211e19; --text-dim: #5b5347; --text-faint: #8c8475;
+    --accent: #8c4a32; --accent-hover: #a05a40; --accent-soft: rgba(140,74,50,0.09);
+    --accent-2: #6b6a4f; --accent-2-soft: rgba(107,106,79,0.12);
+    --shadow: 0 1px 2px rgba(36,30,22,0.04), 0 6px 18px rgba(36,30,22,0.05);
+    --chart-grid: rgba(36, 30, 22, 0.07);
+  }
+
+  /* Palette C — Pure Stone (neutral, balanced, considered) */
+  :root[data-theme="light"][data-palette="stone"] {
+    --bg: #e7e6e2; --surface: #efeeea; --surface-2: #ddddd8; --surface-3: #cdccc6;
+    --border: rgba(30, 28, 24, 0.10);
+    --text: #1c1c19; --text-dim: #555349; --text-faint: #8a877c;
+    --accent: #3f6660; --accent-hover: #4f7a72; --accent-soft: rgba(63,102,96,0.10);
+    --accent-2: #6b6a64; --accent-2-soft: rgba(107,106,100,0.12);
+    --shadow: 0 1px 2px rgba(30,28,24,0.04), 0 6px 18px rgba(30,28,24,0.05);
+    --chart-grid: rgba(30, 28, 24, 0.07);
+  }
+
+  /* Palette D — Slate (cooler, slightly bluer, sharper ink) */
+  :root[data-theme="light"][data-palette="slate"] {
+    --bg: #dde1e6; --surface: #e8ebef; --surface-2: #d2d6dc; --surface-3: #c2c7cd;
+    --border: rgba(20, 26, 36, 0.12);
+    --text: #161a22; --text-dim: #4a5260; --text-faint: #818892;
+    --accent: #2d4358; --accent-hover: #3a5470; --accent-soft: rgba(45,67,88,0.10);
+    --accent-2: #5e6878; --accent-2-soft: rgba(94,104,120,0.12);
+    --shadow: 0 1px 2px rgba(20,26,36,0.05), 0 6px 18px rgba(20,26,36,0.06);
+    --chart-grid: rgba(20, 26, 36, 0.07);
+  }
+
+  /* Palette switcher UI */
+  .palette-switcher {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 4px;
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    background: transparent;
+  }
+  .palette-chip {
+    width: 18px; height: 18px;
+    border-radius: 50%;
+    cursor: pointer;
+    border: 1px solid rgba(0,0,0,0.06);
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+    position: relative;
+  }
+  .palette-chip:hover { transform: scale(1.12); }
+  .palette-chip.active {
+    box-shadow: 0 0 0 2px var(--bg), 0 0 0 3px var(--text);
+  }
+  .palette-chip[data-p="cool"]  { background: linear-gradient(135deg, #eceef0 50%, #4a6478 50%); }
+  .palette-chip[data-p="warm"]  { background: linear-gradient(135deg, #efece6 50%, #8c4a32 50%); }
+  .palette-chip[data-p="stone"] { background: linear-gradient(135deg, #e7e6e2 50%, #3f6660 50%); }
+  .palette-chip[data-p="slate"] { background: linear-gradient(135deg, #dde1e6 50%, #2d4358 50%); }
+  .palette-label {
+    font-family: "Inter", sans-serif;
+    font-size: 10px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--text-faint);
+    padding: 0 8px 0 4px;
+    user-select: none;
   }
   * { box-sizing: border-box; margin: 0; padding: 0; }
   body {
@@ -1158,11 +1239,18 @@
     </div>
     <div class="top-meta" style="display:flex;align-items:center;gap:14px">
       <span><span id="currentDate"></span> &middot; <span style="color:var(--success)">&bull;</span> Demo workspace</span>
+      <div class="palette-switcher" title="Switch palette">
+        <span class="palette-label">Palette</span>
+        <span class="palette-chip" data-p="cool" title="Cool Newsprint"></span>
+        <span class="palette-chip" data-p="warm" title="Warm Newsprint"></span>
+        <span class="palette-chip" data-p="stone" title="Pure Stone"></span>
+        <span class="palette-chip" data-p="slate" title="Slate"></span>
+      </div>
       <button class="theme-toggle" id="themeToggle" title="Toggle light/dark">
         <span class="theme-icon" id="themeIcon">&#9788;</span>
         <span class="theme-label" id="themeLabel">Light</span>
       </button>
-      <button class="theme-toggle" id="demoBtn" title="Play scripted walkthrough" style="background:linear-gradient(135deg,var(--accent),var(--accent-2));color:white;border:none">
+      <button class="theme-toggle" id="demoBtn" title="Play scripted walkthrough" style="background:var(--text);color:var(--bg);border:1px solid var(--text)">
         <span style="font-size:14px">&#127916;</span>
         <span>Play demo</span>
       </button>
@@ -2477,6 +2565,31 @@ function generateProposalHTML(p) {
 
   <div class="footer">${COMPANY.name} · ${COMPANY.address} · ${COMPANY.phone}</div>
 </div>
+
+<script>
+(function(){
+  var saved = null;
+  try { saved = localStorage.getItem('zyph-pr-palette'); } catch(e) {}
+  var initial = saved || 'cool';
+  var root = document.documentElement;
+  root.setAttribute('data-palette', initial);
+
+  function setActive(p) {
+    root.setAttribute('data-palette', p);
+    document.querySelectorAll('.palette-chip').forEach(function(el){
+      el.classList.toggle('active', el.getAttribute('data-p') === p);
+    });
+    try { localStorage.setItem('zyph-pr-palette', p); } catch(e) {}
+  }
+  setActive(initial);
+
+  document.querySelectorAll('.palette-chip').forEach(function(el){
+    el.addEventListener('click', function(){
+      setActive(el.getAttribute('data-p'));
+    });
+  });
+})();
+</script>
 </body></html>`;
 }
 
