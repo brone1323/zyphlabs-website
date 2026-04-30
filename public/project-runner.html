@@ -1,85 +1,64 @@
 <!DOCTYPE html>
-<html lang="en" data-theme="light">
+<html lang="en">
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>Project Runner — quit typing, run the work</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,300;0,6..72,400;0,6..72,500;0,6..72,600;0,6..72,700;1,6..72,400&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<title>Project Runner — quit typing and run these projects</title>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.0/chart.umd.min.js"></script>
 <style>
-    :root, :root[data-theme="dark"] {
-    --bg: #14110d;                  /* obsidian, faint warmth */
-    --surface: #1c1814;
-    --surface-2: #221d18;
-    --surface-3: #2a241e;
-    --border: rgba(232, 220, 198, 0.10);
-    --text: #ede4d0;                /* cream */
-    --text-dim: #9c9182;
-    --text-faint: #6b6457;
-    --accent: #c9a063;              /* deep amber */
-    --accent-hover: #d9b073;
-    --accent-soft: rgba(201,160,99,0.12);
-    --accent-2: #8a9580;            /* muted sage */
-    --accent-2-hover: #a3ad99;
-    --accent-2-soft: rgba(138,149,128,0.14);
-    --success: #8a9580;
-    --warn: #c9a063;
-    --danger: #b8624c;
-    --info: #7d9098;
-    --purple: #9b8aa6;
-    --shadow: 0 1px 2px rgba(0,0,0,0.18), 0 8px 28px rgba(0,0,0,0.22);
-    --chart-grid: rgba(232, 220, 198, 0.07);
+  :root, :root[data-theme="dark"] {
+    --bg: #0b1220;
+    --surface: #131b2e;
+    --surface-2: #1c2740;
+    --surface-3: #263352;
+    --border: #263352;
+    --text: #e8edf5;
+    --text-dim: #8a96b3;
+    --text-faint: #6b7280;
+    --accent: #2f6fed;          /* dark blue */
+    --accent-hover: #4f8cff;
+    --accent-soft: rgba(47,111,237,0.12);
+    --accent-2: #86efac;        /* light green */
+    --accent-2-hover: #a7f3d0;
+    --accent-2-soft: rgba(134,239,172,0.14);
+    --success: #34d399;
+    --warn: #f59e0b;
+    --danger: #ef4444;
+    --info: #06b6d4;
+    --purple: #a855f7;
+    --shadow: 0 4px 24px rgba(0,0,0,0.4);
+    --chart-grid: #263352;
   }
-          :root[data-theme="light"] {
-    /* defaults to cool palette; overridden by data-palette */
-    --bg: #eceef0; --surface: #f4f5f7; --surface-2: #e3e5e8; --surface-3: #d4d7db;
-    --border: rgba(28, 30, 34, 0.10);
-    --text: #1f2226; --text-dim: #545961; --text-faint: #888d96;
-    --accent: #1e6cb8; --accent-hover: #2a7dd0; --accent-soft: rgba(30,108,184,0.12);
-    --accent-2: #2f5d85; --accent-2-hover: #3a6f9c; --accent-2-soft: rgba(47,93,133,0.14);
-    --accent-warm: #c8704a; --accent-warm-soft: rgba(200,112,74,0.12);
-    --success: #3a8c5c; --success-soft: rgba(58,140,92,0.14);
-    --warn: #c2902f; --warn-soft: rgba(194,144,47,0.16);
-    --danger: #b14e3a; --danger-soft: rgba(177,78,58,0.14);
-    --info: #1e6cb8; --purple: #6e6478;
-    --shadow: 0 1px 2px rgba(28,30,34,0.04), 0 6px 18px rgba(28,30,34,0.06);
-    --chart-grid: rgba(28, 30, 34, 0.07);
-  }
-
-  /* Palette A — Cool Newsprint (current default; reading-room cool grey) */
-      :root[data-theme="light"][data-palette="cool"] {
-    --bg: #eceef0; --surface: #f4f5f7; --surface-2: #e3e5e8; --surface-3: #d4d7db;
-    --border: rgba(28, 30, 34, 0.10);
-    --text: #1f2226; --text-dim: #545961; --text-faint: #888d96;
-    --accent: #1e6cb8;             /* vivid reading-room blue, magazine pull-quote */
-    --accent-hover: #2a7dd0;
-    --accent-soft: rgba(30,108,184,0.12);
-    --accent-2: #2f5d85;
-    --accent-2-soft: rgba(47,93,133,0.14);
-    --accent-warm: #c8704a;        /* terracotta — warm complement */
-    --accent-warm-soft: rgba(200,112,74,0.12);
-    --success: #3a8c5c;            /* vivid forest */
-    --success-soft: rgba(58,140,92,0.14);
-    --warn: #c2902f;               /* warm amber */
-    --warn-soft: rgba(194,144,47,0.16);
-    --danger: #b14e3a;             /* vivid terracotta red */
-    --danger-soft: rgba(177,78,58,0.14);
-    --info: #1e6cb8;
-    --shadow: 0 1px 2px rgba(28,30,34,0.04), 0 6px 18px rgba(28,30,34,0.06);
-    --chart-grid: rgba(28, 30, 34, 0.07);
+  :root[data-theme="light"] {
+    --bg: #f4f7fc;
+    --surface: #ffffff;
+    --surface-2: #eef3fa;
+    --surface-3: #dfe7f3;
+    --border: #d6dfee;
+    --text: #0b1220;
+    --text-dim: #4a5670;
+    --text-faint: #8794ad;
+    --accent: #1e3a8a;          /* deep navy */
+    --accent-hover: #1e40af;
+    --accent-soft: rgba(30,58,138,0.08);
+    --accent-2: #4ade80;        /* light green */
+    --accent-2-hover: #22c55e;
+    --accent-2-soft: rgba(74,222,128,0.15);
+    --success: #16a34a;
+    --warn: #d97706;
+    --danger: #dc2626;
+    --info: #0891b2;
+    --purple: #9333ea;
+    --shadow: 0 4px 16px rgba(11,18,32,0.08);
+    --chart-grid: #dfe7f3;
   }
   * { box-sizing: border-box; margin: 0; padding: 0; }
   body {
-    font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-    font-feature-settings: "ss01", "cv11", "tnum";
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
     background: var(--bg);
     color: var(--text);
     min-height: 100vh;
-    line-height: 1.55;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
+    line-height: 1.5;
   }
   .app { display: flex; flex-direction: column; min-height: 100vh; }
   header.top {
@@ -515,10 +494,55 @@
   /* Typing caret indicator */
   .demo-typing { caret-color: var(--accent-2); outline: 2px solid var(--accent-2) !important; outline-offset: 1px; }
 
-  /* Demo mode caption */
+  /* Top-center demo control bar */
+  .demo-bar {
+    position: fixed;
+    top: 16px; left: 50%;
+    transform: translateX(-50%);
+    z-index: 320;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    padding: 6px;
+    display: flex;
+    align-items: center;
+    gap: 2px;
+    box-shadow: 0 6px 20px rgba(0,0,0,0.25);
+  }
+  .demo-ctrl {
+    background: transparent;
+    border: none;
+    color: var(--text);
+    padding: 8px 14px;
+    border-radius: 999px;
+    cursor: pointer;
+    font-size: 13px;
+    font-weight: 600;
+    font-family: inherit;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    transition: background 0.15s, opacity 0.15s;
+  }
+  .demo-ctrl:hover:not(:disabled) { background: var(--surface-2); }
+  .demo-ctrl.primary {
+    background: linear-gradient(135deg, var(--accent), var(--accent-2));
+    color: white;
+  }
+  .demo-ctrl.primary:hover { filter: brightness(1.08); }
+  .demo-ctrl:disabled { opacity: 0.35; cursor: not-allowed; }
+  .demo-ctrl-icon { font-size: 14px; line-height: 1; }
+  .demo-bar-divider {
+    width: 1px; height: 22px;
+    background: var(--border);
+    margin: 0 2px;
+  }
+
+  /* Demo mode caption — sits just below the top-center Play demo bar so the
+     description is visible right next to the controls (easier to follow) */
   .demo-caption {
-    position: fixed; left: 50%; bottom: 28px;
-    transform: translateX(-50%) translateY(120%);
+    position: fixed; left: 50%; top: 76px;
+    transform: translateX(-50%) translateY(-130%);
     background: linear-gradient(135deg, var(--accent), var(--accent-2));
     color: white;
     padding: 20px 30px;
@@ -527,9 +551,10 @@
     display: flex; align-items: center; gap: 18px;
     min-width: 600px; max-width: 880px;
     z-index: 300;
-    transition: transform 0.4s ease;
+    transition: transform 0.4s ease, opacity 0.3s ease;
+    opacity: 0;
   }
-  .demo-caption.show { transform: translateX(-50%) translateY(0); }
+  .demo-caption.show { transform: translateX(-50%) translateY(0); opacity: 1; }
   .demo-caption .demo-icon { font-size: 38px; }
   .demo-caption .demo-step { font-weight: 700; font-size: 20px; line-height: 1.3; }
   .demo-caption .demo-msg { font-size: 17px; opacity: 0.95; margin-top: 4px; line-height: 1.45; }
@@ -917,573 +942,6 @@
     background: var(--accent-2); box-shadow: 0 0 0 3px var(--accent-2-soft);
   }
   .conn-status-pill.disconnected { background: var(--surface-3); color: var(--text-dim); }
-
-  /* ============================================================
-     EDITORIAL TONE OVERLAY — macstories-inspired retune
-     Restraint, warmth, hairlines, serif headlines.
-     ============================================================ */
-
-  /* Default to light (paper) on first paint */
-  html:not([data-theme]) { color-scheme: light; }
-  :root { color-scheme: light dark; }
-
-  /* Display serif on headings, brand, big numbers */
-  .brand,
-  .section-title,
-  h1, h2, h3, h4,
-  .kpi-value, .stat-value,
-  .module-title, .panel-title,
-  .big-num, .display {
-    font-family: "Newsreader", ui-serif, Georgia, "Times New Roman", serif;
-    font-weight: 500;
-    letter-spacing: -0.01em;
-  }
-  .brand { font-weight: 600; font-size: 22px; letter-spacing: -0.02em; }
-  .section-title { font-weight: 500; font-size: 22px; letter-spacing: -0.015em; }
-  .section-title small { font-family: "Inter", sans-serif; font-style: italic; color: var(--text-faint); font-size: 12px; }
-
-  /* Tabular figures everywhere numbers live */
-  .kpi-value, .stat-value, .big-num, .gantt-row, .ms-amt,
-  table, td, th, .num, .price, input[type="number"] {
-    font-variant-numeric: tabular-nums;
-    font-feature-settings: "tnum";
-  }
-
-  /* Header — quieter, hairline, generous breathing */
-  header.top {
-    padding: 22px 36px;
-    border-bottom: 1px solid var(--border);
-    background: var(--bg);
-  }
-  .brand-icon {
-    background: var(--text) !important;
-    color: var(--bg) !important;
-    border-radius: 4px !important;
-    width: 32px !important; height: 32px !important;
-    font-family: "Newsreader", serif;
-    font-weight: 600;
-    font-size: 17px !important;
-    letter-spacing: 0;
-  }
-  .top-meta {
-    font-family: "Newsreader", serif;
-    font-style: italic;
-    color: var(--text-faint);
-    font-size: 13px;
-  }
-
-  /* Tabs — restrained, no bright underline; use ink */
-  .tabs {
-    background: var(--bg);
-    border-bottom: 1px solid var(--border);
-    padding: 0 36px;
-    gap: 0;
-  }
-  .tab {
-    padding: 14px 0;
-    margin-right: 28px;
-    font-family: "Inter", sans-serif;
-    font-weight: 500;
-    font-size: 13px;
-    letter-spacing: 0.01em;
-    color: var(--text-dim);
-    border-bottom: 1px solid transparent;
-  }
-  .tab:hover { color: var(--text); border-bottom-color: var(--text-faint); }
-  .tab.active { color: var(--text); border-bottom-color: var(--text); }
-  .tab-badge {
-    background: transparent;
-    color: var(--text-faint);
-    border: 1px solid var(--border);
-    font-weight: 500;
-    font-size: 10px;
-    letter-spacing: 0.04em;
-    text-transform: uppercase;
-    padding: 1px 7px;
-  }
-  .tab.active .tab-badge { background: var(--text); color: var(--bg); border-color: var(--text); }
-
-  /* Main canvas — generous like an article column */
-  main { padding: 40px 36px 80px; max-width: 1280px; }
-
-  /* Cards — flatter, hairline borders, softer corners, tighter shadow */
-  .card {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 6px;
-    padding: 24px;
-    margin-bottom: 22px;
-    box-shadow: none;
-  }
-
-  /* Buttons — outlined ink, no gradient. Primary = filled ink. */
-  button, .btn, input[type="submit"] {
-    font-family: "Inter", sans-serif;
-    font-weight: 500;
-    letter-spacing: 0.005em;
-    border-radius: 4px;
-    transition: background 0.18s ease, color 0.18s ease, border-color 0.18s ease;
-  }
-
-  /* Inputs */
-  input[type="text"], input[type="number"], input[type="email"],
-  input[type="date"], textarea, select {
-    font-family: "Inter", sans-serif;
-    border-radius: 4px;
-    border: 1px solid var(--border);
-    background: var(--surface);
-    transition: border-color 0.15s ease, background 0.15s ease;
-  }
-  input:focus, textarea:focus, select:focus {
-    outline: none;
-    border-color: var(--accent);
-    background: var(--surface);
-    box-shadow: 0 0 0 3px var(--accent-soft);
-  }
-
-  /* Upload zone — paper-like, restrained */
-  .upload-zone {
-    border-radius: 6px;
-    border: 1px dashed var(--border);
-    background: transparent;
-  }
-  .upload-zone:hover, .upload-zone.drag {
-    border-color: var(--accent);
-    background: var(--accent-soft);
-  }
-
-  /* Dropdowns — calmer */
-  .dropdown-menu { border-radius: 6px; box-shadow: var(--shadow); }
-  .dropdown-item { border-radius: 4px; }
-
-  /* Pills/badges — flatter */
-  .ms-pill, .badge, .chip {
-    border-radius: 3px;
-    font-family: "Inter", sans-serif;
-    font-weight: 500;
-    letter-spacing: 0.04em;
-    text-transform: uppercase;
-    font-size: 10px;
-  }
-
-  /* Theme toggle — pill of ink */
-  .theme-toggle {
-    border-radius: 999px;
-    background: transparent;
-    border: 1px solid var(--border);
-    color: var(--text-dim);
-    font-family: "Inter", sans-serif;
-    font-size: 12px;
-    padding: 6px 14px;
-    transition: color 0.15s ease, border-color 0.15s ease;
-  }
-  .theme-toggle:hover { color: var(--text); border-color: var(--text); background: transparent; }
-
-  /* Tables, gantt — hairline dividers, tabular figures */
-  .gantt-row { border-bottom: 1px solid var(--border); }
-  .gantt-track { background: var(--surface-2); border-radius: 2px; }
-
-  /* Crew suggestion (was emoji + green) — editorial pull-aside */
-  .crew-suggestion {
-    background: transparent;
-    border: none;
-    border-left: 2px solid var(--accent);
-    border-radius: 0;
-    padding-left: 14px;
-    color: var(--text);
-    font-family: "Newsreader", serif;
-    font-style: italic;
-    font-size: 14px;
-  }
-  .crew-suggestion .lead::before { content: ''; margin-right: 0; }
-
-  /* Milestone editor — refined */
-  .ms-editor {
-    border-radius: 5px;
-    border-left-width: 2px;
-    border-left-color: var(--text-faint);
-    background: var(--surface);
-    box-shadow: none;
-  }
-  .ms-editor:hover, .ms-editor.active {
-    border-color: var(--border);
-    border-left-color: var(--accent);
-    box-shadow: none;
-  }
-
-  /* Estimate row head — small caps eyebrow */
-  .est-row-head {
-    color: var(--text-faint);
-    font-family: "Inter", sans-serif;
-  }
-  .est-row-head strong {
-    text-transform: uppercase;
-    letter-spacing: 0.12em;
-    font-size: 10px;
-    font-weight: 600;
-    color: var(--text-faint);
-  }
-
-  /* Selection — warm */
-  ::selection { background: var(--accent-soft); color: var(--text); }
-
-  /* Smoother transitions site-wide */
-  * { transition-timing-function: cubic-bezier(0.22, 0.61, 0.36, 1); }
-
-  /* Scrollbar — quieter */
-  ::-webkit-scrollbar { width: 10px; height: 10px; }
-  ::-webkit-scrollbar-track { background: transparent; }
-  ::-webkit-scrollbar-thumb {
-    background: var(--border);
-    border-radius: 999px;
-    border: 2px solid var(--bg);
-  }
-  ::-webkit-scrollbar-thumb:hover { background: var(--text-faint); }
-
-  /* Subtle entry animation for cards on first paint */
-  @keyframes cardRise {
-    from { opacity: 0; transform: translateY(8px); }
-    to   { opacity: 1; transform: translateY(0); }
-  }
-  .card { animation: cardRise 480ms cubic-bezier(0.22,0.61,0.36,1) both; }
-  .panel.active .card:nth-child(1) { animation-delay: 0ms; }
-  .panel.active .card:nth-child(2) { animation-delay: 60ms; }
-  .panel.active .card:nth-child(3) { animation-delay: 120ms; }
-  .panel.active .card:nth-child(4) { animation-delay: 180ms; }
-  .panel.active .card:nth-child(5) { animation-delay: 240ms; }
-
-  /* Pull a Newsreader feel into KPI numbers without breaking layout */
-  .kpi-value, .stat-value, .big-num {
-    font-weight: 500;
-    letter-spacing: -0.025em;
-  }
-
-  /* Default to light theme on first paint (paper feel) */
-
-  /* ============================================================
-     COLOR POLISH — strategic accents on Palette A
-     Editorial restraint, but data and state earn color
-     ============================================================ */
-
-  /* Active tab — accent underline instead of pure ink */
-  .tab.active { color: var(--accent); border-bottom-color: var(--accent); }
-  .tab.active .tab-badge { background: var(--accent); border-color: var(--accent); color: var(--bg); }
-  .tab:hover { color: var(--accent); border-bottom-color: var(--accent-soft); }
-
-  /* Brand icon — slate-blue ink, not pure black */
-  .brand-icon {
-    background: var(--accent) !important;
-    color: var(--surface) !important;
-  }
-
-  /* KPI deltas — real semantic colors, not muted */
-  .kpi-trend.up,  .ev-good   { color: var(--success); font-weight: 600; }
-  .kpi-trend.down, .ev-bad   { color: var(--danger);  font-weight: 600; }
-  .kpi-value, .stat-value {
-    color: var(--text);
-  }
-  .kpi-value .num-accent, .stat-value .num-accent { color: var(--accent); }
-
-  /* Badges — semantic with restrained fills */
-  .badge.pending { background: var(--warn-soft); color: var(--warn); }
-  .badge.lost,
-  .badge.overdue { background: var(--danger-soft); color: var(--danger); }
-  .badge.won,
-  .badge.paid    { background: var(--success-soft); color: var(--success); }
-  .badge.active  { background: var(--accent-soft); color: var(--accent); }
-
-  /* Progress bars — semantic, but flatter */
-  .progress-fill          { background: var(--accent); }
-  .progress-fill.success  { background: var(--success); }
-  .progress-fill.warn     { background: var(--warn); }
-  .progress-fill.danger   { background: var(--danger); }
-
-  /* Active milestone — accent left rule, not faint grey */
-  .ms-editor.active {
-    border-left-color: var(--accent) !important;
-    background: var(--accent-soft);
-  }
-  .ms-editor:hover { border-left-color: var(--accent); }
-
-  /* Estimate row eyebrow — accent on the heading */
-  .est-row-head { color: var(--accent); }
-  .est-row-head strong { color: var(--accent); }
-
-  /* Crew suggestion (the italic pull-aside) — accent rule, accent type */
-  .crew-suggestion {
-    border-left-color: var(--accent);
-    color: var(--text);
-  }
-
-  /* Theme toggle — accent on hover */
-  .theme-toggle:hover { color: var(--accent); border-color: var(--accent); }
-
-  /* Buttons: primary becomes accent-on-paper, not ink-on-paper */
-  .btn.primary, button.primary, button[type="submit"]:not(.theme-toggle) {
-    background: var(--accent);
-    color: var(--surface);
-    border: 1px solid var(--accent);
-  }
-  .btn.primary:hover, button.primary:hover { background: var(--accent-hover); border-color: var(--accent-hover); }
-  .btn.success { background: var(--success); color: var(--surface); border: 1px solid var(--success); }
-  .btn.danger  { background: var(--danger);  color: var(--surface); border: 1px solid var(--danger); }
-
-  /* Input focus glow — accent ring */
-  input:focus, textarea:focus, select:focus {
-    border-color: var(--accent);
-    box-shadow: 0 0 0 3px var(--accent-soft);
-  }
-
-  /* QB checkmark and similar status icons — real success green */
-  .inv-preview .inv-qb::before { color: var(--success) !important; }
-
-  /* Selection — warm slate */
-  ::selection { background: var(--accent-soft); color: var(--text); }
-
-  /* Toast borders — semantic */
-  .toast { border-left-color: var(--success); }
-  .toast.error { border-left-color: var(--danger); }
-  .toast.warn  { border-left-color: var(--warn); }
-  .toast.info  { border-left-color: var(--accent); }
-
-  /* Section titles — slim accent underline on hover/focus to add hierarchy */
-  .section-title {
-    border-bottom: 1px solid var(--border);
-    padding-bottom: 10px;
-    margin-bottom: 18px;
-  }
-
-  /* Headers in the Play demo button — accent ink, not gradient */
-  #demoBtn {
-    background: var(--accent) !important;
-    color: var(--surface) !important;
-    border-color: var(--accent) !important;
-  }
-  #demoBtn:hover {
-    background: var(--accent-hover) !important;
-    border-color: var(--accent-hover) !important;
-  }
-
-  /* ============================================================
-     MORE COLOR — push palette A a touch livelier
-     ============================================================ */
-
-  /* Brand: bigger, pop the accent more */
-  .brand-icon {
-    background: var(--accent) !important;
-    color: var(--surface) !important;
-    box-shadow: 0 1px 0 rgba(255,255,255,0.6) inset;
-  }
-  .brand > div > span:first-child {
-    color: var(--text);
-  }
-
-  /* KPI big numbers — accent on the dollar/percent figure itself */
-  .kpi-value {
-    color: var(--accent);
-    font-weight: 600;
-  }
-  .stat-value {
-    color: var(--accent);
-  }
-  /* But keep negative or "down" KPIs in danger color */
-  .kpi-value.neg, .kpi-value.danger { color: var(--danger); }
-  .kpi-value.warn  { color: var(--warn); }
-  .kpi-value.muted { color: var(--text); }
-
-  /* Larger, friendlier KPI deltas */
-  .kpi-trend.up,  .ev-good {
-    color: var(--success);
-    font-weight: 600;
-    background: var(--success-soft);
-    padding: 1px 6px;
-    border-radius: 3px;
-    font-size: 11px;
-  }
-  .kpi-trend.down, .ev-bad {
-    color: var(--danger);
-    font-weight: 600;
-    background: var(--danger-soft);
-    padding: 1px 6px;
-    border-radius: 3px;
-    font-size: 11px;
-  }
-
-  /* Currency amounts in lists — accent */
-  .amt, .price, .currency {
-    color: var(--accent);
-    font-weight: 600;
-    font-variant-numeric: tabular-nums;
-  }
-
-  /* Card hover — subtle accent left-edge highlight */
-  .card {
-    transition: border-color 0.18s ease, box-shadow 0.18s ease, transform 0.18s ease;
-    position: relative;
-  }
-  .card::before {
-    content: "";
-    position: absolute;
-    left: 0; top: 12px; bottom: 12px;
-    width: 2px;
-    background: transparent;
-    border-radius: 0 2px 2px 0;
-    transition: background 0.2s ease;
-  }
-  .card:hover::before { background: var(--accent); }
-  .card:hover { border-color: rgba(30,108,184,0.18); }
-
-  /* Section title — accent on the eyebrow text */
-  .section-title small {
-    color: var(--accent);
-    font-style: italic;
-  }
-
-  /* Tabs — accent badge filled with soft accent on inactive too */
-  .tab-badge {
-    background: var(--accent-soft);
-    color: var(--accent);
-    border: none;
-    font-weight: 600;
-    font-size: 10px;
-  }
-  .tab.active .tab-badge {
-    background: var(--accent);
-    color: var(--bg);
-  }
-
-  /* ms-pill (milestone status) — accent fill */
-  .ms-pill {
-    background: var(--accent-soft) !important;
-    color: var(--accent) !important;
-    border: none;
-  }
-
-  /* Crew suggestion — restored a small lightbulb in accent (was stripped) */
-  .crew-suggestion {
-    background: var(--accent-soft);
-    border-left: 2px solid var(--accent);
-    color: var(--text);
-    padding: 12px 14px;
-  }
-  .crew-suggestion .lead::before {
-    content: "→";
-    color: var(--accent);
-    margin-right: 8px;
-    font-weight: 600;
-    font-style: normal;
-  }
-
-  /* "Demo workspace" indicator dot — accent */
-  .top-meta span[style*="success"] {
-    color: var(--accent) !important;
-  }
-
-  /* Tabular cells that show contract / budget / variance */
-  td.amount, td.budget, td.variance {
-    color: var(--accent);
-    font-weight: 600;
-  }
-  td.variance.bad  { color: var(--danger); }
-  td.variance.good { color: var(--success); }
-
-  /* Estimate row eyebrow — accent stays visible */
-  .est-row-head, .est-row-head strong { color: var(--accent); }
-
-  /* Upload zone hover — full accent */
-  .upload-zone:hover, .upload-zone.drag {
-    border-color: var(--accent);
-    background: var(--accent-soft);
-  }
-  .upload-zone:hover .upload-icon, .upload-zone.drag .upload-icon { color: var(--accent); }
-
-  /* Underlines on links inside body */
-  main a {
-    color: var(--accent);
-    text-decoration: underline;
-    text-decoration-thickness: 1px;
-    text-underline-offset: 3px;
-    text-decoration-color: var(--accent-soft);
-    transition: text-decoration-color 0.15s ease;
-  }
-  main a:hover { text-decoration-color: var(--accent); }
-
-  /* Theme toggle — keep restrained, but icon accent on hover */
-  .theme-toggle:hover .theme-icon { color: var(--accent); }
-
-  /* ============================================================
-     RUN THE DEMO BUTTON — primary CTA in the header
-     ============================================================ */
-  .run-demo-btn {
-    display: inline-flex;
-    align-items: center;
-    gap: 10px;
-    padding: 9px 18px 9px 14px;
-    border-radius: 999px;
-    border: 1px solid var(--accent);
-    background: var(--accent);
-    color: var(--surface);
-    font-family: "Inter", sans-serif;
-    font-weight: 600;
-    font-size: 13px;
-    letter-spacing: 0.005em;
-    cursor: pointer;
-    transition: all 0.18s cubic-bezier(0.22,0.61,0.36,1);
-    box-shadow: 0 1px 2px rgba(30,108,184,0.15), 0 4px 12px rgba(30,108,184,0.18);
-    position: relative;
-    overflow: hidden;
-  }
-  .run-demo-btn::before {
-    content: "";
-    position: absolute;
-    inset: 0;
-    background: linear-gradient(135deg, rgba(255,255,255,0.18), rgba(255,255,255,0));
-    pointer-events: none;
-  }
-  .run-demo-btn:hover {
-    background: var(--accent-hover);
-    border-color: var(--accent-hover);
-    transform: translateY(-1px);
-    box-shadow: 0 2px 4px rgba(30,108,184,0.18), 0 8px 20px rgba(30,108,184,0.24);
-  }
-  .run-demo-btn:active {
-    transform: translateY(0);
-    box-shadow: 0 1px 2px rgba(30,108,184,0.20);
-  }
-  .run-demo-icon {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    width: 22px; height: 22px;
-    border-radius: 50%;
-    background: rgba(255,255,255,0.18);
-    color: var(--surface);
-    flex-shrink: 0;
-  }
-  .run-demo-icon svg { display: block; margin-left: 1px; }
-  .run-demo-label {
-    font-family: "Newsreader", ui-serif, Georgia, serif;
-    font-weight: 500;
-    font-size: 15px;
-    letter-spacing: -0.01em;
-    color: var(--surface);
-  }
-  .run-demo-kbd {
-    font-family: "JetBrains Mono", ui-monospace, "SF Mono", monospace;
-    font-size: 10px;
-    letter-spacing: 0.04em;
-    color: rgba(255,255,255,0.78);
-    background: rgba(255,255,255,0.13);
-    padding: 2px 7px;
-    border-radius: 4px;
-    border: 1px solid rgba(255,255,255,0.16);
-  }
-  @media (max-width: 720px) {
-    .run-demo-kbd { display: none; }
-    .run-demo-label { font-size: 14px; }
-  }
-
-  /* Keyboard shortcut: Alt/Option + D plays the demo */
 </style>
 </head>
 <body>
@@ -1498,21 +956,30 @@
     </div>
     <div class="top-meta" style="display:flex;align-items:center;gap:14px">
       <span><span id="currentDate"></span> &middot; <span style="color:var(--success)">&bull;</span> Demo workspace</span>
-            <button class="theme-toggle" id="themeToggle" title="Toggle light/dark">
+      <button class="theme-toggle" id="themeToggle" title="Toggle light/dark">
         <span class="theme-icon" id="themeIcon">&#9788;</span>
         <span class="theme-label" id="themeLabel">Light</span>
       </button>
-      <button id="demoBtn" title="Play scripted walkthrough" class="run-demo-btn">
-        <span class="run-demo-icon" aria-hidden="true">
-          <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M3 2L12 7L3 12V2Z" fill="currentColor"/>
-          </svg>
-        </span>
-        <span class="run-demo-label">Run the demo</span>
-        <span class="run-demo-kbd">⌥D</span>
-      </button>
     </div>
   </header>
+
+  <!-- Floating top-center demo control bar -->
+  <div class="demo-bar" id="demoBar">
+    <button class="demo-ctrl" id="demoBack" title="Restart demo from the beginning" disabled>
+      <span class="demo-ctrl-icon">&#9198;</span>
+    </button>
+    <button class="demo-ctrl primary" id="demoPlayPause" title="Play scripted walkthrough">
+      <span class="demo-ctrl-icon" id="demoPlayIcon">&#9654;</span>
+      <span id="demoPlayLabel">Play demo</span>
+    </button>
+    <button class="demo-ctrl" id="demoForward" title="Skip to the next step" disabled>
+      <span class="demo-ctrl-icon">&#9197;</span>
+    </button>
+    <span class="demo-bar-divider" id="demoBarDivider" style="display:none"></span>
+    <button class="demo-ctrl" id="demoStop" title="Stop demo" style="display:none">
+      <span class="demo-ctrl-icon">&times;</span>
+    </button>
+  </div>
 
   <nav class="tabs">
     <div class="tab active" data-tab="proposals">Proposals <span class="tab-badge" id="badge-proposals">0</span></div>
@@ -2688,458 +2155,6 @@ function moneyLong(n) {
   return '$' + Number(n||0).toLocaleString(undefined, {minimumFractionDigits:2, maximumFractionDigits:2});
 }
 
-
-function generateChangeOrderHTML(p, co, idx) {
-  const today = new Date().toLocaleDateString(undefined,{year:'numeric',month:'long',day:'numeric'});
-  const issuedOn = co.date ? new Date(co.date).toLocaleDateString(undefined,{year:'numeric',month:'long',day:'numeric'}) : today;
-  const submittedOn = co.submittedDate ? new Date(co.submittedDate).toLocaleDateString(undefined,{year:'numeric',month:'long',day:'numeric'}) : '—';
-  const approvedOn = co.approvedDate ? new Date(co.approvedDate).toLocaleDateString(undefined,{year:'numeric',month:'long',day:'numeric'}) : null;
-  const cost = Number(co.cost) || 0;
-  const markup = Number(co.markup) || 0.15;
-  const overhead = cost * markup;
-  const total = Number(co.amount) || (cost + overhead);
-  const newContract = (Number(p.cost)||0) + (p.changeOrders||[]).filter(x=>x.status==='approved').reduce((s,x)=>s+(Number(x.amount)||0),0) + (co.status!=='approved'?total:0);
-  const statusLabel = ({draft:'Draft', sent_to_customer:'Awaiting customer approval', approved:'Approved', rejected:'Rejected'})[co.status] || co.status;
-  const statusColor = co.status==='approved' ? '#3a8c5c' : co.status==='rejected' ? '#b14e3a' : co.status==='sent_to_customer' ? '#c2902f' : '#888';
-
-  return `<!DOCTYPE html>
-<html><head><meta charset="UTF-8"><title>Change Order ${esc(co.number)} — ${esc(p.client||'')}</title>
-<style>
-  @page { size: letter; margin: 0.6in; }
-  body { font-family: Georgia, "Times New Roman", serif; color: #1a1a1a; line-height: 1.55; max-width: 7.5in; margin: 0.4in auto; padding: 0 0.4in; background: #fafafa; }
-  .doc { background: white; padding: 0.5in; box-shadow: 0 1px 6px rgba(0,0,0,0.08); border: 1px solid #ddd; }
-  .header { display: flex; align-items: center; gap: 18px; padding-bottom: 14px; border-bottom: 3px double #1e6cb8; }
-  .header .co-name { font-size: 26px; font-weight: 700; color: #1e6cb8; letter-spacing: 0.5px; margin: 0; }
-  .header .co-tagline { font-size: 11px; color: #b06a4a; text-transform: uppercase; letter-spacing: 1.5px; font-weight: 600; }
-  .header .co-meta { margin-left: auto; text-align: right; font-size: 11px; color: #555; line-height: 1.6; }
-  .doc-title { font-size: 22px; color: #1e6cb8; margin: 22px 0 4px; font-weight: 700; text-align: center; letter-spacing: 1px; text-transform: uppercase;}
-  .doc-num { text-align: center; font-size: 12px; color: #888; margin-bottom: 18px; }
-  .meta-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; margin: 18px 0; padding: 12px; border: 1px solid #e0e6ee; background: #f7faff; border-radius: 4px; font-size: 12px; }
-  .meta-grid h4 { font-size: 10px; text-transform: uppercase; letter-spacing: 1px; color: #888; margin: 0 0 4px; font-weight: 700; }
-  .meta-grid p { margin: 1px 0; }
-  .status-pill { display: inline-block; padding: 3px 10px; border-radius: 999px; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; color: white; }
-  table { width: 100%; border-collapse: collapse; margin: 12px 0; font-size: 12.5px; }
-  th { background: #1e6cb8; color: white; padding: 8px 10px; text-align: left; font-size: 11px; text-transform: uppercase; letter-spacing: 1px; font-weight: 600; }
-  td { padding: 8px 10px; border-bottom: 1px solid #eee; vertical-align: top; }
-  .totals { margin-top: 12px; }
-  .totals tr td { border: none; padding: 4px 10px; }
-  .totals .grand { background: #1e6cb8; color: white; font-weight: 700; font-size: 14px; }
-  .reason-box { background: #fffbf2; border: 1px solid #f4e3b6; border-left: 4px solid #c2902f; padding: 12px 14px; margin: 14px 0; font-size: 13px; }
-  .reason-box h4 { margin: 0 0 4px; color: #8c6818; font-size: 11px; text-transform: uppercase; letter-spacing: 1px; }
-  .sig-row { display: flex; gap: 28px; margin-top: 36px; }
-  .sig { flex: 1; }
-  .sig .line { border-top: 1px solid #333; margin-top: 32px; padding-top: 4px; font-size: 11px; color: #555; }
-  .footer { margin-top: 32px; padding-top: 12px; border-top: 1px solid #ddd; text-align: center; font-size: 10px; color: #888; }
-  .impact { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin: 14px 0; }
-  .impact .box { border: 1px solid #ddd; border-radius: 4px; padding: 12px; background: #fafafa; }
-  .impact .box .lbl { font-size: 10px; text-transform: uppercase; letter-spacing: 1px; color: #888; font-weight: 600; }
-  .impact .box .val { font-size: 18px; font-weight: 700; color: #1e6cb8; margin-top: 4px; }
-  .impact .box.warn .val { color: #c2902f; }
-  ul { padding-left: 18px; margin: 6px 0 12px; }
-</style>
-</head><body><div class="doc">
-
-  <div class="header">
-    <div>
-      <div class="co-name">PROJECT RUNNER</div>
-      <div class="co-tagline">Construction · Project Management</div>
-    </div>
-    <div class="co-meta">
-      Issued: ${issuedOn}<br>
-      Project: ${esc(p.id||'')}<br>
-      Document: ${esc(co.number)}
-    </div>
-  </div>
-
-  <div class="doc-title">Change Order Request</div>
-  <div class="doc-num">${esc(co.number)} · Issued ${issuedOn} · <span class="status-pill" style="background:${statusColor}">${statusLabel}</span></div>
-
-  <div class="meta-grid">
-    <div>
-      <h4>Issued To</h4>
-      <p><strong>${esc(p.client||'')}</strong></p>
-      <p>Project: ${esc(p.service||p.projectTitle||'')}</p>
-      <p>Reference: Contract ${esc(p.proposalNumber||p.id||'')}</p>
-    </div>
-    <div>
-      <h4>Issued By</h4>
-      <p><strong>Project Runner Construction Ltd.</strong></p>
-      <p>${esc(co.submittedBy||'PM Office')}</p>
-      <p>Submitted: ${submittedOn}${approvedOn?`<br>Approved: ${approvedOn}`:''}</p>
-    </div>
-  </div>
-
-  <div class="reason-box">
-    <h4>Reason for change</h4>
-    <p style="margin:0">${esc(co.description||'No description provided.')}</p>
-    ${co.notes ? `<p style="margin:6px 0 0;font-size:12px;color:#666">${esc(co.notes)}</p>` : ''}
-  </div>
-
-  <h3 style="margin:18px 0 6px;font-size:14px;color:#1e6cb8;text-transform:uppercase;letter-spacing:1px">Cost breakdown</h3>
-  <table>
-    <thead><tr><th>Description</th><th style="text-align:right;width:120px">Amount</th></tr></thead>
-    <tbody>
-      <tr><td>Direct cost — labour, materials, subs</td><td style="text-align:right">${money(cost)}</td></tr>
-      <tr><td>Overhead &amp; profit (${Math.round(markup*100)}% per Article 5)</td><td style="text-align:right">${money(overhead)}</td></tr>
-    </tbody>
-    <tfoot class="totals">
-      <tr class="grand"><td>TOTAL CHANGE ORDER VALUE</td><td style="text-align:right">${money(total)}</td></tr>
-    </tfoot>
-  </table>
-
-  <div class="impact">
-    <div class="box">
-      <div class="lbl">Schedule impact</div>
-      <div class="val">${(co.scheduleDays||0)>0?'+':''}${co.scheduleDays||0} day${Math.abs(co.scheduleDays||0)===1?'':'s'}</div>
-    </div>
-    <div class="box ${total>=0?'':'warn'}">
-      <div class="lbl">Revised contract value</div>
-      <div class="val">${money(newContract)}</div>
-    </div>
-  </div>
-
-  <h3 style="margin:18px 0 6px;font-size:14px;color:#1e6cb8;text-transform:uppercase;letter-spacing:1px">Authorization</h3>
-  <p style="font-size:12.5px">By signing below, the Owner authorizes the Contractor to proceed with the change in scope described above and agrees to the corresponding adjustments to the Contract Price and Schedule. This change order, once executed, becomes an integral part of the Contract.</p>
-
-  <div class="sig-row">
-    <div class="sig">
-      <div class="line"><strong>Owner</strong> — ${esc(p.client||'')}<br>Signature &amp; Date</div>
-    </div>
-    <div class="sig">
-      <div class="line"><strong>Contractor</strong> — Project Runner Construction Ltd.<br>Signature &amp; Date</div>
-    </div>
-  </div>
-
-  <div class="footer">
-    ${esc(co.number)} · Generated ${today} · This document supersedes any verbal agreement regarding the changes described herein.
-  </div>
-
-</div></body></html>`;
-}
-
-function generateInvoiceHTML(p, m, milestoneIdx) {
-  const today = new Date().toLocaleDateString(undefined,{year:'numeric',month:'long',day:'numeric'});
-  const invoicedOn = m.invoicedDate ? new Date(m.invoicedDate).toLocaleDateString(undefined,{year:'numeric',month:'long',day:'numeric'}) : today;
-  const dueOn = m.dueDate ? new Date(m.dueDate).toLocaleDateString(undefined,{year:'numeric',month:'long',day:'numeric'}) : '—';
-  const paidOn = m.paidDate ? new Date(m.paidDate).toLocaleDateString(undefined,{year:'numeric',month:'long',day:'numeric'}) : null;
-  const subtotal = Number(m.amount) || 0;
-  const holdback = subtotal * 0.10;
-  const billable = subtotal - holdback;
-  const tax = billable * 0.05;
-  const grand = billable + tax;
-  const invoiceNum = m.invoiceNumber || `INV-${(p.id||'').slice(-4)||'0001'}-${String((milestoneIdx||0)+1).padStart(2,'0')}`;
-  const allMilestones = p.milestones || [];
-  const billedToDate = allMilestones.filter((x,i)=>i<=milestoneIdx).reduce((s,x)=>s+(Number(x.amount)||0),0);
-  const remaining = (Number(p.cost)||0) - billedToDate;
-  const status = paidOn ? 'PAID' : 'OUTSTANDING';
-  const statusColor = paidOn ? '#3a8c5c' : '#c2902f';
-
-  return `<!DOCTYPE html>
-<html><head><meta charset="UTF-8"><title>Invoice ${esc(invoiceNum)} — ${esc(p.client||'')}</title>
-<style>
-  @page { size: letter; margin: 0.5in; }
-  body { font-family: Georgia, "Times New Roman", serif; color: #1a1a1a; line-height: 1.5; max-width: 7.5in; margin: 0.3in auto; padding: 0 0.3in; background: #fafafa; }
-  .doc { background: white; padding: 0.45in; box-shadow: 0 1px 6px rgba(0,0,0,0.08); border: 1px solid #ddd; }
-  .top { display: flex; justify-content: space-between; align-items: flex-start; padding-bottom: 18px; border-bottom: 4px solid #1e6cb8; }
-  .top .brand-block { font-family: Georgia, serif; }
-  .top .brand-name { font-size: 24px; font-weight: 700; color: #1e6cb8; letter-spacing: 0.4px; line-height: 1; }
-  .top .brand-tag  { font-size: 10px; color: #b06a4a; text-transform: uppercase; letter-spacing: 1.5px; font-weight: 600; margin-top: 4px; }
-  .top .brand-addr { font-size: 11px; color: #555; line-height: 1.5; margin-top: 8px; }
-  .top .inv-block { text-align: right; }
-  .top .inv-title { font-size: 32px; color: #1e6cb8; letter-spacing: 4px; font-weight: 300; margin: 0; }
-  .top .inv-meta { font-size: 12px; color: #555; margin-top: 8px; line-height: 1.7; }
-  .top .inv-meta strong { color: #1a1a1a; }
-  .status-stamp { display: inline-block; margin-top: 8px; padding: 4px 12px; border: 2px solid; border-radius: 4px; font-size: 13px; font-weight: 700; letter-spacing: 2px; }
-  .billing { display: grid; grid-template-columns: 1fr 1fr; gap: 28px; margin: 22px 0; }
-  .billing h4 { font-size: 10px; text-transform: uppercase; letter-spacing: 1.5px; color: #888; margin: 0 0 8px; font-weight: 700; border-bottom: 1px solid #ddd; padding-bottom: 4px; }
-  .billing p { margin: 1px 0; font-size: 12.5px; }
-  table { width: 100%; border-collapse: collapse; margin: 14px 0; font-size: 12.5px; }
-  th { background: #f4f5f7; color: #1a1a1a; padding: 10px 12px; text-align: left; font-size: 10px; text-transform: uppercase; letter-spacing: 1px; font-weight: 700; border-bottom: 2px solid #1e6cb8; }
-  td { padding: 12px; border-bottom: 1px solid #eee; vertical-align: top; }
-  .desc { font-weight: 600; }
-  .desc-sub { font-size: 11px; color: #888; margin-top: 4px; font-style: italic; }
-  .totals { margin-left: auto; width: 60%; border-top: 1px solid #ddd; padding-top: 8px; }
-  .totals tr td { border: none; padding: 4px 12px; font-size: 13px; }
-  .totals .label { color: #555; }
-  .totals .amt { text-align: right; font-variant-numeric: tabular-nums; }
-  .totals tr.subtotal td { border-top: 1px solid #ddd; padding-top: 8px; }
-  .totals tr.grand td { background: #1e6cb8; color: white; font-weight: 700; font-size: 16px; padding: 10px 12px; }
-  .terms { margin-top: 22px; padding: 14px; background: #f7faff; border: 1px solid #e0e6ee; border-radius: 4px; font-size: 11.5px; line-height: 1.6; }
-  .terms h4 { margin: 0 0 6px; font-size: 11px; text-transform: uppercase; letter-spacing: 1px; color: #1e6cb8; }
-  .summary { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin: 16px 0; }
-  .summary .box { padding: 12px; border: 1px solid #ddd; border-radius: 4px; background: #fafafa; }
-  .summary .lbl { font-size: 10px; text-transform: uppercase; letter-spacing: 1px; color: #888; font-weight: 600; }
-  .summary .val { font-size: 16px; font-weight: 700; color: #1a1a1a; margin-top: 4px; font-variant-numeric: tabular-nums; }
-  .summary .box.due .val { color: #c2902f; }
-  .summary .box.paid .val { color: #3a8c5c; }
-  .footer { margin-top: 28px; padding-top: 12px; border-top: 1px solid #ddd; text-align: center; font-size: 10px; color: #888; }
-  .qb-tag { display: inline-flex; align-items: center; gap: 6px; margin-top: 10px; padding: 4px 10px; background: rgba(58,140,92,0.1); color: #3a8c5c; border-radius: 999px; font-size: 11px; font-weight: 600; }
-</style>
-</head><body><div class="doc">
-
-  <div class="top">
-    <div class="brand-block">
-      <div class="brand-name">PROJECT RUNNER</div>
-      <div class="brand-tag">Construction Ltd.</div>
-      <div class="brand-addr">
-        2840 Industrial Way<br>
-        Calgary, AB · T2H 4P5<br>
-        billing@projectrunner.example · (403) 555-0117<br>
-        GST: 89345 6712 RT0001
-      </div>
-    </div>
-    <div class="inv-block">
-      <h1 class="inv-title">INVOICE</h1>
-      <div class="inv-meta">
-        <strong>${esc(invoiceNum)}</strong><br>
-        Issued: ${invoicedOn}<br>
-        Due: ${dueOn} · Net 30
-      </div>
-      <div class="status-stamp" style="border-color:${statusColor};color:${statusColor}">${status}</div>
-    </div>
-  </div>
-
-  <div class="billing">
-    <div>
-      <h4>Bill To</h4>
-      <p><strong>${esc(p.client||'')}</strong></p>
-      <p>${esc(p.contactName||'Accounts Payable')}</p>
-      <p>${esc(p.contactEmail||'')}</p>
-    </div>
-    <div>
-      <h4>Project</h4>
-      <p><strong>${esc(p.service||p.projectTitle||'')}</strong></p>
-      <p>Contract: ${esc(p.proposalNumber||p.id||'')}</p>
-      <p>This invoice covers progress milestone ${(milestoneIdx||0)+1} of ${allMilestones.length}.</p>
-    </div>
-  </div>
-
-  <table>
-    <thead><tr><th style="width:60%">Description</th><th style="width:14%;text-align:center">% Complete</th><th style="width:13%;text-align:right">Rate</th><th style="width:13%;text-align:right">Amount</th></tr></thead>
-    <tbody>
-      <tr>
-        <td>
-          <div class="desc">${esc(m.name||'Milestone billing')}</div>
-          <div class="desc-sub">Progress invoice for completion of milestone ${(milestoneIdx||0)+1}: ${esc(m.name||'')}. Per Schedule of Values in Article 3 of the executed contract.</div>
-        </td>
-        <td style="text-align:center"><strong>100%</strong></td>
-        <td style="text-align:right">Lump sum</td>
-        <td style="text-align:right"><strong>${money(subtotal)}</strong></td>
-      </tr>
-    </tbody>
-  </table>
-
-  <table class="totals">
-    <tbody>
-      <tr><td class="label">Milestone subtotal</td><td class="amt">${money(subtotal)}</td></tr>
-      <tr><td class="label">Less: 10% holdback (Builders Lien Act)</td><td class="amt" style="color:#888">(${money(holdback)})</td></tr>
-      <tr class="subtotal"><td class="label"><strong>Currently billable</strong></td><td class="amt"><strong>${money(billable)}</strong></td></tr>
-      <tr><td class="label">GST (5%)</td><td class="amt">${money(tax)}</td></tr>
-      <tr class="grand"><td>AMOUNT DUE</td><td class="amt">${money(grand)}</td></tr>
-    </tbody>
-  </table>
-
-  <div class="summary">
-    <div class="box">
-      <div class="lbl">Contract value</div>
-      <div class="val">${money(p.cost||0)}</div>
-    </div>
-    <div class="box paid">
-      <div class="lbl">Billed to date</div>
-      <div class="val">${money(billedToDate)}</div>
-    </div>
-    <div class="box ${remaining>0?'due':''}">
-      <div class="lbl">Remaining</div>
-      <div class="val">${money(remaining)}</div>
-    </div>
-  </div>
-
-  <div class="terms">
-    <h4>Payment terms</h4>
-    Payment due within thirty (30) days of invoice date per Article 3 of the executed contract. Holdback of ten percent (10%) is retained per the Builders Lien Act and released forty-five (45) days after substantial performance. Payment may be made by EFT, cheque, or e-transfer to billing@projectrunner.example. Late payments accrue interest at 1.5% per month (18% APR).
-    <div class="qb-tag">✓ Synced to QuickBooks Online</div>
-  </div>
-
-  <div class="footer">
-    Invoice ${esc(invoiceNum)} · Generated ${today} · Project Runner Construction Ltd. · Thank you for your business.
-  </div>
-
-</div></body></html>`;
-}
-
-function generateDailyReportHTML(p) {
-  const today = new Date();
-  const dateStr = today.toLocaleDateString(undefined,{weekday:'long',year:'numeric',month:'long',day:'numeric'});
-  const reportNum = `DR-${(p.id||'').slice(-4)||'0001'}-${today.toISOString().slice(0,10).replace(/-/g,'')}`;
-  // Synthesize realistic daily report data from project state
-  const activeMilestone = (p.milestones||[]).find(m => m.status==='active') || (p.milestones||[]).find(m => m.status==='pending') || (p.milestones||[])[0];
-  const crewSize = 4 + Math.floor(Math.random()*4);
-  const hours = crewSize * 8;
-  const weather = ['Clear, 18°C, light breeze','Overcast, 14°C, dry','Sunny, 22°C, no wind','Light rain a.m., cleared p.m., 16°C'][Math.floor(Math.random()*4)];
-  const safetyIncidents = Math.random() > 0.85 ? 1 : 0;
-
-  return `<!DOCTYPE html>
-<html><head><meta charset="UTF-8"><title>Daily Report ${dateStr} — ${esc(p.client||'')}</title>
-<style>
-  @page { size: letter; margin: 0.55in; }
-  body { font-family: Georgia, "Times New Roman", serif; color: #1a1a1a; line-height: 1.55; max-width: 7.5in; margin: 0.3in auto; padding: 0 0.3in; background: #fafafa; }
-  .doc { background: white; padding: 0.5in; box-shadow: 0 1px 6px rgba(0,0,0,0.08); border: 1px solid #ddd; }
-  .header { display: flex; align-items: flex-start; padding-bottom: 14px; border-bottom: 2px solid #1e6cb8; }
-  .header-left { flex: 1; }
-  .header-left .name { font-size: 20px; color: #1e6cb8; font-weight: 700; letter-spacing: 0.3px; }
-  .header-left .tag { font-size: 10px; color: #b06a4a; text-transform: uppercase; letter-spacing: 1.5px; font-weight: 600; margin-top: 2px;}
-  .header-right { text-align: right; font-size: 11px; color: #555; line-height: 1.7; }
-  .doc-title { font-size: 22px; color: #1e6cb8; margin: 18px 0 4px; font-weight: 700; text-align: center; letter-spacing: 1px; text-transform: uppercase;}
-  .doc-num { text-align: center; font-size: 11px; color: #888; margin-bottom: 14px; }
-  .meta-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin: 14px 0 18px; }
-  .meta-row .box { padding: 10px 12px; background: #f4f5f7; border-left: 3px solid #1e6cb8; }
-  .meta-row .lbl { font-size: 9px; text-transform: uppercase; letter-spacing: 1.2px; color: #888; font-weight: 700; }
-  .meta-row .val { font-size: 13px; font-weight: 700; color: #1a1a1a; margin-top: 2px; }
-  .section { margin: 18px 0; }
-  .section h3 { font-size: 13px; color: #1e6cb8; text-transform: uppercase; letter-spacing: 1.5px; margin: 0 0 8px; padding-bottom: 4px; border-bottom: 1px solid #e0e6ee; font-weight: 700; }
-  .section p { margin: 0 0 6px; font-size: 12.5px; }
-  table { width: 100%; border-collapse: collapse; margin: 6px 0; font-size: 12px; }
-  th { background: #f4f5f7; color: #1a1a1a; padding: 6px 10px; text-align: left; font-size: 10px; text-transform: uppercase; letter-spacing: 1px; border-bottom: 1px solid #ddd;}
-  td { padding: 6px 10px; border-bottom: 1px solid #eee; }
-  .safety-banner { padding: 10px 14px; border-radius: 4px; margin: 10px 0; font-size: 12.5px; }
-  .safety-banner.ok { background: rgba(58,140,92,0.08); border-left: 3px solid #3a8c5c; color: #1f5e38; }
-  .safety-banner.warn { background: rgba(194,144,47,0.10); border-left: 3px solid #c2902f; color: #6e5118; }
-  .checklist { list-style: none; padding: 0; margin: 6px 0; }
-  .checklist li { padding: 3px 0 3px 22px; position: relative; font-size: 12.5px; }
-  .checklist li::before { content: '✓'; position: absolute; left: 0; color: #3a8c5c; font-weight: 700; }
-  .sig-row { display: flex; gap: 28px; margin-top: 30px; padding-top: 14px; border-top: 1px solid #e0e6ee;}
-  .sig { flex: 1; }
-  .sig .line { border-top: 1px solid #333; margin-top: 28px; padding-top: 4px; font-size: 11px; color: #555; }
-  .footer { margin-top: 24px; padding-top: 10px; border-top: 1px solid #ddd; text-align: center; font-size: 10px; color: #888; }
-  .photo-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 8px; margin-top: 8px; }
-  .photo-grid .ph { aspect-ratio: 4/3; background: linear-gradient(135deg, #e0e6ee, #c8d2dc); border-radius: 3px; display: flex; align-items: center; justify-content: center; font-size: 10px; color: #888; text-transform: uppercase; letter-spacing: 1px;}
-</style>
-</head><body><div class="doc">
-
-  <div class="header">
-    <div class="header-left">
-      <div class="name">PROJECT RUNNER</div>
-      <div class="tag">Construction Ltd. · Daily Field Report</div>
-    </div>
-    <div class="header-right">
-      Report: ${reportNum}<br>
-      Submitted: ${dateStr}<br>
-      Project: ${esc(p.id||'')}
-    </div>
-  </div>
-
-  <div class="doc-title">Daily Site Report</div>
-  <div class="doc-num">${esc(p.client||'')} · ${esc(p.service||p.projectTitle||'')}</div>
-
-  <div class="meta-row">
-    <div class="box"><div class="lbl">Date</div><div class="val">${dateStr.split(',')[0]}</div></div>
-    <div class="box"><div class="lbl">Weather</div><div class="val" style="font-size:11px">${weather}</div></div>
-    <div class="box"><div class="lbl">Crew on site</div><div class="val">${crewSize} workers</div></div>
-    <div class="box"><div class="lbl">Hours worked</div><div class="val">${hours} hrs</div></div>
-  </div>
-
-  <div class="safety-banner ${safetyIncidents===0?'ok':'warn'}">
-    <strong>Safety:</strong> ${safetyIncidents===0?'Zero incidents · daily toolbox talk completed at 7:00 a.m. · all PPE accounted for.':'1 minor incident — see notes section. Toolbox talk completed at 7:00 a.m.'}
-  </div>
-
-  <div class="section">
-    <h3>Active milestone</h3>
-    <p><strong>${esc(activeMilestone?.name||'No active milestone')}</strong> — ${activeMilestone? Math.round((activeMilestone.progress||0.5)*100)+'% complete' : ''}</p>
-    <p style="color:#555;font-size:12px">Crew lead: ${esc(activeMilestone?.crewLead||'A. Mendoza')}. Phase status: on track.</p>
-  </div>
-
-  <div class="section">
-    <h3>Work performed today</h3>
-    <ul class="checklist">
-      <li>Continued installation per drawing set rev ${Math.floor(Math.random()*3)+2}</li>
-      <li>Material delivery from primary supplier received and staged</li>
-      <li>Coordination call with ${esc(p.client||'owner')} — confirmed milestone ${activeMilestone?.name||''} sign-off scheduled for end of week</li>
-      <li>Sub-trade crew (${['electrical','mechanical','framing','finish'][Math.floor(Math.random()*4)]}) on site for parallel work</li>
-      <li>Quality control walk-through with site superintendent — no deficiencies logged</li>
-    </ul>
-  </div>
-
-  <div class="section">
-    <h3>Crew on site</h3>
-    <table>
-      <thead><tr><th>Trade</th><th>Workers</th><th>Hours</th><th>Lead</th></tr></thead>
-      <tbody>
-        <tr><td>Carpenters</td><td>${Math.max(1,crewSize-2)}</td><td>${(crewSize-2)*8}</td><td>A. Mendoza</td></tr>
-        <tr><td>Labourers</td><td>2</td><td>16</td><td>D. Patel</td></tr>
-        ${Math.random()>0.4?'<tr><td>Sub — Electrical</td><td>2</td><td>16</td><td>NorthGrid Electric</td></tr>':''}
-      </tbody>
-    </table>
-  </div>
-
-  <div class="section">
-    <h3>Materials &amp; deliveries</h3>
-    <table>
-      <thead><tr><th>Item</th><th>Quantity</th><th>Status</th><th>Supplier</th></tr></thead>
-      <tbody>
-        <tr><td>Concrete (32 MPa)</td><td>${Math.floor(Math.random()*8)+10} m³</td><td>Delivered, used</td><td>Lafarge</td></tr>
-        <tr><td>Rebar (#4 / 12mm)</td><td>${Math.floor(Math.random()*200)+400} ft</td><td>On site, staged</td><td>Westeel</td></tr>
-        <tr><td>Framing lumber (2x6)</td><td>${Math.floor(Math.random()*40)+80} pcs</td><td>Delivered today</td><td>Dick's Lumber</td></tr>
-      </tbody>
-    </table>
-  </div>
-
-  <div class="section">
-    <h3>Issues, delays, RFIs</h3>
-    <p style="font-size:12.5px;color:#555">${(p.issues||[]).filter(i=>i.status==='open').length===0?'No active issues. No RFIs outstanding. Schedule on track.':'See issue log for full details. Open items being tracked by PM.'}</p>
-  </div>
-
-  <div class="section">
-    <h3>Site photos</h3>
-    <div class="photo-grid">
-      <div class="ph">[ progress shot 1 ]</div>
-      <div class="ph">[ progress shot 2 ]</div>
-      <div class="ph">[ progress shot 3 ]</div>
-    </div>
-    <p style="font-size:11px;color:#888;margin-top:6px;font-style:italic">Photos auto-uploaded from site superintendent's phone via the AI inbox; included in client weekly digest.</p>
-  </div>
-
-  <div class="sig-row">
-    <div class="sig">
-      <div class="line"><strong>Site Superintendent</strong><br>Signature &amp; Date</div>
-    </div>
-    <div class="sig">
-      <div class="line"><strong>Project Manager</strong><br>Signature &amp; Date</div>
-    </div>
-  </div>
-
-  <div class="footer">
-    ${reportNum} · Generated ${dateStr} · For internal use and client weekly digest. Project Runner Construction Ltd.
-  </div>
-
-</div></body></html>`;
-}
-
-function openChangeOrderDoc(projId, idx) {
-  const p = state.projects.find(x => x.id === projId);
-  if (!p) return showToast('Project not found', true);
-  const co = (p.changeOrders||[])[idx];
-  if (!co) return showToast('Change order not found', true);
-  openDocInNewTab(generateChangeOrderHTML(p, co, idx), `${co.number}-${(p.client||'').replace(/\s+/g,'_')}.html`);
-}
-
-function openInvoiceDoc(projId, idx) {
-  const p = state.projects.find(x => x.id === projId);
-  if (!p) return showToast('Project not found', true);
-  const m = (p.milestones||[])[idx];
-  if (!m) return showToast('Milestone not found', true);
-  if (m.status !== 'invoiced' && m.status !== 'paid') return showToast('No invoice yet — milestone not invoiced.');
-  openDocInNewTab(generateInvoiceHTML(p, m, idx), `Invoice-${(p.id||'').slice(-4)}-${idx+1}.html`);
-}
-
-function openDailyReportDoc(projId) {
-  const p = state.projects.find(x => x.id === projId);
-  if (!p) return showToast('Project not found', true);
-  openDocInNewTab(generateDailyReportHTML(p), `DailyReport-${(p.id||'').slice(-4)}-${new Date().toISOString().slice(0,10)}.html`);
-}
-
-// Helper for currency formatting in templates (alias for fmt$)
-function money(n) { return '$' + Number(n||0).toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2}); }
-
 function generateProposalHTML(p) {
   const subtotal = (p.lineItems||[]).reduce((s,li)=>s+li.qty*li.unitPrice, 0) || p.cost;
   const tax = subtotal * 0.05;
@@ -3183,7 +2198,7 @@ function generateProposalHTML(p) {
   @media print { .actions { display: none; } body { background: white; } .doc { box-shadow: none; border: none; padding: 0; } }
 </style></head>
 <body>
-<!-- print button removed -->
+<div class="actions"><button onclick="window.print()">Print / Save PDF</button></div>
 <div class="doc">
   <div class="header">
     ${logoSVG()}
@@ -3310,7 +2325,7 @@ function generateContractHTML(p) {
   .footer { margin-top: 32px; padding-top: 12px; border-top: 1px solid #ddd; text-align: center; font-size: 10px; color: #888; }
 </style></head>
 <body>
-<!-- print button removed -->
+<div class="actions"><button onclick="window.print()">Print / Save PDF</button></div>
 <div class="doc">
   <div class="header">
     ${logoSVG()}
@@ -4478,7 +3493,6 @@ function openProject(id) {
           <button class="btn" onclick="openContractDoc('${p.proposalId}')">&#128221; Open contract</button>
           <button class="btn secondary" onclick="openProposalDoc('${p.proposalId}')">&#128196; Open proposal</button>
           <button class="btn secondary" onclick="openCustomerPortal('${p.id}')">&#128100; Customer portal</button>
-          <button class="btn ghost" onclick="openDailyReportDoc('${p.id}')" title="Generate today's site report">&#128221; Daily report</button>
         </div>` : ''}
       <div class="grid cols-4">
         <div class="kpi"><div class="kpi-label">Contract value</div><div class="kpi-value">${fmt$(p.totalCost)}</div></div>
@@ -4582,9 +3596,7 @@ function openProject(id) {
                   <td>${fmtDate(m.dueDate)}</td>
                   <td>${fmtDate(m.paidDate)}</td>
                   <td style="${overdue?'color:var(--danger)':''}">${daysCol}</td>
-                  <td><span class="badge ${overdue?'overdue':m.status}">${overdue?'overdue':m.status}</span>
-                    ${(m.status==='invoiced'||m.status==='paid')? `<button class="btn ghost small" style="margin-left:6px" onclick="openInvoiceDoc('${p.id}',${p.milestones.indexOf(m)})">Open invoice</button>`:''}
-                  </td>
+                  <td><span class="badge ${overdue?'overdue':m.status}">${overdue?'overdue':m.status}</span></td>
                 </tr>`;
               }).join('')}
             </tbody>
@@ -4629,7 +3641,6 @@ function openProject(id) {
                 <td style="white-space:nowrap">
                   ${co.status==='draft' ? `<button class="btn small" onclick="resubmitCO('${p.id}',${i})" title="Email this CO to the customer for approval">Submit</button>` : ''}
                   ${co.status==='sent_to_customer' ? `<button class="btn small success" onclick="simulateCustomerApproval('${p.id}',${i})" title="Demo: simulate the customer replying \\&quot;approved\\&quot;">Simulate approval</button>` : ''}
-                  <button class="btn ghost small" onclick="openChangeOrderDoc('${p.id}',${i})" title="Open the formal CO document in a new tab">Open</button>
                   <button class="btn ghost small" onclick="deleteChangeOrder('${p.id}',${i})">&times;</button>
                 </td>
               </tr>`;
@@ -6203,6 +5214,8 @@ function renderAll() {
    DEMO MODE — scripted walkthrough orchestrator
    ============================================================ */
 let demoRunning = false, demoCancelled = false;
+let demoPaused = false;          // ⏸ pause flag — demoWait holds while true
+let skipToNextStep = false;      // ⏭ forward flag — demoWait returns early; reset at next demoStep
 let demoLastHighlighted = null;
 // Global speed multiplier — bump this to slow the whole walkthrough down
 const DEMO_SPEED = 1.6;
@@ -6210,13 +5223,30 @@ const DEMO_SPEED = 1.6;
 function demoStep(title, message) {
   return new Promise(resolve => {
     if (demoCancelled) return resolve();
+    // Reset the forward-skip flag at every step boundary so each press of ⏭
+    // skips waits within just the current step, not all subsequent ones
+    skipToNextStep = false;
     document.getElementById('demoCaptionTitle').textContent = title;
     document.getElementById('demoCaptionMsg').textContent = message || '';
     document.getElementById('demoCaption').classList.add('show');
     resolve();
   });
 }
-function demoWait(ms) { return new Promise(r => setTimeout(r, demoCancelled ? 0 : Math.round(ms * DEMO_SPEED))); }
+async function demoWait(ms) {
+  if (demoCancelled) return;
+  if (skipToNextStep) return;
+  const total = Math.round(ms * DEMO_SPEED);
+  const start = Date.now();
+  while (Date.now() - start < total) {
+    if (demoCancelled || skipToNextStep) return;
+    if (demoPaused) {
+      // Hold here while paused; check ~10x/sec for unpause or cancel
+      while (demoPaused && !demoCancelled) await new Promise(r => setTimeout(r, 90));
+      if (demoCancelled) return;
+    }
+    await new Promise(r => setTimeout(r, 60));
+  }
+}
 
 function clearHighlight() {
   if (demoLastHighlighted) demoLastHighlighted.classList.remove('demo-highlight');
@@ -6462,6 +5492,16 @@ async function typeInto(input, text, charDelay = 38) {
   const perChar = Math.round(charDelay * DEMO_SPEED);
   for (const char of text) {
     if (demoCancelled) break;
+    // If user pressed Forward, finish typing instantly and bail out
+    if (skipToNextStep) {
+      input.value = text;
+      break;
+    }
+    // While paused, hold the typing animation too
+    while (demoPaused && !demoCancelled && !skipToNextStep) {
+      await new Promise(r => setTimeout(r, 90));
+    }
+    if (demoCancelled) break;
     input.value += char;
     input.dispatchEvent(new Event('input'));
     await new Promise(r => setTimeout(r, perChar));
@@ -6474,8 +5514,10 @@ async function typeInto(input, text, charDelay = 38) {
 async function runDemo() {
   if (demoRunning) return;
   demoRunning = true; demoCancelled = false;
+  demoPaused = false; skipToNextStep = false;
   document.getElementById('demoCaption').classList.add('show');
-  document.getElementById('cancelDemoBtn').style.display = 'inline-flex';
+  // Inline "Skip" button is replaced by the floating top-center demo bar
+  if (typeof updateDemoButtons === 'function') updateDemoButtons();
 
   // Clean out any prior Cliffside demo project + proposal so each run starts fresh.
   // We match by project title, client, and proposal number prefix used in the demo.
@@ -6493,17 +5535,17 @@ async function runDemo() {
 
   try {
     // ---- Stage 1: Salesperson creates a proposal ----
-    await demoStep('1. Salesperson creates a proposal', 'A salesperson just got a call from Cliffside Developments — 32-unit town housing project. Time to put together a proposal.');
+    await demoStep('Salesperson creates a proposal', 'A salesperson just got a call from Cliffside Developments — 32-unit town housing project. Time to put together a proposal.');
     switchTab('proposals');
     await demoWait(3500);
 
-    await demoStep('2. Open the new proposal menu', 'Top right of the Proposals tab.');
+    await demoStep('Open the new proposal menu', 'Top right of the Proposals tab.');
     await pointAt('#addProposalBtn');
     await demoWait(2200);
     document.getElementById('addProposalDropdown').classList.add('open');
     await demoWait(1800);
 
-    await demoStep('3. Pick "Create a proposal"', 'Manual form path — we\'ll build it from scratch.');
+    await demoStep('Pick "Create a proposal"', 'Manual form path — we\'ll build it from scratch.');
     await pointAt('#addProposalMenu .dropdown-item[data-mode="create"]');
     await demoWait(2200);
     document.getElementById('addProposalDropdown').classList.remove('open');
@@ -6517,24 +5559,24 @@ async function runDemo() {
     formMilestones = STD_MS_TEMPLATE.map(m => ({...m, hours:[], subcontracts:[], materials:[]}));
     renderFormLineItems();
 
-    await demoStep('4. Fill in project title', '');
+    await demoStep('Fill in project title', '');
     await typeInto(f.projectTitle, 'Cliffside Townhouse Project');
 
-    await demoStep('5. Client', '');
+    await demoStep('Client', '');
     await typeInto(f.client, 'Cliffside Developments Ltd.');
 
-    await demoStep('6. Location', '');
+    await demoStep('Location', '');
     await typeInto(f.location, '8800 Crescent Drive, Surrey, BC');
 
-    await demoStep('7. Scope summary', '');
+    await demoStep('Scope summary', '');
     await typeInto(f.service, '32 town houses — turnkey');
 
-    await demoStep('8. Expected response date', 'When we hope to hear back from the client.');
+    await demoStep('Expected response date', 'When we hope to hear back from the client.');
     await typeInto(f.expectedResponse, addDays(todayISO(), 14));
     await demoWait(800);
 
     // ---- Add line items one at a time ----
-    await demoStep('9. Add itemized scope of work', 'Each line automatically totals into the contract value at the bottom.');
+    await demoStep('Add itemized scope of work', 'Each line automatically totals into the contract value at the bottom.');
     await pointAt('#addLineItemBtn');
     await demoWait(1500);
     const addLines = [
@@ -6554,19 +5596,19 @@ async function runDemo() {
     await demoWait(1500);
 
     // ---- Estimate ----
-    await demoStep('10. Build the estimate', 'Per milestone — sub quotes, crew hours, material quotes. Automatically pre-fills cost tracking once the proposal is sold.');
+    await demoStep('Build the estimate', 'Per milestone — sub quotes, crew hours, material quotes. Automatically pre-fills cost tracking once the proposal is sold.');
     await pointAt('#estimateBlocks [data-est-toggle="0"]');
     await demoWait(2500);
     const firstHeader = document.querySelector('#estimateBlocks [data-est-toggle="0"]');
     if (firstHeader) firstHeader.click();
     await demoWait(1200);
 
-    await demoStep('11. Pacific Concrete subcontractor quote', 'Foundations + concrete — $380k.');
+    await demoStep('Pacific Concrete subcontractor quote', 'Foundations + concrete — $380k.');
     formMilestones[0].subcontracts = [{sub:'Pacific Concrete Forming Ltd.',scope:'Foundations & concrete forming',amount:380000,status:'quoted'}];
     renderFormEstimate();
     await demoWait(2000);
 
-    await demoStep('12. Crew hours estimate', 'Foreman + lead carpenter — feeds labor cost.');
+    await demoStep('Crew hours estimate', 'Foreman + lead carpenter — feeds labor cost.');
     formMilestones[0].hours = [{role:'Foreman',hours:280,rate:85}];
     renderFormEstimate();
     await demoWait(1300);
@@ -6574,13 +5616,13 @@ async function runDemo() {
     renderFormEstimate();
     await demoWait(1800);
 
-    await demoStep('13. Material quote from BC Concrete', 'Ready-mix + rebar — $142k.');
+    await demoStep('Material quote from BC Concrete', 'Ready-mix + rebar — $142k.');
     formMilestones[0].materials = [{vendor:'BC Concrete Supply',item:'Ready-mix concrete & rebar',qty:1,unitCost:142000,status:'quoted'}];
     renderFormEstimate();
     await demoWait(2500);
 
     // ---- Save proposal ----
-    await demoStep('14. Save the proposal', 'Document is automatically generated — branded, with line items and 11-clause T&Cs.');
+    await demoStep('Save the proposal', 'Document is automatically generated — branded, with line items and 11-clause T&Cs.');
     await pointAt('#proposalForm button[type="submit"]', {side:'top'});
     await demoWait(2000);
     hidePointer();
@@ -6588,14 +5630,14 @@ async function runDemo() {
     await demoWait(2500);
 
     // ---- View the document ----
-    await demoStep('15. The new proposal', 'Sitting at the top of the existing proposals list. Click View to open the actual PDF-ready document.');
+    await demoStep('The new proposal', 'Sitting at the top of the existing proposals list. Click View to open the actual PDF-ready document.');
     const firstRow = document.querySelector('#proposalsTbody tr');
     if (firstRow) await pointAt(firstRow);
     await demoWait(3500);
     hidePointer();
 
     // ---- Customer says yes ----
-    await demoStep('16. Two weeks later — customer says yes', 'Marking Sold opens the schedule setup.');
+    await demoStep('Two weeks later — customer says yes', 'Marking Sold opens the schedule setup.');
     const newProp = state.proposals[0];
     await pointAt('#proposalsTbody tr .btn.success.small');
     await demoWait(2200);
@@ -6603,25 +5645,25 @@ async function runDemo() {
     markSold(newProp.id);
     await demoWait(3000);
 
-    await demoStep('17. Live Gantt schedule', 'Each milestone gets start/finish dates. The Gantt updates automatically in real time as you set them.');
+    await demoStep('Live Gantt schedule', 'Each milestone gets start/finish dates. The Gantt updates automatically in real time as you set them.');
     await pointAt('#schGantt');
     await demoWait(4000);
     hidePointer();
 
-    await demoStep('18. Suggested crew', 'Project Runner automatically suggests the right crew per phase based on specialty and availability — override available.');
+    await demoStep('Suggested crew', 'Project Runner automatically suggests the right crew per phase based on specialty and availability — override available.');
     const firstMs = document.querySelector('#schMilestones .ms-editor');
     if (firstMs) await pointAt(firstMs);
     await demoWait(3500);
     hidePointer();
 
-    await demoStep('19. Include schedule in contract', 'Toggle the box to attach the schedule as Schedule "A".');
+    await demoStep('Include schedule in contract', 'Toggle the box to attach the schedule as Schedule "A".');
     await pointAt('#schIncludeInContract');
     await demoWait(2200);
     document.getElementById('schIncludeInContract').checked = true;
     document.getElementById('schIncludeInContract').dispatchEvent(new Event('change'));
     await demoWait(2500);
 
-    await demoStep('20. Confirm — contract automatically builds', 'Proposal becomes a project. An 11-article construction contract is automatically generated, with Schedule A attached, and stored on the project.');
+    await demoStep('Confirm — contract automatically builds', 'Proposal becomes a project. An 11-article construction contract is automatically generated, with Schedule A attached, and stored on the project.');
     await pointAt('#confirmScheduleBtn');
     await demoWait(2200);
     hidePointer();
@@ -6630,7 +5672,7 @@ async function runDemo() {
 
     // ---- Project execution ----
     const newProj = state.projects[0];
-    await demoStep('21. New project on the board', 'Sitting at the top of Projects with Contract / Costs / Portal buttons.');
+    await demoStep('New project on the board', 'Sitting at the top of Projects with Contract / Costs / Portal buttons.');
     switchTab('projects');
     await demoWait(2000);
     const projCard = document.querySelector('#projectsGrid .project-card');
@@ -6639,7 +5681,7 @@ async function runDemo() {
     hidePointer();
 
     // ---- Stage 3: One email from the field updates everything ----
-    await demoStep('22. Foreman emails the AI-monitored inbox', 'One plain-text email from the truck to updates@projectrunner — with 4 site photos attached. Reads exactly like a normal email a foreman would write.');
+    await demoStep('Foreman emails the AI-monitored inbox', 'One plain-text email from the truck to updates@projectrunner — with 4 site photos attached. Reads exactly like a normal email a foreman would write.');
     showFieldEmail({
       from: 'Marcus Reyes <foreman.marcus@cliffsidecrew.example>',
       to:   'updates@projectrunner.solardev.ca',
@@ -6678,7 +5720,7 @@ async function runDemo() {
     await demoWait(7500);
 
     // ---- Step 23: One step. Project automatically updates everywhere it should ----
-    await demoStep('23. Project automatically updates', 'Progress bumps, hours land in cost tracking, payroll posts to QuickBooks, photos become a site report on the project, the issue gets logged with a red flag, and the PM gets an alert email — all from that one email.');
+    await demoStep('Project automatically updates', 'Progress bumps, hours land in cost tracking, payroll posts to QuickBooks, photos become a site report on the project, the issue gets logged with a red flag, and the PM gets an alert email — all from that one email.');
     // Apply all field-driven updates
     newProj.progress = 0.18;
     if (newProj.milestones[0]) {
@@ -6735,7 +5777,7 @@ async function runDemo() {
     hidePointer();
 
     // ---- Step 24: Customer-facing email + portal update ----
-    await demoStep('24. Customer automatically gets an update email with a portal link', 'AI writes a plain-language summary and emails the client a link to their progress portal. The 4 photos go on the portal — not in the email — and the internal issue stays internal.');
+    await demoStep('Customer automatically gets an update email with a portal link', 'AI writes a plain-language summary and emails the client a link to their progress portal. The 4 photos go on the portal — not in the email — and the internal issue stays internal.');
     flashExtracted(5);
     newProj.emails.unshift({
       date: todayISO(),
@@ -6749,7 +5791,7 @@ async function runDemo() {
     hideFieldEmail();
 
     // ---- Stage 4: Change order — PM types it in the project module, submits, customer approves ----
-    await demoStep('25. PM files a change order in the project module', 'Switch to the Change orders tab → "+ New change order" → fill in the request and click Save & submit. The customer gets it by email.');
+    await demoStep('PM files a change order in the project module', 'Switch to the Change orders tab → "+ New change order" → fill in the request and click Save & submit. The customer gets it by email.');
     // Make sure the project modal is open (it should be from step 23) and on the Change orders tab
     if (!document.getElementById('projectModal').classList.contains('show')) openProject(newProj.id);
     setProjectSubTab('changeorders');
@@ -6791,7 +5833,7 @@ async function runDemo() {
     const coRef = newProj.changeOrders[coIdx];
     const coAmountForMsg = coRef ? coRef.amount : 0;
     const coNumberForMsg = coRef ? coRef.number : '';
-    await demoStep('26. Customer replies "approved" — AI automatically logs it', `Customer email reply hits the AI-monitored inbox. Parsed automatically: the CO is logged, status flipped to Approved, contract value adjusted (+${fmt$(coAmountForMsg)}).`);
+    await demoStep('Customer replies "approved" — AI automatically logs it', `Customer email reply hits the AI-monitored inbox. Parsed automatically: the CO is logged, status flipped to Approved, contract value adjusted (+${fmt$(coAmountForMsg)}).`);
     if (coRef) {
       coRef.status = 'approved';
       coRef.approvedDate = todayISO();
@@ -6821,7 +5863,7 @@ async function runDemo() {
 
     // ---- Stage 5: Milestone closes → invoice (inline preview) → portal (inline preview) ----
     const invNum = 4000 + Math.floor(Math.random()*999);
-    await demoStep('27. Foundations milestone closes — invoice automatically created & pushed to QuickBooks', `Invoice INV-${invNum} is generated and synced. Preview popup shows on the right — click the X to close it.`);
+    await demoStep('Foundations milestone closes — invoice automatically created & pushed to QuickBooks', `Invoice INV-${invNum} is generated and synced. Preview popup shows on the right — click the X to close it.`);
     if (newProj.milestones[0]) {
       newProj.milestones[0].status = 'invoiced';
       newProj.milestones[0].invoicedDate = todayISO();
@@ -6845,7 +5887,7 @@ async function runDemo() {
     hideDemoPreview();
     await demoWait(400);
 
-    await demoStep('28. Customer portal preview', 'Branded, live status page — milestones, progress, recent updates with site photos. Showing it on the right (instead of opening a new tab) — click the X when ready.');
+    await demoStep('Customer portal preview', 'Branded, live status page — milestones, progress, recent updates with site photos. Showing it on the right (instead of opening a new tab) — click the X when ready.');
     showPortalPreview(newProj);
     // Light log to keep the activity stream consistent with what would happen in production
     logSync('Customer Portal', `Preview opened for ${newProj.client}`);
@@ -6853,32 +5895,51 @@ async function runDemo() {
     hideDemoPreview();
     await demoWait(400);
 
-    // ---- Stage 6: Finance roll-up ----
-    await demoStep('29. Now to Finance', 'Everything from the field — hours, materials, sub quotes, invoices, change orders — automatically rolls up here. No double entry.');
+    // ---- Project-level financials (before zooming out to whole-company) ----
+    await demoStep('Project financials — automatically updated', 'CPI, SPI, earned-value summary, cost & hours snapshot — every line driven by the field email and the change order we just approved. No spreadsheets, no double entry.');
+    openProject(newProj.id);
+    setProjectSubTab('overview');
+    await demoWait(900);
+    // Point at the 4-up KPI row (Contract value / Progress / CPI / SPI)
+    const projKpiRow = document.querySelector('#pmBody [data-stab-panel="overview"] .grid.cols-4');
+    if (projKpiRow) await pointAt(projKpiRow, {side:'top'});
+    await demoWait(3500);
+    hidePointer();
+    // Then highlight the Earned-Value summary table
+    const evSummary = document.querySelector('#pmBody [data-stab-panel="overview"] .grid.cols-2 .card');
+    if (evSummary) await pointAt(evSummary);
+    await demoWait(3500);
+    hidePointer();
+    // Close the project modal before switching to the Financial tab
+    document.getElementById('projectModal').classList.remove('show');
+    await demoWait(400);
+
+    // ---- Stage 6: Whole-company Finance roll-up ----
+    await demoStep('Now to whole-company Finance', 'Everything from every project — hours, materials, sub quotes, invoices, change orders — automatically rolls up here. No double entry.');
     switchTab('financial');
     await demoWait(3500);
 
-    await demoStep('30. KPIs update automatically', 'Active project value, costs to date, outstanding invoices, and forecast margin recalculate the moment a milestone closes or an hour is logged.');
+    await demoStep('KPIs update automatically', 'Active project value, costs to date, outstanding invoices, and forecast margin recalculate the moment a milestone closes or an hour is logged.');
     await pointAt('#panel-financial .grid.cols-4', {side:'top'});
     await demoWait(4200);
     hidePointer();
 
-    await demoStep('31. Outstanding invoice automatically tracked', `The INV we just pushed shows here automatically — net 30. Over-30 callout reads $0 because the invoice was just issued today.`);
+    await demoStep('Outstanding invoice automatically tracked', `The INV we just pushed shows here automatically — net 30. Over-30 callout reads $0 because the invoice was just issued today.`);
     await pointAt('#kpiOutstanding', {side:'top'});
     await demoWait(4000);
     hidePointer();
 
-    await demoStep('32. Pipeline & win rate', 'Won vs lost trends and reasons we lose deals — automatically coded from proposal outcomes. Helps the sales side without anyone tagging anything.');
+    await demoStep('Pipeline & win rate', 'Won vs lost trends and reasons we lose deals — automatically coded from proposal outcomes. Helps the sales side without anyone tagging anything.');
     await pointAt('#pipelineCard', {side:'top'});
     await demoWait(4500);
     hidePointer();
 
-    await demoStep('33. Revenue & cost forecast', 'Past actuals + signed work projected forward. Updates automatically as milestones invoice and new proposals get sold.');
+    await demoStep('Revenue & cost forecast', 'Past actuals + signed work projected forward. Updates automatically as milestones invoice and new proposals get sold.');
     await pointAt('#finForecastChart', {side:'top'});
     await demoWait(4500);
     hidePointer();
 
-    await demoStep('34. Supplier cost & wage roll-up', 'Every sub PO and every logged hour automatically lands in the supplier and wage tables — ready for the next QuickBooks sync.');
+    await demoStep('Supplier cost & wage roll-up', 'Every sub PO and every logged hour automatically lands in the supplier and wage tables — ready for the next QuickBooks sync.');
     await pointAt('#suppliersTbody', {side:'top'});
     await demoWait(4000);
     hidePointer();
@@ -6896,56 +5957,103 @@ async function runDemo() {
   document.getElementById('demoCaption').classList.remove('show');
   document.getElementById('cancelDemoBtn').style.display = 'none';
   demoRunning = false;
+  demoPaused = false;
+  skipToNextStep = false;
+  if (typeof updateDemoButtons === 'function') updateDemoButtons();
 }
 
-document.getElementById('demoBtn').onclick = () => {
-  if (demoRunning) { demoCancelled = true; return; }
-  runDemo();
+// ----- Demo control bar wiring (top-center: ⏮ ▶ ⏭ ✕) -----
+function updateDemoButtons() {
+  const playPause = document.getElementById('demoPlayPause');
+  const playIcon  = document.getElementById('demoPlayIcon');
+  const playLabel = document.getElementById('demoPlayLabel');
+  const back      = document.getElementById('demoBack');
+  const fwd       = document.getElementById('demoForward');
+  const stop      = document.getElementById('demoStop');
+  const div       = document.getElementById('demoBarDivider');
+  if (!playPause) return;
+  if (!demoRunning) {
+    playIcon.innerHTML  = '&#9654;';
+    playLabel.textContent = 'Play demo';
+    playPause.title = 'Play scripted walkthrough';
+    back.disabled = true;
+    fwd.disabled = true;
+    stop.style.display = 'none';
+    div.style.display = 'none';
+  } else {
+    if (demoPaused) {
+      playIcon.innerHTML = '&#9654;';
+      playLabel.textContent = 'Resume';
+      playPause.title = 'Resume demo';
+    } else {
+      playIcon.innerHTML = '&#10074;&#10074;';
+      playLabel.textContent = 'Pause';
+      playPause.title = 'Pause demo';
+    }
+    back.disabled = false;
+    fwd.disabled = false;
+    stop.style.display = 'inline-flex';
+    div.style.display = 'inline-block';
+  }
+}
+
+document.getElementById('demoPlayPause').onclick = () => {
+  if (!demoRunning) {
+    runDemo();
+    return;
+  }
+  demoPaused = !demoPaused;
+  updateDemoButtons();
+};
+document.getElementById('demoForward').onclick = () => {
+  if (!demoRunning) return;
+  // Skip the rest of the current step's waits, jumping to the next demoStep boundary
+  skipToNextStep = true;
+  demoPaused = false;
+  updateDemoButtons();
+};
+document.getElementById('demoBack').onclick = () => {
+  if (!demoRunning) return;
+  // Cancel the current run and restart from the beginning
+  demoCancelled = true;
+  demoPaused = false;
+  skipToNextStep = false;
+  setTimeout(() => {
+    demoCancelled = false;
+    runDemo();
+  }, 350);
+};
+document.getElementById('demoStop').onclick = () => {
+  demoCancelled = true;
+  demoPaused = false;
+  skipToNextStep = false;
 };
 
-document.getElementById('currentDate').textContent = new Date().toLocaleDateString(undefined, {weekday:'long', month:'long', day:'numeric', year:'numeric'});
+// Initial state for the bar
+updateDemoButtons();
 
-/* ============================================================
-   THEME TOGGLE
-   ============================================================ */
-const THEME_KEY = 'aio_theme_v2';
-function applyTheme(theme) {
-  document.documentElement.setAttribute('data-theme', theme);
+// ----- Theme toggle (light is default; persisted to localStorage) -----
+function applyTheme(t) {
+  document.documentElement.setAttribute('data-theme', t);
   const icon = document.getElementById('themeIcon');
   const label = document.getElementById('themeLabel');
-  if (theme === 'light') {
-    icon.innerHTML = '&#9789;';   // moon
-    label.textContent = 'Dark';
+  if (t === 'dark') {
+    if (icon)  icon.innerHTML  = '&#9789;';
+    if (label) label.textContent = 'Dark';
   } else {
-    icon.innerHTML = '&#9788;';   // sun
-    label.textContent = 'Light';
+    if (icon)  icon.innerHTML  = '&#9788;';
+    if (label) label.textContent = 'Light';
   }
-  localStorage.setItem(THEME_KEY, theme);
-  // re-render financial charts so axes/labels pick up the new colors
-  if (document.getElementById('panel-financial').classList.contains('active')) {
-    renderFinancial();
-  }
+  try { localStorage.setItem('pr_theme', t); } catch (e) {}
 }
-document.getElementById('themeToggle').onclick = () => {
-  const current = document.documentElement.getAttribute('data-theme') || 'light';
-  applyTheme(current === 'dark' ? 'light' : 'dark');
-};
-applyTheme(localStorage.getItem(THEME_KEY) || 'light');
-
-bindConnectionEvents();
-ensureConnections();
-renderAll();
-</script>
-
-<script>
-(function(){
-  document.addEventListener('keydown', function(e){
-    if ((e.altKey || e.metaKey) && (e.key === 'd' || e.key === 'D')) {
-      var btn = document.getElementById('demoBtn');
-      if (btn) { e.preventDefault(); btn.click(); }
-    }
-  });
+(function initTheme() {
+  let saved = null;
+  try { saved = localStorage.getItem('pr_theme'); } catch (e) {}
+  applyTheme(saved === 'dark' ? 'dark' : 'light');
 })();
-</script>
-</body>
-</html>
+document.getElementById('themeToggle').onclick = () => {
+  const cur = document.documentElement.getAttribute('data-theme') || 'light';
+  applyTheme(cur === 'dark' ? 'light' : 'dark');
+};
+
+document.getEleme
