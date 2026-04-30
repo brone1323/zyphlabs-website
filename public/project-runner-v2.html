@@ -32,7 +32,7 @@
     --shadow: 0 1px 2px rgba(0,0,0,0.18), 0 8px 28px rgba(0,0,0,0.22);
     --chart-grid: rgba(232, 220, 198, 0.07);
   }
-      :root[data-theme="light"] {
+        :root[data-theme="light"] {
     /* defaults to cool palette; overridden by data-palette */
     --bg: #eceef0;
     --surface: #f4f5f7;
@@ -42,28 +42,45 @@
     --text: #1f2226;
     --text-dim: #545961;
     --text-faint: #888d96;
-    --accent: #4a6478;
-    --accent-hover: #5b7488;
-    --accent-soft: rgba(74,100,120,0.10);
-    --accent-2: #6b7480;
-    --accent-2-hover: #7c8590;
-    --accent-2-soft: rgba(107,116,128,0.12);
-    --success: #5a7a64;
-    --warn: #a07840;
+    --accent: #2f5d85;
+    --accent-hover: #3a6f9c;
+    --accent-soft: rgba(47,93,133,0.10);
+    --accent-2: #4a6478;
+    --accent-2-hover: #5b7488;
+    --accent-2-soft: rgba(74,100,120,0.12);
+    --accent-warm: #b06a4a;
+    --accent-warm-soft: rgba(176,106,74,0.10);
+    --success: #3e7a55;
+    --success-soft: rgba(62,122,85,0.12);
+    --warn: #b08038;
+    --warn-soft: rgba(176,128,56,0.14);
     --danger: #9c4a3a;
-    --info: #4a6478;
+    --danger-soft: rgba(156,74,58,0.12);
+    --info: #2f5d85;
     --purple: #6e6478;
     --shadow: 0 1px 2px rgba(28,30,34,0.04), 0 6px 18px rgba(28,30,34,0.05);
     --chart-grid: rgba(28, 30, 34, 0.07);
   }
 
   /* Palette A — Cool Newsprint (current default; reading-room cool grey) */
-  :root[data-theme="light"][data-palette="cool"] {
+    :root[data-theme="light"][data-palette="cool"] {
     --bg: #eceef0; --surface: #f4f5f7; --surface-2: #e3e5e8; --surface-3: #d4d7db;
     --border: rgba(28, 30, 34, 0.10);
     --text: #1f2226; --text-dim: #545961; --text-faint: #888d96;
-    --accent: #4a6478; --accent-hover: #5b7488; --accent-soft: rgba(74,100,120,0.10);
-    --accent-2: #6b7480; --accent-2-soft: rgba(107,116,128,0.12);
+    --accent: #2f5d85;             /* richer reading-room blue */
+    --accent-hover: #3a6f9c;
+    --accent-soft: rgba(47,93,133,0.10);
+    --accent-2: #4a6478;
+    --accent-2-soft: rgba(74,100,120,0.12);
+    --accent-warm: #b06a4a;        /* warm complement (terracotta) for emphasis */
+    --accent-warm-soft: rgba(176,106,74,0.10);
+    --success: #3e7a55;            /* forest green */
+    --success-soft: rgba(62,122,85,0.12);
+    --warn: #b08038;               /* restrained amber */
+    --warn-soft: rgba(176,128,56,0.14);
+    --danger: #9c4a3a;             /* terra-cotta red */
+    --danger-soft: rgba(156,74,58,0.12);
+    --info: #2f5d85;
     --shadow: 0 1px 2px rgba(28,30,34,0.04), 0 6px 18px rgba(28,30,34,0.05);
     --chart-grid: rgba(28, 30, 34, 0.07);
   }
@@ -1225,6 +1242,110 @@
   }
 
   /* Default to light theme on first paint (paper feel) */
+
+  /* ============================================================
+     COLOR POLISH — strategic accents on Palette A
+     Editorial restraint, but data and state earn color
+     ============================================================ */
+
+  /* Active tab — accent underline instead of pure ink */
+  .tab.active { color: var(--accent); border-bottom-color: var(--accent); }
+  .tab.active .tab-badge { background: var(--accent); border-color: var(--accent); color: var(--bg); }
+  .tab:hover { color: var(--accent); border-bottom-color: var(--accent-soft); }
+
+  /* Brand icon — slate-blue ink, not pure black */
+  .brand-icon {
+    background: var(--accent) !important;
+    color: var(--surface) !important;
+  }
+
+  /* KPI deltas — real semantic colors, not muted */
+  .kpi-trend.up,  .ev-good   { color: var(--success); font-weight: 600; }
+  .kpi-trend.down, .ev-bad   { color: var(--danger);  font-weight: 600; }
+  .kpi-value, .stat-value {
+    color: var(--text);
+  }
+  .kpi-value .num-accent, .stat-value .num-accent { color: var(--accent); }
+
+  /* Badges — semantic with restrained fills */
+  .badge.pending { background: var(--warn-soft); color: var(--warn); }
+  .badge.lost,
+  .badge.overdue { background: var(--danger-soft); color: var(--danger); }
+  .badge.won,
+  .badge.paid    { background: var(--success-soft); color: var(--success); }
+  .badge.active  { background: var(--accent-soft); color: var(--accent); }
+
+  /* Progress bars — semantic, but flatter */
+  .progress-fill          { background: var(--accent); }
+  .progress-fill.success  { background: var(--success); }
+  .progress-fill.warn     { background: var(--warn); }
+  .progress-fill.danger   { background: var(--danger); }
+
+  /* Active milestone — accent left rule, not faint grey */
+  .ms-editor.active {
+    border-left-color: var(--accent) !important;
+    background: var(--accent-soft);
+  }
+  .ms-editor:hover { border-left-color: var(--accent); }
+
+  /* Estimate row eyebrow — accent on the heading */
+  .est-row-head { color: var(--accent); }
+  .est-row-head strong { color: var(--accent); }
+
+  /* Crew suggestion (the italic pull-aside) — accent rule, accent type */
+  .crew-suggestion {
+    border-left-color: var(--accent);
+    color: var(--text);
+  }
+
+  /* Theme toggle — accent on hover */
+  .theme-toggle:hover { color: var(--accent); border-color: var(--accent); }
+
+  /* Buttons: primary becomes accent-on-paper, not ink-on-paper */
+  .btn.primary, button.primary, button[type="submit"]:not(.theme-toggle) {
+    background: var(--accent);
+    color: var(--surface);
+    border: 1px solid var(--accent);
+  }
+  .btn.primary:hover, button.primary:hover { background: var(--accent-hover); border-color: var(--accent-hover); }
+  .btn.success { background: var(--success); color: var(--surface); border: 1px solid var(--success); }
+  .btn.danger  { background: var(--danger);  color: var(--surface); border: 1px solid var(--danger); }
+
+  /* Input focus glow — accent ring */
+  input:focus, textarea:focus, select:focus {
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px var(--accent-soft);
+  }
+
+  /* QB checkmark and similar status icons — real success green */
+  .inv-preview .inv-qb::before { color: var(--success) !important; }
+
+  /* Selection — warm slate */
+  ::selection { background: var(--accent-soft); color: var(--text); }
+
+  /* Toast borders — semantic */
+  .toast { border-left-color: var(--success); }
+  .toast.error { border-left-color: var(--danger); }
+  .toast.warn  { border-left-color: var(--warn); }
+  .toast.info  { border-left-color: var(--accent); }
+
+  /* Section titles — slim accent underline on hover/focus to add hierarchy */
+  .section-title {
+    border-bottom: 1px solid var(--border);
+    padding-bottom: 10px;
+    margin-bottom: 18px;
+  }
+
+  /* Headers in the Play demo button — accent ink, not gradient */
+  #demoBtn {
+    background: var(--accent) !important;
+    color: var(--surface) !important;
+    border-color: var(--accent) !important;
+  }
+  #demoBtn:hover {
+    background: var(--accent-hover) !important;
+    border-color: var(--accent-hover) !important;
+  }
 </style>
 </head>
 <body>
