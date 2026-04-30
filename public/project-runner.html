@@ -1,64 +1,85 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="light">
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>Project Runner — quit typing and run these projects</title>
+<title>Project Runner — quit typing, run the work</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,300;0,6..72,400;0,6..72,500;0,6..72,600;0,6..72,700;1,6..72,400&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.0/chart.umd.min.js"></script>
 <style>
-  :root, :root[data-theme="dark"] {
-    --bg: #0b1220;
-    --surface: #131b2e;
-    --surface-2: #1c2740;
-    --surface-3: #263352;
-    --border: #263352;
-    --text: #e8edf5;
-    --text-dim: #8a96b3;
-    --text-faint: #6b7280;
-    --accent: #2f6fed;          /* dark blue */
-    --accent-hover: #4f8cff;
-    --accent-soft: rgba(47,111,237,0.12);
-    --accent-2: #86efac;        /* light green */
-    --accent-2-hover: #a7f3d0;
-    --accent-2-soft: rgba(134,239,172,0.14);
-    --success: #34d399;
-    --warn: #f59e0b;
-    --danger: #ef4444;
-    --info: #06b6d4;
-    --purple: #a855f7;
-    --shadow: 0 4px 24px rgba(0,0,0,0.4);
-    --chart-grid: #263352;
+    :root, :root[data-theme="dark"] {
+    --bg: #14110d;                  /* obsidian, faint warmth */
+    --surface: #1c1814;
+    --surface-2: #221d18;
+    --surface-3: #2a241e;
+    --border: rgba(232, 220, 198, 0.10);
+    --text: #ede4d0;                /* cream */
+    --text-dim: #9c9182;
+    --text-faint: #6b6457;
+    --accent: #c9a063;              /* deep amber */
+    --accent-hover: #d9b073;
+    --accent-soft: rgba(201,160,99,0.12);
+    --accent-2: #8a9580;            /* muted sage */
+    --accent-2-hover: #a3ad99;
+    --accent-2-soft: rgba(138,149,128,0.14);
+    --success: #8a9580;
+    --warn: #c9a063;
+    --danger: #b8624c;
+    --info: #7d9098;
+    --purple: #9b8aa6;
+    --shadow: 0 1px 2px rgba(0,0,0,0.18), 0 8px 28px rgba(0,0,0,0.22);
+    --chart-grid: rgba(232, 220, 198, 0.07);
   }
-  :root[data-theme="light"] {
-    --bg: #f4f7fc;
-    --surface: #ffffff;
-    --surface-2: #eef3fa;
-    --surface-3: #dfe7f3;
-    --border: #d6dfee;
-    --text: #0b1220;
-    --text-dim: #4a5670;
-    --text-faint: #8794ad;
-    --accent: #1e3a8a;          /* deep navy */
-    --accent-hover: #1e40af;
-    --accent-soft: rgba(30,58,138,0.08);
-    --accent-2: #4ade80;        /* light green */
-    --accent-2-hover: #22c55e;
-    --accent-2-soft: rgba(74,222,128,0.15);
-    --success: #16a34a;
-    --warn: #d97706;
-    --danger: #dc2626;
-    --info: #0891b2;
-    --purple: #9333ea;
-    --shadow: 0 4px 16px rgba(11,18,32,0.08);
-    --chart-grid: #dfe7f3;
+          :root[data-theme="light"] {
+    /* defaults to cool palette; overridden by data-palette */
+    --bg: #eceef0; --surface: #f4f5f7; --surface-2: #e3e5e8; --surface-3: #d4d7db;
+    --border: rgba(28, 30, 34, 0.10);
+    --text: #1f2226; --text-dim: #545961; --text-faint: #888d96;
+    --accent: #1e6cb8; --accent-hover: #2a7dd0; --accent-soft: rgba(30,108,184,0.12);
+    --accent-2: #2f5d85; --accent-2-hover: #3a6f9c; --accent-2-soft: rgba(47,93,133,0.14);
+    --accent-warm: #c8704a; --accent-warm-soft: rgba(200,112,74,0.12);
+    --success: #3a8c5c; --success-soft: rgba(58,140,92,0.14);
+    --warn: #c2902f; --warn-soft: rgba(194,144,47,0.16);
+    --danger: #b14e3a; --danger-soft: rgba(177,78,58,0.14);
+    --info: #1e6cb8; --purple: #6e6478;
+    --shadow: 0 1px 2px rgba(28,30,34,0.04), 0 6px 18px rgba(28,30,34,0.06);
+    --chart-grid: rgba(28, 30, 34, 0.07);
+  }
+
+  /* Palette A — Cool Newsprint (current default; reading-room cool grey) */
+      :root[data-theme="light"][data-palette="cool"] {
+    --bg: #eceef0; --surface: #f4f5f7; --surface-2: #e3e5e8; --surface-3: #d4d7db;
+    --border: rgba(28, 30, 34, 0.10);
+    --text: #1f2226; --text-dim: #545961; --text-faint: #888d96;
+    --accent: #1e6cb8;             /* vivid reading-room blue, magazine pull-quote */
+    --accent-hover: #2a7dd0;
+    --accent-soft: rgba(30,108,184,0.12);
+    --accent-2: #2f5d85;
+    --accent-2-soft: rgba(47,93,133,0.14);
+    --accent-warm: #c8704a;        /* terracotta — warm complement */
+    --accent-warm-soft: rgba(200,112,74,0.12);
+    --success: #3a8c5c;            /* vivid forest */
+    --success-soft: rgba(58,140,92,0.14);
+    --warn: #c2902f;               /* warm amber */
+    --warn-soft: rgba(194,144,47,0.16);
+    --danger: #b14e3a;             /* vivid terracotta red */
+    --danger-soft: rgba(177,78,58,0.14);
+    --info: #1e6cb8;
+    --shadow: 0 1px 2px rgba(28,30,34,0.04), 0 6px 18px rgba(28,30,34,0.06);
+    --chart-grid: rgba(28, 30, 34, 0.07);
   }
   * { box-sizing: border-box; margin: 0; padding: 0; }
   body {
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    font-feature-settings: "ss01", "cv11", "tnum";
     background: var(--bg);
     color: var(--text);
     min-height: 100vh;
-    line-height: 1.5;
+    line-height: 1.55;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
   }
   .app { display: flex; flex-direction: column; min-height: 100vh; }
   header.top {
@@ -896,6 +917,573 @@
     background: var(--accent-2); box-shadow: 0 0 0 3px var(--accent-2-soft);
   }
   .conn-status-pill.disconnected { background: var(--surface-3); color: var(--text-dim); }
+
+  /* ============================================================
+     EDITORIAL TONE OVERLAY — macstories-inspired retune
+     Restraint, warmth, hairlines, serif headlines.
+     ============================================================ */
+
+  /* Default to light (paper) on first paint */
+  html:not([data-theme]) { color-scheme: light; }
+  :root { color-scheme: light dark; }
+
+  /* Display serif on headings, brand, big numbers */
+  .brand,
+  .section-title,
+  h1, h2, h3, h4,
+  .kpi-value, .stat-value,
+  .module-title, .panel-title,
+  .big-num, .display {
+    font-family: "Newsreader", ui-serif, Georgia, "Times New Roman", serif;
+    font-weight: 500;
+    letter-spacing: -0.01em;
+  }
+  .brand { font-weight: 600; font-size: 22px; letter-spacing: -0.02em; }
+  .section-title { font-weight: 500; font-size: 22px; letter-spacing: -0.015em; }
+  .section-title small { font-family: "Inter", sans-serif; font-style: italic; color: var(--text-faint); font-size: 12px; }
+
+  /* Tabular figures everywhere numbers live */
+  .kpi-value, .stat-value, .big-num, .gantt-row, .ms-amt,
+  table, td, th, .num, .price, input[type="number"] {
+    font-variant-numeric: tabular-nums;
+    font-feature-settings: "tnum";
+  }
+
+  /* Header — quieter, hairline, generous breathing */
+  header.top {
+    padding: 22px 36px;
+    border-bottom: 1px solid var(--border);
+    background: var(--bg);
+  }
+  .brand-icon {
+    background: var(--text) !important;
+    color: var(--bg) !important;
+    border-radius: 4px !important;
+    width: 32px !important; height: 32px !important;
+    font-family: "Newsreader", serif;
+    font-weight: 600;
+    font-size: 17px !important;
+    letter-spacing: 0;
+  }
+  .top-meta {
+    font-family: "Newsreader", serif;
+    font-style: italic;
+    color: var(--text-faint);
+    font-size: 13px;
+  }
+
+  /* Tabs — restrained, no bright underline; use ink */
+  .tabs {
+    background: var(--bg);
+    border-bottom: 1px solid var(--border);
+    padding: 0 36px;
+    gap: 0;
+  }
+  .tab {
+    padding: 14px 0;
+    margin-right: 28px;
+    font-family: "Inter", sans-serif;
+    font-weight: 500;
+    font-size: 13px;
+    letter-spacing: 0.01em;
+    color: var(--text-dim);
+    border-bottom: 1px solid transparent;
+  }
+  .tab:hover { color: var(--text); border-bottom-color: var(--text-faint); }
+  .tab.active { color: var(--text); border-bottom-color: var(--text); }
+  .tab-badge {
+    background: transparent;
+    color: var(--text-faint);
+    border: 1px solid var(--border);
+    font-weight: 500;
+    font-size: 10px;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    padding: 1px 7px;
+  }
+  .tab.active .tab-badge { background: var(--text); color: var(--bg); border-color: var(--text); }
+
+  /* Main canvas — generous like an article column */
+  main { padding: 40px 36px 80px; max-width: 1280px; }
+
+  /* Cards — flatter, hairline borders, softer corners, tighter shadow */
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 24px;
+    margin-bottom: 22px;
+    box-shadow: none;
+  }
+
+  /* Buttons — outlined ink, no gradient. Primary = filled ink. */
+  button, .btn, input[type="submit"] {
+    font-family: "Inter", sans-serif;
+    font-weight: 500;
+    letter-spacing: 0.005em;
+    border-radius: 4px;
+    transition: background 0.18s ease, color 0.18s ease, border-color 0.18s ease;
+  }
+
+  /* Inputs */
+  input[type="text"], input[type="number"], input[type="email"],
+  input[type="date"], textarea, select {
+    font-family: "Inter", sans-serif;
+    border-radius: 4px;
+    border: 1px solid var(--border);
+    background: var(--surface);
+    transition: border-color 0.15s ease, background 0.15s ease;
+  }
+  input:focus, textarea:focus, select:focus {
+    outline: none;
+    border-color: var(--accent);
+    background: var(--surface);
+    box-shadow: 0 0 0 3px var(--accent-soft);
+  }
+
+  /* Upload zone — paper-like, restrained */
+  .upload-zone {
+    border-radius: 6px;
+    border: 1px dashed var(--border);
+    background: transparent;
+  }
+  .upload-zone:hover, .upload-zone.drag {
+    border-color: var(--accent);
+    background: var(--accent-soft);
+  }
+
+  /* Dropdowns — calmer */
+  .dropdown-menu { border-radius: 6px; box-shadow: var(--shadow); }
+  .dropdown-item { border-radius: 4px; }
+
+  /* Pills/badges — flatter */
+  .ms-pill, .badge, .chip {
+    border-radius: 3px;
+    font-family: "Inter", sans-serif;
+    font-weight: 500;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    font-size: 10px;
+  }
+
+  /* Theme toggle — pill of ink */
+  .theme-toggle {
+    border-radius: 999px;
+    background: transparent;
+    border: 1px solid var(--border);
+    color: var(--text-dim);
+    font-family: "Inter", sans-serif;
+    font-size: 12px;
+    padding: 6px 14px;
+    transition: color 0.15s ease, border-color 0.15s ease;
+  }
+  .theme-toggle:hover { color: var(--text); border-color: var(--text); background: transparent; }
+
+  /* Tables, gantt — hairline dividers, tabular figures */
+  .gantt-row { border-bottom: 1px solid var(--border); }
+  .gantt-track { background: var(--surface-2); border-radius: 2px; }
+
+  /* Crew suggestion (was emoji + green) — editorial pull-aside */
+  .crew-suggestion {
+    background: transparent;
+    border: none;
+    border-left: 2px solid var(--accent);
+    border-radius: 0;
+    padding-left: 14px;
+    color: var(--text);
+    font-family: "Newsreader", serif;
+    font-style: italic;
+    font-size: 14px;
+  }
+  .crew-suggestion .lead::before { content: ''; margin-right: 0; }
+
+  /* Milestone editor — refined */
+  .ms-editor {
+    border-radius: 5px;
+    border-left-width: 2px;
+    border-left-color: var(--text-faint);
+    background: var(--surface);
+    box-shadow: none;
+  }
+  .ms-editor:hover, .ms-editor.active {
+    border-color: var(--border);
+    border-left-color: var(--accent);
+    box-shadow: none;
+  }
+
+  /* Estimate row head — small caps eyebrow */
+  .est-row-head {
+    color: var(--text-faint);
+    font-family: "Inter", sans-serif;
+  }
+  .est-row-head strong {
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    font-size: 10px;
+    font-weight: 600;
+    color: var(--text-faint);
+  }
+
+  /* Selection — warm */
+  ::selection { background: var(--accent-soft); color: var(--text); }
+
+  /* Smoother transitions site-wide */
+  * { transition-timing-function: cubic-bezier(0.22, 0.61, 0.36, 1); }
+
+  /* Scrollbar — quieter */
+  ::-webkit-scrollbar { width: 10px; height: 10px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb {
+    background: var(--border);
+    border-radius: 999px;
+    border: 2px solid var(--bg);
+  }
+  ::-webkit-scrollbar-thumb:hover { background: var(--text-faint); }
+
+  /* Subtle entry animation for cards on first paint */
+  @keyframes cardRise {
+    from { opacity: 0; transform: translateY(8px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  .card { animation: cardRise 480ms cubic-bezier(0.22,0.61,0.36,1) both; }
+  .panel.active .card:nth-child(1) { animation-delay: 0ms; }
+  .panel.active .card:nth-child(2) { animation-delay: 60ms; }
+  .panel.active .card:nth-child(3) { animation-delay: 120ms; }
+  .panel.active .card:nth-child(4) { animation-delay: 180ms; }
+  .panel.active .card:nth-child(5) { animation-delay: 240ms; }
+
+  /* Pull a Newsreader feel into KPI numbers without breaking layout */
+  .kpi-value, .stat-value, .big-num {
+    font-weight: 500;
+    letter-spacing: -0.025em;
+  }
+
+  /* Default to light theme on first paint (paper feel) */
+
+  /* ============================================================
+     COLOR POLISH — strategic accents on Palette A
+     Editorial restraint, but data and state earn color
+     ============================================================ */
+
+  /* Active tab — accent underline instead of pure ink */
+  .tab.active { color: var(--accent); border-bottom-color: var(--accent); }
+  .tab.active .tab-badge { background: var(--accent); border-color: var(--accent); color: var(--bg); }
+  .tab:hover { color: var(--accent); border-bottom-color: var(--accent-soft); }
+
+  /* Brand icon — slate-blue ink, not pure black */
+  .brand-icon {
+    background: var(--accent) !important;
+    color: var(--surface) !important;
+  }
+
+  /* KPI deltas — real semantic colors, not muted */
+  .kpi-trend.up,  .ev-good   { color: var(--success); font-weight: 600; }
+  .kpi-trend.down, .ev-bad   { color: var(--danger);  font-weight: 600; }
+  .kpi-value, .stat-value {
+    color: var(--text);
+  }
+  .kpi-value .num-accent, .stat-value .num-accent { color: var(--accent); }
+
+  /* Badges — semantic with restrained fills */
+  .badge.pending { background: var(--warn-soft); color: var(--warn); }
+  .badge.lost,
+  .badge.overdue { background: var(--danger-soft); color: var(--danger); }
+  .badge.won,
+  .badge.paid    { background: var(--success-soft); color: var(--success); }
+  .badge.active  { background: var(--accent-soft); color: var(--accent); }
+
+  /* Progress bars — semantic, but flatter */
+  .progress-fill          { background: var(--accent); }
+  .progress-fill.success  { background: var(--success); }
+  .progress-fill.warn     { background: var(--warn); }
+  .progress-fill.danger   { background: var(--danger); }
+
+  /* Active milestone — accent left rule, not faint grey */
+  .ms-editor.active {
+    border-left-color: var(--accent) !important;
+    background: var(--accent-soft);
+  }
+  .ms-editor:hover { border-left-color: var(--accent); }
+
+  /* Estimate row eyebrow — accent on the heading */
+  .est-row-head { color: var(--accent); }
+  .est-row-head strong { color: var(--accent); }
+
+  /* Crew suggestion (the italic pull-aside) — accent rule, accent type */
+  .crew-suggestion {
+    border-left-color: var(--accent);
+    color: var(--text);
+  }
+
+  /* Theme toggle — accent on hover */
+  .theme-toggle:hover { color: var(--accent); border-color: var(--accent); }
+
+  /* Buttons: primary becomes accent-on-paper, not ink-on-paper */
+  .btn.primary, button.primary, button[type="submit"]:not(.theme-toggle) {
+    background: var(--accent);
+    color: var(--surface);
+    border: 1px solid var(--accent);
+  }
+  .btn.primary:hover, button.primary:hover { background: var(--accent-hover); border-color: var(--accent-hover); }
+  .btn.success { background: var(--success); color: var(--surface); border: 1px solid var(--success); }
+  .btn.danger  { background: var(--danger);  color: var(--surface); border: 1px solid var(--danger); }
+
+  /* Input focus glow — accent ring */
+  input:focus, textarea:focus, select:focus {
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px var(--accent-soft);
+  }
+
+  /* QB checkmark and similar status icons — real success green */
+  .inv-preview .inv-qb::before { color: var(--success) !important; }
+
+  /* Selection — warm slate */
+  ::selection { background: var(--accent-soft); color: var(--text); }
+
+  /* Toast borders — semantic */
+  .toast { border-left-color: var(--success); }
+  .toast.error { border-left-color: var(--danger); }
+  .toast.warn  { border-left-color: var(--warn); }
+  .toast.info  { border-left-color: var(--accent); }
+
+  /* Section titles — slim accent underline on hover/focus to add hierarchy */
+  .section-title {
+    border-bottom: 1px solid var(--border);
+    padding-bottom: 10px;
+    margin-bottom: 18px;
+  }
+
+  /* Headers in the Play demo button — accent ink, not gradient */
+  #demoBtn {
+    background: var(--accent) !important;
+    color: var(--surface) !important;
+    border-color: var(--accent) !important;
+  }
+  #demoBtn:hover {
+    background: var(--accent-hover) !important;
+    border-color: var(--accent-hover) !important;
+  }
+
+  /* ============================================================
+     MORE COLOR — push palette A a touch livelier
+     ============================================================ */
+
+  /* Brand: bigger, pop the accent more */
+  .brand-icon {
+    background: var(--accent) !important;
+    color: var(--surface) !important;
+    box-shadow: 0 1px 0 rgba(255,255,255,0.6) inset;
+  }
+  .brand > div > span:first-child {
+    color: var(--text);
+  }
+
+  /* KPI big numbers — accent on the dollar/percent figure itself */
+  .kpi-value {
+    color: var(--accent);
+    font-weight: 600;
+  }
+  .stat-value {
+    color: var(--accent);
+  }
+  /* But keep negative or "down" KPIs in danger color */
+  .kpi-value.neg, .kpi-value.danger { color: var(--danger); }
+  .kpi-value.warn  { color: var(--warn); }
+  .kpi-value.muted { color: var(--text); }
+
+  /* Larger, friendlier KPI deltas */
+  .kpi-trend.up,  .ev-good {
+    color: var(--success);
+    font-weight: 600;
+    background: var(--success-soft);
+    padding: 1px 6px;
+    border-radius: 3px;
+    font-size: 11px;
+  }
+  .kpi-trend.down, .ev-bad {
+    color: var(--danger);
+    font-weight: 600;
+    background: var(--danger-soft);
+    padding: 1px 6px;
+    border-radius: 3px;
+    font-size: 11px;
+  }
+
+  /* Currency amounts in lists — accent */
+  .amt, .price, .currency {
+    color: var(--accent);
+    font-weight: 600;
+    font-variant-numeric: tabular-nums;
+  }
+
+  /* Card hover — subtle accent left-edge highlight */
+  .card {
+    transition: border-color 0.18s ease, box-shadow 0.18s ease, transform 0.18s ease;
+    position: relative;
+  }
+  .card::before {
+    content: "";
+    position: absolute;
+    left: 0; top: 12px; bottom: 12px;
+    width: 2px;
+    background: transparent;
+    border-radius: 0 2px 2px 0;
+    transition: background 0.2s ease;
+  }
+  .card:hover::before { background: var(--accent); }
+  .card:hover { border-color: rgba(30,108,184,0.18); }
+
+  /* Section title — accent on the eyebrow text */
+  .section-title small {
+    color: var(--accent);
+    font-style: italic;
+  }
+
+  /* Tabs — accent badge filled with soft accent on inactive too */
+  .tab-badge {
+    background: var(--accent-soft);
+    color: var(--accent);
+    border: none;
+    font-weight: 600;
+    font-size: 10px;
+  }
+  .tab.active .tab-badge {
+    background: var(--accent);
+    color: var(--bg);
+  }
+
+  /* ms-pill (milestone status) — accent fill */
+  .ms-pill {
+    background: var(--accent-soft) !important;
+    color: var(--accent) !important;
+    border: none;
+  }
+
+  /* Crew suggestion — restored a small lightbulb in accent (was stripped) */
+  .crew-suggestion {
+    background: var(--accent-soft);
+    border-left: 2px solid var(--accent);
+    color: var(--text);
+    padding: 12px 14px;
+  }
+  .crew-suggestion .lead::before {
+    content: "→";
+    color: var(--accent);
+    margin-right: 8px;
+    font-weight: 600;
+    font-style: normal;
+  }
+
+  /* "Demo workspace" indicator dot — accent */
+  .top-meta span[style*="success"] {
+    color: var(--accent) !important;
+  }
+
+  /* Tabular cells that show contract / budget / variance */
+  td.amount, td.budget, td.variance {
+    color: var(--accent);
+    font-weight: 600;
+  }
+  td.variance.bad  { color: var(--danger); }
+  td.variance.good { color: var(--success); }
+
+  /* Estimate row eyebrow — accent stays visible */
+  .est-row-head, .est-row-head strong { color: var(--accent); }
+
+  /* Upload zone hover — full accent */
+  .upload-zone:hover, .upload-zone.drag {
+    border-color: var(--accent);
+    background: var(--accent-soft);
+  }
+  .upload-zone:hover .upload-icon, .upload-zone.drag .upload-icon { color: var(--accent); }
+
+  /* Underlines on links inside body */
+  main a {
+    color: var(--accent);
+    text-decoration: underline;
+    text-decoration-thickness: 1px;
+    text-underline-offset: 3px;
+    text-decoration-color: var(--accent-soft);
+    transition: text-decoration-color 0.15s ease;
+  }
+  main a:hover { text-decoration-color: var(--accent); }
+
+  /* Theme toggle — keep restrained, but icon accent on hover */
+  .theme-toggle:hover .theme-icon { color: var(--accent); }
+
+  /* ============================================================
+     RUN THE DEMO BUTTON — primary CTA in the header
+     ============================================================ */
+  .run-demo-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 9px 18px 9px 14px;
+    border-radius: 999px;
+    border: 1px solid var(--accent);
+    background: var(--accent);
+    color: var(--surface);
+    font-family: "Inter", sans-serif;
+    font-weight: 600;
+    font-size: 13px;
+    letter-spacing: 0.005em;
+    cursor: pointer;
+    transition: all 0.18s cubic-bezier(0.22,0.61,0.36,1);
+    box-shadow: 0 1px 2px rgba(30,108,184,0.15), 0 4px 12px rgba(30,108,184,0.18);
+    position: relative;
+    overflow: hidden;
+  }
+  .run-demo-btn::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, rgba(255,255,255,0.18), rgba(255,255,255,0));
+    pointer-events: none;
+  }
+  .run-demo-btn:hover {
+    background: var(--accent-hover);
+    border-color: var(--accent-hover);
+    transform: translateY(-1px);
+    box-shadow: 0 2px 4px rgba(30,108,184,0.18), 0 8px 20px rgba(30,108,184,0.24);
+  }
+  .run-demo-btn:active {
+    transform: translateY(0);
+    box-shadow: 0 1px 2px rgba(30,108,184,0.20);
+  }
+  .run-demo-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 22px; height: 22px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.18);
+    color: var(--surface);
+    flex-shrink: 0;
+  }
+  .run-demo-icon svg { display: block; margin-left: 1px; }
+  .run-demo-label {
+    font-family: "Newsreader", ui-serif, Georgia, serif;
+    font-weight: 500;
+    font-size: 15px;
+    letter-spacing: -0.01em;
+    color: var(--surface);
+  }
+  .run-demo-kbd {
+    font-family: "JetBrains Mono", ui-monospace, "SF Mono", monospace;
+    font-size: 10px;
+    letter-spacing: 0.04em;
+    color: rgba(255,255,255,0.78);
+    background: rgba(255,255,255,0.13);
+    padding: 2px 7px;
+    border-radius: 4px;
+    border: 1px solid rgba(255,255,255,0.16);
+  }
+  @media (max-width: 720px) {
+    .run-demo-kbd { display: none; }
+    .run-demo-label { font-size: 14px; }
+  }
+
+  /* Keyboard shortcut: Alt/Option + D plays the demo */
 </style>
 </head>
 <body>
@@ -910,13 +1498,18 @@
     </div>
     <div class="top-meta" style="display:flex;align-items:center;gap:14px">
       <span><span id="currentDate"></span> &middot; <span style="color:var(--success)">&bull;</span> Demo workspace</span>
-      <button class="theme-toggle" id="themeToggle" title="Toggle light/dark">
+            <button class="theme-toggle" id="themeToggle" title="Toggle light/dark">
         <span class="theme-icon" id="themeIcon">&#9788;</span>
         <span class="theme-label" id="themeLabel">Light</span>
       </button>
-      <button class="theme-toggle" id="demoBtn" title="Play scripted walkthrough" style="background:linear-gradient(135deg,var(--accent),var(--accent-2));color:white;border:none">
-        <span style="font-size:14px">&#127916;</span>
-        <span>Play demo</span>
+      <button id="demoBtn" title="Play scripted walkthrough" class="run-demo-btn">
+        <span class="run-demo-icon" aria-hidden="true">
+          <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M3 2L12 7L3 12V2Z" fill="currentColor"/>
+          </svg>
+        </span>
+        <span class="run-demo-label">Run the demo</span>
+        <span class="run-demo-kbd">⌥D</span>
       </button>
     </div>
   </header>
@@ -2138,7 +2731,7 @@ function generateProposalHTML(p) {
   @media print { .actions { display: none; } body { background: white; } .doc { box-shadow: none; border: none; padding: 0; } }
 </style></head>
 <body>
-<div class="actions"><button onclick="window.print()">Print / Save PDF</button></div>
+<!-- print button removed -->
 <div class="doc">
   <div class="header">
     ${logoSVG()}
@@ -2265,7 +2858,7 @@ function generateContractHTML(p) {
   .footer { margin-top: 32px; padding-top: 12px; border-top: 1px solid #ddd; text-align: center; font-size: 10px; color: #888; }
 </style></head>
 <body>
-<div class="actions"><button onclick="window.print()">Print / Save PDF</button></div>
+<!-- print button removed -->
 <div class="doc">
   <div class="header">
     ${logoSVG()}
@@ -5859,7 +6452,7 @@ document.getElementById('currentDate').textContent = new Date().toLocaleDateStri
 /* ============================================================
    THEME TOGGLE
    ============================================================ */
-const THEME_KEY = 'aio_theme';
+const THEME_KEY = 'aio_theme_v2';
 function applyTheme(theme) {
   document.documentElement.setAttribute('data-theme', theme);
   const icon = document.getElementById('themeIcon');
@@ -5878,14 +6471,25 @@ function applyTheme(theme) {
   }
 }
 document.getElementById('themeToggle').onclick = () => {
-  const current = document.documentElement.getAttribute('data-theme') || 'dark';
+  const current = document.documentElement.getAttribute('data-theme') || 'light';
   applyTheme(current === 'dark' ? 'light' : 'dark');
 };
-applyTheme(localStorage.getItem(THEME_KEY) || 'dark');
+applyTheme(localStorage.getItem(THEME_KEY) || 'light');
 
 bindConnectionEvents();
 ensureConnections();
 renderAll();
+</script>
+
+<script>
+(function(){
+  document.addEventListener('keydown', function(e){
+    if ((e.altKey || e.metaKey) && (e.key === 'd' || e.key === 'D')) {
+      var btn = document.getElementById('demoBtn');
+      if (btn) { e.preventDefault(); btn.click(); }
+    }
+  });
+})();
 </script>
 </body>
 </html>
