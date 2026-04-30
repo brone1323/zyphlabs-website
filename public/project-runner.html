@@ -6056,4 +6056,9 @@ document.getElementById('themeToggle').onclick = () => {
   applyTheme(cur === 'dark' ? 'light' : 'dark');
 };
 
-document.getEleme
+document.getElementById('currentDate').textContent = new Date().toLocaleDateString(undefined, {weekday:'long', month:'long', day:'numeric', year:'numeric'});
+
+</script>
+</div>
+</body>
+</html>
