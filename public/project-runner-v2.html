@@ -32,56 +32,42 @@
     --shadow: 0 1px 2px rgba(0,0,0,0.18), 0 8px 28px rgba(0,0,0,0.22);
     --chart-grid: rgba(232, 220, 198, 0.07);
   }
-        :root[data-theme="light"] {
+          :root[data-theme="light"] {
     /* defaults to cool palette; overridden by data-palette */
-    --bg: #eceef0;
-    --surface: #f4f5f7;
-    --surface-2: #e3e5e8;
-    --surface-3: #d4d7db;
+    --bg: #eceef0; --surface: #f4f5f7; --surface-2: #e3e5e8; --surface-3: #d4d7db;
     --border: rgba(28, 30, 34, 0.10);
-    --text: #1f2226;
-    --text-dim: #545961;
-    --text-faint: #888d96;
-    --accent: #2f5d85;
-    --accent-hover: #3a6f9c;
-    --accent-soft: rgba(47,93,133,0.10);
-    --accent-2: #4a6478;
-    --accent-2-hover: #5b7488;
-    --accent-2-soft: rgba(74,100,120,0.12);
-    --accent-warm: #b06a4a;
-    --accent-warm-soft: rgba(176,106,74,0.10);
-    --success: #3e7a55;
-    --success-soft: rgba(62,122,85,0.12);
-    --warn: #b08038;
-    --warn-soft: rgba(176,128,56,0.14);
-    --danger: #9c4a3a;
-    --danger-soft: rgba(156,74,58,0.12);
-    --info: #2f5d85;
-    --purple: #6e6478;
-    --shadow: 0 1px 2px rgba(28,30,34,0.04), 0 6px 18px rgba(28,30,34,0.05);
+    --text: #1f2226; --text-dim: #545961; --text-faint: #888d96;
+    --accent: #1e6cb8; --accent-hover: #2a7dd0; --accent-soft: rgba(30,108,184,0.12);
+    --accent-2: #2f5d85; --accent-2-hover: #3a6f9c; --accent-2-soft: rgba(47,93,133,0.14);
+    --accent-warm: #c8704a; --accent-warm-soft: rgba(200,112,74,0.12);
+    --success: #3a8c5c; --success-soft: rgba(58,140,92,0.14);
+    --warn: #c2902f; --warn-soft: rgba(194,144,47,0.16);
+    --danger: #b14e3a; --danger-soft: rgba(177,78,58,0.14);
+    --info: #1e6cb8; --purple: #6e6478;
+    --shadow: 0 1px 2px rgba(28,30,34,0.04), 0 6px 18px rgba(28,30,34,0.06);
     --chart-grid: rgba(28, 30, 34, 0.07);
   }
 
   /* Palette A — Cool Newsprint (current default; reading-room cool grey) */
-    :root[data-theme="light"][data-palette="cool"] {
+      :root[data-theme="light"][data-palette="cool"] {
     --bg: #eceef0; --surface: #f4f5f7; --surface-2: #e3e5e8; --surface-3: #d4d7db;
     --border: rgba(28, 30, 34, 0.10);
     --text: #1f2226; --text-dim: #545961; --text-faint: #888d96;
-    --accent: #2f5d85;             /* richer reading-room blue */
-    --accent-hover: #3a6f9c;
-    --accent-soft: rgba(47,93,133,0.10);
-    --accent-2: #4a6478;
-    --accent-2-soft: rgba(74,100,120,0.12);
-    --accent-warm: #b06a4a;        /* warm complement (terracotta) for emphasis */
-    --accent-warm-soft: rgba(176,106,74,0.10);
-    --success: #3e7a55;            /* forest green */
-    --success-soft: rgba(62,122,85,0.12);
-    --warn: #b08038;               /* restrained amber */
-    --warn-soft: rgba(176,128,56,0.14);
-    --danger: #9c4a3a;             /* terra-cotta red */
-    --danger-soft: rgba(156,74,58,0.12);
-    --info: #2f5d85;
-    --shadow: 0 1px 2px rgba(28,30,34,0.04), 0 6px 18px rgba(28,30,34,0.05);
+    --accent: #1e6cb8;             /* vivid reading-room blue, magazine pull-quote */
+    --accent-hover: #2a7dd0;
+    --accent-soft: rgba(30,108,184,0.12);
+    --accent-2: #2f5d85;
+    --accent-2-soft: rgba(47,93,133,0.14);
+    --accent-warm: #c8704a;        /* terracotta — warm complement */
+    --accent-warm-soft: rgba(200,112,74,0.12);
+    --success: #3a8c5c;            /* vivid forest */
+    --success-soft: rgba(58,140,92,0.14);
+    --warn: #c2902f;               /* warm amber */
+    --warn-soft: rgba(194,144,47,0.16);
+    --danger: #b14e3a;             /* vivid terracotta red */
+    --danger-soft: rgba(177,78,58,0.14);
+    --info: #1e6cb8;
+    --shadow: 0 1px 2px rgba(28,30,34,0.04), 0 6px 18px rgba(28,30,34,0.06);
     --chart-grid: rgba(28, 30, 34, 0.07);
   }
 
@@ -1346,6 +1332,153 @@
     background: var(--accent-hover) !important;
     border-color: var(--accent-hover) !important;
   }
+
+  /* ============================================================
+     MORE COLOR — push palette A a touch livelier
+     ============================================================ */
+
+  /* Brand: bigger, pop the accent more */
+  .brand-icon {
+    background: var(--accent) !important;
+    color: var(--surface) !important;
+    box-shadow: 0 1px 0 rgba(255,255,255,0.6) inset;
+  }
+  .brand > div > span:first-child {
+    color: var(--text);
+  }
+
+  /* KPI big numbers — accent on the dollar/percent figure itself */
+  .kpi-value {
+    color: var(--accent);
+    font-weight: 600;
+  }
+  .stat-value {
+    color: var(--accent);
+  }
+  /* But keep negative or "down" KPIs in danger color */
+  .kpi-value.neg, .kpi-value.danger { color: var(--danger); }
+  .kpi-value.warn  { color: var(--warn); }
+  .kpi-value.muted { color: var(--text); }
+
+  /* Larger, friendlier KPI deltas */
+  .kpi-trend.up,  .ev-good {
+    color: var(--success);
+    font-weight: 600;
+    background: var(--success-soft);
+    padding: 1px 6px;
+    border-radius: 3px;
+    font-size: 11px;
+  }
+  .kpi-trend.down, .ev-bad {
+    color: var(--danger);
+    font-weight: 600;
+    background: var(--danger-soft);
+    padding: 1px 6px;
+    border-radius: 3px;
+    font-size: 11px;
+  }
+
+  /* Currency amounts in lists — accent */
+  .amt, .price, .currency {
+    color: var(--accent);
+    font-weight: 600;
+    font-variant-numeric: tabular-nums;
+  }
+
+  /* Card hover — subtle accent left-edge highlight */
+  .card {
+    transition: border-color 0.18s ease, box-shadow 0.18s ease, transform 0.18s ease;
+    position: relative;
+  }
+  .card::before {
+    content: "";
+    position: absolute;
+    left: 0; top: 12px; bottom: 12px;
+    width: 2px;
+    background: transparent;
+    border-radius: 0 2px 2px 0;
+    transition: background 0.2s ease;
+  }
+  .card:hover::before { background: var(--accent); }
+  .card:hover { border-color: rgba(30,108,184,0.18); }
+
+  /* Section title — accent on the eyebrow text */
+  .section-title small {
+    color: var(--accent);
+    font-style: italic;
+  }
+
+  /* Tabs — accent badge filled with soft accent on inactive too */
+  .tab-badge {
+    background: var(--accent-soft);
+    color: var(--accent);
+    border: none;
+    font-weight: 600;
+    font-size: 10px;
+  }
+  .tab.active .tab-badge {
+    background: var(--accent);
+    color: var(--bg);
+  }
+
+  /* ms-pill (milestone status) — accent fill */
+  .ms-pill {
+    background: var(--accent-soft) !important;
+    color: var(--accent) !important;
+    border: none;
+  }
+
+  /* Crew suggestion — restored a small lightbulb in accent (was stripped) */
+  .crew-suggestion {
+    background: var(--accent-soft);
+    border-left: 2px solid var(--accent);
+    color: var(--text);
+    padding: 12px 14px;
+  }
+  .crew-suggestion .lead::before {
+    content: "→";
+    color: var(--accent);
+    margin-right: 8px;
+    font-weight: 600;
+    font-style: normal;
+  }
+
+  /* "Demo workspace" indicator dot — accent */
+  .top-meta span[style*="success"] {
+    color: var(--accent) !important;
+  }
+
+  /* Tabular cells that show contract / budget / variance */
+  td.amount, td.budget, td.variance {
+    color: var(--accent);
+    font-weight: 600;
+  }
+  td.variance.bad  { color: var(--danger); }
+  td.variance.good { color: var(--success); }
+
+  /* Estimate row eyebrow — accent stays visible */
+  .est-row-head, .est-row-head strong { color: var(--accent); }
+
+  /* Upload zone hover — full accent */
+  .upload-zone:hover, .upload-zone.drag {
+    border-color: var(--accent);
+    background: var(--accent-soft);
+  }
+  .upload-zone:hover .upload-icon, .upload-zone.drag .upload-icon { color: var(--accent); }
+
+  /* Underlines on links inside body */
+  main a {
+    color: var(--accent);
+    text-decoration: underline;
+    text-decoration-thickness: 1px;
+    text-underline-offset: 3px;
+    text-decoration-color: var(--accent-soft);
+    transition: text-decoration-color 0.15s ease;
+  }
+  main a:hover { text-decoration-color: var(--accent); }
+
+  /* Theme toggle — keep restrained, but icon accent on hover */
+  .theme-toggle:hover .theme-icon { color: var(--accent); }
 </style>
 </head>
 <body>
