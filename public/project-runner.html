@@ -2688,6 +2688,458 @@ function moneyLong(n) {
   return '$' + Number(n||0).toLocaleString(undefined, {minimumFractionDigits:2, maximumFractionDigits:2});
 }
 
+
+function generateChangeOrderHTML(p, co, idx) {
+  const today = new Date().toLocaleDateString(undefined,{year:'numeric',month:'long',day:'numeric'});
+  const issuedOn = co.date ? new Date(co.date).toLocaleDateString(undefined,{year:'numeric',month:'long',day:'numeric'}) : today;
+  const submittedOn = co.submittedDate ? new Date(co.submittedDate).toLocaleDateString(undefined,{year:'numeric',month:'long',day:'numeric'}) : '—';
+  const approvedOn = co.approvedDate ? new Date(co.approvedDate).toLocaleDateString(undefined,{year:'numeric',month:'long',day:'numeric'}) : null;
+  const cost = Number(co.cost) || 0;
+  const markup = Number(co.markup) || 0.15;
+  const overhead = cost * markup;
+  const total = Number(co.amount) || (cost + overhead);
+  const newContract = (Number(p.cost)||0) + (p.changeOrders||[]).filter(x=>x.status==='approved').reduce((s,x)=>s+(Number(x.amount)||0),0) + (co.status!=='approved'?total:0);
+  const statusLabel = ({draft:'Draft', sent_to_customer:'Awaiting customer approval', approved:'Approved', rejected:'Rejected'})[co.status] || co.status;
+  const statusColor = co.status==='approved' ? '#3a8c5c' : co.status==='rejected' ? '#b14e3a' : co.status==='sent_to_customer' ? '#c2902f' : '#888';
+
+  return `<!DOCTYPE html>
+<html><head><meta charset="UTF-8"><title>Change Order ${esc(co.number)} — ${esc(p.client||'')}</title>
+<style>
+  @page { size: letter; margin: 0.6in; }
+  body { font-family: Georgia, "Times New Roman", serif; color: #1a1a1a; line-height: 1.55; max-width: 7.5in; margin: 0.4in auto; padding: 0 0.4in; background: #fafafa; }
+  .doc { background: white; padding: 0.5in; box-shadow: 0 1px 6px rgba(0,0,0,0.08); border: 1px solid #ddd; }
+  .header { display: flex; align-items: center; gap: 18px; padding-bottom: 14px; border-bottom: 3px double #1e6cb8; }
+  .header .co-name { font-size: 26px; font-weight: 700; color: #1e6cb8; letter-spacing: 0.5px; margin: 0; }
+  .header .co-tagline { font-size: 11px; color: #b06a4a; text-transform: uppercase; letter-spacing: 1.5px; font-weight: 600; }
+  .header .co-meta { margin-left: auto; text-align: right; font-size: 11px; color: #555; line-height: 1.6; }
+  .doc-title { font-size: 22px; color: #1e6cb8; margin: 22px 0 4px; font-weight: 700; text-align: center; letter-spacing: 1px; text-transform: uppercase;}
+  .doc-num { text-align: center; font-size: 12px; color: #888; margin-bottom: 18px; }
+  .meta-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; margin: 18px 0; padding: 12px; border: 1px solid #e0e6ee; background: #f7faff; border-radius: 4px; font-size: 12px; }
+  .meta-grid h4 { font-size: 10px; text-transform: uppercase; letter-spacing: 1px; color: #888; margin: 0 0 4px; font-weight: 700; }
+  .meta-grid p { margin: 1px 0; }
+  .status-pill { display: inline-block; padding: 3px 10px; border-radius: 999px; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; color: white; }
+  table { width: 100%; border-collapse: collapse; margin: 12px 0; font-size: 12.5px; }
+  th { background: #1e6cb8; color: white; padding: 8px 10px; text-align: left; font-size: 11px; text-transform: uppercase; letter-spacing: 1px; font-weight: 600; }
+  td { padding: 8px 10px; border-bottom: 1px solid #eee; vertical-align: top; }
+  .totals { margin-top: 12px; }
+  .totals tr td { border: none; padding: 4px 10px; }
+  .totals .grand { background: #1e6cb8; color: white; font-weight: 700; font-size: 14px; }
+  .reason-box { background: #fffbf2; border: 1px solid #f4e3b6; border-left: 4px solid #c2902f; padding: 12px 14px; margin: 14px 0; font-size: 13px; }
+  .reason-box h4 { margin: 0 0 4px; color: #8c6818; font-size: 11px; text-transform: uppercase; letter-spacing: 1px; }
+  .sig-row { display: flex; gap: 28px; margin-top: 36px; }
+  .sig { flex: 1; }
+  .sig .line { border-top: 1px solid #333; margin-top: 32px; padding-top: 4px; font-size: 11px; color: #555; }
+  .footer { margin-top: 32px; padding-top: 12px; border-top: 1px solid #ddd; text-align: center; font-size: 10px; color: #888; }
+  .impact { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin: 14px 0; }
+  .impact .box { border: 1px solid #ddd; border-radius: 4px; padding: 12px; background: #fafafa; }
+  .impact .box .lbl { font-size: 10px; text-transform: uppercase; letter-spacing: 1px; color: #888; font-weight: 600; }
+  .impact .box .val { font-size: 18px; font-weight: 700; color: #1e6cb8; margin-top: 4px; }
+  .impact .box.warn .val { color: #c2902f; }
+  ul { padding-left: 18px; margin: 6px 0 12px; }
+</style>
+</head><body><div class="doc">
+
+  <div class="header">
+    <div>
+      <div class="co-name">PROJECT RUNNER</div>
+      <div class="co-tagline">Construction · Project Management</div>
+    </div>
+    <div class="co-meta">
+      Issued: ${issuedOn}<br>
+      Project: ${esc(p.id||'')}<br>
+      Document: ${esc(co.number)}
+    </div>
+  </div>
+
+  <div class="doc-title">Change Order Request</div>
+  <div class="doc-num">${esc(co.number)} · Issued ${issuedOn} · <span class="status-pill" style="background:${statusColor}">${statusLabel}</span></div>
+
+  <div class="meta-grid">
+    <div>
+      <h4>Issued To</h4>
+      <p><strong>${esc(p.client||'')}</strong></p>
+      <p>Project: ${esc(p.service||p.projectTitle||'')}</p>
+      <p>Reference: Contract ${esc(p.proposalNumber||p.id||'')}</p>
+    </div>
+    <div>
+      <h4>Issued By</h4>
+      <p><strong>Project Runner Construction Ltd.</strong></p>
+      <p>${esc(co.submittedBy||'PM Office')}</p>
+      <p>Submitted: ${submittedOn}${approvedOn?`<br>Approved: ${approvedOn}`:''}</p>
+    </div>
+  </div>
+
+  <div class="reason-box">
+    <h4>Reason for change</h4>
+    <p style="margin:0">${esc(co.description||'No description provided.')}</p>
+    ${co.notes ? `<p style="margin:6px 0 0;font-size:12px;color:#666">${esc(co.notes)}</p>` : ''}
+  </div>
+
+  <h3 style="margin:18px 0 6px;font-size:14px;color:#1e6cb8;text-transform:uppercase;letter-spacing:1px">Cost breakdown</h3>
+  <table>
+    <thead><tr><th>Description</th><th style="text-align:right;width:120px">Amount</th></tr></thead>
+    <tbody>
+      <tr><td>Direct cost — labour, materials, subs</td><td style="text-align:right">${money(cost)}</td></tr>
+      <tr><td>Overhead &amp; profit (${Math.round(markup*100)}% per Article 5)</td><td style="text-align:right">${money(overhead)}</td></tr>
+    </tbody>
+    <tfoot class="totals">
+      <tr class="grand"><td>TOTAL CHANGE ORDER VALUE</td><td style="text-align:right">${money(total)}</td></tr>
+    </tfoot>
+  </table>
+
+  <div class="impact">
+    <div class="box">
+      <div class="lbl">Schedule impact</div>
+      <div class="val">${(co.scheduleDays||0)>0?'+':''}${co.scheduleDays||0} day${Math.abs(co.scheduleDays||0)===1?'':'s'}</div>
+    </div>
+    <div class="box ${total>=0?'':'warn'}">
+      <div class="lbl">Revised contract value</div>
+      <div class="val">${money(newContract)}</div>
+    </div>
+  </div>
+
+  <h3 style="margin:18px 0 6px;font-size:14px;color:#1e6cb8;text-transform:uppercase;letter-spacing:1px">Authorization</h3>
+  <p style="font-size:12.5px">By signing below, the Owner authorizes the Contractor to proceed with the change in scope described above and agrees to the corresponding adjustments to the Contract Price and Schedule. This change order, once executed, becomes an integral part of the Contract.</p>
+
+  <div class="sig-row">
+    <div class="sig">
+      <div class="line"><strong>Owner</strong> — ${esc(p.client||'')}<br>Signature &amp; Date</div>
+    </div>
+    <div class="sig">
+      <div class="line"><strong>Contractor</strong> — Project Runner Construction Ltd.<br>Signature &amp; Date</div>
+    </div>
+  </div>
+
+  <div class="footer">
+    ${esc(co.number)} · Generated ${today} · This document supersedes any verbal agreement regarding the changes described herein.
+  </div>
+
+</div></body></html>`;
+}
+
+function generateInvoiceHTML(p, m, milestoneIdx) {
+  const today = new Date().toLocaleDateString(undefined,{year:'numeric',month:'long',day:'numeric'});
+  const invoicedOn = m.invoicedDate ? new Date(m.invoicedDate).toLocaleDateString(undefined,{year:'numeric',month:'long',day:'numeric'}) : today;
+  const dueOn = m.dueDate ? new Date(m.dueDate).toLocaleDateString(undefined,{year:'numeric',month:'long',day:'numeric'}) : '—';
+  const paidOn = m.paidDate ? new Date(m.paidDate).toLocaleDateString(undefined,{year:'numeric',month:'long',day:'numeric'}) : null;
+  const subtotal = Number(m.amount) || 0;
+  const holdback = subtotal * 0.10;
+  const billable = subtotal - holdback;
+  const tax = billable * 0.05;
+  const grand = billable + tax;
+  const invoiceNum = m.invoiceNumber || `INV-${(p.id||'').slice(-4)||'0001'}-${String((milestoneIdx||0)+1).padStart(2,'0')}`;
+  const allMilestones = p.milestones || [];
+  const billedToDate = allMilestones.filter((x,i)=>i<=milestoneIdx).reduce((s,x)=>s+(Number(x.amount)||0),0);
+  const remaining = (Number(p.cost)||0) - billedToDate;
+  const status = paidOn ? 'PAID' : 'OUTSTANDING';
+  const statusColor = paidOn ? '#3a8c5c' : '#c2902f';
+
+  return `<!DOCTYPE html>
+<html><head><meta charset="UTF-8"><title>Invoice ${esc(invoiceNum)} — ${esc(p.client||'')}</title>
+<style>
+  @page { size: letter; margin: 0.5in; }
+  body { font-family: Georgia, "Times New Roman", serif; color: #1a1a1a; line-height: 1.5; max-width: 7.5in; margin: 0.3in auto; padding: 0 0.3in; background: #fafafa; }
+  .doc { background: white; padding: 0.45in; box-shadow: 0 1px 6px rgba(0,0,0,0.08); border: 1px solid #ddd; }
+  .top { display: flex; justify-content: space-between; align-items: flex-start; padding-bottom: 18px; border-bottom: 4px solid #1e6cb8; }
+  .top .brand-block { font-family: Georgia, serif; }
+  .top .brand-name { font-size: 24px; font-weight: 700; color: #1e6cb8; letter-spacing: 0.4px; line-height: 1; }
+  .top .brand-tag  { font-size: 10px; color: #b06a4a; text-transform: uppercase; letter-spacing: 1.5px; font-weight: 600; margin-top: 4px; }
+  .top .brand-addr { font-size: 11px; color: #555; line-height: 1.5; margin-top: 8px; }
+  .top .inv-block { text-align: right; }
+  .top .inv-title { font-size: 32px; color: #1e6cb8; letter-spacing: 4px; font-weight: 300; margin: 0; }
+  .top .inv-meta { font-size: 12px; color: #555; margin-top: 8px; line-height: 1.7; }
+  .top .inv-meta strong { color: #1a1a1a; }
+  .status-stamp { display: inline-block; margin-top: 8px; padding: 4px 12px; border: 2px solid; border-radius: 4px; font-size: 13px; font-weight: 700; letter-spacing: 2px; }
+  .billing { display: grid; grid-template-columns: 1fr 1fr; gap: 28px; margin: 22px 0; }
+  .billing h4 { font-size: 10px; text-transform: uppercase; letter-spacing: 1.5px; color: #888; margin: 0 0 8px; font-weight: 700; border-bottom: 1px solid #ddd; padding-bottom: 4px; }
+  .billing p { margin: 1px 0; font-size: 12.5px; }
+  table { width: 100%; border-collapse: collapse; margin: 14px 0; font-size: 12.5px; }
+  th { background: #f4f5f7; color: #1a1a1a; padding: 10px 12px; text-align: left; font-size: 10px; text-transform: uppercase; letter-spacing: 1px; font-weight: 700; border-bottom: 2px solid #1e6cb8; }
+  td { padding: 12px; border-bottom: 1px solid #eee; vertical-align: top; }
+  .desc { font-weight: 600; }
+  .desc-sub { font-size: 11px; color: #888; margin-top: 4px; font-style: italic; }
+  .totals { margin-left: auto; width: 60%; border-top: 1px solid #ddd; padding-top: 8px; }
+  .totals tr td { border: none; padding: 4px 12px; font-size: 13px; }
+  .totals .label { color: #555; }
+  .totals .amt { text-align: right; font-variant-numeric: tabular-nums; }
+  .totals tr.subtotal td { border-top: 1px solid #ddd; padding-top: 8px; }
+  .totals tr.grand td { background: #1e6cb8; color: white; font-weight: 700; font-size: 16px; padding: 10px 12px; }
+  .terms { margin-top: 22px; padding: 14px; background: #f7faff; border: 1px solid #e0e6ee; border-radius: 4px; font-size: 11.5px; line-height: 1.6; }
+  .terms h4 { margin: 0 0 6px; font-size: 11px; text-transform: uppercase; letter-spacing: 1px; color: #1e6cb8; }
+  .summary { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin: 16px 0; }
+  .summary .box { padding: 12px; border: 1px solid #ddd; border-radius: 4px; background: #fafafa; }
+  .summary .lbl { font-size: 10px; text-transform: uppercase; letter-spacing: 1px; color: #888; font-weight: 600; }
+  .summary .val { font-size: 16px; font-weight: 700; color: #1a1a1a; margin-top: 4px; font-variant-numeric: tabular-nums; }
+  .summary .box.due .val { color: #c2902f; }
+  .summary .box.paid .val { color: #3a8c5c; }
+  .footer { margin-top: 28px; padding-top: 12px; border-top: 1px solid #ddd; text-align: center; font-size: 10px; color: #888; }
+  .qb-tag { display: inline-flex; align-items: center; gap: 6px; margin-top: 10px; padding: 4px 10px; background: rgba(58,140,92,0.1); color: #3a8c5c; border-radius: 999px; font-size: 11px; font-weight: 600; }
+</style>
+</head><body><div class="doc">
+
+  <div class="top">
+    <div class="brand-block">
+      <div class="brand-name">PROJECT RUNNER</div>
+      <div class="brand-tag">Construction Ltd.</div>
+      <div class="brand-addr">
+        2840 Industrial Way<br>
+        Calgary, AB · T2H 4P5<br>
+        billing@projectrunner.example · (403) 555-0117<br>
+        GST: 89345 6712 RT0001
+      </div>
+    </div>
+    <div class="inv-block">
+      <h1 class="inv-title">INVOICE</h1>
+      <div class="inv-meta">
+        <strong>${esc(invoiceNum)}</strong><br>
+        Issued: ${invoicedOn}<br>
+        Due: ${dueOn} · Net 30
+      </div>
+      <div class="status-stamp" style="border-color:${statusColor};color:${statusColor}">${status}</div>
+    </div>
+  </div>
+
+  <div class="billing">
+    <div>
+      <h4>Bill To</h4>
+      <p><strong>${esc(p.client||'')}</strong></p>
+      <p>${esc(p.contactName||'Accounts Payable')}</p>
+      <p>${esc(p.contactEmail||'')}</p>
+    </div>
+    <div>
+      <h4>Project</h4>
+      <p><strong>${esc(p.service||p.projectTitle||'')}</strong></p>
+      <p>Contract: ${esc(p.proposalNumber||p.id||'')}</p>
+      <p>This invoice covers progress milestone ${(milestoneIdx||0)+1} of ${allMilestones.length}.</p>
+    </div>
+  </div>
+
+  <table>
+    <thead><tr><th style="width:60%">Description</th><th style="width:14%;text-align:center">% Complete</th><th style="width:13%;text-align:right">Rate</th><th style="width:13%;text-align:right">Amount</th></tr></thead>
+    <tbody>
+      <tr>
+        <td>
+          <div class="desc">${esc(m.name||'Milestone billing')}</div>
+          <div class="desc-sub">Progress invoice for completion of milestone ${(milestoneIdx||0)+1}: ${esc(m.name||'')}. Per Schedule of Values in Article 3 of the executed contract.</div>
+        </td>
+        <td style="text-align:center"><strong>100%</strong></td>
+        <td style="text-align:right">Lump sum</td>
+        <td style="text-align:right"><strong>${money(subtotal)}</strong></td>
+      </tr>
+    </tbody>
+  </table>
+
+  <table class="totals">
+    <tbody>
+      <tr><td class="label">Milestone subtotal</td><td class="amt">${money(subtotal)}</td></tr>
+      <tr><td class="label">Less: 10% holdback (Builders Lien Act)</td><td class="amt" style="color:#888">(${money(holdback)})</td></tr>
+      <tr class="subtotal"><td class="label"><strong>Currently billable</strong></td><td class="amt"><strong>${money(billable)}</strong></td></tr>
+      <tr><td class="label">GST (5%)</td><td class="amt">${money(tax)}</td></tr>
+      <tr class="grand"><td>AMOUNT DUE</td><td class="amt">${money(grand)}</td></tr>
+    </tbody>
+  </table>
+
+  <div class="summary">
+    <div class="box">
+      <div class="lbl">Contract value</div>
+      <div class="val">${money(p.cost||0)}</div>
+    </div>
+    <div class="box paid">
+      <div class="lbl">Billed to date</div>
+      <div class="val">${money(billedToDate)}</div>
+    </div>
+    <div class="box ${remaining>0?'due':''}">
+      <div class="lbl">Remaining</div>
+      <div class="val">${money(remaining)}</div>
+    </div>
+  </div>
+
+  <div class="terms">
+    <h4>Payment terms</h4>
+    Payment due within thirty (30) days of invoice date per Article 3 of the executed contract. Holdback of ten percent (10%) is retained per the Builders Lien Act and released forty-five (45) days after substantial performance. Payment may be made by EFT, cheque, or e-transfer to billing@projectrunner.example. Late payments accrue interest at 1.5% per month (18% APR).
+    <div class="qb-tag">✓ Synced to QuickBooks Online</div>
+  </div>
+
+  <div class="footer">
+    Invoice ${esc(invoiceNum)} · Generated ${today} · Project Runner Construction Ltd. · Thank you for your business.
+  </div>
+
+</div></body></html>`;
+}
+
+function generateDailyReportHTML(p) {
+  const today = new Date();
+  const dateStr = today.toLocaleDateString(undefined,{weekday:'long',year:'numeric',month:'long',day:'numeric'});
+  const reportNum = `DR-${(p.id||'').slice(-4)||'0001'}-${today.toISOString().slice(0,10).replace(/-/g,'')}`;
+  // Synthesize realistic daily report data from project state
+  const activeMilestone = (p.milestones||[]).find(m => m.status==='active') || (p.milestones||[]).find(m => m.status==='pending') || (p.milestones||[])[0];
+  const crewSize = 4 + Math.floor(Math.random()*4);
+  const hours = crewSize * 8;
+  const weather = ['Clear, 18°C, light breeze','Overcast, 14°C, dry','Sunny, 22°C, no wind','Light rain a.m., cleared p.m., 16°C'][Math.floor(Math.random()*4)];
+  const safetyIncidents = Math.random() > 0.85 ? 1 : 0;
+
+  return `<!DOCTYPE html>
+<html><head><meta charset="UTF-8"><title>Daily Report ${dateStr} — ${esc(p.client||'')}</title>
+<style>
+  @page { size: letter; margin: 0.55in; }
+  body { font-family: Georgia, "Times New Roman", serif; color: #1a1a1a; line-height: 1.55; max-width: 7.5in; margin: 0.3in auto; padding: 0 0.3in; background: #fafafa; }
+  .doc { background: white; padding: 0.5in; box-shadow: 0 1px 6px rgba(0,0,0,0.08); border: 1px solid #ddd; }
+  .header { display: flex; align-items: flex-start; padding-bottom: 14px; border-bottom: 2px solid #1e6cb8; }
+  .header-left { flex: 1; }
+  .header-left .name { font-size: 20px; color: #1e6cb8; font-weight: 700; letter-spacing: 0.3px; }
+  .header-left .tag { font-size: 10px; color: #b06a4a; text-transform: uppercase; letter-spacing: 1.5px; font-weight: 600; margin-top: 2px;}
+  .header-right { text-align: right; font-size: 11px; color: #555; line-height: 1.7; }
+  .doc-title { font-size: 22px; color: #1e6cb8; margin: 18px 0 4px; font-weight: 700; text-align: center; letter-spacing: 1px; text-transform: uppercase;}
+  .doc-num { text-align: center; font-size: 11px; color: #888; margin-bottom: 14px; }
+  .meta-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin: 14px 0 18px; }
+  .meta-row .box { padding: 10px 12px; background: #f4f5f7; border-left: 3px solid #1e6cb8; }
+  .meta-row .lbl { font-size: 9px; text-transform: uppercase; letter-spacing: 1.2px; color: #888; font-weight: 700; }
+  .meta-row .val { font-size: 13px; font-weight: 700; color: #1a1a1a; margin-top: 2px; }
+  .section { margin: 18px 0; }
+  .section h3 { font-size: 13px; color: #1e6cb8; text-transform: uppercase; letter-spacing: 1.5px; margin: 0 0 8px; padding-bottom: 4px; border-bottom: 1px solid #e0e6ee; font-weight: 700; }
+  .section p { margin: 0 0 6px; font-size: 12.5px; }
+  table { width: 100%; border-collapse: collapse; margin: 6px 0; font-size: 12px; }
+  th { background: #f4f5f7; color: #1a1a1a; padding: 6px 10px; text-align: left; font-size: 10px; text-transform: uppercase; letter-spacing: 1px; border-bottom: 1px solid #ddd;}
+  td { padding: 6px 10px; border-bottom: 1px solid #eee; }
+  .safety-banner { padding: 10px 14px; border-radius: 4px; margin: 10px 0; font-size: 12.5px; }
+  .safety-banner.ok { background: rgba(58,140,92,0.08); border-left: 3px solid #3a8c5c; color: #1f5e38; }
+  .safety-banner.warn { background: rgba(194,144,47,0.10); border-left: 3px solid #c2902f; color: #6e5118; }
+  .checklist { list-style: none; padding: 0; margin: 6px 0; }
+  .checklist li { padding: 3px 0 3px 22px; position: relative; font-size: 12.5px; }
+  .checklist li::before { content: '✓'; position: absolute; left: 0; color: #3a8c5c; font-weight: 700; }
+  .sig-row { display: flex; gap: 28px; margin-top: 30px; padding-top: 14px; border-top: 1px solid #e0e6ee;}
+  .sig { flex: 1; }
+  .sig .line { border-top: 1px solid #333; margin-top: 28px; padding-top: 4px; font-size: 11px; color: #555; }
+  .footer { margin-top: 24px; padding-top: 10px; border-top: 1px solid #ddd; text-align: center; font-size: 10px; color: #888; }
+  .photo-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 8px; margin-top: 8px; }
+  .photo-grid .ph { aspect-ratio: 4/3; background: linear-gradient(135deg, #e0e6ee, #c8d2dc); border-radius: 3px; display: flex; align-items: center; justify-content: center; font-size: 10px; color: #888; text-transform: uppercase; letter-spacing: 1px;}
+</style>
+</head><body><div class="doc">
+
+  <div class="header">
+    <div class="header-left">
+      <div class="name">PROJECT RUNNER</div>
+      <div class="tag">Construction Ltd. · Daily Field Report</div>
+    </div>
+    <div class="header-right">
+      Report: ${reportNum}<br>
+      Submitted: ${dateStr}<br>
+      Project: ${esc(p.id||'')}
+    </div>
+  </div>
+
+  <div class="doc-title">Daily Site Report</div>
+  <div class="doc-num">${esc(p.client||'')} · ${esc(p.service||p.projectTitle||'')}</div>
+
+  <div class="meta-row">
+    <div class="box"><div class="lbl">Date</div><div class="val">${dateStr.split(',')[0]}</div></div>
+    <div class="box"><div class="lbl">Weather</div><div class="val" style="font-size:11px">${weather}</div></div>
+    <div class="box"><div class="lbl">Crew on site</div><div class="val">${crewSize} workers</div></div>
+    <div class="box"><div class="lbl">Hours worked</div><div class="val">${hours} hrs</div></div>
+  </div>
+
+  <div class="safety-banner ${safetyIncidents===0?'ok':'warn'}">
+    <strong>Safety:</strong> ${safetyIncidents===0?'Zero incidents · daily toolbox talk completed at 7:00 a.m. · all PPE accounted for.':'1 minor incident — see notes section. Toolbox talk completed at 7:00 a.m.'}
+  </div>
+
+  <div class="section">
+    <h3>Active milestone</h3>
+    <p><strong>${esc(activeMilestone?.name||'No active milestone')}</strong> — ${activeMilestone? Math.round((activeMilestone.progress||0.5)*100)+'% complete' : ''}</p>
+    <p style="color:#555;font-size:12px">Crew lead: ${esc(activeMilestone?.crewLead||'A. Mendoza')}. Phase status: on track.</p>
+  </div>
+
+  <div class="section">
+    <h3>Work performed today</h3>
+    <ul class="checklist">
+      <li>Continued installation per drawing set rev ${Math.floor(Math.random()*3)+2}</li>
+      <li>Material delivery from primary supplier received and staged</li>
+      <li>Coordination call with ${esc(p.client||'owner')} — confirmed milestone ${activeMilestone?.name||''} sign-off scheduled for end of week</li>
+      <li>Sub-trade crew (${['electrical','mechanical','framing','finish'][Math.floor(Math.random()*4)]}) on site for parallel work</li>
+      <li>Quality control walk-through with site superintendent — no deficiencies logged</li>
+    </ul>
+  </div>
+
+  <div class="section">
+    <h3>Crew on site</h3>
+    <table>
+      <thead><tr><th>Trade</th><th>Workers</th><th>Hours</th><th>Lead</th></tr></thead>
+      <tbody>
+        <tr><td>Carpenters</td><td>${Math.max(1,crewSize-2)}</td><td>${(crewSize-2)*8}</td><td>A. Mendoza</td></tr>
+        <tr><td>Labourers</td><td>2</td><td>16</td><td>D. Patel</td></tr>
+        ${Math.random()>0.4?'<tr><td>Sub — Electrical</td><td>2</td><td>16</td><td>NorthGrid Electric</td></tr>':''}
+      </tbody>
+    </table>
+  </div>
+
+  <div class="section">
+    <h3>Materials &amp; deliveries</h3>
+    <table>
+      <thead><tr><th>Item</th><th>Quantity</th><th>Status</th><th>Supplier</th></tr></thead>
+      <tbody>
+        <tr><td>Concrete (32 MPa)</td><td>${Math.floor(Math.random()*8)+10} m³</td><td>Delivered, used</td><td>Lafarge</td></tr>
+        <tr><td>Rebar (#4 / 12mm)</td><td>${Math.floor(Math.random()*200)+400} ft</td><td>On site, staged</td><td>Westeel</td></tr>
+        <tr><td>Framing lumber (2x6)</td><td>${Math.floor(Math.random()*40)+80} pcs</td><td>Delivered today</td><td>Dick's Lumber</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="section">
+    <h3>Issues, delays, RFIs</h3>
+    <p style="font-size:12.5px;color:#555">${(p.issues||[]).filter(i=>i.status==='open').length===0?'No active issues. No RFIs outstanding. Schedule on track.':'See issue log for full details. Open items being tracked by PM.'}</p>
+  </div>
+
+  <div class="section">
+    <h3>Site photos</h3>
+    <div class="photo-grid">
+      <div class="ph">[ progress shot 1 ]</div>
+      <div class="ph">[ progress shot 2 ]</div>
+      <div class="ph">[ progress shot 3 ]</div>
+    </div>
+    <p style="font-size:11px;color:#888;margin-top:6px;font-style:italic">Photos auto-uploaded from site superintendent's phone via the AI inbox; included in client weekly digest.</p>
+  </div>
+
+  <div class="sig-row">
+    <div class="sig">
+      <div class="line"><strong>Site Superintendent</strong><br>Signature &amp; Date</div>
+    </div>
+    <div class="sig">
+      <div class="line"><strong>Project Manager</strong><br>Signature &amp; Date</div>
+    </div>
+  </div>
+
+  <div class="footer">
+    ${reportNum} · Generated ${dateStr} · For internal use and client weekly digest. Project Runner Construction Ltd.
+  </div>
+
+</div></body></html>`;
+}
+
+function openChangeOrderDoc(projId, idx) {
+  const p = state.projects.find(x => x.id === projId);
+  if (!p) return showToast('Project not found', true);
+  const co = (p.changeOrders||[])[idx];
+  if (!co) return showToast('Change order not found', true);
+  openDocInNewTab(generateChangeOrderHTML(p, co, idx), `${co.number}-${(p.client||'').replace(/\s+/g,'_')}.html`);
+}
+
+function openInvoiceDoc(projId, idx) {
+  const p = state.projects.find(x => x.id === projId);
+  if (!p) return showToast('Project not found', true);
+  const m = (p.milestones||[])[idx];
+  if (!m) return showToast('Milestone not found', true);
+  if (m.status !== 'invoiced' && m.status !== 'paid') return showToast('No invoice yet — milestone not invoiced.');
+  openDocInNewTab(generateInvoiceHTML(p, m, idx), `Invoice-${(p.id||'').slice(-4)}-${idx+1}.html`);
+}
+
+function openDailyReportDoc(projId) {
+  const p = state.projects.find(x => x.id === projId);
+  if (!p) return showToast('Project not found', true);
+  openDocInNewTab(generateDailyReportHTML(p), `DailyReport-${(p.id||'').slice(-4)}-${new Date().toISOString().slice(0,10)}.html`);
+}
+
+// Helper for currency formatting in templates (alias for fmt$)
+function money(n) { return '$' + Number(n||0).toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2}); }
+
 function generateProposalHTML(p) {
   const subtotal = (p.lineItems||[]).reduce((s,li)=>s+li.qty*li.unitPrice, 0) || p.cost;
   const tax = subtotal * 0.05;
@@ -4026,6 +4478,7 @@ function openProject(id) {
           <button class="btn" onclick="openContractDoc('${p.proposalId}')">&#128221; Open contract</button>
           <button class="btn secondary" onclick="openProposalDoc('${p.proposalId}')">&#128196; Open proposal</button>
           <button class="btn secondary" onclick="openCustomerPortal('${p.id}')">&#128100; Customer portal</button>
+          <button class="btn ghost" onclick="openDailyReportDoc('${p.id}')" title="Generate today's site report">&#128221; Daily report</button>
         </div>` : ''}
       <div class="grid cols-4">
         <div class="kpi"><div class="kpi-label">Contract value</div><div class="kpi-value">${fmt$(p.totalCost)}</div></div>
@@ -4129,7 +4582,9 @@ function openProject(id) {
                   <td>${fmtDate(m.dueDate)}</td>
                   <td>${fmtDate(m.paidDate)}</td>
                   <td style="${overdue?'color:var(--danger)':''}">${daysCol}</td>
-                  <td><span class="badge ${overdue?'overdue':m.status}">${overdue?'overdue':m.status}</span></td>
+                  <td><span class="badge ${overdue?'overdue':m.status}">${overdue?'overdue':m.status}</span>
+                    ${(m.status==='invoiced'||m.status==='paid')? `<button class="btn ghost small" style="margin-left:6px" onclick="openInvoiceDoc('${p.id}',${p.milestones.indexOf(m)})">Open invoice</button>`:''}
+                  </td>
                 </tr>`;
               }).join('')}
             </tbody>
@@ -4174,6 +4629,7 @@ function openProject(id) {
                 <td style="white-space:nowrap">
                   ${co.status==='draft' ? `<button class="btn small" onclick="resubmitCO('${p.id}',${i})" title="Email this CO to the customer for approval">Submit</button>` : ''}
                   ${co.status==='sent_to_customer' ? `<button class="btn small success" onclick="simulateCustomerApproval('${p.id}',${i})" title="Demo: simulate the customer replying \\&quot;approved\\&quot;">Simulate approval</button>` : ''}
+                  <button class="btn ghost small" onclick="openChangeOrderDoc('${p.id}',${i})" title="Open the formal CO document in a new tab">Open</button>
                   <button class="btn ghost small" onclick="deleteChangeOrder('${p.id}',${i})">&times;</button>
                 </td>
               </tr>`;
