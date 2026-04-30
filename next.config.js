@@ -3,6 +3,14 @@
 const nextConfig = {
   typescript: { ignoreBuildErrors: true },
   eslint: { ignoreDuringBuilds: true },
+  async rewrites() {
+    return [
+      {
+        source: '/project-runner',
+        destination: '/project-runner.html',
+      },
+    ]
+  },
   async redirects() {
     return [
       {
