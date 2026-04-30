@@ -2474,7 +2474,7 @@ function generateProposalHTML(p) {
   @media print { .actions { display: none; } body { background: white; } .doc { box-shadow: none; border: none; padding: 0; } }
 </style></head>
 <body>
-<div class="actions"><button onclick="window.print()">Print / Save PDF</button></div>
+<!-- print button removed -->
 <div class="doc">
   <div class="header">
     ${logoSVG()}
@@ -2575,7 +2575,14 @@ function generateProposalHTML(p) {
   root.setAttribute('data-palette', initial);
 
   function setActive(p) {
+    // Palette implies light theme — force it so the palette CSS actually applies
+    root.setAttribute('data-theme', 'light');
     root.setAttribute('data-palette', p);
+    try { localStorage.setItem('aio_theme_v2', 'light'); } catch(e) {}
+    var ti = document.getElementById('themeIcon');
+    var tl = document.getElementById('themeLabel');
+    if (ti) ti.innerHTML = '\u263D';   // moon (next state)
+    if (tl) tl.textContent = 'Dark';
     document.querySelectorAll('.palette-chip').forEach(function(el){
       el.classList.toggle('active', el.getAttribute('data-p') === p);
     });
@@ -2626,7 +2633,7 @@ function generateContractHTML(p) {
   .footer { margin-top: 32px; padding-top: 12px; border-top: 1px solid #ddd; text-align: center; font-size: 10px; color: #888; }
 </style></head>
 <body>
-<div class="actions"><button onclick="window.print()">Print / Save PDF</button></div>
+<!-- print button removed -->
 <div class="doc">
   <div class="header">
     ${logoSVG()}
@@ -6220,7 +6227,7 @@ document.getElementById('currentDate').textContent = new Date().toLocaleDateStri
 /* ============================================================
    THEME TOGGLE
    ============================================================ */
-const THEME_KEY = 'aio_theme';
+const THEME_KEY = 'aio_theme_v2';
 function applyTheme(theme) {
   document.documentElement.setAttribute('data-theme', theme);
   const icon = document.getElementById('themeIcon');
@@ -6239,10 +6246,10 @@ function applyTheme(theme) {
   }
 }
 document.getElementById('themeToggle').onclick = () => {
-  const current = document.documentElement.getAttribute('data-theme') || 'dark';
+  const current = document.documentElement.getAttribute('data-theme') || 'light';
   applyTheme(current === 'dark' ? 'light' : 'dark');
 };
-applyTheme(localStorage.getItem(THEME_KEY) || 'dark');
+applyTheme(localStorage.getItem(THEME_KEY) || 'light');
 
 bindConnectionEvents();
 ensureConnections();
