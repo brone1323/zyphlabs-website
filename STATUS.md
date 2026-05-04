@@ -7,6 +7,26 @@
 
 ---
 
+## Round 2 (2026-05-04)
+
+**Preview:** https://zyphlabs-website-ew2k2qbqh-solar-devs-projects.vercel.app  
+**Commit:** 5ba94d9 — Revise round 1: hero copy, 9-role two-column org chart, status badge cleanup, Content Creator/Bespoke Agent removal
+
+### Blockers addressed
+
+1. **HERO COPY** — H1 replaced verbatim: "Run your business on an AI Company." Subhead: "An executive team to decide. An office team to do the work. You run the company." Eyebrow was already correct. Price anchor "Starts at $129/mo." added. CTA labels untouched.
+
+2. **MEET YOUR AI COMPANY SECTION** — Restructured from 6-role flat grid to 9-role two-column split. Executive Team (PROJECT RUNNER/COO, STRATEGIST/CSO, FINANCIAL ANALYST/CFO, KNOWLEDGE EXPERT/CKO) on left with header "EXECUTIVE TEAM — they decide". Office Team (EMAIL OFFICER, CRM OPERATOR, BOOKKEEPER, RECRUITER, CUSTOMER SUPPORT) on right with header "OFFICE TEAM — they do the work". Content Creator and Bespoke Agent removed from homepage org chart, services examples, and pricing comparison table. No status badges on org-chart cards.
+
+3. **STATUS COPY** — "Launching this week" removed from Project Runner homepage Feature Callout section and from /project-runner page hero. "Free Tool · Launching This Week" retained on Proposal Drafter callout card. Audit complete — no other status badges found on role/agent cards.
+
+4. **KILL-SHOT** — Verified present verbatim in FAQ section of /project-runner. Current text includes the locked string plus construction-specific context from the locked plan. No change needed.
+
+**Build:** ✓ 0 TS errors, 36 pages, Vercel build success.  
+**Hold for Brian re-approval before promoting to production.**
+
+---
+
 ## DONE
 
 - **Homepage `/`** — Hero repositioned to "AI executive team" framing (verbatim copy from brief). New sections: Meet Your AI Executive Team (6 role cards), Project Runner callout, Pricing Teaser (4 tiers, "Contact for pricing"), free tool callout, new final CTA. Primary CTA = "Start My Free Assessment" → /questionnaire. Secondary CTAs: "See Project Runner" and "View Pricing".
