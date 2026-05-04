@@ -1,127 +1,129 @@
 import Link from 'next/link'
 import Hero from '@/components/Hero'
-import PortfolioCard from '@/components/PortfolioCard'
-import { portfolioItems } from '@/lib/portfolioData'
 
-const niches = [
+const executiveTeam = [
   {
-    name: 'Contractors & Trades',
-    slug: 'contractors',
-    icon: '🔨',
-    desc: 'Lead-generating websites for roofers, HVAC, plumbers, electricians, builders, and more.',
-    from: 149,
-    color: '#f39c12',
+    icon: '🏗️',
+    role: 'PROJECT RUNNER',
+    title: 'Your COO.',
+    desc: 'Runs proposals, projects, billing, change orders.',
+    status: 'Launching this week',
+    statusColor: '#00cec9',
+    href: '/project-runner',
   },
   {
-    name: 'E-Commerce Stores',
-    slug: 'ecommerce',
-    icon: '🛍️',
-    desc: 'Shopify stores that sell — set up, launched, and maintained so you can focus on your products.',
-    from: 199,
-    color: '#00cec9',
+    icon: '📬',
+    role: 'EMAIL OFFICER',
+    title: 'Your Comms Director.',
+    desc: 'Reads, classifies, drafts, replies.',
+    status: 'Available now',
+    statusColor: '#6c5ce7',
+    href: null,
   },
   {
-    name: 'Realtors & Real Estate',
-    slug: 'real-estate',
-    icon: '🏠',
-    desc: 'Professional real estate sites that capture buyers and sellers on autopilot.',
-    from: 179,
-    color: '#6c5ce7',
+    icon: '🤝',
+    role: 'CRM OPERATOR',
+    title: 'Your Sales Lead.',
+    desc: 'Tracks every relationship and follow-up.',
+    status: 'Available now',
+    statusColor: '#6c5ce7',
+    href: null,
   },
   {
-    name: 'Law Firms & Attorneys',
-    slug: 'law-firms',
-    icon: '⚖️',
-    desc: 'Authoritative law firm websites that establish credibility and fill your consultation calendar.',
-    from: 199,
-    color: '#0984e3',
+    icon: '🧠',
+    role: 'STRATEGIST',
+    title: 'Your Business Brain.',
+    desc: 'Pricing, positioning, deal review, market scans.',
+    status: 'Available now',
+    statusColor: '#6c5ce7',
+    href: null,
+  },
+  {
+    icon: '📣',
+    role: 'CONTENT CREATOR',
+    title: 'Your Marketing Arm.',
+    desc: 'Multi-platform publishing, on brand.',
+    status: 'Available now',
+    statusColor: '#6c5ce7',
+    href: null,
+  },
+  {
+    icon: '⚙️',
+    role: 'BESPOKE AGENT',
+    title: 'Built for Your Business.',
+    desc: 'One specific job. Automated end-to-end.',
+    status: 'Custom build',
+    statusColor: '#f39c12',
+    href: null,
   },
 ]
 
-const steps = [
+const pricingTiers = [
   {
-    num: '01',
-    title: 'You Order',
-    desc: 'Pick your niche, build tier, and hosting plan. One checkout — no back-and-forth quoting.',
-    icon: '🛒',
+    name: 'Project Runner Starter',
+    tagline: 'Bring your own Claude Desktop. Best for solo operators.',
+    price: 'Contact for pricing',
+    cta: 'Join Waitlist',
+    ctaHref: '/project-runner',
+    highlight: false,
   },
   {
-    num: '02',
-    title: 'We Onboard You',
-    desc: 'Fill out a short questionnaire to share your brand assets, content, and goals — takes about 15 minutes.',
-    icon: '📋',
+    name: 'Project Runner Pro',
+    tagline: 'Hosted, ready to go. Best for owners running 5–20 active projects.',
+    price: 'Contact for pricing',
+    cta: 'Join Waitlist',
+    ctaHref: '/project-runner',
+    highlight: false,
   },
   {
-    num: '03',
-    title: 'We Build It',
-    desc: 'Custom design and development. You review a preview and approve before anything goes live.',
-    icon: '⚙️',
+    name: 'OpenClaw Operator',
+    tagline: 'Project Runner + Email + CRM + a vertical template tuned to your industry.',
+    price: 'Contact for pricing',
+    cta: 'Talk to Us',
+    ctaHref: '/questionnaire',
+    highlight: true,
   },
   {
-    num: '04',
-    title: 'We Deploy & Host',
-    desc: 'We configure your domain, SSL, and hosting. Your site goes live — we handle everything.',
-    icon: '🚀',
-  },
-  {
-    num: '05',
-    title: 'We Maintain It',
-    desc: "Ongoing hosting, security, backups, and content updates. We're your web team, permanently.",
-    icon: '🛡️',
+    name: 'OpenClaw Command',
+    tagline: 'The full executive team — Email, CRM, Project Runner, Strategist, + custom agents fine-tuned to your business.',
+    price: 'Contact for pricing',
+    cta: 'Apply',
+    ctaHref: '/questionnaire',
+    highlight: false,
+    badge: 'Flagship',
   },
 ]
 
 const whyCards = [
   {
     icon: '⚡',
-    title: 'Live in 7–14 Days',
-    desc: 'From order to live site in under two weeks. No lengthy discovery phases or endless revision cycles.',
+    title: 'Always On. Never Tired.',
+    desc: 'Your AI team works 24/7 — no sick days, no context-switching, no meetings.',
   },
   {
     icon: '🔒',
-    title: 'Zero Technical Headaches',
-    desc: 'We handle hosting, SSL, DNS, domain setup, and maintenance. You never touch a cPanel or server.',
+    title: 'One Stack. Zero Complexity.',
+    desc: 'Everything runs on OpenClaw + Claude. No patchwork of SaaS tools to integrate and maintain.',
   },
   {
     icon: '♻️',
-    title: 'Recurring Revenue Model',
-    desc: "Your site keeps working for you month after month. We keep it running — you focus on your business.",
+    title: 'Leverage Without Headcount.',
+    desc: 'The work of 10 people. The payroll of zero. AI inverts the scaling equation.',
   },
   {
     icon: '💳',
-    title: 'One Simple Checkout',
-    desc: 'Build fee + hosting plan in a single Stripe checkout. Cards, Apple Pay, Google Pay accepted.',
+    title: 'Fractional C-Suite Pricing.',
+    desc: 'Less than the cost of a single hire. The executive team you could never afford — now you can.',
   },
   {
     icon: '🎯',
-    title: 'Built for Your Niche',
-    desc: 'Not a generic template. Every site is tailored to the specific needs of your industry.',
+    title: 'Built for Construction First.',
+    desc: 'Vertical-tuned for service contractors. General contractors, subs, residential and commercial.',
   },
   {
     icon: '📞',
-    title: 'Real Support',
-    desc: 'Email support included. Priority plans get 24hr response time and a dedicated point of contact.',
-  },
-]
-
-const testimonials = [
-  {
-    quote:
-      "I used to lose bids because clients checked my website and it looked old. Now they call me already sold. Zyph Labs built and launched it in 10 days — I didn't do a thing.",
-    name: 'Marcus T.',
-    role: 'Owner, Summit Roofing Co.',
-  },
-  {
-    quote:
-      "As a realtor I needed something professional but had no time to manage it. Zyph Labs built the site AND hosts it. When I need a photo changed I just email them. It's incredible.",
-    name: 'Sarah M.',
-    role: 'Realtor, Apex Property Group',
-  },
-  {
-    quote:
-      "Our old Shopify store was set up by a freelancer who disappeared. Zyph Labs rebuilt it, runs it, and handles all the technical stuff. Our conversion rate went up 40%.",
-    name: 'Anika P.',
-    role: 'Founder, Lumina Glow',
+    title: 'White-Glove Onboarding.',
+    desc: 'We configure your AI team to your business, your clients, your workflow. Then we hand you the keys.',
   },
 ]
 
@@ -131,109 +133,124 @@ export default function HomePage() {
       {/* Hero */}
       <Hero />
 
-      {/* Who We Serve */}
+      {/* Meet Your AI Executive Team */}
       <section className="py-24 px-4 sm:px-6 max-w-7xl mx-auto">
         <div className="text-center mb-16">
           <p className="text-[#6c5ce7] text-sm font-semibold uppercase tracking-widest mb-3">
-            Who We Serve
+            Your AI Executive Team
           </p>
           <h2
             className="text-4xl md:text-5xl font-bold text-white mb-4"
             style={{ fontFamily: 'Space Grotesk, sans-serif' }}
           >
-            Pick your industry.<br />
-            <span className="gradient-text">We handle the rest.</span>
+            Meet the team running<br />
+            <span className="gradient-text">your business.</span>
           </h2>
           <p className="text-[#8888aa] max-w-xl mx-auto">
-            Niche-built websites with pricing designed for real small businesses — not agency budgets.
+            Six specialized AI agents. Each one focused on a critical business function.
+            All of them working together — so you don&apos;t have to.
           </p>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-          {niches.map((niche) => (
-            <Link
-              key={niche.slug}
-              href={`/services/${niche.slug}`}
-              className="glass card-glow p-7 flex flex-col group"
-            >
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          {executiveTeam.map((member) => {
+            const card = (
               <div
-                className="w-12 h-12 rounded-xl flex items-center justify-center text-2xl mb-5 flex-shrink-0"
-                style={{ background: `${niche.color}20`, border: `1px solid ${niche.color}40` }}
+                className="glass card-glow p-7 flex flex-col h-full group"
+                style={member.href ? { cursor: 'pointer' } : {}}
               >
-                {niche.icon}
-              </div>
-              <h3
-                className="text-lg font-semibold text-white mb-2 group-hover:text-[#a29bfe] transition-colors"
-                style={{ fontFamily: 'Space Grotesk, sans-serif' }}
-              >
-                {niche.name}
-              </h3>
-              <p className="text-sm text-[#8888aa] leading-relaxed mb-5 flex-1">{niche.desc}</p>
-              <div className="flex items-center justify-between">
-                <span className="text-sm text-white">
-                  From{' '}
-                  <span className="font-semibold text-[#a29bfe]">${niche.from}</span>
-                </span>
-                <span className="text-[#6c5ce7] group-hover:translate-x-1 transition-transform text-lg">
-                  →
-                </span>
-              </div>
-            </Link>
-          ))}
-        </div>
-      </section>
-
-      <div className="section-divider" />
-
-      {/* Frictionless Promise */}
-      <section className="py-24 px-4 sm:px-6">
-        <div className="max-w-7xl mx-auto">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
-            {/* Left: problem */}
-            <div>
-              <p className="text-[#6c5ce7] text-sm font-semibold uppercase tracking-widest mb-3">
-                The Problem
-              </p>
-              <h2
-                className="text-4xl font-bold text-white mb-6"
-                style={{ fontFamily: 'Space Grotesk, sans-serif' }}
-              >
-                Most freelancers deliver a zip file and disappear.
-              </h2>
-              <p className="text-[#8888aa] leading-relaxed mb-4">
-                You hired someone on Fiverr, got your files, and then spent three weeks trying to figure
-                out Bluehost, getting an SSL error, wondering why your site loads in 8 seconds on mobile,
-                and emailing someone who never responds.
-              </p>
-              <p className="text-[#8888aa] leading-relaxed">
-                That's friction. It's the norm in this industry — and it's exactly what we eliminate.
-              </p>
-            </div>
-
-            {/* Right: comparison table */}
-            <div className="glass p-6 rounded-2xl">
-              <div className="grid grid-cols-3 gap-4 text-xs text-[#8888aa] uppercase tracking-wide mb-4 pb-3 border-b border-white/8">
-                <span>Feature</span>
-                <span className="text-center">Typical Freelancer</span>
-                <span className="text-center text-[#a29bfe]">Zyph Labs</span>
-              </div>
-              {[
-                ['What you get', 'Files (zip)', 'Live website'],
-                ['Hosting', 'Figure it out', 'Managed ✓'],
-                ['SSL/Security', 'Not included', 'Included ✓'],
-                ['Domain setup', 'Not included', 'We do it ✓'],
-                ['Ongoing support', 'None', 'Monthly plan ✓'],
-                ['Updates/changes', 'Buy another gig', 'Included in plan ✓'],
-              ].map(([feature, bad, good]) => (
-                <div
-                  key={feature}
-                  className="grid grid-cols-3 gap-4 py-3 border-b border-white/5 text-sm items-center"
+                <div className="w-12 h-12 rounded-xl flex items-center justify-center text-2xl mb-5 flex-shrink-0 bg-[#6c5ce7]/10 border border-[#6c5ce7]/30">
+                  {member.icon}
+                </div>
+                <p className="text-xs font-bold text-[#6c5ce7] uppercase tracking-widest mb-1">
+                  {member.role}
+                </p>
+                <h3
+                  className="text-lg font-semibold text-white mb-2 group-hover:text-[#a29bfe] transition-colors"
+                  style={{ fontFamily: 'Space Grotesk, sans-serif' }}
                 >
-                  <span className="text-[#ccccdd]">{feature}</span>
-                  <span className="text-center text-[#555577]">{bad}</span>
-                  <span className="text-center text-[#00cec9] font-medium">{good}</span>
+                  {member.title}
+                </h3>
+                <p className="text-sm text-[#8888aa] leading-relaxed flex-1">{member.desc}</p>
+                <div className="mt-4 flex items-center gap-2">
+                  <span
+                    className="w-2 h-2 rounded-full flex-shrink-0"
+                    style={{ backgroundColor: member.statusColor }}
+                  />
+                  <span className="text-xs" style={{ color: member.statusColor }}>
+                    {member.status}
+                  </span>
                 </div>
-              ))}
+              </div>
+            )
+
+            return member.href ? (
+              <Link key={member.role} href={member.href} className="block">
+                {card}
+              </Link>
+            ) : (
+              <div key={member.role}>{card}</div>
+            )
+          })}
+        </div>
+
+        <p className="text-center text-xs text-[#555577] mt-6">
+          [BRIAN-CONFIRM] Agent roster status — which are shippable today vs. roadmap needs a truth pass before go-live.
+        </p>
+      </section>
+
+      <div className="section-divider" />
+
+      {/* Project Runner Feature Callout */}
+      <section className="py-20 px-4 sm:px-6">
+        <div className="max-w-7xl mx-auto">
+          <div className="glass rounded-3xl p-10 md:p-16 relative overflow-hidden border border-[#6c5ce7]/20">
+            <div
+              className="absolute inset-0 rounded-3xl"
+              style={{
+                background: 'radial-gradient(ellipse at 20% 50%, rgba(108,92,231,0.12) 0%, transparent 60%)',
+              }}
+            />
+            <div className="relative z-10 grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+              <div>
+                <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-[#00cec9]/10 border border-[#00cec9]/30 text-[#00cec9] text-xs font-semibold mb-6">
+                  <span className="w-1.5 h-1.5 rounded-full bg-[#00cec9] animate-pulse" />
+                  Launching this week
+                </div>
+                <h2
+                  className="text-3xl md:text-4xl font-bold text-white mb-4"
+                  style={{ fontFamily: 'Space Grotesk, sans-serif' }}
+                >
+                  quit typing and run these projects.
+                </h2>
+                <p className="text-[#8888aa] leading-relaxed mb-8">
+                  Project Runner is the AI-powered project, proposal, and financial command center for service contractors.
+                  Your inbox fills it; your projects run themselves.
+                </p>
+                <div className="flex flex-col sm:flex-row gap-4">
+                  <Link href="/project-runner" className="btn-primary text-base px-8 py-4 inline-block">
+                    See Project Runner →
+                  </Link>
+                  <Link href="/pricing" className="btn-secondary text-base px-8 py-4 inline-block">
+                    View Pricing
+                  </Link>
+                </div>
+              </div>
+              <div className="grid grid-cols-2 gap-4">
+                {[
+                  { icon: '📄', label: 'AI Proposal Drafting' },
+                  { icon: '📊', label: 'Project Dashboard' },
+                  { icon: '🔄', label: 'Change Order Automation' },
+                  { icon: '📥', label: 'AI Inbox Monitoring' },
+                  { icon: '👥', label: 'Crew & Supplier Directory' },
+                  { icon: '🔗', label: 'Gmail, QuickBooks, Drive' },
+                ].map((feature) => (
+                  <div key={feature.label} className="glass p-4 rounded-xl flex items-center gap-3">
+                    <span className="text-xl">{feature.icon}</span>
+                    <span className="text-sm text-[#ccccdd]">{feature.label}</span>
+                  </div>
+                ))}
+              </div>
             </div>
           </div>
         </div>
@@ -241,93 +258,69 @@ export default function HomePage() {
 
       <div className="section-divider" />
 
-      {/* How It Works */}
+      {/* Pricing Teaser */}
       <section className="py-24 px-4 sm:px-6">
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-16">
             <p className="text-[#6c5ce7] text-sm font-semibold uppercase tracking-widest mb-3">
-              How It Works
+              Pricing
             </p>
             <h2
               className="text-4xl md:text-5xl font-bold text-white mb-4"
               style={{ fontFamily: 'Space Grotesk, sans-serif' }}
             >
-              From order to live site —<br />
-              <span className="gradient-text">we handle every step.</span>
-            </h2>
-          </div>
-
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-6">
-            {steps.map((step, i) => (
-              <div key={step.num} className="relative">
-                {/* Connector line */}
-                {i < steps.length - 1 && (
-                  <div className="hidden lg:block absolute top-8 left-[calc(100%_-_12px)] w-6 h-0.5 bg-gradient-to-r from-[#6c5ce7]/40 to-transparent z-10" />
-                )}
-                <div className="glass p-6 h-full">
-                  <div className="text-2xl mb-4">{step.icon}</div>
-                  <div
-                    className="text-xs font-bold text-[#6c5ce7] mb-2"
-                    style={{ fontFamily: 'Space Grotesk, sans-serif' }}
-                  >
-                    {step.num}
-                  </div>
-                  <h3
-                    className="text-base font-semibold text-white mb-2"
-                    style={{ fontFamily: 'Space Grotesk, sans-serif' }}
-                  >
-                    {step.title}
-                  </h3>
-                  <p className="text-xs text-[#8888aa] leading-relaxed">{step.desc}</p>
-                </div>
-              </div>
-            ))}
-          </div>
-
-          <div className="text-center mt-10">
-            <Link href="/how-it-works" className="btn-secondary inline-block px-8 py-3">
-              Learn more about the process →
-            </Link>
-          </div>
-        </div>
-      </section>
-
-      <div className="section-divider" />
-
-      {/* See Our Work */}
-      <section className="py-24 px-4 sm:px-6">
-        <div className="max-w-7xl mx-auto">
-          <div className="text-center mb-16">
-            <p className="text-[#6c5ce7] text-sm font-semibold uppercase tracking-widest mb-3">
-              Our Work
-            </p>
-            <h2
-              className="text-4xl md:text-5xl font-bold text-white mb-4"
-              style={{ fontFamily: 'Space Grotesk, sans-serif' }}
-            >
-              Example sites<br />
-              <span className="gradient-text">we've built.</span>
+              Pick your team.<br />
+              <span className="gradient-text">Scale as you grow.</span>
             </h2>
             <p className="text-[#8888aa] max-w-xl mx-auto">
-              Every site is custom-designed for its niche, fully deployed, and maintained by our team.
-              No templates. No abandoned freelancers.
+              Four tiers from solo operator to full AI executive suite.
+              Pricing locked at our 8 AM strategy session — check back shortly.
             </p>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
-            {[
-              portfolioItems.find((i) => i.id === 'vanguard-roofing')!,
-              portfolioItems.find((i) => i.id === 'velvet-petal')!,
-              portfolioItems.find((i) => i.id === 'meridian-luxury-realty')!,
-              portfolioItems.find((i) => i.id === 'ashford-drake')!,
-            ].map((item) => (
-              <PortfolioCard key={item.id} item={item} />
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            {pricingTiers.map((tier) => (
+              <div
+                key={tier.name}
+                className={`glass p-7 flex flex-col relative ${tier.highlight ? 'border-[#6c5ce7]/50 shadow-[0_0_30px_rgba(108,92,231,0.15)]' : ''}`}
+              >
+                {tier.highlight && (
+                  <div className="absolute -top-3 left-1/2 -translate-x-1/2 px-4 py-1 rounded-full bg-gradient-to-r from-[#6c5ce7] to-[#0984e3] text-white text-xs font-bold whitespace-nowrap">
+                    Most Popular
+                  </div>
+                )}
+                {tier.badge && (
+                  <div className="absolute -top-3 left-1/2 -translate-x-1/2 px-4 py-1 rounded-full bg-gradient-to-r from-[#f39c12] to-[#e67e22] text-white text-xs font-bold whitespace-nowrap">
+                    {tier.badge}
+                  </div>
+                )}
+                <h3
+                  className="text-base font-bold text-white mb-2"
+                  style={{ fontFamily: 'Space Grotesk, sans-serif' }}
+                >
+                  {tier.name}
+                </h3>
+                <p className="text-xs text-[#8888aa] leading-relaxed mb-6 flex-1">{tier.tagline}</p>
+                <div className="mb-6">
+                  <p className="text-lg font-bold text-[#a29bfe]">{tier.price}</p>
+                </div>
+                <Link
+                  href={tier.ctaHref}
+                  className={`text-center py-3 px-6 rounded-lg text-sm font-semibold transition-all ${
+                    tier.highlight
+                      ? 'btn-primary'
+                      : 'border border-[#6c5ce7]/40 text-[#a29bfe] hover:border-[#6c5ce7] hover:bg-[#6c5ce7]/10'
+                  }`}
+                >
+                  {tier.cta}
+                </Link>
+              </div>
             ))}
           </div>
 
-          <div className="text-center mt-12">
-            <Link href="/portfolio" className="btn-primary inline-block px-10 py-4 text-base">
-              Browse All Example Sites →
+          <div className="text-center mt-8">
+            <Link href="/pricing" className="btn-secondary inline-block px-8 py-3">
+              View Full Pricing Details →
             </Link>
           </div>
         </div>
@@ -370,41 +363,30 @@ export default function HomePage() {
 
       <div className="section-divider" />
 
-      {/* Testimonials */}
-      <section className="py-24 px-4 sm:px-6">
-        <div className="max-w-7xl mx-auto">
-          <div className="text-center mb-16">
-            <p className="text-[#6c5ce7] text-sm font-semibold uppercase tracking-widest mb-3">
-              Client Stories
-            </p>
-            <h2
-              className="text-4xl font-bold text-white"
-              style={{ fontFamily: 'Space Grotesk, sans-serif' }}
-            >
-              What our clients say
-            </h2>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            {testimonials.map((t) => (
-              <div key={t.name} className="glass p-8 flex flex-col">
-                <div className="flex gap-0.5 mb-5">
-                  {[...Array(5)].map((_, i) => (
-                    <span key={i} className="text-[#f39c12] text-lg">★</span>
-                  ))}
-                </div>
-                <p className="text-[#ccccdd] text-sm leading-relaxed flex-1 mb-6 italic">
-                  "{t.quote}"
-                </p>
-                <div>
-                  <p className="text-white font-semibold text-sm" style={{ fontFamily: 'Space Grotesk, sans-serif' }}>
-                    {t.name}
+      {/* Free Tool Callout */}
+      <section className="py-16 px-4 sm:px-6">
+        <div className="max-w-3xl mx-auto">
+          <Link href="/tools/proposal-drafter" className="block">
+            <div className="glass rounded-2xl p-8 border border-[#00cec9]/20 hover:border-[#00cec9]/50 transition-all group">
+              <div className="flex flex-col sm:flex-row items-start sm:items-center gap-6">
+                <div className="text-4xl">📝</div>
+                <div className="flex-1">
+                  <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#00cec9]/10 border border-[#00cec9]/30 text-[#00cec9] text-xs font-semibold mb-3">
+                    Free Tool · Launching This Week
+                  </div>
+                  <h3
+                    className="text-xl font-bold text-white mb-2 group-hover:text-[#a29bfe] transition-colors"
+                    style={{ fontFamily: 'Space Grotesk, sans-serif' }}
+                  >
+                    AI Proposal Drafter for Contractors
+                  </h3>
+                  <p className="text-sm text-[#8888aa]">
+                    Five fields in. A polished, branded proposal out. 30 seconds. Get early access →
                   </p>
-                  <p className="text-[#8888aa] text-xs mt-0.5">{t.role}</p>
                 </div>
               </div>
-            ))}
-          </div>
+            </div>
+          </Link>
         </div>
       </section>
 
@@ -418,18 +400,18 @@ export default function HomePage() {
             className="text-4xl md:text-5xl font-bold text-white mb-6"
             style={{ fontFamily: 'Space Grotesk, sans-serif' }}
           >
-            Ready to stop worrying about your website?
+            Ready to build your AI executive team?
           </h2>
           <p className="text-[#8888aa] text-lg mb-10">
-            Pick your niche, choose your tier, and check out in minutes.
-            Your site will be live within two weeks — managed by us, forever.
+            Start with a free assessment. We&apos;ll map out the right team and tier for your business —
+            no sales pressure, just a clear plan.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Link href="/services/contractors" className="btn-primary text-base px-10 py-4 inline-block">
-              View All Packages
+            <Link href="/questionnaire" className="btn-primary text-base px-10 py-4 inline-block">
+              Start My Free Assessment
             </Link>
-            <Link href="/hosting" className="btn-secondary text-base px-10 py-4 inline-block">
-              Explore Hosting Plans
+            <Link href="/project-runner" className="btn-secondary text-base px-10 py-4 inline-block">
+              See Project Runner →
             </Link>
           </div>
           <p className="text-[#444466] text-sm mt-8">

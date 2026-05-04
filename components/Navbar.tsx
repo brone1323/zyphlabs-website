@@ -4,12 +4,10 @@ import { useState, useEffect } from 'react'
 import Link from 'next/link'
 
 const navLinks = [
-  { href: '/services/contractors', label: 'Contractors' },
-  { href: '/services/ecommerce', label: 'E-Commerce' },
-  { href: '/services/real-estate', label: 'Real Estate' },
-  { href: '/services/law-firms', label: 'Law Firms' },
+  { href: '/project-runner', label: 'Project Runner' },
+  { href: '/pricing', label: 'Pricing' },
+  { href: '/services', label: 'Services' },
   { href: '/how-it-works', label: 'How It Works' },
-  { href: '/hosting', label: 'Hosting' },
   { href: '/portfolio', label: 'Portfolio' },
 ]
 
@@ -57,8 +55,8 @@ export default function Navbar() {
           </div>
 
           {/* CTA */}
-          <Link href="/services/contractors" className="hidden lg:inline-block btn-primary text-sm px-5 py-2.5">
-            Get Started
+          <Link href="/questionnaire" className="hidden lg:inline-block btn-primary text-sm px-5 py-2.5">
+            Free Assessment
           </Link>
 
           {/* Mobile hamburger */}
@@ -103,11 +101,11 @@ export default function Navbar() {
             </Link>
           ))}
           <Link
-            href="/services/contractors"
+            href="/questionnaire"
             onClick={() => setMobileOpen(false)}
             className="btn-primary text-sm block mt-4 text-center"
           >
-            Get Started
+            Free Assessment
           </Link>
         </div>
       </div>

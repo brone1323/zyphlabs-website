@@ -1,16 +1,16 @@
 import Link from 'next/link'
 
-const services = [
-  { href: '/services/contractors', label: 'Contractors & Trades' },
-  { href: '/services/ecommerce', label: 'E-Commerce Stores' },
-  { href: '/services/real-estate', label: 'Realtors & Real Estate' },
-  { href: '/services/law-firms', label: 'Law Firms & Attorneys' },
+const products = [
+  { href: '/project-runner', label: 'Project Runner' },
+  { href: '/pricing', label: 'Pricing & Tiers' },
+  { href: '/tools/proposal-drafter', label: 'AI Proposal Drafter (Free)' },
+  { href: '/services', label: 'All Services' },
 ]
 
 const company = [
   { href: '/how-it-works', label: 'How It Works' },
-  { href: '/hosting', label: 'Managed Hosting' },
   { href: '/portfolio', label: 'Portfolio' },
+  { href: '/questionnaire', label: 'Free Assessment' },
   { href: 'mailto:contact@zyphlabs.com', label: 'Contact Us' },
 ]
 
@@ -33,8 +33,7 @@ export default function Footer() {
               </span>
             </div>
             <p className="text-[#8888aa] text-sm leading-relaxed max-w-sm mb-6">
-              We build it. We host it. We maintain it. Professional websites for growing businesses —
-              from first click to fully live, with zero technical headaches.
+              AI executive teams for SMB owners — email, CRM, projects, strategy — so you spend your day making decisions instead of putting out fires.
             </p>
             <div className="flex items-center gap-3 text-xs text-[#8888aa]">
               <span className="flex items-center gap-1.5">
@@ -42,17 +41,17 @@ export default function Footer() {
                 Secure checkout via PayPal
               </span>
               <span>·</span>
-              <span>Cancel hosting anytime</span>
+              <span>Cancel anytime</span>
             </div>
           </div>
 
-          {/* Services */}
+          {/* Products */}
           <div>
             <h3 className="text-sm font-semibold text-white mb-4 uppercase tracking-wider" style={{ fontFamily: 'Space Grotesk, sans-serif' }}>
-              Services
+              Products
             </h3>
             <ul className="space-y-2.5">
-              {services.map((s) => (
+              {products.map((s) => (
                 <li key={s.href}>
                   <Link href={s.href} className="text-sm text-[#8888aa] hover:text-[#a29bfe] transition-colors">
                     {s.label}

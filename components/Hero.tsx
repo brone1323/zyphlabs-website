@@ -153,7 +153,7 @@ export default function Hero() {
         {/* Badge */}
         <div className="inline-flex items-center gap-2.5 px-4 py-2 rounded-full bg-white/5 border border-white/10 text-sm text-[#a29bfe] mb-8 backdrop-blur-sm animate-fadeIn">
           <span className="w-2 h-2 rounded-full bg-[#00cec9] inline-block animate-pulse flex-shrink-0" />
-          Professional websites for contractors, realtors, stores & law firms
+          For SMB owners ready to stop running on chaos
         </div>
 
         {/* Headline */}
@@ -161,35 +161,39 @@ export default function Hero() {
           className="text-5xl sm:text-6xl md:text-7xl font-bold mb-6 leading-[1.05] tracking-tight animate-fadeInUp"
           style={{ fontFamily: 'Space Grotesk, sans-serif' }}
         >
-          We build it.<br />
-          We host it.<br />
-          <span className="gradient-text">We maintain it.</span>
+          Your business deserves<br />
+          an executive team.<br />
+          <span className="gradient-text">Now you can afford one.</span>
         </h1>
 
         {/* Subheadline */}
         <p className="text-lg md:text-xl text-[#8888aa] mb-10 max-w-2xl mx-auto leading-relaxed animate-fadeInUp delay-200">
-          One checkout. A professional website live on your domain — designed, deployed,
-          and supported by us. Zero technical headaches, ever.
+          Zyph Labs builds AI executive teams that run your business —
+          email, CRM, projects, strategy — so you spend your day making
+          decisions instead of putting out fires.
         </p>
 
         {/* CTAs */}
         <div className="flex flex-col sm:flex-row gap-4 justify-center items-center animate-fadeInUp delay-300">
-          <Link href="/services/contractors" className="btn-primary text-base px-8 py-4 w-full sm:w-auto">
-            View Packages & Pricing
+          <Link href="/questionnaire" className="btn-primary text-base px-8 py-4 w-full sm:w-auto">
+            Start My Free Assessment
           </Link>
-          <Link href="/how-it-works" className="btn-secondary text-base px-8 py-4 w-full sm:w-auto">
-            How It Works →
+          <Link href="/project-runner" className="btn-secondary text-base px-8 py-4 w-full sm:w-auto">
+            See Project Runner →
+          </Link>
+          <Link href="/pricing" className="text-sm text-[#8888aa] hover:text-white transition-colors px-4 py-4 w-full sm:w-auto">
+            View Pricing →
           </Link>
         </div>
 
         {/* Social proof row */}
         <div className="flex flex-wrap gap-x-8 gap-y-3 justify-center mt-16 text-sm text-[#666688] animate-fadeInUp delay-400">
           {[
-            'No technical setup required',
-            'Site live in 7–14 days',
-            'Managed hosting included',
-            '30-day free hosting trial',
-            'Cancel anytime',
+            'Always-on AI team',
+            'Email · CRM · Projects · Strategy',
+            'Fractional C-suite pricing',
+            'Construction-ready',
+            'No headcount needed',
           ].map((item) => (
             <span key={item} className="flex items-center gap-2">
               <span className="text-[#00cec9] text-base">✓</span>
