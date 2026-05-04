@@ -11,6 +11,12 @@ const capabilities = [
   {
     icon: '🤖',
     name: 'AI Agents & Chatbots',
+    eyebrow: '[BRIAN-FOLLOWUP]',
+    h2: '[BRIAN-FOLLOWUP]',
+    subhead: '[BRIAN-FOLLOWUP]',
+    body: '[BRIAN-FOLLOWUP]',
+    cta: 'Talk to Us',
+    ctaHref: '/questionnaire',
     role: 'The Communicators on your team.',
     desc: 'Your AI executive team communicates for you — inbound inquiries, client follow-ups, support triage. These agents handle the inbox so nothing falls through the cracks.',
     examples: ['Email Officer', 'CRM Operator', 'Lead qualifier', 'Support responder'],
@@ -19,6 +25,12 @@ const capabilities = [
   {
     icon: '⚙️',
     name: 'Workflow Automation',
+    eyebrow: '[BRIAN-FOLLOWUP]',
+    h2: '[BRIAN-FOLLOWUP]',
+    subhead: '[BRIAN-FOLLOWUP]',
+    body: '[BRIAN-FOLLOWUP]',
+    cta: 'Talk to Us',
+    ctaHref: '/questionnaire',
     role: 'The Operations engine.',
     desc: 'The systems that keep your business running without you in the loop. From project handoffs to invoice generation to change orders — automated end-to-end.',
     examples: ['Project Runner', 'Proposal automation', 'Change order requests', 'QuickBooks sync'],
@@ -27,16 +39,28 @@ const capabilities = [
   {
     icon: '👷',
     name: 'Digital Workers',
+    eyebrow: '[BRIAN-FOLLOWUP]',
+    h2: '[BRIAN-FOLLOWUP]',
+    subhead: '[BRIAN-FOLLOWUP]',
+    body: '[BRIAN-FOLLOWUP]',
+    cta: 'Talk to Us',
+    ctaHref: '/questionnaire',
     role: 'The always-on contributors.',
     desc: 'AI that takes on full job functions — not just answering questions, but doing the work. Content creation, research, scheduling, reporting — handled.',
-    examples: ['Content Creator', 'Strategist', 'Market scanner', 'Report generator'],
+    examples: ['Strategist', 'Market scanner', 'Report generator'],
     color: '#00cec9',
   },
   {
     icon: '🛠️',
     name: 'Bespoke AI Tools',
+    eyebrow: '[BRIAN-FOLLOWUP]',
+    h2: '[BRIAN-FOLLOWUP]',
+    subhead: '[BRIAN-FOLLOWUP]',
+    body: '[BRIAN-FOLLOWUP]',
+    cta: 'Talk to Us',
+    ctaHref: '/questionnaire',
     role: 'Built for one specific job in your business.',
-    desc: 'Every business has a task that doesn\'t fit any off-the-shelf tool. We build it. One-off AI tools designed around your exact workflow, your data, your clients.',
+    desc: "Every business has a task that doesn't fit any off-the-shelf tool. We build it. One-off AI tools designed around your exact workflow, your data, your clients.",
     examples: ['Custom estimating tools', 'Industry-specific agents', 'Internal process bots', 'Data extraction pipelines'],
     color: '#a29bfe',
   },
@@ -103,9 +127,9 @@ export default function ServicesPage() {
 
       <div className="section-divider" />
 
-      {/* Capability Pillars */}
+      {/* Capability Pillars — Reframed */}
       <section className="py-24 px-4 sm:px-6">
-        <div className="max-w-7xl mx-auto">
+        <div className="max-w-5xl mx-auto">
           <div className="text-center mb-16">
             <p className="text-[#6c5ce7] text-sm font-semibold uppercase tracking-widest mb-3">Capabilities</p>
             <h2
@@ -116,42 +140,71 @@ export default function ServicesPage() {
             </h2>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+          <div className="space-y-16">
             {capabilities.map((cap) => (
-              <div key={cap.name} className="glass card-glow p-8 rounded-2xl">
-                <div
-                  className="w-14 h-14 rounded-2xl flex items-center justify-center text-3xl mb-6 flex-shrink-0"
-                  style={{ background: `${cap.color}18`, border: `1px solid ${cap.color}40` }}
-                >
-                  {cap.icon}
-                </div>
-                <p
-                  className="text-xs font-bold uppercase tracking-widest mb-1"
-                  style={{ color: cap.color }}
-                >
-                  {cap.role}
-                </p>
-                <h3
-                  className="text-xl font-bold text-white mb-3"
-                  style={{ fontFamily: 'Space Grotesk, sans-serif' }}
-                >
-                  {cap.name}
-                </h3>
-                <p className="text-sm text-[#8888aa] leading-relaxed mb-6">{cap.desc}</p>
-                <div className="flex flex-wrap gap-2">
-                  {cap.examples.map((ex) => (
-                    <span
-                      key={ex}
-                      className="px-3 py-1 rounded-full text-xs"
-                      style={{
-                        background: `${cap.color}12`,
-                        border: `1px solid ${cap.color}30`,
-                        color: cap.color,
-                      }}
+              <div key={cap.name} className="glass card-glow p-10 rounded-2xl">
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 items-start">
+                  {/* Left: icon + existing content */}
+                  <div>
+                    <div
+                      className="w-14 h-14 rounded-2xl flex items-center justify-center text-3xl mb-6 flex-shrink-0"
+                      style={{ background: `${cap.color}18`, border: `1px solid ${cap.color}40` }}
                     >
-                      {ex}
-                    </span>
-                  ))}
+                      {cap.icon}
+                    </div>
+                    <p
+                      className="text-xs font-bold uppercase tracking-widest mb-1"
+                      style={{ color: cap.color }}
+                    >
+                      {cap.role}
+                    </p>
+                    <h3
+                      className="text-2xl font-bold text-white mb-3"
+                      style={{ fontFamily: 'Space Grotesk, sans-serif' }}
+                    >
+                      {cap.name}
+                    </h3>
+                    <p className="text-sm text-[#8888aa] leading-relaxed mb-6">{cap.desc}</p>
+                    <div className="flex flex-wrap gap-2">
+                      {cap.examples.map((ex) => (
+                        <span
+                          key={ex}
+                          className="px-3 py-1 rounded-full text-xs"
+                          style={{
+                            background: `${cap.color}12`,
+                            border: `1px solid ${cap.color}30`,
+                            color: cap.color,
+                          }}
+                        >
+                          {ex}
+                        </span>
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* Right: reframe pattern */}
+                  <div className="border-l border-white/5 pl-10">
+                    <p
+                      className="text-xs font-bold uppercase tracking-widest mb-2"
+                      style={{ color: cap.color }}
+                    >
+                      {cap.eyebrow}
+                    </p>
+                    <h4
+                      className="text-xl font-bold text-white mb-2"
+                      style={{ fontFamily: 'Space Grotesk, sans-serif' }}
+                    >
+                      {cap.h2}
+                    </h4>
+                    <p className="text-sm text-[#a29bfe] mb-4">{cap.subhead}</p>
+                    <p className="text-sm text-[#8888aa] leading-relaxed mb-8">{cap.body}</p>
+                    <Link
+                      href={cap.ctaHref}
+                      className="inline-block border border-[#6c5ce7]/40 text-[#a29bfe] hover:border-[#6c5ce7] hover:bg-[#6c5ce7]/10 py-2.5 px-6 rounded-lg text-sm font-semibold transition-all"
+                    >
+                      {cap.cta}
+                    </Link>
+                  </div>
                 </div>
               </div>
             ))}

@@ -161,16 +161,17 @@ export default function Hero() {
           className="text-5xl sm:text-6xl md:text-7xl font-bold mb-6 leading-[1.05] tracking-tight animate-fadeInUp"
           style={{ fontFamily: 'Space Grotesk, sans-serif' }}
         >
-          Your business deserves<br />
-          an executive team.<br />
-          <span className="gradient-text">Now you can afford one.</span>
+          Run your business on<br />
+          <span className="gradient-text">an AI Company.</span>
         </h1>
 
         {/* Subheadline */}
-        <p className="text-lg md:text-xl text-[#8888aa] mb-10 max-w-2xl mx-auto leading-relaxed animate-fadeInUp delay-200">
-          Zyph Labs builds AI executive teams that run your business —
-          email, CRM, projects, strategy — so you spend your day making
-          decisions instead of putting out fires.
+        <p className="text-lg md:text-xl text-[#8888aa] mb-4 max-w-2xl mx-auto leading-relaxed animate-fadeInUp delay-200">
+          An executive team to decide. An office team to do the work. You run the company.
+        </p>
+
+        <p className="text-[#a29bfe] font-semibold text-base mb-8 animate-fadeInUp delay-200">
+          Starts at $129/mo.
         </p>
 
         {/* CTAs */}

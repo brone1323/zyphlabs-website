@@ -5,55 +5,62 @@ const executiveTeam = [
   {
     icon: '🏗️',
     role: 'PROJECT RUNNER',
-    title: 'Your COO.',
+    title: 'COO',
     desc: 'Runs proposals, projects, billing, change orders.',
-    status: 'Launching this week',
-    statusColor: '#00cec9',
     href: '/project-runner',
   },
   {
+    icon: '📊',
+    role: 'STRATEGIST',
+    title: 'CSO',
+    desc: 'Pricing, positioning, deal review, industry scans.',
+    href: null,
+  },
+  {
+    icon: '💰',
+    role: 'FINANCIAL ANALYST',
+    title: 'CFO',
+    desc: 'P&L review, cash-flow forecast, margin analysis, scenario modeling.',
+    href: null,
+  },
+  {
+    icon: '🔍',
+    role: 'KNOWLEDGE EXPERT',
+    title: 'CKO',
+    desc: 'Industry foresight — regulatory shifts, tech changes, competitor moves.',
+    href: null,
+  },
+]
+
+const officeTeam = [
+  {
     icon: '📬',
     role: 'EMAIL OFFICER',
-    title: 'Your Comms Director.',
-    desc: 'Reads, classifies, drafts, replies.',
-    status: 'Available now',
-    statusColor: '#6c5ce7',
+    desc: 'Reads, classifies, drafts, replies — clears your inbox.',
     href: null,
   },
   {
     icon: '🤝',
     role: 'CRM OPERATOR',
-    title: 'Your Sales Lead.',
     desc: 'Tracks every relationship and follow-up.',
-    status: 'Available now',
-    statusColor: '#6c5ce7',
     href: null,
   },
   {
-    icon: '🧠',
-    role: 'STRATEGIST',
-    title: 'Your Business Brain.',
-    desc: 'Pricing, positioning, deal review, market scans.',
-    status: 'Available now',
-    statusColor: '#6c5ce7',
+    icon: '📚',
+    role: 'BOOKKEEPER',
+    desc: 'Categorizes, invoices, reconciles, runs payroll.',
     href: null,
   },
   {
-    icon: '📣',
-    role: 'CONTENT CREATOR',
-    title: 'Your Marketing Arm.',
-    desc: 'Multi-platform publishing, on brand.',
-    status: 'Available now',
-    statusColor: '#6c5ce7',
+    icon: '👥',
+    role: 'RECRUITER',
+    desc: 'Sources, screens, schedules — never lets a role sit open.',
     href: null,
   },
   {
-    icon: '⚙️',
-    role: 'BESPOKE AGENT',
-    title: 'Built for Your Business.',
-    desc: 'One specific job. Automated end-to-end.',
-    status: 'Custom build',
-    statusColor: '#f39c12',
+    icon: '🎧',
+    role: 'CUSTOMER SUPPORT',
+    desc: 'Answers, escalates, follows up. 24/7.',
     href: null,
   },
 ]
@@ -62,31 +69,35 @@ const pricingTiers = [
   {
     name: 'Project Runner Starter',
     tagline: 'Bring your own Claude Desktop. Best for solo operators.',
-    price: 'Contact for pricing',
-    cta: 'Join Waitlist',
-    ctaHref: '/project-runner',
+    price: '$129/mo',
+    priceNote: '$0 setup',
+    cta: 'Get Started',
+    ctaHref: '/questionnaire',
     highlight: false,
   },
   {
     name: 'Project Runner Pro',
     tagline: 'Hosted, ready to go. Best for owners running 5–20 active projects.',
-    price: 'Contact for pricing',
-    cta: 'Join Waitlist',
-    ctaHref: '/project-runner',
+    price: '$449/mo',
+    priceNote: '$499 setup',
+    cta: 'Get Started',
+    ctaHref: '/questionnaire',
     highlight: false,
   },
   {
     name: 'OpenClaw Operator',
     tagline: 'Project Runner + Email + CRM + a vertical template tuned to your industry.',
-    price: 'Contact for pricing',
+    price: '$1,799/mo',
+    priceNote: '$2,500 setup',
     cta: 'Talk to Us',
     ctaHref: '/questionnaire',
     highlight: true,
   },
   {
     name: 'OpenClaw Command',
-    tagline: 'The full executive team — Email, CRM, Project Runner, Strategist, + custom agents fine-tuned to your business.',
-    price: 'Contact for pricing',
+    tagline: 'Your full AI Company — 4 execs + 5 office roles, fine-tuned to your business.',
+    price: '$5,500/mo',
+    priceNote: '$7,500 setup',
     cta: 'Apply',
     ctaHref: '/questionnaire',
     highlight: false,
@@ -133,70 +144,81 @@ export default function HomePage() {
       {/* Hero */}
       <Hero />
 
-      {/* Meet Your AI Executive Team */}
+      {/* Meet Your AI Company */}
       <section className="py-24 px-4 sm:px-6 max-w-7xl mx-auto">
         <div className="text-center mb-16">
           <p className="text-[#6c5ce7] text-sm font-semibold uppercase tracking-widest mb-3">
-            Your AI Executive Team
+            Meet Your AI Company
           </p>
           <h2
             className="text-4xl md:text-5xl font-bold text-white mb-4"
             style={{ fontFamily: 'Space Grotesk, sans-serif' }}
           >
-            Meet the team running<br />
-            <span className="gradient-text">your business.</span>
+            Two teams. One company.<br />
+            <span className="gradient-text">Running your business.</span>
           </h2>
           <p className="text-[#8888aa] max-w-xl mx-auto">
-            Six specialized AI agents. Each one focused on a critical business function.
-            All of them working together — so you don&apos;t have to.
+            An executive team to decide. An office team to do the work. Nine roles, one integrated AI company.
           </p>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-          {executiveTeam.map((member) => {
-            const card = (
-              <div
-                className="glass card-glow p-7 flex flex-col h-full group"
-                style={member.href ? { cursor: 'pointer' } : {}}
-              >
-                <div className="w-12 h-12 rounded-xl flex items-center justify-center text-2xl mb-5 flex-shrink-0 bg-[#6c5ce7]/10 border border-[#6c5ce7]/30">
-                  {member.icon}
-                </div>
-                <p className="text-xs font-bold text-[#6c5ce7] uppercase tracking-widest mb-1">
-                  {member.role}
-                </p>
-                <h3
-                  className="text-lg font-semibold text-white mb-2 group-hover:text-[#a29bfe] transition-colors"
-                  style={{ fontFamily: 'Space Grotesk, sans-serif' }}
-                >
-                  {member.title}
-                </h3>
-                <p className="text-sm text-[#8888aa] leading-relaxed flex-1">{member.desc}</p>
-                <div className="mt-4 flex items-center gap-2">
-                  <span
-                    className="w-2 h-2 rounded-full flex-shrink-0"
-                    style={{ backgroundColor: member.statusColor }}
-                  />
-                  <span className="text-xs" style={{ color: member.statusColor }}>
-                    {member.status}
-                  </span>
-                </div>
-              </div>
-            )
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-16">
+          {/* Executive Team */}
+          <div>
+            <p className="text-xs font-bold uppercase tracking-widest text-[#a29bfe] mb-6 pb-4 border-b border-[#6c5ce7]/20">
+              EXECUTIVE TEAM — they decide
+            </p>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              {executiveTeam.map((member) => {
+                const card = (
+                  <div
+                    className="glass card-glow p-6 flex flex-col h-full group"
+                    style={member.href ? { cursor: 'pointer' } : {}}
+                  >
+                    <div className="w-11 h-11 rounded-xl flex items-center justify-center text-xl mb-4 flex-shrink-0 bg-[#6c5ce7]/10 border border-[#6c5ce7]/30">
+                      {member.icon}
+                    </div>
+                    <p className="text-xs font-bold text-[#6c5ce7] uppercase tracking-widest mb-1">
+                      {member.role}
+                    </p>
+                    <p className="text-xs text-[#a29bfe] mb-2">{member.title}</p>
+                    <p className="text-sm text-[#8888aa] leading-relaxed flex-1">{member.desc}</p>
+                  </div>
+                )
+                return member.href ? (
+                  <Link key={member.role} href={member.href} className="block">
+                    {card}
+                  </Link>
+                ) : (
+                  <div key={member.role}>{card}</div>
+                )
+              })}
+            </div>
+          </div>
 
-            return member.href ? (
-              <Link key={member.role} href={member.href} className="block">
-                {card}
-              </Link>
-            ) : (
-              <div key={member.role}>{card}</div>
-            )
-          })}
+          {/* Office Team */}
+          <div>
+            <p className="text-xs font-bold uppercase tracking-widest text-[#00cec9] mb-6 pb-4 border-b border-[#00cec9]/20">
+              OFFICE TEAM — they do the work
+            </p>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              {officeTeam.map((member) => (
+                <div key={member.role}>
+                  <div className="glass card-glow p-6 flex flex-col h-full">
+                    <div className="w-11 h-11 rounded-xl flex items-center justify-center text-xl mb-4 flex-shrink-0 bg-[#00cec9]/10 border border-[#00cec9]/30">
+                      {member.icon}
+                    </div>
+                    <p className="text-xs font-bold text-[#00cec9] uppercase tracking-widest mb-1">
+                      {member.role}
+                    </p>
+                    <p className="text-sm text-[#8888aa] leading-relaxed flex-1">{member.desc}</p>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
         </div>
 
-        <p className="text-center text-xs text-[#555577] mt-6">
-          [BRIAN-CONFIRM] Agent roster status — which are shippable today vs. roadmap needs a truth pass before go-live.
-        </p>
       </section>
 
       <div className="section-divider" />
@@ -213,10 +235,6 @@ export default function HomePage() {
             />
             <div className="relative z-10 grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
               <div>
-                <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-[#00cec9]/10 border border-[#00cec9]/30 text-[#00cec9] text-xs font-semibold mb-6">
-                  <span className="w-1.5 h-1.5 rounded-full bg-[#00cec9] animate-pulse" />
-                  Launching this week
-                </div>
                 <h2
                   className="text-3xl md:text-4xl font-bold text-white mb-4"
                   style={{ fontFamily: 'Space Grotesk, sans-serif' }}
@@ -273,8 +291,7 @@ export default function HomePage() {
               <span className="gradient-text">Scale as you grow.</span>
             </h2>
             <p className="text-[#8888aa] max-w-xl mx-auto">
-              Four tiers from solo operator to full AI executive suite.
-              Pricing locked at our 8 AM strategy session — check back shortly.
+              Four tiers from solo operator to full AI executive suite. Starts at $129/mo.
             </p>
           </div>
 
@@ -300,9 +317,10 @@ export default function HomePage() {
                 >
                   {tier.name}
                 </h3>
-                <p className="text-xs text-[#8888aa] leading-relaxed mb-6 flex-1">{tier.tagline}</p>
+                <p className="text-xs text-[#8888aa] leading-relaxed mb-4 flex-1">{tier.tagline}</p>
                 <div className="mb-6">
                   <p className="text-lg font-bold text-[#a29bfe]">{tier.price}</p>
+                  <p className="text-xs text-[#555577] mt-0.5">{tier.priceNote}</p>
                 </div>
                 <Link
                   href={tier.ctaHref}

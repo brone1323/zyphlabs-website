@@ -4,81 +4,67 @@ import type { Metadata } from 'next'
 export const metadata: Metadata = {
   title: 'Pricing — AI Executive Team Tiers | Zyph Labs',
   description:
-    'Four tiers from Project Runner Starter to OpenClaw Command. Pick the AI executive team that fits your business. Pricing finalized soon.',
+    'Four tiers from Project Runner Starter to OpenClaw Command. Pick the AI executive team that fits your business.',
 }
 
-const tiers = [
+interface Tier {
+  name: string
+  tagline: string
+  monthly: string
+  setup: string
+  disclosure?: string
+  bullets: string[]
+  cta: string
+  ctaHref: string
+  highlight: boolean
+  badge: string | null
+}
+
+const tiers: Tier[] = [
   {
     name: 'Project Runner Starter',
-    tagline: 'Bring your own Claude Desktop. Best for solo operators who want to dip their toes in.',
-    price: 'Contact for pricing',
-    priceNote: '[BRIAN-CONFIRM] Pricing locked at 8 AM strategy session',
-    cta: 'Join Waitlist',
+    tagline: 'Bring your own Claude Desktop. Best for solo operators.',
+    monthly: '$129/mo',
+    setup: '$0 setup',
+    disclosure: 'Requires Claude Pro or Max subscription (~$100–200/mo, billed by Anthropic).',
+    bullets: [],
+    cta: 'Get Started',
     ctaHref: '/questionnaire',
     highlight: false,
     badge: null,
-    includes: [
-      'AI proposal drafting',
-      'Active project dashboard',
-      'Crew & supplier directory',
-      'Automated change orders',
-      'BYO Claude Desktop (Pro/Max)',
-      'Email support',
-    ],
   },
   {
     name: 'Project Runner Pro',
     tagline: 'Hosted, ready to go. Best for owners running 5–20 active projects.',
-    price: 'Contact for pricing',
-    priceNote: '[BRIAN-CONFIRM] Pricing locked at 8 AM strategy session',
-    cta: 'Join Waitlist',
+    monthly: '$449/mo',
+    setup: '$499 setup',
+    bullets: [],
+    cta: 'Get Started',
     ctaHref: '/questionnaire',
     highlight: true,
     badge: 'Most Popular',
-    includes: [
-      'Everything in Starter',
-      'Zyph-hosted (no BYO required)',
-      'AI inbox monitoring',
-      'Gmail + Outlook connector',
-      'QuickBooks integration',
-      'Google Drive / OneDrive',
-    ],
   },
   {
     name: 'OpenClaw Operator',
-    tagline: 'Project Runner + Email Officer + CRM Operator + a vertical template tuned to your industry.',
-    price: 'Contact for pricing',
-    priceNote: '[BRIAN-CONFIRM] Pricing locked at 8 AM strategy session',
+    tagline: 'Project Runner + Email + CRM + a vertical template tuned to your industry.',
+    monthly: '$1,799/mo',
+    setup: '$2,500 setup',
+    bullets: [],
     cta: 'Talk to Us',
     ctaHref: '/questionnaire',
     highlight: false,
     badge: null,
-    includes: [
-      'Everything in Pro',
-      'Email Officer (reads, drafts, replies)',
-      'CRM Operator (tracks every relationship)',
-      'Industry vertical template',
-      'White-glove onboarding',
-      'Priority support',
-    ],
   },
   {
     name: 'OpenClaw Command',
-    tagline: 'The full executive team — Email, CRM, Project Runner, Strategist, + custom agents fine-tuned to your business.',
-    price: 'Contact for pricing',
-    priceNote: '[BRIAN-CONFIRM] Pricing locked at 8 AM strategy session',
+    tagline: 'Your full AI Company — 4 execs + 5 office roles, fine-tuned to your business. White-glove onboarding.',
+    monthly: '$5,500/mo',
+    setup: '$7,500 setup',
+    bullets: [],
     cta: 'Apply',
     ctaHref: '/questionnaire',
     highlight: false,
     badge: 'Flagship',
-    includes: [
-      'Everything in Operator',
-      'Strategist (pricing, positioning, deal review)',
-      'Content Creator (multi-platform publishing)',
-      'Bespoke custom agent (your use case)',
-      'Fine-tuned to your business',
-      'Dedicated success manager',
-    ],
   },
 ]
 
@@ -91,8 +77,6 @@ const comparisonRows: { feature: string; starter: boolean | string; pro: boolean
   { feature: 'Email Officer', starter: false, pro: false, operator: true, command: true },
   { feature: 'CRM Operator', starter: false, pro: false, operator: true, command: true },
   { feature: 'Strategist', starter: false, pro: false, operator: false, command: true },
-  { feature: 'Content Creator', starter: false, pro: false, operator: false, command: true },
-  { feature: 'Bespoke Custom Agent', starter: false, pro: false, operator: false, command: true },
   { feature: 'White-Glove Onboarding', starter: false, pro: false, operator: true, command: true },
 ]
 
@@ -123,13 +107,9 @@ export default function PricingPage() {
             Pick your team.<br />
             <span className="gradient-text">Scale as you grow.</span>
           </h1>
-          <p className="text-lg text-[#8888aa] max-w-2xl mx-auto mb-4">
-            Four tiers from solo operator to full AI executive suite. Pricing finalized at our 8 AM strategy session today — join the waitlist to be first to know.
+          <p className="text-lg text-[#8888aa] max-w-2xl mx-auto">
+            Four tiers from solo operator to full AI executive suite. Starts at $129/mo.
           </p>
-          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-[#f39c12]/10 border border-[#f39c12]/30 text-[#f39c12] text-sm">
-            <span className="w-2 h-2 rounded-full bg-[#f39c12] animate-pulse" />
-            Pricing announcement coming today
-          </div>
         </div>
       </section>
 
@@ -164,25 +144,38 @@ export default function PricingPage() {
                 >
                   {tier.name}
                 </h2>
-                <p className="text-xs text-[#8888aa] leading-relaxed mb-6">{tier.tagline}</p>
+                <p className="text-xs text-[#8888aa] leading-relaxed mb-4">{tier.tagline}</p>
 
-                <div className="mb-6">
-                  <p className="text-lg font-bold text-[#a29bfe]">{tier.price}</p>
-                  <p className="text-xs text-[#555577] mt-1">{tier.priceNote}</p>
+                {/* Price */}
+                <div className="mb-2">
+                  <p className="text-2xl font-bold text-[#a29bfe]">{tier.monthly}</p>
+                  <p className="text-xs text-[#555577] mt-0.5">{tier.setup}</p>
                 </div>
 
-                <ul className="space-y-2 mb-8 flex-1">
-                  {tier.includes.map((item) => (
-                    <li key={item} className="flex items-start gap-2 text-sm text-[#8888aa]">
-                      <span className="text-[#00cec9] mt-0.5 flex-shrink-0">✓</span>
-                      {item}
-                    </li>
-                  ))}
-                </ul>
+                {/* Starter disclosure */}
+                {tier.disclosure && (
+                  <p className="text-[10px] text-[#666688] leading-snug mb-4 italic">
+                    {tier.disclosure}
+                  </p>
+                )}
+
+                {/* Bullets — renders only when non-empty */}
+                {tier.bullets.length > 0 && (
+                  <ul className="space-y-2 mb-6 flex-1">
+                    {tier.bullets.map((bullet) => (
+                      <li key={bullet} className="flex items-start gap-2 text-sm text-[#8888aa]">
+                        <span className="text-[#00cec9] mt-0.5 flex-shrink-0">✓</span>
+                        {bullet}
+                      </li>
+                    ))}
+                  </ul>
+                )}
+
+                <div className="flex-1" />
 
                 <Link
                   href={tier.ctaHref}
-                  className={`text-center py-3 px-6 rounded-lg text-sm font-semibold transition-all ${
+                  className={`text-center py-3 px-6 rounded-lg text-sm font-semibold transition-all mt-6 ${
                     tier.highlight
                       ? 'btn-primary'
                       : 'border border-[#6c5ce7]/40 text-[#a29bfe] hover:border-[#6c5ce7] hover:bg-[#6c5ce7]/10'

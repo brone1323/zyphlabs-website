@@ -7,8 +7,8 @@ const navLinks = [
   { href: '/project-runner', label: 'Project Runner' },
   { href: '/pricing', label: 'Pricing' },
   { href: '/services', label: 'Services' },
-  { href: '/how-it-works', label: 'How It Works' },
   { href: '/portfolio', label: 'Portfolio' },
+  { href: '/how-it-works', label: 'How It Works' },
 ]
 
 export default function Navbar() {

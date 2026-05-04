@@ -1,11 +1,7 @@
-import Link from 'next/link'
-import type { Metadata } from 'next'
+'use client'
 
-export const metadata: Metadata = {
-  title: 'Project Runner — AI Project, Proposal & Financial Command Center | Zyph Labs',
-  description:
-    'Project Runner is the AI-powered project, proposal, and financial command center for service contractors. Your inbox fills it; your projects run themselves.',
-}
+import { useState } from 'react'
+import Link from 'next/link'
 
 const features = [
   {
@@ -43,23 +39,52 @@ const features = [
 const faq = [
   {
     q: 'How is this different from Buildertrend, Jobber, or Procore?',
-    a: '[BRIAN-CONFIRM] — Kill-shot differentiator to be provided by Brian at the 8 AM strategy session. Short answer: Project Runner is AI-native and runs on your existing Claude + email workflow, not a bloated SaaS platform that requires retraining your whole team.',
+    a: "Buildertrend, Jobber, Procore want you to log in. Project Runner doesn't. They sell software you operate. We sell a COO that operates it for you — drafts the proposal, follows up with the client, flags the schedule slip before the GC notices, runs the Friday review while you're with your kid.",
   },
   {
     q: 'Do I need to bring my own AI subscription?',
-    a: 'It depends on your tier. Project Runner Starter requires your own Claude Desktop (BYO). Project Runner Pro and above are Zyph-hosted — we handle the AI infrastructure, you just use the product.',
+    a: 'Tier-dependent. Starter is BYO Claude Desktop. Pro and above are Zyph-hosted.',
   },
   {
     q: 'How long is onboarding?',
-    a: 'Most operators are running within one week. We configure the system to your business during a white-glove onboarding session — your projects, your workflow, your clients.',
+    a: 'Starter: same day. Pro: a few days. Operator/Command: 2–4 weeks of fine-tuning to your business.',
   },
   {
     q: 'What integrations do you support today?',
-    a: 'Gmail and Outlook for email, QuickBooks for financials, Google Drive and OneDrive for documents. Additional connectors on the roadmap — let us know what you need.',
+    a: 'Gmail, QuickBooks Online, Google Drive/Calendar are the priority lane. HubSpot free tier next. More on request.',
   },
 ]
 
 export default function ProjectRunnerPage() {
+  const [email, setEmail] = useState('')
+  const [submitted, setSubmitted] = useState(false)
+  const [loading, setLoading] = useState(false)
+  const [error, setError] = useState('')
+
+  async function handleSubmit(e: React.FormEvent) {
+    e.preventDefault()
+    if (!email) return
+    setLoading(true)
+    setError('')
+    try {
+      const res = await fetch('/api/waitlist/project-runner', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email }),
+      })
+      if (res.ok) {
+        setSubmitted(true)
+      } else {
+        const data = await res.json().catch(() => ({}))
+        setError(data.error || 'Something went wrong. Try again or email us.')
+      }
+    } catch {
+      setError('Network error. Try again or email contact@zyphlabs.com')
+    } finally {
+      setLoading(false)
+    }
+  }
+
   return (
     <div className="min-h-screen">
       {/* Hero */}
@@ -77,10 +102,6 @@ export default function ProjectRunnerPage() {
               ← Back to home
             </Link>
           </div>
-          <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-[#00cec9]/10 border border-[#00cec9]/30 text-[#00cec9] text-xs font-semibold mb-6">
-            <span className="w-1.5 h-1.5 rounded-full bg-[#00cec9] animate-pulse" />
-            Launching this week
-          </div>
           <h1
             className="text-4xl sm:text-5xl md:text-6xl font-bold text-white mb-6 leading-tight"
             style={{ fontFamily: 'Space Grotesk, sans-serif' }}
@@ -92,14 +113,42 @@ export default function ProjectRunnerPage() {
             Project Runner is the AI-powered project, proposal, and financial command center
             for service contractors. Your inbox fills it; your projects run themselves.
           </p>
-          <div className="flex flex-col sm:flex-row gap-4">
-            <Link href="/questionnaire" className="btn-primary inline-block text-base px-8 py-4">
-              Join Waitlist
-            </Link>
-            <Link href="/pricing" className="btn-secondary inline-block text-base px-8 py-4">
-              See Pricing →
-            </Link>
+
+          {/* Waitlist form */}
+          <div className="max-w-md mb-6">
+            {submitted ? (
+              <div className="glass rounded-xl p-6 border border-[#00cec9]/30 text-center">
+                <div className="text-3xl mb-3">🎉</div>
+                <p className="text-white font-semibold" style={{ fontFamily: 'Space Grotesk, sans-serif' }}>
+                  You&apos;re on the list!
+                </p>
+                <p className="text-[#8888aa] text-sm mt-1">We&apos;ll reach out when you&apos;re up.</p>
+              </div>
+            ) : (
+              <form onSubmit={handleSubmit} className="flex flex-col sm:flex-row gap-3">
+                <input
+                  type="email"
+                  placeholder="your@email.com"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  required
+                  className="flex-1 bg-white/5 border border-white/10 rounded-lg px-4 py-3 text-white placeholder-[#8888aa] text-sm focus:outline-none focus:border-[#00cec9]/50 transition-colors"
+                />
+                <button
+                  type="submit"
+                  disabled={loading}
+                  className="btn-primary text-sm px-6 py-3 whitespace-nowrap disabled:opacity-60 disabled:cursor-not-allowed"
+                >
+                  {loading ? 'Joining...' : 'Join Waitlist'}
+                </button>
+              </form>
+            )}
+            {error && <p className="text-red-400 text-xs mt-3">{error}</p>}
           </div>
+
+          <Link href="/pricing" className="btn-secondary inline-block text-base px-8 py-4">
+            See Pricing →
+          </Link>
         </div>
       </section>
 
@@ -152,7 +201,7 @@ export default function ProjectRunnerPage() {
             Two tiers. BYO or hosted.
           </h2>
           <p className="text-[#8888aa] mb-12 max-w-xl mx-auto">
-            Pricing is being finalized at our 8 AM strategy session today. Join the waitlist to be first to know.
+            Start solo or go fully hosted. Upgrade when your project load grows.
           </p>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-2xl mx-auto mb-8">
@@ -160,10 +209,12 @@ export default function ProjectRunnerPage() {
               <h3 className="text-base font-bold text-white mb-2" style={{ fontFamily: 'Space Grotesk, sans-serif' }}>
                 Project Runner Starter
               </h3>
-              <p className="text-sm text-[#8888aa] mb-4">Bring your own Claude Desktop. Best for solo operators.</p>
-              <p className="text-[#a29bfe] font-bold mb-6">Contact for pricing</p>
+              <p className="text-sm text-[#8888aa] mb-1">Bring your own Claude Desktop. Best for solo operators.</p>
+              <p className="text-xs text-[#555577] mb-4 italic">Requires Claude Pro or Max (~$100–200/mo, billed by Anthropic).</p>
+              <p className="text-[#a29bfe] font-bold text-xl mb-1">$129<span className="text-sm font-normal">/mo</span></p>
+              <p className="text-xs text-[#555577] mb-6">$0 setup</p>
               <Link href="/questionnaire" className="btn-secondary text-sm px-6 py-3 inline-block w-full text-center">
-                Join Waitlist
+                Get Started
               </Link>
             </div>
             <div className="glass p-8 text-left border-[#6c5ce7]/50 shadow-[0_0_30px_rgba(108,92,231,0.15)]">
@@ -171,9 +222,10 @@ export default function ProjectRunnerPage() {
                 Project Runner Pro
               </h3>
               <p className="text-sm text-[#8888aa] mb-4">Hosted, ready to go. Best for owners running 5–20 active projects.</p>
-              <p className="text-[#a29bfe] font-bold mb-6">Contact for pricing</p>
+              <p className="text-[#a29bfe] font-bold text-xl mb-1">$449<span className="text-sm font-normal">/mo</span></p>
+              <p className="text-xs text-[#555577] mb-6">$499 setup</p>
               <Link href="/questionnaire" className="btn-primary text-sm px-6 py-3 inline-block w-full text-center">
-                Join Waitlist
+                Get Started
               </Link>
             </div>
           </div>
