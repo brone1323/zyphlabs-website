@@ -1,10 +1,65 @@
 # STATUS — Zyph Labs v2 Repositioning
 
-**Build date:** 2026-05-05 (Round 4)
+**Build date:** 2026-05-05 (Round 5 — CTA Collapse + Chat Widget)
 **Branch:** v2-repositioning
-**Commit:** 3b893b9
-**Vercel preview:** https://zyphlabs-website-3lgzpjdo6-solar-devs-projects.vercel.app
-**Build:** TS clean, 38 pages, Vercel green
+**Commit:** ecb482a
+**Vercel preview:** https://zyphlabs-website-gtmc4vcsh-solar-devs-projects.vercel.app
+**Build:** TS clean, 28 pages (signup/questionnaire/portfolio removed), Vercel green
+
+---
+
+## Round 5 — CTA Collapse + Chat Widget (2026-05-05)
+
+### CHANGE 1 — Contact form simplified
+- Removed **Subject** field. Form is now: Name / Email / Message.
+- Message placeholder: `"What are you trying to fix? We'll get back fast."`
+- After successful submit: **"Want answers right now? Chat with Zyph →"** opens the chat widget.
+
+### CHANGE 2 — All CTAs collapsed to Chat widget | Contact modal
+Every "Get Started" / "Apply" / "Talk to Us" CTA that previously routed to `/signup` or `/questionnaire` now opens the chat widget (primary) or contact modal (secondary).
+
+Surfaces updated: Hero, Navbar (desktop + mobile), Footer, Pricing tier cards (all 4 + bottom CTA), Services capability pillars (all 4 + bottom CTA), Homepage pricing teaser + final CTA.
+
+**Redirects added to `next.config.js` (302):**
+- `/signup` → `/`
+- `/signup/:path*` → `/`
+- `/questionnaire` → `/`
+- `/questionnaire/:path*` → `/`
+- `/portfolio` → `/`
+- `/portfolio/:path*` → `/`
+
+Pages `app/signup/`, `app/questionnaire/`, `app/portfolio/` deleted.
+
+### CHANGE 3 — Chat widget
+New floating chat button (bottom-right, every page). Opens a 400×560 branded panel powered by Claude.
+
+| File | Purpose |
+|---|---|
+| `components/ChatWidgetProvider.tsx` | Context — `open`, `tier`, `openWidget(tier?)`, `closeWidget()` |
+| `components/ChatWidget.tsx` | Floating button + slide-up panel |
+| `components/OpenChatButton.tsx` | Client button for use in server components |
+| `app/api/chat/route.ts` | POST `/api/chat` — Anthropic API call, 5 msg/IP/60s rate limit, honeypot |
+| `app/api/chat/system-prompt.md` | **Editable prompt** — change without redeploy (read at request time) |
+
+**Tier-specific greetings:** clicking a Pricing tier card opens widget pre-contextualized for that tier.
+
+**`ANTHROPIC_API_KEY` setup (BRIAN-FOLLOWUP):**
+Vercel → Project → Settings → Environment Variables:
+```
+Name:  ANTHROPIC_API_KEY
+Value: sk-ant-... (your key from console.anthropic.com)
+Env:   Production + Preview
+```
+Until set, widget shows: `"Chat is being set up — please use the contact form below for now."` + Contact button.
+
+**To iterate on the system prompt:** edit `app/api/chat/system-prompt.md` and push — no other code changes needed.
+
+### CHANGE 4 — Portfolio removed
+- Navbar: Portfolio link removed.
+- Footer: Portfolio link removed.
+- `app/portfolio/` deleted.
+
+---
 
 ---
 
