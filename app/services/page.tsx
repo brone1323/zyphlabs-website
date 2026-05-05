@@ -1,5 +1,6 @@
 import Link from 'next/link'
 import type { Metadata } from 'next'
+import { MessageSquareIcon, GitBranchIcon, ZapIcon, WrenchIcon } from '@/components/icons'
 
 export const metadata: Metadata = {
   title: 'Services — AI Executive Team Capabilities | Zyph Labs',
@@ -9,7 +10,7 @@ export const metadata: Metadata = {
 
 const capabilities = [
   {
-    icon: '🤖',
+    Icon: MessageSquareIcon,
     name: 'AI Agents & Chatbots',
     eyebrow: '[BRIAN-FOLLOWUP]',
     h2: '[BRIAN-FOLLOWUP]',
@@ -23,7 +24,7 @@ const capabilities = [
     color: '#6c5ce7',
   },
   {
-    icon: '⚙️',
+    Icon: GitBranchIcon,
     name: 'Workflow Automation',
     eyebrow: '[BRIAN-FOLLOWUP]',
     h2: '[BRIAN-FOLLOWUP]',
@@ -37,7 +38,7 @@ const capabilities = [
     color: '#0984e3',
   },
   {
-    icon: '👷',
+    Icon: ZapIcon,
     name: 'Digital Workers',
     eyebrow: '[BRIAN-FOLLOWUP]',
     h2: '[BRIAN-FOLLOWUP]',
@@ -51,7 +52,7 @@ const capabilities = [
     color: '#00cec9',
   },
   {
-    icon: '🛠️',
+    Icon: WrenchIcon,
     name: 'Bespoke AI Tools',
     eyebrow: '[BRIAN-FOLLOWUP]',
     h2: '[BRIAN-FOLLOWUP]',
@@ -147,10 +148,10 @@ export default function ServicesPage() {
                   {/* Left: icon + existing content */}
                   <div>
                     <div
-                      className="w-14 h-14 rounded-2xl flex items-center justify-center text-3xl mb-6 flex-shrink-0"
+                      className="w-14 h-14 rounded-2xl flex items-center justify-center mb-6 flex-shrink-0"
                       style={{ background: `${cap.color}18`, border: `1px solid ${cap.color}40` }}
                     >
-                      {cap.icon}
+                      <cap.Icon size={24} color={cap.color} />
                     </div>
                     <p
                       className="text-xs font-bold uppercase tracking-widest mb-1"

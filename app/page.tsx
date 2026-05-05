@@ -1,69 +1,6 @@
 import Link from 'next/link'
 import Hero from '@/components/Hero'
-
-const executiveTeam = [
-  {
-    icon: '🏗️',
-    role: 'PROJECT RUNNER',
-    title: 'COO',
-    desc: 'Runs proposals, projects, billing, change orders.',
-    href: '/project-runner',
-  },
-  {
-    icon: '📊',
-    role: 'STRATEGIST',
-    title: 'CSO',
-    desc: 'Pricing, positioning, deal review, industry scans.',
-    href: null,
-  },
-  {
-    icon: '💰',
-    role: 'FINANCIAL ANALYST',
-    title: 'CFO',
-    desc: 'P&L review, cash-flow forecast, margin analysis, scenario modeling.',
-    href: null,
-  },
-  {
-    icon: '🔍',
-    role: 'KNOWLEDGE EXPERT',
-    title: 'CKO',
-    desc: 'Industry foresight — regulatory shifts, tech changes, competitor moves.',
-    href: null,
-  },
-]
-
-const officeTeam = [
-  {
-    icon: '📬',
-    role: 'EMAIL OFFICER',
-    desc: 'Reads, classifies, drafts, replies — clears your inbox.',
-    href: null,
-  },
-  {
-    icon: '🤝',
-    role: 'CRM OPERATOR',
-    desc: 'Tracks every relationship and follow-up.',
-    href: null,
-  },
-  {
-    icon: '📚',
-    role: 'BOOKKEEPER',
-    desc: 'Categorizes, invoices, reconciles, runs payroll.',
-    href: null,
-  },
-  {
-    icon: '👥',
-    role: 'RECRUITER',
-    desc: 'Sources, screens, schedules — never lets a role sit open.',
-    href: null,
-  },
-  {
-    icon: '🎧',
-    role: 'CUSTOMER SUPPORT',
-    desc: 'Answers, escalates, follows up. 24/7.',
-    href: null,
-  },
-]
+import OrgChart from '@/components/OrgChart'
 
 const pricingTiers = [
   {
@@ -144,81 +81,106 @@ export default function HomePage() {
       {/* Hero */}
       <Hero />
 
-      {/* Meet Your AI Company */}
-      <section className="py-24 px-4 sm:px-6 max-w-7xl mx-auto">
-        <div className="text-center mb-16">
-          <p className="text-[#6c5ce7] text-sm font-semibold uppercase tracking-widest mb-3">
-            Meet Your AI Company
+      {/* Meet Your AI Company — org chart with animations */}
+      <OrgChart />
+
+      <div className="section-divider" />
+
+      {/* Product Mock — Monday morning brief */}
+      <section className="py-20 px-4 sm:px-6">
+        <div className="max-w-3xl mx-auto">
+          <p className="text-center text-[#8888aa] text-sm mb-8">
+            This is what your COO sends you on Monday morning.
           </p>
-          <h2
-            className="text-4xl md:text-5xl font-bold text-white mb-4"
-            style={{ fontFamily: 'Space Grotesk, sans-serif' }}
+
+          {/* Email mock */}
+          <div
+            className="rounded-2xl overflow-hidden"
+            style={{
+              background: 'rgba(255,255,255,0.03)',
+              border: '1px solid rgba(255,255,255,0.08)',
+              boxShadow: '0 8px 40px rgba(0,0,0,0.5), 0 0 0 1px rgba(108,92,231,0.08)',
+            }}
           >
-            Two teams. One company.<br />
-            <span className="gradient-text">Running your business.</span>
-          </h2>
-          <p className="text-[#8888aa] max-w-xl mx-auto">
-            An executive team to decide. An office team to do the work. Nine roles, one integrated AI company.
+            {/* Email chrome header */}
+            <div
+              className="px-6 py-4 border-b"
+              style={{ borderColor: 'rgba(255,255,255,0.06)', background: 'rgba(255,255,255,0.02)' }}
+            >
+              <div className="flex items-center gap-2 mb-3">
+                <div className="w-3 h-3 rounded-full bg-red-500/50" />
+                <div className="w-3 h-3 rounded-full bg-yellow-500/50" />
+                <div className="w-3 h-3 rounded-full bg-green-500/50" />
+              </div>
+              <div className="space-y-1 text-xs" style={{ fontFamily: 'ui-monospace, monospace' }}>
+                <div>
+                  <span className="text-[#555577]">From: </span>
+                  <span className="text-[#a29bfe]">Project Runner (COO)</span>
+                  <span className="text-[#333355]"> &lt;coo@yourcompany.ai&gt;</span>
+                </div>
+                <div>
+                  <span className="text-[#555577]">To: </span>
+                  <span className="text-[#ccccdd]">Brian</span>
+                </div>
+                <div>
+                  <span className="text-[#555577]">Subject: </span>
+                  <span className="text-white font-medium">Monday morning brief — Apr 27</span>
+                </div>
+              </div>
+            </div>
+
+            {/* Email body */}
+            <div
+              className="px-6 py-8 text-sm leading-7 text-[#ccccdd]"
+              style={{ fontFamily: 'ui-monospace, monospace' }}
+            >
+              <p className="mb-6">Good morning. Three things on your desk today.</p>
+
+              <div className="space-y-6">
+                <div>
+                  <p className="text-white font-medium mb-1">1. Henderson reno — framing crew is 1 day behind.</p>
+                  <p className="text-[#8888aa] pl-4 border-l border-[#6c5ce7]/30">
+                    Cause: lumber delivery slipped Friday. I rebooked<br />
+                    for Tuesday 7am and pushed drywall to next Monday.<br />
+                    No client-facing slip. Updated the schedule.
+                  </p>
+                </div>
+
+                <div>
+                  <p className="text-white font-medium mb-1">2. Patel kitchen — invoice #2103 is 14 days overdue.</p>
+                  <p className="text-[#8888aa] pl-4 border-l border-[#6c5ce7]/30">
+                    Bookkeeper sent reminder #2 on Friday. If no reply<br />
+                    by EOD I&apos;ll escalate to a phone call from you.<br />
+                    Draft talking points attached.
+                  </p>
+                </div>
+
+                <div>
+                  <p className="text-white font-medium mb-1">3. New lead — Sarah K., bathroom remodel, Westside.</p>
+                  <p className="text-[#8888aa] pl-4 border-l border-[#6c5ce7]/30">
+                    CRM scored her at 78 (qualified). Recruiter pulled<br />
+                    her last contractor&apos;s reviews — three complaints<br />
+                    about communication. We win on that. Strategist<br />
+                    drafted the pitch angle. On your CRM dashboard.
+                  </p>
+                </div>
+              </div>
+
+              <p className="mt-8 text-[#6888aa]">Nothing else needs you today. I&apos;m running the rest.</p>
+              <p className="mt-4 text-[#a29bfe]">— Project Runner</p>
+            </div>
+          </div>
+
+          <p className="text-center mt-8 text-[#8888aa] text-sm">
+            Project Runner is doing the work.{' '}
+            <Link
+              href="/project-runner"
+              className="text-[#a29bfe] hover:text-white transition-colors underline underline-offset-2"
+            >
+              You&apos;re running the company.
+            </Link>
           </p>
         </div>
-
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-16">
-          {/* Executive Team */}
-          <div>
-            <p className="text-xs font-bold uppercase tracking-widest text-[#a29bfe] mb-6 pb-4 border-b border-[#6c5ce7]/20">
-              EXECUTIVE TEAM — they decide
-            </p>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              {executiveTeam.map((member) => {
-                const card = (
-                  <div
-                    className="glass card-glow p-6 flex flex-col h-full group"
-                    style={member.href ? { cursor: 'pointer' } : {}}
-                  >
-                    <div className="w-11 h-11 rounded-xl flex items-center justify-center text-xl mb-4 flex-shrink-0 bg-[#6c5ce7]/10 border border-[#6c5ce7]/30">
-                      {member.icon}
-                    </div>
-                    <p className="text-xs font-bold text-[#6c5ce7] uppercase tracking-widest mb-1">
-                      {member.role}
-                    </p>
-                    <p className="text-xs text-[#a29bfe] mb-2">{member.title}</p>
-                    <p className="text-sm text-[#8888aa] leading-relaxed flex-1">{member.desc}</p>
-                  </div>
-                )
-                return member.href ? (
-                  <Link key={member.role} href={member.href} className="block">
-                    {card}
-                  </Link>
-                ) : (
-                  <div key={member.role}>{card}</div>
-                )
-              })}
-            </div>
-          </div>
-
-          {/* Office Team */}
-          <div>
-            <p className="text-xs font-bold uppercase tracking-widest text-[#00cec9] mb-6 pb-4 border-b border-[#00cec9]/20">
-              OFFICE TEAM — they do the work
-            </p>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              {officeTeam.map((member) => (
-                <div key={member.role}>
-                  <div className="glass card-glow p-6 flex flex-col h-full">
-                    <div className="w-11 h-11 rounded-xl flex items-center justify-center text-xl mb-4 flex-shrink-0 bg-[#00cec9]/10 border border-[#00cec9]/30">
-                      {member.icon}
-                    </div>
-                    <p className="text-xs font-bold text-[#00cec9] uppercase tracking-widest mb-1">
-                      {member.role}
-                    </p>
-                    <p className="text-sm text-[#8888aa] leading-relaxed flex-1">{member.desc}</p>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
-
       </section>
 
       <div className="section-divider" />

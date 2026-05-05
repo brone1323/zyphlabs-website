@@ -2,35 +2,43 @@
 
 import { useState } from 'react'
 import Link from 'next/link'
+import {
+  FileTextIcon,
+  LayoutDashboardIcon,
+  UsersIcon,
+  RefreshCwIcon,
+  InboxIcon,
+  LinkIcon,
+} from '@/components/icons'
 
 const features = [
   {
-    icon: '📄',
+    Icon: FileTextIcon,
     title: 'AI Proposal Drafting',
     desc: 'Generate polished, branded proposals from a quick description, file upload, or RFP parsing. Stop typing from scratch.',
   },
   {
-    icon: '📊',
+    Icon: LayoutDashboardIcon,
     title: 'Active Project Dashboard',
     desc: 'Every project at a glance — status, revenue, costs, outstanding items. Real numbers, updated automatically.',
   },
   {
-    icon: '👥',
+    Icon: UsersIcon,
     title: 'Crew & Supplier Directory',
     desc: 'Your people and partners in one place. Assign crew to jobs, track supplier contacts and status, all linked to your projects.',
   },
   {
-    icon: '🔄',
+    Icon: RefreshCwIcon,
     title: 'Automated Change Order Requests',
     desc: 'Scope creep happens. Project Runner catches it and drafts change order requests before you even think to ask.',
   },
   {
-    icon: '📥',
+    Icon: InboxIcon,
     title: 'AI-Monitored Inbox',
     desc: 'Your email feeds your projects. Project Runner reads incoming messages and updates project status, flags issues, and drafts replies.',
   },
   {
-    icon: '🔗',
+    Icon: LinkIcon,
     title: 'Integrations Built In',
     desc: 'Gmail, Outlook, QuickBooks, Google Drive, OneDrive. Connects to the tools you already use — no new apps to learn.',
   },
@@ -174,7 +182,9 @@ export default function ProjectRunnerPage() {
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
             {features.map((f) => (
               <div key={f.title} className="glass card-glow p-7">
-                <div className="text-3xl mb-4">{f.icon}</div>
+                <div className="w-11 h-11 rounded-xl flex items-center justify-center mb-4 bg-[#6c5ce7]/10 border border-[#6c5ce7]/30">
+                  <f.Icon size={20} color="#6c5ce7" />
+                </div>
                 <h3
                   className="text-lg font-semibold text-white mb-2"
                   style={{ fontFamily: 'Space Grotesk, sans-serif' }}
