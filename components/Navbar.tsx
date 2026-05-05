@@ -78,8 +78,8 @@ export default function Navbar() {
           </div>
 
           {/* CTA */}
-          <Link href="/questionnaire" className="hidden lg:inline-block btn-primary text-sm px-5 py-2.5">
-            Free Assessment
+          <Link href="/signup?tier=starter" className="hidden lg:inline-block btn-primary text-sm px-5 py-2.5">
+            Get Started
           </Link>
 
           {/* Mobile hamburger */}
@@ -144,11 +144,11 @@ export default function Navbar() {
             </Link>
           ))}
           <Link
-            href="/questionnaire"
+            href="/signup?tier=starter"
             onClick={() => setMobileOpen(false)}
             className="btn-primary text-sm block mt-4 text-center"
           >
-            Free Assessment
+            Get Started
           </Link>
         </div>
       </div>

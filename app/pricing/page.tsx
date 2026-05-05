@@ -255,17 +255,20 @@ export default function PricingPage() {
             className="text-4xl font-bold text-white mb-6"
             style={{ fontFamily: 'Space Grotesk, sans-serif' }}
           >
-            Not sure which tier is right?
+            Pick a team. We&apos;ll spin it up this week.
           </h2>
+          <p className="text-[#8888aa] mb-3">
+            Starter and Pro are self-serve — sign up, we onboard, you&apos;re running.
+          </p>
           <p className="text-[#8888aa] mb-10">
-            Start with a free assessment. We&apos;ll map your business to the right tier — no pressure, no pitch, just a clear recommendation.
+            Operator and Command are application-only because we tune them to your business.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Link href="/questionnaire" className="btn-primary text-base px-10 py-4 inline-block">
-              Start My Free Assessment
+            <Link href="/signup?tier=starter" className="btn-primary text-base px-10 py-4 inline-block">
+              Get Started →
             </Link>
-            <Link href="/project-runner" className="btn-secondary text-base px-10 py-4 inline-block">
-              See Project Runner →
+            <Link href="/questionnaire" className="btn-secondary text-base px-10 py-4 inline-block">
+              Talk to us →
             </Link>
           </div>
         </div>

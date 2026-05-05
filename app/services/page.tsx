@@ -279,14 +279,14 @@ export default function ServicesPage() {
             Ready to build your team?
           </h2>
           <p className="text-[#8888aa] mb-10">
-            Start with a free assessment. We&apos;ll figure out which agents fit your business, which tier makes sense, and what the first 30 days looks like.
+            Starter and Pro are self-serve — sign up and we&apos;ll have your team running this week.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Link href="/questionnaire" className="btn-primary text-base px-10 py-4 inline-block">
-              Start My Free Assessment
+            <Link href="/signup?tier=starter" className="btn-primary text-base px-10 py-4 inline-block">
+              Get Started
             </Link>
-            <Link href="/pricing" className="btn-secondary text-base px-10 py-4 inline-block">
-              View Pricing →
+            <Link href="/questionnaire" className="btn-secondary text-base px-10 py-4 inline-block">
+              Talk to us →
             </Link>
           </div>
         </div>

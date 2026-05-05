@@ -132,8 +132,8 @@ export default function Hero() {
 
             {/* CTAs */}
             <div className="flex flex-col sm:flex-row gap-4 animate-fadeInUp delay-300">
-              <Link href="/questionnaire" className="btn-primary text-base px-8 py-4 w-full sm:w-auto">
-                Start My Free Assessment
+              <Link href="/signup?tier=starter" className="btn-primary text-base px-8 py-4 w-full sm:w-auto">
+                Get Started
               </Link>
               <Link href="/project-runner" className="btn-secondary text-base px-8 py-4 w-full sm:w-auto">
                 See Project Runner →
@@ -145,7 +145,7 @@ export default function Hero() {
                 onMouseEnter={(e) => (e.currentTarget.style.color = 'var(--text-heading)')}
                 onMouseLeave={(e) => (e.currentTarget.style.color = 'var(--text-muted)')}
               >
-                View Pricing →
+                See pricing →
               </Link>
             </div>
 

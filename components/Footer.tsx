@@ -13,7 +13,7 @@ const products = [
 
 const company = [
   { href: '/how-it-works', label: 'How It Works' },
-  { href: '/questionnaire', label: 'Free Assessment' },
+  { href: '/questionnaire', label: 'Talk to Us' },
   { href: 'mailto:contact@zyphlabs.com', label: 'Contact' },
 ]
 
@@ -139,7 +139,7 @@ export default function Footer() {
                   e.currentTarget.style.color = 'rgba(255,255,255,0.6)'
                 }}
               >
-                Free Assessment
+                Talk to Us
               </Link>
             </div>
           </div>
