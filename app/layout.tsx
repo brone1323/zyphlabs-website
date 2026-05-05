@@ -6,15 +6,15 @@ import SaleBanner from '@/components/SaleBanner'
 import AnalyticsTracker from '@/components/AnalyticsTracker'
 
 export const metadata: Metadata = {
-  title: 'Zyph Labs — Professional Websites, Built & Hosted For You',
+  title: 'Zyph Labs — Run Your Business on an AI Company',
   description:
-    'We build, host, and maintain professional websites for contractors, e-commerce brands, realtors, and law firms. One checkout — zero technical headaches.',
+    'An executive team to decide. An office team to do the work. You run the company. Starts at $129/mo.',
   keywords:
-    'web design, web development, managed hosting, contractor websites, real estate websites, law firm websites, ecommerce shopify',
+    'AI executive team, AI company, AI agents for business, project runner, service business AI, OpenClaw, construction AI',
   openGraph: {
-    title: 'Zyph Labs — Professional Websites, Built & Hosted For You',
+    title: 'Zyph Labs — Run Your Business on an AI Company',
     description:
-      'We build, host, and maintain professional websites for contractors, e-commerce brands, realtors, and law firms.',
+      'An executive team to decide. An office team to do the work. You run the company. Starts at $129/mo.',
     type: 'website',
   },
 }

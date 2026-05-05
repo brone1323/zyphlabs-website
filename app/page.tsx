@@ -1,6 +1,14 @@
 import Link from 'next/link'
 import Hero from '@/components/Hero'
 import OrgChart from '@/components/OrgChart'
+import {
+  ClockIcon,
+  LayersIcon,
+  UsersIcon,
+  CreditCardIcon,
+  BuildingIcon,
+  PhoneIcon,
+} from '@/components/icons'
 
 const pricingTiers = [
   {
@@ -9,7 +17,8 @@ const pricingTiers = [
     price: '$129/mo',
     priceNote: '$0 setup',
     cta: 'Get Started',
-    ctaHref: '/questionnaire',
+    ctaHref: '/signup?tier=starter',
+    selfServe: true,
     highlight: false,
   },
   {
@@ -18,7 +27,8 @@ const pricingTiers = [
     price: '$449/mo',
     priceNote: '$499 setup',
     cta: 'Get Started',
-    ctaHref: '/questionnaire',
+    ctaHref: '/signup?tier=pro',
+    selfServe: true,
     highlight: false,
   },
   {
@@ -27,7 +37,8 @@ const pricingTiers = [
     price: '$1,799/mo',
     priceNote: '$2,500 setup',
     cta: 'Talk to Us',
-    ctaHref: '/questionnaire',
+    ctaHref: '/questionnaire?tier=operator',
+    selfServe: false,
     highlight: true,
   },
   {
@@ -36,7 +47,8 @@ const pricingTiers = [
     price: '$5,500/mo',
     priceNote: '$7,500 setup',
     cta: 'Apply',
-    ctaHref: '/questionnaire',
+    ctaHref: '/questionnaire?tier=command',
+    selfServe: false,
     highlight: false,
     badge: 'Flagship',
   },
@@ -44,32 +56,32 @@ const pricingTiers = [
 
 const whyCards = [
   {
-    icon: '⚡',
+    Icon: ClockIcon,
     title: 'Always On. Never Tired.',
     desc: 'Your AI team works 24/7 — no sick days, no context-switching, no meetings.',
   },
   {
-    icon: '🔒',
+    Icon: LayersIcon,
     title: 'One Stack. Zero Complexity.',
     desc: 'Everything runs on OpenClaw + Claude. No patchwork of SaaS tools to integrate and maintain.',
   },
   {
-    icon: '♻️',
+    Icon: UsersIcon,
     title: 'Leverage Without Headcount.',
     desc: 'The work of 10 people. The payroll of zero. AI inverts the scaling equation.',
   },
   {
-    icon: '💳',
+    Icon: CreditCardIcon,
     title: 'Fractional C-Suite Pricing.',
     desc: 'Less than the cost of a single hire. The executive team you could never afford — now you can.',
   },
   {
-    icon: '🎯',
-    title: 'Built for Construction First.',
-    desc: 'Vertical-tuned for service contractors. General contractors, subs, residential and commercial.',
+    Icon: BuildingIcon,
+    title: 'Service-business ready.',
+    desc: 'Vertical templates for construction first, with horizontal expansion to other service trades. General contractors, subs, residential and commercial — and growing.',
   },
   {
-    icon: '📞',
+    Icon: PhoneIcon,
     title: 'White-Glove Onboarding.',
     desc: 'We configure your AI team to your business, your clients, your workflow. Then we hand you the keys.',
   },
@@ -294,6 +306,14 @@ export default function HomePage() {
                 >
                   {tier.cta}
                 </Link>
+                {tier.selfServe && (
+                  <p className="text-center text-xs text-[#555577] mt-3">
+                    Need help picking?{' '}
+                    <Link href="/questionnaire" className="text-[#a29bfe] hover:text-white transition-colors underline underline-offset-2">
+                      Talk to us
+                    </Link>
+                  </p>
+                )}
               </div>
             ))}
           </div>
@@ -327,7 +347,9 @@ export default function HomePage() {
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
             {whyCards.map((card) => (
               <div key={card.title} className="glass card-glow p-7">
-                <div className="text-3xl mb-4">{card.icon}</div>
+                <div className="mb-4">
+                  <card.Icon size={28} color="#6c5ce7" />
+                </div>
                 <h3
                   className="text-lg font-semibold text-white mb-2"
                   style={{ fontFamily: 'Space Grotesk, sans-serif' }}
@@ -380,23 +402,27 @@ export default function HomePage() {
             className="text-4xl md:text-5xl font-bold text-white mb-6"
             style={{ fontFamily: 'Space Grotesk, sans-serif' }}
           >
-            Ready to build your AI executive team?
+            Pick a team. We&apos;ll spin it up this week.
           </h2>
+          <p className="text-[#8888aa] text-lg mb-4">
+            Starter and Pro are self-serve — sign up, we onboard, you&apos;re running.
+          </p>
           <p className="text-[#8888aa] text-lg mb-10">
-            Start with a free assessment. We&apos;ll map out the right team and tier for your business —
-            no sales pressure, just a clear plan.
+            Operator and Command are application-only because we tune them to your business.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Link href="/questionnaire" className="btn-primary text-base px-10 py-4 inline-block">
-              Start My Free Assessment
+            <Link href="/signup?tier=starter" className="btn-primary text-base px-10 py-4 inline-block">
+              Get Started →
             </Link>
-            <Link href="/project-runner" className="btn-secondary text-base px-10 py-4 inline-block">
-              See Project Runner →
+            <Link href="/pricing" className="btn-secondary text-base px-10 py-4 inline-block">
+              View All Tiers
             </Link>
           </div>
           <p className="text-[#444466] text-sm mt-8">
-            Questions? Email us at{' '}
-            <span className="text-[#a29bfe]">contact@zyphlabs.com</span>
+            Questions?{' '}
+            <a href="mailto:contact@zyphlabs.com" className="text-[#a29bfe] hover:text-white transition-colors">
+              contact@zyphlabs.com
+            </a>
           </p>
         </div>
       </section>

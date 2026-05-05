@@ -193,7 +193,7 @@ export default function Hero() {
             'Always-on AI team',
             'Email · CRM · Projects · Strategy',
             'Fractional C-suite pricing',
-            'Construction-ready',
+            'Service-business ready',
             'No headcount needed',
           ].map((item) => (
             <span key={item} className="flex items-center gap-2">

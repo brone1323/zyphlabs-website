@@ -223,9 +223,15 @@ export default function ProjectRunnerPage() {
               <p className="text-xs text-[#555577] mb-4 italic">Requires Claude Pro or Max (~$100–200/mo, billed by Anthropic).</p>
               <p className="text-[#a29bfe] font-bold text-xl mb-1">$129<span className="text-sm font-normal">/mo</span></p>
               <p className="text-xs text-[#555577] mb-6">$0 setup</p>
-              <Link href="/questionnaire" className="btn-secondary text-sm px-6 py-3 inline-block w-full text-center">
+              <Link href="/signup?tier=starter" className="btn-secondary text-sm px-6 py-3 inline-block w-full text-center">
                 Get Started
               </Link>
+              <p className="text-center text-xs text-[#555577] mt-3">
+                Need help picking?{' '}
+                <Link href="/questionnaire" className="text-[#a29bfe] hover:text-white transition-colors underline underline-offset-2">
+                  Talk to us
+                </Link>
+              </p>
             </div>
             <div className="glass p-8 text-left border-[#6c5ce7]/50 shadow-[0_0_30px_rgba(108,92,231,0.15)]">
               <h3 className="text-base font-bold text-white mb-2" style={{ fontFamily: 'Space Grotesk, sans-serif' }}>
@@ -234,9 +240,15 @@ export default function ProjectRunnerPage() {
               <p className="text-sm text-[#8888aa] mb-4">Hosted, ready to go. Best for owners running 5–20 active projects.</p>
               <p className="text-[#a29bfe] font-bold text-xl mb-1">$449<span className="text-sm font-normal">/mo</span></p>
               <p className="text-xs text-[#555577] mb-6">$499 setup</p>
-              <Link href="/questionnaire" className="btn-primary text-sm px-6 py-3 inline-block w-full text-center">
+              <Link href="/signup?tier=pro" className="btn-primary text-sm px-6 py-3 inline-block w-full text-center">
                 Get Started
               </Link>
+              <p className="text-center text-xs text-[#555577] mt-3">
+                Need help picking?{' '}
+                <Link href="/questionnaire" className="text-[#a29bfe] hover:text-white transition-colors underline underline-offset-2">
+                  Talk to us
+                </Link>
+              </p>
             </div>
           </div>
 

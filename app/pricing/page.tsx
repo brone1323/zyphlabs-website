@@ -4,7 +4,12 @@ import type { Metadata } from 'next'
 export const metadata: Metadata = {
   title: 'Pricing — AI Executive Team Tiers | Zyph Labs',
   description:
-    'Four tiers from Project Runner Starter to OpenClaw Command. Pick the AI executive team that fits your business.',
+    'An executive team to decide. An office team to do the work. You run the company. Starts at $129/mo.',
+  openGraph: {
+    title: 'Pricing — AI Executive Team Tiers | Zyph Labs',
+    description:
+      'An executive team to decide. An office team to do the work. You run the company. Starts at $129/mo.',
+  },
 }
 
 interface Tier {
@@ -18,6 +23,7 @@ interface Tier {
   ctaHref: string
   highlight: boolean
   badge: string | null
+  selfServe?: boolean
 }
 
 const tiers: Tier[] = [
@@ -29,9 +35,10 @@ const tiers: Tier[] = [
     disclosure: 'Requires Claude Pro or Max subscription (~$100–200/mo, billed by Anthropic).',
     bullets: [],
     cta: 'Get Started',
-    ctaHref: '/questionnaire',
+    ctaHref: '/signup?tier=starter',
     highlight: false,
     badge: null,
+    selfServe: true,
   },
   {
     name: 'Project Runner Pro',
@@ -40,9 +47,10 @@ const tiers: Tier[] = [
     setup: '$499 setup',
     bullets: [],
     cta: 'Get Started',
-    ctaHref: '/questionnaire',
+    ctaHref: '/signup?tier=pro',
     highlight: true,
     badge: 'Most Popular',
+    selfServe: true,
   },
   {
     name: 'OpenClaw Operator',
@@ -51,7 +59,7 @@ const tiers: Tier[] = [
     setup: '$2,500 setup',
     bullets: [],
     cta: 'Talk to Us',
-    ctaHref: '/questionnaire',
+    ctaHref: '/questionnaire?tier=operator',
     highlight: false,
     badge: null,
   },
@@ -62,7 +70,7 @@ const tiers: Tier[] = [
     setup: '$7,500 setup',
     bullets: [],
     cta: 'Apply',
-    ctaHref: '/questionnaire',
+    ctaHref: '/questionnaire?tier=command',
     highlight: false,
     badge: 'Flagship',
   },
@@ -183,6 +191,14 @@ export default function PricingPage() {
                 >
                   {tier.cta}
                 </Link>
+                {tier.selfServe && (
+                  <p className="text-center text-xs text-[#555577] mt-3">
+                    Need help picking?{' '}
+                    <Link href="/questionnaire" className="text-[#a29bfe] hover:text-white transition-colors underline underline-offset-2">
+                      Talk to us
+                    </Link>
+                  </p>
+                )}
               </div>
             ))}
           </div>

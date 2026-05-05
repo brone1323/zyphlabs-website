@@ -5,7 +5,12 @@ import { MessageSquareIcon, GitBranchIcon, ZapIcon, WrenchIcon } from '@/compone
 export const metadata: Metadata = {
   title: 'Services — AI Executive Team Capabilities | Zyph Labs',
   description:
-    'The four capability pillars of your Zyph Labs AI executive team. AI agents, workflow automation, digital workers, and bespoke AI — all roles in one integrated team.',
+    'An executive team to decide. An office team to do the work. You run the company. Starts at $129/mo.',
+  openGraph: {
+    title: 'Services — AI Executive Team Capabilities | Zyph Labs',
+    description:
+      'An executive team to decide. An office team to do the work. You run the company. Starts at $129/mo.',
+  },
 }
 
 const capabilities = [
