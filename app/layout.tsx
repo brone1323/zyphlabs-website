@@ -7,6 +7,8 @@ import AnalyticsTracker from '@/components/AnalyticsTracker'
 import GlobalReveal from '@/components/GlobalReveal'
 import { ContactModalProvider } from '@/components/ContactModalProvider'
 import ContactModal from '@/components/ContactModal'
+import { ChatWidgetProvider } from '@/components/ChatWidgetProvider'
+import ChatWidget from '@/components/ChatWidget'
 
 export const metadata: Metadata = {
   title: 'Zyph Labs — Run Your Business on an AI Company',
@@ -38,14 +40,17 @@ export default function RootLayout({
         />
       </head>
       <body>
-        <ContactModalProvider>
-          <div className="noise-overlay" aria-hidden="true" />
-          <SaleBanner />
-          <Navbar />
-          <main>{children}</main>
-          <Footer />
-          <ContactModal />
-        </ContactModalProvider>
+        <ChatWidgetProvider>
+          <ContactModalProvider>
+            <div className="noise-overlay" aria-hidden="true" />
+            <SaleBanner />
+            <Navbar />
+            <main>{children}</main>
+            <Footer />
+            <ContactModal />
+            <ChatWidget />
+          </ContactModalProvider>
+        </ChatWidgetProvider>
         <AnalyticsTracker />
         <GlobalReveal />
       </body>

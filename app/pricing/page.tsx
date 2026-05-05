@@ -1,6 +1,6 @@
-import Link from 'next/link'
 import type { Metadata } from 'next'
 import OpenContactButton from '@/components/OpenContactButton'
+import OpenChatButton from '@/components/OpenChatButton'
 
 export const metadata: Metadata = {
   title: 'Pricing — AI Executive Team Tiers | Zyph Labs',
@@ -15,21 +15,20 @@ export const metadata: Metadata = {
 
 interface Tier {
   name: string
+  tierId: string
   tagline: string
   monthly: string
   setup: string
   disclosure?: string
   bullets: string[]
-  cta: string
-  ctaHref: string
   highlight: boolean
   badge: string | null
-  selfServe?: boolean
 }
 
 const tiers: Tier[] = [
   {
     name: 'Project Runner Starter',
+    tierId: 'starter',
     tagline: 'Bring your own Claude Desktop. Best for solo operators.',
     monthly: '$129/mo',
     setup: '$0 setup',
@@ -39,14 +38,12 @@ const tiers: Tier[] = [
       'Runs in your Claude Desktop. You install it, you log in, you launch it.',
       'No hosting, no integrations wired by us. Agent talks to you; you copy/paste into your tools.',
     ],
-    cta: 'Get Started',
-    ctaHref: '/signup?tier=starter',
     highlight: false,
     badge: null,
-    selfServe: true,
   },
   {
     name: 'Project Runner Pro',
+    tierId: 'pro',
     tagline: 'Hosted, ready to go. Best for owners running 5–20 active projects.',
     monthly: '$449/mo',
     setup: '$499 setup',
@@ -55,14 +52,12 @@ const tiers: Tier[] = [
       'We host them. They run on our infra, reachable on web/Telegram/whatever surface.',
       'Basic integrations wired (calendar, email read, file access). No fine-tuning. Shared base prompts.',
     ],
-    cta: 'Get Started',
-    ctaHref: '/signup?tier=pro',
     highlight: true,
     badge: 'Most Popular',
-    selfServe: true,
   },
   {
     name: 'OpenClaw Operator',
+    tierId: 'operator',
     tagline: 'Project Runner + Email + CRM + a vertical template tuned to your industry.',
     monthly: '$1,799/mo',
     setup: '$2,500 setup',
@@ -72,13 +67,12 @@ const tiers: Tier[] = [
       'Email agent sends/receives on your domain. CRM agent reads/writes your CRM. Execs read the office agents\' output and report to you.',
       'Same base models, configured — not trained — on your business.',
     ],
-    cta: 'Talk to Us',
-    ctaHref: '/questionnaire?tier=operator',
     highlight: false,
     badge: null,
   },
   {
     name: 'OpenClaw Command',
+    tierId: 'command',
     tagline: 'Your full AI Company — 4 execs + 5 office roles, fine-tuned to your business. White-glove onboarding.',
     monthly: '$5,500/mo',
     setup: '$7,500 setup',
@@ -88,8 +82,6 @@ const tiers: Tier[] = [
       'Office agents act in your tools (email, CRM, books, ATS, support inbox). Execs read across all of it and run weekly/daily ops loops.',
       'Custom integrations built per client.',
     ],
-    cta: 'Apply',
-    ctaHref: '/questionnaire?tier=command',
     highlight: false,
     badge: 'Flagship',
   },
@@ -200,26 +192,23 @@ export default function PricingPage() {
 
                 <div className="flex-1" />
 
-                <Link
-                  href={tier.ctaHref}
-                  className={`text-center py-3 px-6 rounded-lg text-sm font-semibold transition-all mt-6 ${
+                <OpenChatButton
+                  tier={tier.tierId}
+                  className={`w-full text-center py-3 px-6 rounded-lg text-sm font-semibold transition-all mt-6 ${
                     tier.highlight
                       ? 'btn-primary'
                       : 'border border-[#6c5ce7]/40 text-[#a29bfe] hover:border-[#6c5ce7] hover:bg-[#6c5ce7]/10'
                   }`}
                 >
-                  {tier.cta}
-                </Link>
-                {tier.selfServe && (
-                  <p className="text-center text-xs text-[#555577] mt-3">
-                    Need help picking?{' '}
-                    <OpenContactButton
-                      className="text-[#a29bfe] hover:text-white transition-colors underline underline-offset-2 bg-transparent border-none cursor-pointer text-xs p-0"
-                    >
-                      Talk to us
-                    </OpenContactButton>
-                  </p>
-                )}
+                  Chat with Zyph
+                </OpenChatButton>
+                <p className="text-center text-xs text-[#555577] mt-3">
+                  <OpenContactButton
+                    className="text-[#a29bfe] hover:text-white transition-colors underline underline-offset-2 bg-transparent border-none cursor-pointer text-xs p-0"
+                  >
+                    or send us a note →
+                  </OpenContactButton>
+                </p>
               </div>
             ))}
           </div>
@@ -285,11 +274,11 @@ export default function PricingPage() {
             Operator and Command are application-only because we tune them to your business.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Link href="/signup?tier=starter" className="btn-primary text-base px-10 py-4 inline-block">
-              Get Started →
-            </Link>
+            <OpenChatButton className="btn-primary text-base px-10 py-4">
+              Chat with Zyph →
+            </OpenChatButton>
             <OpenContactButton className="btn-secondary text-base px-10 py-4">
-              Talk to us →
+              Contact us →
             </OpenContactButton>
           </div>
         </div>

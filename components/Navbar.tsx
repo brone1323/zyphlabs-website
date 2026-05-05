@@ -3,12 +3,12 @@
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import { useContactModal } from './ContactModalProvider'
+import { useChatWidget } from './ChatWidgetProvider'
 
 const navLinks = [
   { href: '/project-runner', label: 'Project Runner' },
   { href: '/pricing', label: 'Pricing' },
   { href: '/services', label: 'Services' },
-  { href: '/portfolio', label: 'Portfolio' },
   { href: '/how-it-works', label: 'How It Works' },
 ]
 
@@ -16,6 +16,7 @@ export default function Navbar() {
   const [scrolled, setScrolled] = useState(false)
   const [mobileOpen, setMobileOpen] = useState(false)
   const { openModal } = useContactModal()
+  const { openWidget } = useChatWidget()
 
   useEffect(() => {
     const handler = () => setScrolled(window.scrollY > 20)
@@ -97,9 +98,13 @@ export default function Navbar() {
             >
               Contact
             </button>
-            <Link href="/signup?tier=starter" className="btn-primary text-sm px-5 py-2.5">
-              Get Started
-            </Link>
+            <button
+              type="button"
+              onClick={() => openWidget()}
+              className="btn-primary text-sm px-5 py-2.5"
+            >
+              Chat with Zyph
+            </button>
           </div>
 
           {/* Mobile hamburger */}
@@ -170,13 +175,13 @@ export default function Navbar() {
           >
             Contact
           </button>
-          <Link
-            href="/signup?tier=starter"
-            onClick={() => setMobileOpen(false)}
-            className="btn-primary text-sm block mt-3 text-center"
+          <button
+            type="button"
+            onClick={() => { openWidget(); setMobileOpen(false) }}
+            className="btn-primary text-sm block w-full mt-3 text-center"
           >
-            Get Started
-          </Link>
+            Chat with Zyph
+          </button>
         </div>
       </div>
     </nav>

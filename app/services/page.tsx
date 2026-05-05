@@ -1,6 +1,7 @@
 import Link from 'next/link'
 import type { Metadata } from 'next'
 import { MessageSquareIcon, GitBranchIcon, ZapIcon, WrenchIcon } from '@/components/icons'
+import OpenChatButton from '@/components/OpenChatButton'
 import OpenContactButton from '@/components/OpenContactButton'
 
 export const metadata: Metadata = {
@@ -205,9 +206,9 @@ export default function ServicesPage() {
                     </h4>
                     <p className="text-sm text-[#a29bfe] mb-4">{cap.subhead}</p>
                     <p className="text-sm text-[#8888aa] leading-relaxed mb-8">{cap.body}</p>
-                    <OpenContactButton className="inline-block border border-[#6c5ce7]/40 text-[#a29bfe] hover:border-[#6c5ce7] hover:bg-[#6c5ce7]/10 py-2.5 px-6 rounded-lg text-sm font-semibold transition-all bg-transparent cursor-pointer">
-                      {cap.cta}
-                    </OpenContactButton>
+                    <OpenChatButton className="inline-block border border-[#6c5ce7]/40 text-[#a29bfe] hover:border-[#6c5ce7] hover:bg-[#6c5ce7]/10 py-2.5 px-6 rounded-lg text-sm font-semibold transition-all bg-transparent cursor-pointer">
+                      Chat with Zyph
+                    </OpenChatButton>
                   </div>
                 </div>
               </div>
@@ -280,11 +281,11 @@ export default function ServicesPage() {
             Starter and Pro are self-serve — sign up and we&apos;ll have your team running this week.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Link href="/signup?tier=starter" className="btn-primary text-base px-10 py-4 inline-block">
-              Get Started
-            </Link>
+            <OpenChatButton className="btn-primary text-base px-10 py-4">
+              Chat with Zyph
+            </OpenChatButton>
             <OpenContactButton className="btn-secondary text-base px-10 py-4">
-              Talk to us →
+              Contact us →
             </OpenContactButton>
           </div>
         </div>

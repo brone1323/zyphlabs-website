@@ -2,6 +2,7 @@ import Link from 'next/link'
 import Hero from '@/components/Hero'
 import OrgChart from '@/components/OrgChart'
 import OpenContactButton from '@/components/OpenContactButton'
+import OpenChatButton from '@/components/OpenChatButton'
 import {
   ClockIcon,
   LayersIcon,
@@ -20,6 +21,7 @@ import {
 const pricingTiers = [
   {
     name: 'Project Runner Starter',
+    tierId: 'starter',
     tagline: 'Bring your own Claude Desktop. Best for solo operators.',
     price: '$129',
     priceNote: '$0 setup',
@@ -28,13 +30,11 @@ const pricingTiers = [
       'Runs in your Claude Desktop. You install it, you log in, you launch it.',
       'No hosting, no integrations wired by us. Agent talks to you; you copy/paste into your tools.',
     ],
-    cta: 'Get Started',
-    ctaHref: '/signup?tier=starter',
-    selfServe: true,
     highlight: false,
   },
   {
     name: 'Project Runner Pro',
+    tierId: 'pro',
     tagline: 'Hosted, ready to go. Best for owners running 5–20 active projects.',
     price: '$449',
     priceNote: '$499 setup',
@@ -43,13 +43,11 @@ const pricingTiers = [
       'We host them. They run on our infra, reachable on web/Telegram/whatever surface.',
       'Basic integrations wired (calendar, email read, file access). No fine-tuning. Shared base prompts.',
     ],
-    cta: 'Get Started',
-    ctaHref: '/signup?tier=pro',
-    selfServe: true,
     highlight: false,
   },
   {
     name: 'OpenClaw Operator',
+    tierId: 'operator',
     tagline: 'Project Runner + Email + CRM + a vertical template tuned to your industry.',
     price: '$1,799',
     priceNote: '$2,500 setup',
@@ -59,13 +57,11 @@ const pricingTiers = [
       'Email agent sends/receives on your domain. CRM agent reads/writes your CRM. Execs read the office agents\' output and report to you.',
       'Same base models, configured — not trained — on your business.',
     ],
-    cta: 'Talk to Us',
-    ctaHref: '/questionnaire?tier=operator',
-    selfServe: false,
     highlight: true,
   },
   {
     name: 'OpenClaw Command',
+    tierId: 'command',
     tagline: 'Your full AI Company — 4 execs + 5 office roles, fine-tuned to your business.',
     price: '$5,500',
     priceNote: '$7,500 setup',
@@ -75,9 +71,6 @@ const pricingTiers = [
       'Office agents act in your tools (email, CRM, books, ATS, support inbox). Execs read across all of it and run weekly/daily ops loops.',
       'Custom integrations built per client.',
     ],
-    cta: 'Apply',
-    ctaHref: '/questionnaire?tier=command',
-    selfServe: false,
     highlight: false,
     badge: 'Flagship',
   },
@@ -418,23 +411,20 @@ export default function HomePage() {
                   </ul>
                 )}
                 <div className="flex-1" />
-                <Link
-                  href={tier.ctaHref}
-                  className={tier.highlight ? 'btn-primary text-center py-3 px-6 rounded-lg text-sm font-semibold' : 'tier-outline-btn'}
+                <OpenChatButton
+                  tier={tier.tierId}
+                  className={tier.highlight ? 'btn-primary text-center w-full py-3 px-6 rounded-lg text-sm font-semibold' : 'tier-outline-btn w-full'}
                 >
-                  {tier.cta}
-                </Link>
-                {tier.selfServe && (
-                  <p className="text-center text-xs mt-3" style={{ color: 'var(--text-muted)' }}>
-                    Need help picking?{' '}
-                    <OpenContactButton
-                      className="underline underline-offset-2 transition-colors bg-transparent border-none cursor-pointer p-0 text-xs"
-                      style={{ color: 'var(--accent)' }}
-                    >
-                      Talk to us
-                    </OpenContactButton>
-                  </p>
-                )}
+                  Chat with Zyph
+                </OpenChatButton>
+                <p className="text-center text-xs mt-3" style={{ color: 'var(--text-muted)' }}>
+                  <OpenContactButton
+                    className="underline underline-offset-2 transition-colors bg-transparent border-none cursor-pointer p-0 text-xs"
+                    style={{ color: 'var(--accent)' }}
+                  >
+                    or send us a note →
+                  </OpenContactButton>
+                </p>
               </div>
             ))}
           </div>
@@ -731,9 +721,9 @@ export default function HomePage() {
             Operator and Command are application-only because we tune them to your business.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Link href="/signup?tier=starter" className="btn-primary text-base px-10 py-4 inline-block">
-              Get Started →
-            </Link>
+            <OpenChatButton className="btn-primary text-base px-10 py-4">
+              Chat with Zyph →
+            </OpenChatButton>
             <Link href="/pricing" className="btn-secondary text-base px-10 py-4 inline-block">
               View All Tiers
             </Link>

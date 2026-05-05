@@ -2,8 +2,12 @@
 
 import { useEffect, useRef } from 'react'
 import Link from 'next/link'
+import { useChatWidget } from './ChatWidgetProvider'
+import { useContactModal } from './ContactModalProvider'
 
 export default function Hero() {
+  const { openWidget } = useChatWidget()
+  const { openModal } = useContactModal()
   const heroRef = useRef<HTMLElement>(null)
   const glowRef = useRef<HTMLDivElement>(null)
 
@@ -132,12 +136,20 @@ export default function Hero() {
 
             {/* CTAs */}
             <div className="flex flex-col sm:flex-row gap-4 animate-fadeInUp delay-300">
-              <Link href="/signup?tier=starter" className="btn-primary text-base px-8 py-4 w-full sm:w-auto">
-                Get Started
-              </Link>
-              <Link href="/project-runner" className="btn-secondary text-base px-8 py-4 w-full sm:w-auto">
-                See Project Runner →
-              </Link>
+              <button
+                type="button"
+                onClick={() => openWidget()}
+                className="btn-primary text-base px-8 py-4 w-full sm:w-auto"
+              >
+                Chat with Zyph
+              </button>
+              <button
+                type="button"
+                onClick={openModal}
+                className="btn-secondary text-base px-8 py-4 w-full sm:w-auto"
+              >
+                Contact
+              </button>
               <Link
                 href="/pricing"
                 className="text-sm px-4 py-4 w-full sm:w-auto flex items-center justify-center sm:justify-start transition-colors"

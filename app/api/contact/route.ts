@@ -39,10 +39,9 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: 'Invalid request body.' }, { status: 400 })
     }
 
-    const { name, email, subject, message, website } = body as {
+    const { name, email, message, website } = body as {
       name?: string
       email?: string
-      subject?: string
       message?: string
       website?: string
     }
@@ -54,7 +53,6 @@ export async function POST(req: NextRequest) {
 
     const nameTrimmed = name?.trim() ?? ''
     const emailTrimmed = email?.trim() ?? ''
-    const subjectTrimmed = subject?.trim() ?? ''
     const messageTrimmed = message?.trim() ?? ''
 
     if (!nameTrimmed || !emailTrimmed || !messageTrimmed) {
@@ -80,8 +78,7 @@ export async function POST(req: NextRequest) {
 
     const text =
       `📨 New Zyph contact-form submission\n\n` +
-      `From: ${escapeHtml(nameTrimmed)} &lt;${escapeHtml(emailTrimmed)}&gt;\n` +
-      `Subject: ${escapeHtml(subjectTrimmed || '(none)')}\n\n` +
+      `From: ${escapeHtml(nameTrimmed)} &lt;${escapeHtml(emailTrimmed)}&gt;\n\n` +
       `${escapeHtml(messageTrimmed)}`
 
     const botToken = process.env.TELEGRAM_BOT_TOKEN
@@ -92,7 +89,6 @@ export async function POST(req: NextRequest) {
         ts: new Date().toISOString(),
         name: nameTrimmed,
         email: emailTrimmed,
-        subject: subjectTrimmed,
         message: messageTrimmed,
       }
       console.log('[contact] Telegram env vars not configured — logging submission:', entry)

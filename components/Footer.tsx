@@ -2,12 +2,12 @@
 
 import Link from 'next/link'
 import { useContactModal } from './ContactModalProvider'
+import { useChatWidget } from './ChatWidgetProvider'
 
 const products = [
   { href: '/project-runner', label: 'Project Runner' },
   { href: '/pricing', label: 'Pricing' },
   { href: '/services', label: 'Services' },
-  { href: '/portfolio', label: 'Portfolio' },
   { href: '/how-it-works', label: 'How It Works' },
   { href: '/tools/proposal-drafter', label: 'Proposal Drafter (Free)' },
 ]
@@ -19,6 +19,7 @@ const companyLinks = [
 
 export default function Footer() {
   const { openModal } = useContactModal()
+  const { openWidget } = useChatWidget()
   return (
     <footer
       style={{
@@ -145,9 +146,13 @@ export default function Footer() {
               Get Started
             </h3>
             <div className="space-y-3">
-              <Link href="/signup?tier=starter" className="btn-primary text-sm block text-center px-5 py-2.5">
-                Get Started →
-              </Link>
+              <button
+                type="button"
+                onClick={() => openWidget()}
+                className="btn-primary text-sm block w-full text-center px-5 py-2.5"
+              >
+                Chat with Zyph →
+              </button>
               <button
                 type="button"
                 onClick={openModal}
@@ -167,7 +172,7 @@ export default function Footer() {
                   e.currentTarget.style.color = 'rgba(255,255,255,0.6)'
                 }}
               >
-                Talk to Us
+                Contact
               </button>
             </div>
           </div>

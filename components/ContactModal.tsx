@@ -2,19 +2,20 @@
 
 import { useEffect, useRef, useState } from 'react'
 import { useContactModal } from './ContactModalProvider'
+import { useChatWidget } from './ChatWidgetProvider'
 
 type FormState = {
   name: string
   email: string
-  subject: string
   message: string
   website: string
 }
 
-const EMPTY: FormState = { name: '', email: '', subject: '', message: '', website: '' }
+const EMPTY: FormState = { name: '', email: '', message: '', website: '' }
 
 export default function ContactModal() {
   const { open, closeModal } = useContactModal()
+  const { openWidget } = useChatWidget()
   const [form, setForm] = useState<FormState>(EMPTY)
   const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle')
   const [errorMsg, setErrorMsg] = useState('')
@@ -114,7 +115,7 @@ export default function ContactModal() {
         </button>
 
         {status === 'success' ? (
-          <div className="text-center py-8">
+          <div className="text-center py-6">
             <div
               className="w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-5"
               style={{ background: 'rgba(87,161,72,0.12)', border: '1.5px solid rgba(87,161,72,0.3)' }}
@@ -127,9 +128,16 @@ export default function ContactModal() {
             >
               Message sent
             </h3>
-            <p className="text-sm" style={{ color: 'var(--text-muted)' }}>
+            <p className="text-sm mb-6" style={{ color: 'var(--text-muted)' }}>
               Thanks — we&apos;ll be in touch within 24 hours.
             </p>
+            <button
+              type="button"
+              onClick={() => { handleClose(); openWidget() }}
+              className="btn-primary w-full text-sm py-2.5"
+            >
+              Want answers right now? Chat with Zyph →
+            </button>
           </div>
         ) : (
           <>
@@ -196,25 +204,6 @@ export default function ContactModal() {
                 />
               </div>
 
-              {/* Subject */}
-              <div>
-                <label
-                  className="block text-sm font-medium mb-1.5"
-                  style={{ color: 'var(--text-body)', fontFamily: 'var(--font-body)' }}
-                >
-                  Subject
-                </label>
-                <input
-                  type="text"
-                  value={form.subject}
-                  onChange={(e) => setForm({ ...form, subject: e.target.value })}
-                  className="w-full px-4 py-2.5 rounded-lg text-sm outline-none transition-all"
-                  style={inputStyle}
-                  onFocus={(e) => (e.currentTarget.style.borderColor = 'var(--accent)')}
-                  onBlur={(e) => (e.currentTarget.style.borderColor = 'var(--border)')}
-                />
-              </div>
-
               {/* Message */}
               <div>
                 <label
@@ -229,6 +218,7 @@ export default function ContactModal() {
                   required
                   minLength={10}
                   rows={4}
+                  placeholder="What are you trying to fix? We'll get back fast."
                   className="w-full px-4 py-2.5 rounded-lg text-sm outline-none transition-all resize-none"
                   style={inputStyle}
                   onFocus={(e) => (e.currentTarget.style.borderColor = 'var(--accent)')}
