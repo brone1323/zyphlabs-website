@@ -1,4 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
+import type { NextFetchEvent } from 'next/server'
+import { trackPageView } from '@/lib/analytics-track'
 
 const WALKTHROUGH_HTML = `<!DOCTYPE html>
 <html lang="en">
@@ -18,8 +20,16 @@ const WALKTHROUGH_HTML = `<!DOCTYPE html>
 </body>
 </html>`
 
-export function middleware(req: NextRequest) {
+export function middleware(req: NextRequest, event: NextFetchEvent) {
   if (req.nextUrl.pathname === '/project-runner') {
+    const ip = req.headers.get('x-forwarded-for')?.split(',')[0]?.trim() || 'unknown'
+    const ua = req.headers.get('user-agent') || ''
+    const referrer = req.headers.get('referer') || 'direct'
+
+    event.waitUntil(
+      trackPageView({ path: '/project-runner', referrer, ip, userAgent: ua })
+    )
+
     return new NextResponse(WALKTHROUGH_HTML, {
       headers: { 'content-type': 'text/html; charset=utf-8' },
     })
