@@ -11,11 +11,5 @@ const nextConfig = {
       { source: '/portfolio/:path*', destination: '/', permanent: false },
     ]
   },
-  async rewrites() {
-    return [
-      { source: '/project-runner', destination: 'https://project-runner-tau.vercel.app/demo/walkthrough' },
-      { source: '/project-runner/:path*', destination: 'https://project-runner-tau.vercel.app/demo/walkthrough/:path*' },
-    ]
-  },
 }
 module.exports = nextConfig
