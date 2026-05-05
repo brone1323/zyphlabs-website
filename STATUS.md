@@ -1,5 +1,76 @@
 # STATUS — Zyph Labs v2 Repositioning
 
+**Build date:** 2026-05-05 (Round 4)
+**Branch:** v2-repositioning
+**Commit:** 3b893b9
+**Vercel preview:** https://zyphlabs-website-3lgzpjdo6-solar-devs-projects.vercel.app
+**Build:** TS clean, 38 pages, Vercel green
+
+---
+
+## Round 4 — Contact-form modal + pricing bullets + Talk-to-Us reroute (2026-05-05)
+
+### Changes
+
+**CHANGE 1 — Pricing tier bullets** — All 4 tiers (Starter/Pro/Operator/Command) now show 3–4 bullet descriptions on both `/pricing` and homepage pricing section. No `[BRIAN-FOLLOWUP]` placeholders remain for these tiers.
+
+**CHANGE 2 — "Talk to Us" reroute** — Footer "Talk to Us" button, Services capability "Talk to Us →" links (all 4 pillars), Services bottom CTA, Pricing bottom CTA, and self-serve "Need help picking? Talk to us" helpers all open the contact-form modal. Operator + Command tier CTAs (`/questionnaire?tier=operator` / `?tier=command`) **left untouched**.
+
+**CHANGE 3 — Contact-form modal** — `ContactModal` + `ContactModalProvider` added to root layout. Nav gets a "Contact" secondary button. Footer Company column gets "Contact" + "Talk to Us" buttons (mailto kept in bottom bar). Modal: Name/Email/Subject/Message, honeypot, 30s/IP rate-limit, Esc/backdrop/X dismiss, loading state, success auto-close 3s, inline error.
+
+**`/api/contact`** — POST, server-side validation, HTML-escaped Telegram delivery; fallback log+200 when env vars absent so preview works immediately.
+
+### Files changed
+
+- `app/api/contact/route.ts` — new
+- `app/layout.tsx` — ContactModalProvider + ContactModal
+- `app/page.tsx` — pricing bullets + modal CTAs
+- `app/pricing/page.tsx` — pricing bullets + modal CTAs
+- `app/services/page.tsx` — modal CTAs
+- `components/ContactModal.tsx` — new
+- `components/ContactModalProvider.tsx` — new
+- `components/OpenContactButton.tsx` — new
+- `components/Navbar.tsx` — Contact button
+- `components/Footer.tsx` — modal buttons
+
+### BRIAN-FOLLOWUP — Contact form Telegram setup
+
+Form works in preview right now (submissions log to server console). To activate Telegram delivery, Brian needs to:
+
+**Step 1 — Create bot via BotFather**
+1. Telegram → search `@BotFather` → `/newbot`
+2. Name: e.g. `Zyph Contact Bot`, username: e.g. `ZyphContactBot`
+3. BotFather gives a token: `123456789:ABC-DEF...` → that is `TELEGRAM_BOT_TOKEN`
+
+**Step 2 — Get your Chat ID**
+1. Send any message to the new bot
+2. Visit: `https://api.telegram.org/bot<TOKEN>/getUpdates`
+3. Find `"chat":{"id":XXXXXXXX}` → that number is `TELEGRAM_CHAT_ID`
+
+**Step 3 — Set Vercel env vars**
+In Vercel dashboard → Settings → Environment Variables:
+
+| Variable | Example |
+|---|---|
+| `TELEGRAM_BOT_TOKEN` | `123456789:ABC-DEF1234ghIkl-zyx57W2v1u123ew11` |
+| `TELEGRAM_CHAT_ID` | `987654321` (your personal or group ID) |
+
+Set both on All Environments (or Production + Preview minimum).
+
+**What the message looks like:**
+```
+📨 New Zyph contact-form submission
+
+From: Jane Smith <jane@example.com>
+Subject: Interested in OpenClaw Operator
+
+Hi, I run a 10-person plumbing company and want to learn more...
+```
+
+---
+
+## Previous builds
+
 **Build date:** 2026-05-04  
 **Branch:** v2-repositioning  
 **Vercel preview:** https://zyphlabs-website-h8scbykxb-solar-devs-projects.vercel.app  
