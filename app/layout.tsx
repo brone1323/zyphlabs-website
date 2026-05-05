@@ -5,6 +5,8 @@ import Footer from '@/components/Footer'
 import SaleBanner from '@/components/SaleBanner'
 import AnalyticsTracker from '@/components/AnalyticsTracker'
 import GlobalReveal from '@/components/GlobalReveal'
+import { ContactModalProvider } from '@/components/ContactModalProvider'
+import ContactModal from '@/components/ContactModal'
 
 export const metadata: Metadata = {
   title: 'Zyph Labs — Run Your Business on an AI Company',
@@ -36,11 +38,14 @@ export default function RootLayout({
         />
       </head>
       <body>
-        <div className="noise-overlay" aria-hidden="true" />
-        <SaleBanner />
-        <Navbar />
-        <main>{children}</main>
-        <Footer />
+        <ContactModalProvider>
+          <div className="noise-overlay" aria-hidden="true" />
+          <SaleBanner />
+          <Navbar />
+          <main>{children}</main>
+          <Footer />
+          <ContactModal />
+        </ContactModalProvider>
         <AnalyticsTracker />
         <GlobalReveal />
       </body>

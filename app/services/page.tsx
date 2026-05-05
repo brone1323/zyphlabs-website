@@ -1,6 +1,7 @@
 import Link from 'next/link'
 import type { Metadata } from 'next'
 import { MessageSquareIcon, GitBranchIcon, ZapIcon, WrenchIcon } from '@/components/icons'
+import OpenContactButton from '@/components/OpenContactButton'
 
 export const metadata: Metadata = {
   title: 'Services — AI Executive Team Capabilities | Zyph Labs',
@@ -204,12 +205,9 @@ export default function ServicesPage() {
                     </h4>
                     <p className="text-sm text-[#a29bfe] mb-4">{cap.subhead}</p>
                     <p className="text-sm text-[#8888aa] leading-relaxed mb-8">{cap.body}</p>
-                    <Link
-                      href={cap.ctaHref}
-                      className="inline-block border border-[#6c5ce7]/40 text-[#a29bfe] hover:border-[#6c5ce7] hover:bg-[#6c5ce7]/10 py-2.5 px-6 rounded-lg text-sm font-semibold transition-all"
-                    >
+                    <OpenContactButton className="inline-block border border-[#6c5ce7]/40 text-[#a29bfe] hover:border-[#6c5ce7] hover:bg-[#6c5ce7]/10 py-2.5 px-6 rounded-lg text-sm font-semibold transition-all bg-transparent cursor-pointer">
                       {cap.cta}
-                    </Link>
+                    </OpenContactButton>
                   </div>
                 </div>
               </div>
@@ -285,9 +283,9 @@ export default function ServicesPage() {
             <Link href="/signup?tier=starter" className="btn-primary text-base px-10 py-4 inline-block">
               Get Started
             </Link>
-            <Link href="/questionnaire" className="btn-secondary text-base px-10 py-4 inline-block">
+            <OpenContactButton className="btn-secondary text-base px-10 py-4">
               Talk to us →
-            </Link>
+            </OpenContactButton>
           </div>
         </div>
       </section>

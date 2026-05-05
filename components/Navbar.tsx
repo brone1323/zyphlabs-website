@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
+import { useContactModal } from './ContactModalProvider'
 
 const navLinks = [
   { href: '/project-runner', label: 'Project Runner' },
@@ -14,6 +15,7 @@ const navLinks = [
 export default function Navbar() {
   const [scrolled, setScrolled] = useState(false)
   const [mobileOpen, setMobileOpen] = useState(false)
+  const { openModal } = useContactModal()
 
   useEffect(() => {
     const handler = () => setScrolled(window.scrollY > 20)
@@ -77,10 +79,28 @@ export default function Navbar() {
             ))}
           </div>
 
-          {/* CTA */}
-          <Link href="/signup?tier=starter" className="hidden lg:inline-block btn-primary text-sm px-5 py-2.5">
-            Get Started
-          </Link>
+          {/* CTAs */}
+          <div className="hidden lg:flex items-center gap-3">
+            <button
+              type="button"
+              onClick={openModal}
+              className="text-sm px-4 py-2.5 rounded-lg transition-all"
+              style={{ color: 'var(--text-muted)', border: '1.5px solid var(--border)' }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.borderColor = 'var(--border-accent)'
+                e.currentTarget.style.color = 'var(--accent)'
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.borderColor = 'var(--border)'
+                e.currentTarget.style.color = 'var(--text-muted)'
+              }}
+            >
+              Contact
+            </button>
+            <Link href="/signup?tier=starter" className="btn-primary text-sm px-5 py-2.5">
+              Get Started
+            </Link>
+          </div>
 
           {/* Mobile hamburger */}
           <button
@@ -143,10 +163,17 @@ export default function Navbar() {
               {link.label}
             </Link>
           ))}
+          <button
+            type="button"
+            onClick={() => { openModal(); setMobileOpen(false) }}
+            className="btn-secondary text-sm block w-full mt-4 text-center"
+          >
+            Contact
+          </button>
           <Link
             href="/signup?tier=starter"
             onClick={() => setMobileOpen(false)}
-            className="btn-primary text-sm block mt-4 text-center"
+            className="btn-primary text-sm block mt-3 text-center"
           >
             Get Started
           </Link>

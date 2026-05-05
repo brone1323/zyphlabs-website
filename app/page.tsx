@@ -1,6 +1,7 @@
 import Link from 'next/link'
 import Hero from '@/components/Hero'
 import OrgChart from '@/components/OrgChart'
+import OpenContactButton from '@/components/OpenContactButton'
 import {
   ClockIcon,
   LayersIcon,
@@ -22,6 +23,11 @@ const pricingTiers = [
     tagline: 'Bring your own Claude Desktop. Best for solo operators.',
     price: '$129',
     priceNote: '$0 setup',
+    bullets: [
+      '1 agent role.',
+      'Runs in your Claude Desktop. You install it, you log in, you launch it.',
+      'No hosting, no integrations wired by us. Agent talks to you; you copy/paste into your tools.',
+    ],
     cta: 'Get Started',
     ctaHref: '/signup?tier=starter',
     selfServe: true,
@@ -32,6 +38,11 @@ const pricingTiers = [
     tagline: 'Hosted, ready to go. Best for owners running 5–20 active projects.',
     price: '$449',
     priceNote: '$499 setup',
+    bullets: [
+      'Up to 3 agent roles.',
+      'We host them. They run on our infra, reachable on web/Telegram/whatever surface.',
+      'Basic integrations wired (calendar, email read, file access). No fine-tuning. Shared base prompts.',
+    ],
     cta: 'Get Started',
     ctaHref: '/signup?tier=pro',
     selfServe: true,
@@ -42,6 +53,12 @@ const pricingTiers = [
     tagline: 'Project Runner + Email + CRM + a vertical template tuned to your industry.',
     price: '$1,799',
     priceNote: '$2,500 setup',
+    bullets: [
+      '4 execs + Email + CRM = 6 roles.',
+      'Hosted by us. Vertical template applied (e.g., construction config for Project Runner).',
+      'Email agent sends/receives on your domain. CRM agent reads/writes your CRM. Execs read the office agents\' output and report to you.',
+      'Same base models, configured — not trained — on your business.',
+    ],
     cta: 'Talk to Us',
     ctaHref: '/questionnaire?tier=operator',
     selfServe: false,
@@ -52,6 +69,12 @@ const pricingTiers = [
     tagline: 'Your full AI Company — 4 execs + 5 office roles, fine-tuned to your business.',
     price: '$5,500',
     priceNote: '$7,500 setup',
+    bullets: [
+      'All 9 roles. Hosted by us.',
+      'Fine-tuned on your data, docs, SOPs, voice.',
+      'Office agents act in your tools (email, CRM, books, ATS, support inbox). Execs read across all of it and run weekly/daily ops loops.',
+      'Custom integrations built per client.',
+    ],
     cta: 'Apply',
     ctaHref: '/questionnaire?tier=command',
     selfServe: false,
@@ -371,10 +394,10 @@ export default function HomePage() {
                 >
                   {tier.name}
                 </h3>
-                <p className="text-xs leading-relaxed mb-4 flex-1" style={{ color: 'var(--text-muted)' }}>
+                <p className="text-xs leading-relaxed mb-4" style={{ color: 'var(--text-muted)' }}>
                   {tier.tagline}
                 </p>
-                <div className="mb-6">
+                <div className="mb-4">
                   <p
                     className="font-bold"
                     style={{ fontFamily: 'var(--font-mono)', fontSize: '20px', color: 'var(--text-heading)' }}
@@ -384,6 +407,17 @@ export default function HomePage() {
                   </p>
                   <p className="text-xs mt-0.5" style={{ color: 'var(--text-muted)' }}>{tier.priceNote}</p>
                 </div>
+                {tier.bullets && tier.bullets.length > 0 && (
+                  <ul className="space-y-1.5 mb-5 flex-1">
+                    {tier.bullets.map((b) => (
+                      <li key={b} className="flex items-start gap-2 text-xs" style={{ color: 'var(--text-muted)' }}>
+                        <span style={{ color: 'var(--accent)', marginTop: '2px', flexShrink: 0 }}>·</span>
+                        {b}
+                      </li>
+                    ))}
+                  </ul>
+                )}
+                <div className="flex-1" />
                 <Link
                   href={tier.ctaHref}
                   className={tier.highlight ? 'btn-primary text-center py-3 px-6 rounded-lg text-sm font-semibold' : 'tier-outline-btn'}
@@ -393,13 +427,12 @@ export default function HomePage() {
                 {tier.selfServe && (
                   <p className="text-center text-xs mt-3" style={{ color: 'var(--text-muted)' }}>
                     Need help picking?{' '}
-                    <Link
-                      href="/questionnaire"
-                      className="underline underline-offset-2 transition-colors"
+                    <OpenContactButton
+                      className="underline underline-offset-2 transition-colors bg-transparent border-none cursor-pointer p-0 text-xs"
                       style={{ color: 'var(--accent)' }}
                     >
                       Talk to us
-                    </Link>
+                    </OpenContactButton>
                   </p>
                 )}
               </div>

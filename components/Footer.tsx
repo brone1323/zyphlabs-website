@@ -1,6 +1,7 @@
 'use client'
 
 import Link from 'next/link'
+import { useContactModal } from './ContactModalProvider'
 
 const products = [
   { href: '/project-runner', label: 'Project Runner' },
@@ -11,13 +12,13 @@ const products = [
   { href: '/tools/proposal-drafter', label: 'Proposal Drafter (Free)' },
 ]
 
-const company = [
+const companyLinks = [
   { href: '/how-it-works', label: 'How It Works' },
-  { href: '/questionnaire', label: 'Talk to Us' },
-  { href: 'mailto:contact@zyphlabs.com', label: 'Contact' },
+  { href: 'mailto:contact@zyphlabs.com', label: 'contact@zyphlabs.com' },
 ]
 
 export default function Footer() {
+  const { openModal } = useContactModal()
   return (
     <footer
       style={{
@@ -95,7 +96,7 @@ export default function Footer() {
               Company
             </h3>
             <ul className="space-y-2.5">
-              {company.map((c) => (
+              {companyLinks.map((c) => (
                 <li key={c.href}>
                   <Link
                     href={c.href}
@@ -108,6 +109,30 @@ export default function Footer() {
                   </Link>
                 </li>
               ))}
+              <li>
+                <button
+                  type="button"
+                  onClick={openModal}
+                  className="text-sm transition-colors text-left"
+                  style={{ color: 'rgba(255,255,255,0.45)', background: 'none', border: 'none', cursor: 'pointer', padding: 0 }}
+                  onMouseEnter={(e) => (e.currentTarget.style.color = 'rgba(255,255,255,0.85)')}
+                  onMouseLeave={(e) => (e.currentTarget.style.color = 'rgba(255,255,255,0.45)')}
+                >
+                  Contact
+                </button>
+              </li>
+              <li>
+                <button
+                  type="button"
+                  onClick={openModal}
+                  className="text-sm transition-colors text-left"
+                  style={{ color: 'rgba(255,255,255,0.45)', background: 'none', border: 'none', cursor: 'pointer', padding: 0 }}
+                  onMouseEnter={(e) => (e.currentTarget.style.color = 'rgba(255,255,255,0.85)')}
+                  onMouseLeave={(e) => (e.currentTarget.style.color = 'rgba(255,255,255,0.45)')}
+                >
+                  Talk to Us
+                </button>
+              </li>
             </ul>
           </div>
 
@@ -123,12 +148,15 @@ export default function Footer() {
               <Link href="/signup?tier=starter" className="btn-primary text-sm block text-center px-5 py-2.5">
                 Get Started →
               </Link>
-              <Link
-                href="/questionnaire"
-                className="block text-center text-sm py-2.5 px-5 rounded-lg transition-all"
+              <button
+                type="button"
+                onClick={openModal}
+                className="block w-full text-center text-sm py-2.5 px-5 rounded-lg transition-all"
                 style={{
                   color: 'rgba(255,255,255,0.6)',
                   border: '1.5px solid rgba(255,255,255,0.12)',
+                  background: 'transparent',
+                  cursor: 'pointer',
                 }}
                 onMouseEnter={(e) => {
                   e.currentTarget.style.borderColor = 'rgba(255,255,255,0.25)'
@@ -140,7 +168,7 @@ export default function Footer() {
                 }}
               >
                 Talk to Us
-              </Link>
+              </button>
             </div>
           </div>
         </div>

@@ -1,5 +1,6 @@
 import Link from 'next/link'
 import type { Metadata } from 'next'
+import OpenContactButton from '@/components/OpenContactButton'
 
 export const metadata: Metadata = {
   title: 'Pricing — AI Executive Team Tiers | Zyph Labs',
@@ -33,7 +34,11 @@ const tiers: Tier[] = [
     monthly: '$129/mo',
     setup: '$0 setup',
     disclosure: 'Requires Claude Pro or Max subscription (~$100–200/mo, billed by Anthropic).',
-    bullets: [],
+    bullets: [
+      '1 agent role.',
+      'Runs in your Claude Desktop. You install it, you log in, you launch it.',
+      'No hosting, no integrations wired by us. Agent talks to you; you copy/paste into your tools.',
+    ],
     cta: 'Get Started',
     ctaHref: '/signup?tier=starter',
     highlight: false,
@@ -45,7 +50,11 @@ const tiers: Tier[] = [
     tagline: 'Hosted, ready to go. Best for owners running 5–20 active projects.',
     monthly: '$449/mo',
     setup: '$499 setup',
-    bullets: [],
+    bullets: [
+      'Up to 3 agent roles.',
+      'We host them. They run on our infra, reachable on web/Telegram/whatever surface.',
+      'Basic integrations wired (calendar, email read, file access). No fine-tuning. Shared base prompts.',
+    ],
     cta: 'Get Started',
     ctaHref: '/signup?tier=pro',
     highlight: true,
@@ -57,7 +66,12 @@ const tiers: Tier[] = [
     tagline: 'Project Runner + Email + CRM + a vertical template tuned to your industry.',
     monthly: '$1,799/mo',
     setup: '$2,500 setup',
-    bullets: [],
+    bullets: [
+      '4 execs + Email + CRM = 6 roles.',
+      'Hosted by us. Vertical template applied (e.g., construction config for Project Runner).',
+      'Email agent sends/receives on your domain. CRM agent reads/writes your CRM. Execs read the office agents\' output and report to you.',
+      'Same base models, configured — not trained — on your business.',
+    ],
     cta: 'Talk to Us',
     ctaHref: '/questionnaire?tier=operator',
     highlight: false,
@@ -68,7 +82,12 @@ const tiers: Tier[] = [
     tagline: 'Your full AI Company — 4 execs + 5 office roles, fine-tuned to your business. White-glove onboarding.',
     monthly: '$5,500/mo',
     setup: '$7,500 setup',
-    bullets: [],
+    bullets: [
+      'All 9 roles. Hosted by us.',
+      'Fine-tuned on your data, docs, SOPs, voice.',
+      'Office agents act in your tools (email, CRM, books, ATS, support inbox). Execs read across all of it and run weekly/daily ops loops.',
+      'Custom integrations built per client.',
+    ],
     cta: 'Apply',
     ctaHref: '/questionnaire?tier=command',
     highlight: false,
@@ -194,9 +213,11 @@ export default function PricingPage() {
                 {tier.selfServe && (
                   <p className="text-center text-xs text-[#555577] mt-3">
                     Need help picking?{' '}
-                    <Link href="/questionnaire" className="text-[#a29bfe] hover:text-white transition-colors underline underline-offset-2">
+                    <OpenContactButton
+                      className="text-[#a29bfe] hover:text-white transition-colors underline underline-offset-2 bg-transparent border-none cursor-pointer text-xs p-0"
+                    >
                       Talk to us
-                    </Link>
+                    </OpenContactButton>
                   </p>
                 )}
               </div>
@@ -267,9 +288,9 @@ export default function PricingPage() {
             <Link href="/signup?tier=starter" className="btn-primary text-base px-10 py-4 inline-block">
               Get Started →
             </Link>
-            <Link href="/questionnaire" className="btn-secondary text-base px-10 py-4 inline-block">
+            <OpenContactButton className="btn-secondary text-base px-10 py-4">
               Talk to us →
-            </Link>
+            </OpenContactButton>
           </div>
         </div>
       </section>
