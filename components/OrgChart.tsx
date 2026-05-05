@@ -198,7 +198,7 @@ export default function OrgChart() {
 
         {/* Title (exec only) */}
         {title && (
-          <p className="text-xs text-[#a29bfe] mb-2">{title}</p>
+          <p className="text-xs mb-2" style={{ color: 'var(--text-muted)' }}>{title}</p>
         )}
 
         {/* Description — always in DOM (preserves height), opacity reveals on interaction */}
@@ -228,18 +228,24 @@ export default function OrgChart() {
   return (
     <section className="py-24 px-4 sm:px-6 max-w-7xl mx-auto">
       <div className="text-center mb-16">
-        <p className="text-[#6c5ce7] text-sm font-semibold uppercase tracking-widest mb-3">
+        <p className="eyebrow mb-3">
           Meet Your AI Company
         </p>
         <h2
-          className="text-4xl md:text-5xl font-bold text-white mb-4"
-          style={{ fontFamily: 'Space Grotesk, sans-serif' }}
+          className="mb-4"
+          style={{
+            fontFamily: 'var(--font-display)',
+            fontSize: 'clamp(32px, 4vw, 52px)',
+            fontWeight: 500,
+            letterSpacing: '-0.02em',
+            color: 'var(--text-heading)',
+          }}
         >
           Two teams. One company.
           <br />
           <span className="gradient-text">Running your business.</span>
         </h2>
-        <p className="text-[#8888aa] max-w-xl mx-auto">
+        <p style={{ color: 'var(--text-muted)', maxWidth: '44ch', margin: '0 auto' }}>
           An executive team to decide. An office team to do the work. Nine roles, one integrated AI company.
         </p>
       </div>
@@ -247,7 +253,10 @@ export default function OrgChart() {
       <div ref={sectionRef} className="grid grid-cols-1 lg:grid-cols-2 gap-16">
         {/* Executive Team */}
         <div>
-          <p className="text-xs font-bold uppercase tracking-widest text-[#a29bfe] mb-6 pb-4 border-b border-[#6c5ce7]/20">
+          <p
+            className="text-xs font-semibold uppercase tracking-widest mb-6 pb-4"
+            style={{ color: '#C76548', borderBottom: '1px solid rgba(199,101,72,0.18)' }}
+          >
             EXECUTIVE TEAM — they decide
           </p>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -255,7 +264,7 @@ export default function OrgChart() {
               <Card
                 key={m.role}
                 {...m}
-                accentColor="#6c5ce7"
+                accentColor="#C76548"
                 delay={i * STAGGER}
               />
             ))}
@@ -264,7 +273,10 @@ export default function OrgChart() {
 
         {/* Office Team */}
         <div>
-          <p className="text-xs font-bold uppercase tracking-widest text-[#00cec9] mb-6 pb-4 border-b border-[#00cec9]/20">
+          <p
+            className="text-xs font-semibold uppercase tracking-widest mb-6 pb-4"
+            style={{ color: '#8C6F47', borderBottom: '1px solid rgba(140,111,71,0.18)' }}
+          >
             OFFICE TEAM — they do the work
           </p>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -272,7 +284,7 @@ export default function OrgChart() {
               <Card
                 key={m.role}
                 {...m}
-                accentColor="#00cec9"
+                accentColor="#8C6F47"
                 delay={(executiveTeam.length + i) * STAGGER}
               />
             ))}

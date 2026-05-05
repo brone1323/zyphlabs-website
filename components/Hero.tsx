@@ -4,213 +4,304 @@ import { useEffect, useRef } from 'react'
 import Link from 'next/link'
 
 export default function Hero() {
-  const canvasRef = useRef<HTMLCanvasElement>(null)
+  const heroRef = useRef<HTMLElement>(null)
+  const glowRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
-    let animationId: number
-    let mouseX = 0
-    let mouseY = 0
+    const hero = heroRef.current
+    const glow = glowRef.current
+    if (!hero || !glow) return
+
+    const mq = window.matchMedia('(prefers-reduced-motion: reduce)')
+    const noHover = window.matchMedia('(hover: none)')
+
+    if (mq.matches) return
+
+    if (noHover.matches) {
+      // Auto-drift for touch: gentle sine/cosine loop, 12s cycle
+      let angle = 0
+      const id = setInterval(() => {
+        angle += (2 * Math.PI) / 120 // 120 ticks × 100ms = 12s cycle
+        const x = 50 + 18 * Math.cos(angle)
+        const y = 35 + 12 * Math.sin(angle * 0.7)
+        glow.style.background = `radial-gradient(circle at ${x.toFixed(1)}% ${y.toFixed(1)}%, rgba(199,101,72,0.10) 0%, transparent 65%)`
+      }, 100)
+      return () => clearInterval(id)
+    }
 
     const onMouse = (e: MouseEvent) => {
-      mouseX = (e.clientX / window.innerWidth - 0.5) * 0.8
-      mouseY = (e.clientY / window.innerHeight - 0.5) * 0.4
-    }
-    window.addEventListener('mousemove', onMouse)
-
-    const initThree = async () => {
-      const THREE = await import('three')
-      const canvas = canvasRef.current
-      if (!canvas) return
-
-      const renderer = new THREE.WebGLRenderer({ canvas, alpha: true, antialias: true })
-      renderer.setSize(window.innerWidth, window.innerHeight)
-      renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
-
-      const scene = new THREE.Scene()
-      const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000)
-      camera.position.z = 90
-
-      // Create particles
-      const count = 3500
-      const positions = new Float32Array(count * 3)
-      const colors = new Float32Array(count * 3)
-
-      const palette = [
-        new THREE.Color('#6c5ce7'),
-        new THREE.Color('#00cec9'),
-        new THREE.Color('#0984e3'),
-        new THREE.Color('#a29bfe'),
-        new THREE.Color('#4a3db5'),
-      ]
-
-      for (let i = 0; i < count; i++) {
-        const r = 80 + Math.random() * 80
-        const theta = Math.random() * Math.PI * 2
-        const phi = Math.acos(2 * Math.random() - 1)
-
-        positions[i * 3] = r * Math.sin(phi) * Math.cos(theta)
-        positions[i * 3 + 1] = r * Math.sin(phi) * Math.sin(theta)
-        positions[i * 3 + 2] = r * Math.cos(phi)
-
-        const c = palette[Math.floor(Math.random() * palette.length)]
-        colors[i * 3] = c.r
-        colors[i * 3 + 1] = c.g
-        colors[i * 3 + 2] = c.b
-      }
-
-      const geometry = new THREE.BufferGeometry()
-      geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3))
-      geometry.setAttribute('color', new THREE.BufferAttribute(colors, 3))
-
-      const material = new THREE.PointsMaterial({
-        size: 0.6,
-        vertexColors: true,
-        transparent: true,
-        opacity: 0.75,
-        sizeAttenuation: true,
-      })
-
-      const particles = new THREE.Points(geometry, material)
-      scene.add(particles)
-
-      // Ambient glow sphere
-      const glowGeo = new THREE.SphereGeometry(20, 32, 32)
-      const glowMat = new THREE.MeshBasicMaterial({
-        color: new THREE.Color('#6c5ce7'),
-        transparent: true,
-        opacity: 0.03,
-      })
-      const glowSphere = new THREE.Mesh(glowGeo, glowMat)
-      scene.add(glowSphere)
-
-      const onResize = () => {
-        camera.aspect = window.innerWidth / window.innerHeight
-        camera.updateProjectionMatrix()
-        renderer.setSize(window.innerWidth, window.innerHeight)
-      }
-      window.addEventListener('resize', onResize)
-
-      let t = 0
-      const animate = () => {
-        animationId = requestAnimationFrame(animate)
-        t += 0.0008
-        particles.rotation.y = t + mouseX * 0.3
-        particles.rotation.x = mouseY * 0.2
-        particles.rotation.z = t * 0.1
-        renderer.render(scene, camera)
-      }
-      animate()
-
-      return () => {
-        window.removeEventListener('resize', onResize)
-        geometry.dispose()
-        material.dispose()
-        renderer.dispose()
-      }
+      const rect = hero.getBoundingClientRect()
+      const x = ((e.clientX - rect.left) / rect.width * 100).toFixed(1)
+      const y = ((e.clientY - rect.top) / rect.height * 100).toFixed(1)
+      glow.style.background = `radial-gradient(circle at ${x}% ${y}%, rgba(199,101,72,0.10) 0%, transparent 65%)`
     }
 
-    let cleanup: (() => void) | undefined
-    initThree().then((fn) => { cleanup = fn })
-
-    return () => {
-      cancelAnimationFrame(animationId)
-      window.removeEventListener('mousemove', onMouse)
-      cleanup?.()
-    }
+    hero.addEventListener('mousemove', onMouse)
+    return () => hero.removeEventListener('mousemove', onMouse)
   }, [])
 
   return (
-    <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
-      {/* Three.js canvas */}
-      <canvas
-        ref={canvasRef}
-        className="absolute inset-0 w-full h-full"
-        style={{ zIndex: 0 }}
+    <section
+      ref={heroRef}
+      className="relative min-h-[92vh] flex items-center"
+      style={{ overflowX: 'clip' }}
+    >
+      {/* Cursor-aware warm glow */}
+      <div
+        ref={glowRef}
+        className="absolute inset-0 pointer-events-none"
+        style={{
+          background: 'radial-gradient(circle at 50% 30%, rgba(199,101,72,0.10) 0%, transparent 65%)',
+          zIndex: 0,
+        }}
         aria-hidden="true"
       />
 
-      {/* Gradient overlays */}
-      <div
-        className="absolute inset-0"
-        style={{
-          background: 'radial-gradient(ellipse at center, rgba(108,92,231,0.08) 0%, transparent 70%)',
-          zIndex: 1,
-        }}
-      />
-      <div
-        className="absolute inset-0"
-        style={{
-          background: 'linear-gradient(to bottom, rgba(10,10,15,0.4) 0%, transparent 40%, rgba(10,10,15,0.9) 85%, #0a0a0f 100%)',
-          zIndex: 1,
-        }}
-      />
+      {/* Subtle warm grid */}
+      <div className="absolute inset-0 grid-bg opacity-40 pointer-events-none" style={{ zIndex: 0 }} aria-hidden="true" />
 
-      {/* Grid background */}
-      <div className="absolute inset-0 grid-bg opacity-30" style={{ zIndex: 0 }} />
+      {/* Content — asymmetric 2-column */}
+      <div className="relative z-10 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-32 pb-20">
+        <div className="grid grid-cols-1 lg:grid-cols-[1fr_460px] gap-12 lg:gap-16 items-center">
 
-      {/* Hero content */}
-      <div className="relative z-10 text-center px-4 sm:px-6 max-w-5xl mx-auto pt-24 pb-20">
-        {/* Badge */}
-        <div className="inline-flex items-center gap-2.5 px-4 py-2 rounded-full bg-white/5 border border-white/10 text-sm text-[#a29bfe] mb-8 backdrop-blur-sm animate-fadeIn">
-          <span className="w-2 h-2 rounded-full bg-[#00cec9] inline-block animate-pulse flex-shrink-0" />
-          For SMB owners ready to stop running on chaos
-        </div>
+          {/* LEFT — headline + CTAs */}
+          <div className="max-w-2xl">
+            {/* Eyebrow */}
+            <div
+              className="inline-flex items-center gap-2.5 px-4 py-2 rounded-full border mb-8 animate-fadeIn"
+              style={{
+                borderColor: 'var(--border-accent)',
+                background: 'var(--accent-subtle)',
+                color: 'var(--accent)',
+                fontSize: '13px',
+                fontWeight: 500,
+              }}
+            >
+              <span
+                className="w-2 h-2 rounded-full flex-shrink-0"
+                style={{ background: 'var(--accent)' }}
+              />
+              For SMB owners ready to stop running on chaos
+            </div>
 
-        {/* Headline */}
-        <h1
-          className="text-5xl sm:text-6xl md:text-7xl font-bold mb-6 leading-[1.05] tracking-tight animate-fadeInUp"
-          style={{ fontFamily: 'Space Grotesk, sans-serif' }}
-        >
-          Run your business on<br />
-          <span className="gradient-text">an AI Company.</span>
-        </h1>
+            {/* H1 */}
+            <h1
+              className="mb-6 animate-fadeInUp"
+              style={{
+                fontFamily: 'var(--font-display)',
+                fontSize: 'clamp(44px, 6.5vw, 88px)',
+                fontWeight: 500,
+                letterSpacing: '-0.025em',
+                lineHeight: 1.08,
+                color: 'var(--text-heading)',
+              }}
+            >
+              Run your business<br />
+              on{' '}
+              <em style={{ fontStyle: 'italic', color: 'var(--accent)' }}>
+                an AI Company.
+              </em>
+            </h1>
 
-        {/* Subheadline */}
-        <p className="text-lg md:text-xl text-[#8888aa] mb-4 max-w-2xl mx-auto leading-relaxed animate-fadeInUp delay-200">
-          An executive team to decide. An office team to do the work. You run the company.
-        </p>
+            {/* Subhead */}
+            <p
+              className="mb-3 animate-fadeInUp delay-200"
+              style={{
+                fontSize: '18px',
+                lineHeight: 1.6,
+                color: 'var(--text-muted)',
+                maxWidth: '54ch',
+              }}
+            >
+              An executive team to decide. An office team to do the work.
+              You run the company.
+            </p>
 
-        <p className="text-[#a29bfe] font-semibold text-base mb-8 animate-fadeInUp delay-200">
-          Starts at $129/mo.
-        </p>
+            {/* Price — mono accent */}
+            <p
+              className="mb-10 animate-fadeInUp delay-200"
+              style={{
+                fontFamily: 'var(--font-mono)',
+                fontSize: '14px',
+                fontWeight: 500,
+                color: 'var(--accent)',
+              }}
+            >
+              from $129/mo
+            </p>
 
-        {/* CTAs */}
-        <div className="flex flex-col sm:flex-row gap-4 justify-center items-center animate-fadeInUp delay-300">
-          <Link href="/questionnaire" className="btn-primary text-base px-8 py-4 w-full sm:w-auto">
-            Start My Free Assessment
-          </Link>
-          <Link href="/project-runner" className="btn-secondary text-base px-8 py-4 w-full sm:w-auto">
-            See Project Runner →
-          </Link>
-          <Link href="/pricing" className="text-sm text-[#8888aa] hover:text-white transition-colors px-4 py-4 w-full sm:w-auto">
-            View Pricing →
-          </Link>
-        </div>
+            {/* CTAs */}
+            <div className="flex flex-col sm:flex-row gap-4 animate-fadeInUp delay-300">
+              <Link href="/questionnaire" className="btn-primary text-base px-8 py-4 w-full sm:w-auto">
+                Start My Free Assessment
+              </Link>
+              <Link href="/project-runner" className="btn-secondary text-base px-8 py-4 w-full sm:w-auto">
+                See Project Runner →
+              </Link>
+              <Link
+                href="/pricing"
+                className="text-sm px-4 py-4 w-full sm:w-auto flex items-center justify-center sm:justify-start transition-colors"
+                style={{ color: 'var(--text-muted)' }}
+                onMouseEnter={(e) => (e.currentTarget.style.color = 'var(--text-heading)')}
+                onMouseLeave={(e) => (e.currentTarget.style.color = 'var(--text-muted)')}
+              >
+                View Pricing →
+              </Link>
+            </div>
 
-        {/* Social proof row */}
-        <div className="flex flex-wrap gap-x-8 gap-y-3 justify-center mt-16 text-sm text-[#666688] animate-fadeInUp delay-400">
-          {[
-            'Always-on AI team',
-            'Email · CRM · Projects · Strategy',
-            'Fractional C-suite pricing',
-            'Service-business ready',
-            'No headcount needed',
-          ].map((item) => (
-            <span key={item} className="flex items-center gap-2">
-              <span className="text-[#00cec9] text-base">✓</span>
-              {item}
-            </span>
-          ))}
+            {/* Social proof */}
+            <div className="flex flex-wrap gap-x-8 gap-y-2 mt-12 animate-fadeInUp delay-400">
+              {[
+                'Always-on AI team',
+                'Email · CRM · Projects · Strategy',
+                'Fractional C-suite pricing',
+                'Service-business ready',
+              ].map((item) => (
+                <span
+                  key={item}
+                  className="flex items-center gap-2 text-sm"
+                  style={{ color: 'var(--text-muted)' }}
+                >
+                  <span style={{ color: 'var(--accent)', fontSize: '15px' }}>✓</span>
+                  {item}
+                </span>
+              ))}
+            </div>
+          </div>
+
+          {/* RIGHT — morning brief card, bleeds 80px past container */}
+          <div className="lg:-mr-20 animate-fadeIn delay-300">
+            <div
+              className="rounded-2xl overflow-hidden"
+              style={{
+                background: 'var(--bg-card)',
+                border: '1px solid var(--border)',
+                boxShadow: 'var(--shadow-card)',
+              }}
+            >
+              {/* Email chrome */}
+              <div
+                className="px-6 py-4 border-b"
+                style={{
+                  borderColor: 'var(--border)',
+                  background: 'var(--bg-warm)',
+                }}
+              >
+                <div className="flex items-center gap-2 mb-3">
+                  <div className="w-3 h-3 rounded-full" style={{ background: '#E5534B', opacity: 0.7 }} />
+                  <div className="w-3 h-3 rounded-full" style={{ background: '#C69A36', opacity: 0.7 }} />
+                  <div className="w-3 h-3 rounded-full" style={{ background: '#57A148', opacity: 0.7 }} />
+                </div>
+                <div className="space-y-1 text-xs" style={{ fontFamily: 'var(--font-mono)' }}>
+                  <div>
+                    <span style={{ color: 'var(--text-muted)' }}>From: </span>
+                    <span style={{ color: 'var(--accent)' }}>Project Runner (COO)</span>
+                    <span style={{ color: 'var(--border)', opacity: 0.6 }}> &lt;coo@yourcompany.ai&gt;</span>
+                  </div>
+                  <div>
+                    <span style={{ color: 'var(--text-muted)' }}>To: </span>
+                    <span style={{ color: 'var(--text-body)' }}>Brian</span>
+                  </div>
+                  <div>
+                    <span style={{ color: 'var(--text-muted)' }}>Subject: </span>
+                    <span style={{ color: 'var(--text-heading)', fontWeight: 500 }}>Monday morning brief — Apr 27</span>
+                  </div>
+                </div>
+              </div>
+
+              {/* Email body */}
+              <div
+                className="px-6 py-7 text-sm leading-7"
+                style={{ fontFamily: 'var(--font-mono)', color: 'var(--text-body)' }}
+              >
+                <p className="mb-5" style={{ color: 'var(--text-muted)' }}>Good morning. Three things on your desk today.</p>
+
+                <div className="space-y-5">
+                  <div>
+                    <p style={{ color: 'var(--text-heading)', fontWeight: 500 }} className="mb-1">
+                      1. Henderson reno — framing crew is 1 day behind.
+                    </p>
+                    <p
+                      className="pl-4 text-xs leading-6"
+                      style={{
+                        color: 'var(--text-muted)',
+                        borderLeft: '2px solid var(--accent-subtle)',
+                        borderLeftColor: 'var(--accent)',
+                        borderLeftWidth: '2px',
+                        paddingLeft: '12px',
+                        opacity: 0.8,
+                      }}
+                    >
+                      Lumber delivery slipped Friday. Rebooked Tuesday<br />
+                      7am, drywall pushed to Monday. No client-facing slip.
+                    </p>
+                  </div>
+
+                  <div>
+                    <p style={{ color: 'var(--text-heading)', fontWeight: 500 }} className="mb-1">
+                      2. Patel kitchen — invoice #2103 is 14 days overdue.
+                    </p>
+                    <p
+                      className="text-xs leading-6"
+                      style={{
+                        color: 'var(--text-muted)',
+                        borderLeft: '2px solid var(--accent)',
+                        paddingLeft: '12px',
+                        opacity: 0.8,
+                      }}
+                    >
+                      Reminder #2 sent Friday. No reply by EOD → phone<br />
+                      call from you. Draft talking points attached.
+                    </p>
+                  </div>
+
+                  <div>
+                    <p style={{ color: 'var(--text-heading)', fontWeight: 500 }} className="mb-1">
+                      3. New lead — Sarah K., bathroom remodel, Westside.
+                    </p>
+                    <p
+                      className="text-xs leading-6"
+                      style={{
+                        color: 'var(--text-muted)',
+                        borderLeft: '2px solid var(--accent)',
+                        paddingLeft: '12px',
+                        opacity: 0.8,
+                      }}
+                    >
+                      CRM scored 78 (qualified). Strategist drafted the<br />
+                      pitch angle. On your dashboard.
+                    </p>
+                  </div>
+                </div>
+
+                <p className="mt-6 text-xs" style={{ color: 'var(--text-muted)' }}>
+                  Nothing else needs you today. I&apos;m running the rest.
+                </p>
+                <p className="mt-3 text-xs" style={{ color: 'var(--accent)', fontWeight: 500 }}>
+                  — Project Runner
+                </p>
+              </div>
+            </div>
+
+            <p
+              className="mt-3 text-xs text-center"
+              style={{ color: 'var(--text-muted)', fontFamily: 'var(--font-mono)' }}
+            >
+              Mon, Apr 27 · 7:04 AM · delivered while you slept
+            </p>
+          </div>
+
         </div>
       </div>
 
-      {/* Bottom fade to section */}
+      {/* Bottom fade — matches warm bg */}
       <div
-        className="absolute bottom-0 left-0 right-0 h-32 pointer-events-none"
+        className="absolute bottom-0 left-0 right-0 h-24 pointer-events-none"
         style={{
-          background: 'linear-gradient(to bottom, transparent, #0a0a0f)',
+          background: 'linear-gradient(to bottom, transparent, var(--bg))',
           zIndex: 2,
         }}
+        aria-hidden="true"
       />
     </section>
   )
