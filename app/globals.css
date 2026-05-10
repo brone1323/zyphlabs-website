@@ -8,14 +8,14 @@
   --bg-card: #FFFFFF;
   --bg-dark: #1F1B17;
   --border: rgba(75, 60, 40, 0.12);
-  --border-accent: rgba(199, 101, 72, 0.30);
+  --border-accent: rgba(176, 74, 40, 0.30);
   --text-heading: #1A1A1A;
   --text-body: #3F3A33;
-  --text-muted: #7A7268;
-  --accent: #C76548;
-  --accent-hover: #B05A3F;
-  --accent-active: #9A4E36;
-  --accent-subtle: rgba(199, 101, 72, 0.08);
+  --text-muted: #5B554E;
+  --accent: #B04A28;
+  --accent-hover: #963D20;
+  --accent-active: #7E3219;
+  --accent-subtle: rgba(176, 74, 40, 0.08);
   --shadow-card: 0 1px 2px rgba(75,60,40,0.04), 0 4px 16px rgba(75,60,40,0.06), 0 16px 48px rgba(75,60,40,0.04);
   --shadow-card-hover: 0 1px 2px rgba(75,60,40,0.06), 0 8px 24px rgba(75,60,40,0.10), 0 24px 64px rgba(75,60,40,0.08);
   --font-display: 'Lora', 'Georgia', serif;
@@ -70,7 +70,7 @@ h1, h2, h3, h4, h5, h6 {
 
 /* Warm glow — cursor-aware radial, driven by --glow-x / --glow-y */
 .warm-glow {
-  background: radial-gradient(circle at var(--glow-x, 50%) var(--glow-y, 30%), rgba(199,101,72,0.10) 0%, transparent 65%);
+  background: radial-gradient(circle at var(--glow-x, 50%) var(--glow-y, 30%), rgba(176,74,40,0.10) 0%, transparent 65%);
 }
 
 /* Glass card (warm light version) */
@@ -83,14 +83,14 @@ h1, h2, h3, h4, h5, h6 {
 
 /* Gradient text — terracotta register */
 .gradient-text {
-  background: linear-gradient(135deg, #C76548 0%, #8C6F47 100%);
+  background: linear-gradient(135deg, #B04A28 0%, #7A5C30 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
 }
 
 .gradient-text-warm {
-  background: linear-gradient(135deg, #C76548 0%, #8C6F47 100%);
+  background: linear-gradient(135deg, #B04A28 0%, #7A5C30 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -117,7 +117,7 @@ h1, h2, h3, h4, h5, h6 {
 .btn-primary:hover {
   background: var(--accent-hover);
   transform: translateY(-1px);
-  box-shadow: 0 4px 16px rgba(199,101,72,0.28);
+  box-shadow: 0 4px 16px rgba(176,74,40,0.28);
 }
 
 .btn-primary:active {
@@ -173,7 +173,7 @@ h1, h2, h3, h4, h5, h6 {
 
 /* Radial glow (final CTA, etc.) — warm version */
 .radial-glow {
-  background: radial-gradient(ellipse at center, rgba(199,101,72,0.10) 0%, transparent 70%);
+  background: radial-gradient(ellipse at center, rgba(176,74,40,0.10) 0%, transparent 70%);
 }
 
 /* Eyebrow text */

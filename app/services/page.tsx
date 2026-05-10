@@ -120,13 +120,13 @@ export default function ServicesPage() {
         <div className="max-w-5xl mx-auto relative z-10 text-center">
           <p className="text-[#6c5ce7] text-sm font-semibold uppercase tracking-widest mb-3">Services</p>
           <h1
-            className="text-4xl sm:text-5xl md:text-6xl font-bold text-white mb-6"
-            style={{ fontFamily: 'Space Grotesk, sans-serif' }}
+            className="text-4xl sm:text-5xl md:text-6xl font-bold mb-6"
+            style={{ fontFamily: 'Space Grotesk, sans-serif', color: 'var(--text-heading)' }}
           >
             What your AI team<br />
             <span className="gradient-text">actually does.</span>
           </h1>
-          <p className="text-lg text-[#8888aa] max-w-2xl mx-auto">
+          <p className="text-lg text-[#5B5B7A] max-w-2xl mx-auto">
             Four capability pillars. All of them roles on your executive team.
             Not standalone products — an integrated team that runs your business.
           </p>
@@ -141,8 +141,8 @@ export default function ServicesPage() {
           <div className="text-center mb-16">
             <p className="text-[#6c5ce7] text-sm font-semibold uppercase tracking-widest mb-3">Capabilities</p>
             <h2
-              className="text-3xl md:text-4xl font-bold text-white"
-              style={{ fontFamily: 'Space Grotesk, sans-serif' }}
+              className="text-3xl md:text-4xl font-bold"
+              style={{ fontFamily: 'Space Grotesk, sans-serif', color: 'var(--text-heading)' }}
             >
               Four roles. One team.
             </h2>
@@ -167,12 +167,12 @@ export default function ServicesPage() {
                       {cap.role}
                     </p>
                     <h3
-                      className="text-2xl font-bold text-white mb-3"
-                      style={{ fontFamily: 'Space Grotesk, sans-serif' }}
+                      className="text-2xl font-bold mb-3"
+                      style={{ fontFamily: 'Space Grotesk, sans-serif', color: 'var(--text-heading)' }}
                     >
                       {cap.name}
                     </h3>
-                    <p className="text-sm text-[#8888aa] leading-relaxed mb-6">{cap.desc}</p>
+                    <p className="text-sm text-[#5B5B7A] leading-relaxed mb-6">{cap.desc}</p>
                     <div className="flex flex-wrap gap-2">
                       {cap.examples.map((ex) => (
                         <span
@@ -190,7 +190,9 @@ export default function ServicesPage() {
                     </div>
                   </div>
 
-                  {/* Right: reframe pattern */}
+                  {/* Right: reframe pattern — hidden until Brian fills placeholder copy */}
+                  {/* TODO: Brian to fill before re-enable */}
+                  {cap.h2 !== '[BRIAN-FOLLOWUP]' && (
                   <div className="border-l border-white/5 pl-10">
                     <p
                       className="text-xs font-bold uppercase tracking-widest mb-2"
@@ -199,17 +201,18 @@ export default function ServicesPage() {
                       {cap.eyebrow}
                     </p>
                     <h4
-                      className="text-xl font-bold text-white mb-2"
-                      style={{ fontFamily: 'Space Grotesk, sans-serif' }}
+                      className="text-xl font-bold mb-2"
+                      style={{ fontFamily: 'Space Grotesk, sans-serif', color: 'var(--text-heading)' }}
                     >
                       {cap.h2}
                     </h4>
-                    <p className="text-sm text-[#a29bfe] mb-4">{cap.subhead}</p>
-                    <p className="text-sm text-[#8888aa] leading-relaxed mb-8">{cap.body}</p>
+                    <p className="text-sm text-[#5B5B7A] mb-4">{cap.subhead}</p>
+                    <p className="text-sm text-[#5B5B7A] leading-relaxed mb-8">{cap.body}</p>
                     <OpenChatButton className="inline-block border border-[#6c5ce7]/40 text-[#a29bfe] hover:border-[#6c5ce7] hover:bg-[#6c5ce7]/10 py-2.5 px-6 rounded-lg text-sm font-semibold transition-all bg-transparent cursor-pointer">
                       Chat with Zyph
                     </OpenChatButton>
                   </div>
+                  )}
                 </div>
               </div>
             ))}
@@ -231,7 +234,7 @@ export default function ServicesPage() {
               Built for your industry.<br />
               <span className="gradient-text">Not generic software.</span>
             </h2>
-            <p className="text-[#8888aa] max-w-xl mx-auto">
+            <p className="text-[#5B5B7A] max-w-xl mx-auto">
               Each vertical gets a team tuned to how that industry actually works — not a one-size-fits-all AI tool.
             </p>
           </div>
@@ -255,7 +258,7 @@ export default function ServicesPage() {
                 >
                   {niche.name}
                 </h3>
-                <p className="text-sm text-[#8888aa] leading-relaxed flex-1">{niche.desc}</p>
+                <p className="text-sm text-[#5B5B7A] leading-relaxed flex-1">{niche.desc}</p>
                 <span className="text-[#6c5ce7] group-hover:translate-x-1 transition-transform text-lg mt-4">
                   →
                 </span>
@@ -272,12 +275,12 @@ export default function ServicesPage() {
         <div className="absolute inset-0 radial-glow opacity-40" />
         <div className="max-w-3xl mx-auto text-center relative z-10">
           <h2
-            className="text-4xl font-bold text-white mb-6"
-            style={{ fontFamily: 'Space Grotesk, sans-serif' }}
+            className="text-4xl font-bold mb-6"
+            style={{ fontFamily: 'Space Grotesk, sans-serif', color: 'var(--text-heading)' }}
           >
             Ready to build your team?
           </h2>
-          <p className="text-[#8888aa] mb-10">
+          <p className="text-[#5B5B7A] mb-10">
             Starter and Pro are self-serve — sign up and we&apos;ll have your team running this week.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
