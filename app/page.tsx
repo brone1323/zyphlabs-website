@@ -3,6 +3,8 @@ import Hero from '@/components/Hero'
 import OrgChart from '@/components/OrgChart'
 import OpenContactButton from '@/components/OpenContactButton'
 import OpenChatButton from '@/components/OpenChatButton'
+import NewsletterSection from '@/components/NewsletterSection'
+import ProposalDrafterSignup from '@/components/ProposalDrafterSignup'
 import {
   ClockIcon,
   LayersIcon,
@@ -15,7 +17,6 @@ import {
   RefreshCwIcon,
   InboxIcon,
   LinkIcon,
-  ZapIcon,
 } from '@/components/icons'
 
 const pricingTiers = [
@@ -118,11 +119,228 @@ const featureItems = [
   { Icon: LinkIcon, label: 'Gmail, QuickBooks, Drive' },
 ]
 
+const demoTiles = [
+  {
+    slug: 'field-staff',
+    icon: '🔧',
+    iconBg: 'linear-gradient(135deg, rgba(251,191,36,0.22), rgba(245,158,11,0.10))',
+    glow: 'rgba(251,191,36,0.20)',
+    title: 'Field Staff',
+    savings: '5–8 hrs/wk · for tech, PM & bookkeeper',
+    beat: 'Tech finishes job, talks 30 seconds — service report, customer email, invoice, follow-up all done before they reach the truck.',
+    length: '48s',
+  },
+  {
+    slug: 'salesperson',
+    icon: '💼',
+    iconBg: 'linear-gradient(135deg, rgba(79,70,229,0.22), rgba(67,56,202,0.10))',
+    glow: 'rgba(79,70,229,0.20)',
+    title: 'Salesperson',
+    savings: '8–12 hrs/wk · for sales, manager & owner',
+    beat: 'Lead arrives 11pm Saturday. Agent qualifies, books Monday 9am — before the rep wakes up.',
+    length: '50s',
+  },
+  {
+    slug: 'bookkeeping',
+    icon: '📊',
+    iconBg: 'linear-gradient(135deg, rgba(16,185,129,0.22), rgba(5,150,105,0.10))',
+    glow: 'rgba(16,185,129,0.20)',
+    title: 'Bookkeeping',
+    savings: '8–12 hrs/wk · for field, books & owner',
+    beat: 'Field tech voice update → agent detects billing milestone → invoice queued for bookkeeper approval. Cash in motion same-day.',
+    length: '50s',
+  },
+  {
+    slug: 'marketer',
+    icon: '📣',
+    iconBg: 'linear-gradient(135deg, rgba(236,72,153,0.22), rgba(190,24,93,0.10))',
+    glow: 'rgba(236,72,153,0.20)',
+    title: 'Marketer',
+    savings: '10–15 hrs/wk · for marketing, owner & sales',
+    beat: 'Owner records 2-min memo. Agent returns 5 social posts (with images), email blast, and blog draft — all in their voice.',
+    length: '50s',
+  },
+  {
+    slug: 'project-manager',
+    icon: '📋',
+    iconBg: 'linear-gradient(135deg, rgba(30,64,175,0.22), rgba(29,78,216,0.10))',
+    glow: 'rgba(30,64,175,0.20)',
+    title: 'Project Manager',
+    savings: '10–15 hrs/wk · for PM, GC & owner',
+    beat: 'Foreman reports a slip. Agent reschedules trades, drafts client update, prevents the cascade.',
+    length: '52s',
+  },
+  {
+    slug: 'ceo',
+    icon: '👔',
+    iconBg: 'linear-gradient(135deg, rgba(139,92,246,0.22), rgba(124,58,237,0.10))',
+    glow: 'rgba(139,92,246,0.20)',
+    title: 'CEO / Owner',
+    savings: '10–15 hrs/wk · for CEO, EA & ops mgr',
+    beat: 'Tom asks "what matters today?" Agent replies in chat with the brief + tappable chips for cash, projects, and 12-wk forecast.',
+    length: '55s',
+  },
+]
+
 export default function HomePage() {
   return (
     <div className="relative">
       {/* Hero */}
       <Hero />
+
+      {/* See It In Action — Live Role Demos */}
+      <section className="py-20 px-4 sm:px-6 relative overflow-hidden" data-reveal id="demos">
+        {/* Ambient backdrop glow */}
+        <div
+          aria-hidden="true"
+          className="absolute inset-0 pointer-events-none"
+          style={{
+            background:
+              'radial-gradient(ellipse 60% 50% at 50% 0%, rgba(199,101,72,0.07) 0%, transparent 70%), radial-gradient(ellipse 40% 40% at 20% 80%, rgba(79,70,229,0.06) 0%, transparent 60%), radial-gradient(ellipse 40% 40% at 80% 80%, rgba(16,185,129,0.06) 0%, transparent 60%)',
+          }}
+        />
+        <div className="relative max-w-7xl mx-auto">
+          <div className="text-center mb-14">
+            <p
+              className="text-xs uppercase mb-3 inline-flex items-center gap-2"
+              style={{ color: 'var(--accent)', fontWeight: 600, letterSpacing: '0.18em' }}
+            >
+              <span
+                className="w-1.5 h-1.5 rounded-full inline-block"
+                style={{ background: 'var(--accent)', boxShadow: '0 0 8px currentColor' }}
+              />
+              See it in action
+            </p>
+            <h2
+              className="mb-5"
+              style={{
+                fontFamily: 'var(--font-display)',
+                fontSize: 'clamp(28px, 4vw, 46px)',
+                fontWeight: 500,
+                color: 'var(--text-heading)',
+                letterSpacing: '-0.02em',
+                lineHeight: 1.1,
+              }}
+            >
+              Six roles. Six 50-second demos.
+              <br className="hidden sm:block" />
+              <span style={{ color: 'var(--accent)' }}>No edit cuts. Real workflows.</span>
+            </h2>
+            <p
+              className="text-base max-w-2xl mx-auto leading-relaxed"
+              style={{ color: 'var(--text-muted)' }}
+            >
+              Tap any role to watch an agent run that part of the business — voice memos, generated
+              content, dashboards, approvals. Audio is muted by default; tap the speaker to unmute.
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5" data-reveal-group>
+            {demoTiles.map((d) => (
+              <a
+                key={d.slug}
+                href={`https://agentic-demo-gamma.vercel.app/${d.slug}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="group relative rounded-2xl p-6 transition-all duration-300 overflow-hidden hover:-translate-y-1 card-glow flex flex-col"
+                data-reveal
+                style={{
+                  background: 'var(--bg-card)',
+                  border: '1px solid var(--border)',
+                  boxShadow: 'var(--shadow-card)',
+                }}
+              >
+                {/* hover glow */}
+                <div
+                  aria-hidden="true"
+                  className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none rounded-2xl"
+                  style={{
+                    background: `radial-gradient(ellipse 80% 60% at 50% 0%, ${d.glow} 0%, transparent 70%)`,
+                  }}
+                />
+                <div className="relative flex flex-col flex-1">
+                  <div className="flex items-start justify-between mb-4">
+                    <div
+                      className="w-14 h-14 rounded-xl flex items-center justify-center text-3xl"
+                      style={{
+                        background: d.iconBg,
+                        border: '1px solid var(--border)',
+                      }}
+                    >
+                      <span aria-hidden="true">{d.icon}</span>
+                    </div>
+                    <span
+                      className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[10px] font-bold uppercase"
+                      style={{
+                        background: 'rgba(34,197,94,0.10)',
+                        color: '#16A34A',
+                        border: '1px solid rgba(34,197,94,0.25)',
+                        letterSpacing: '0.08em',
+                      }}
+                    >
+                      <span
+                        className="w-1.5 h-1.5 rounded-full animate-pulse"
+                        style={{
+                          background: '#22C55E',
+                          boxShadow: '0 0 6px #22C55E',
+                        }}
+                      />
+                      Live demo
+                    </span>
+                  </div>
+
+                  <h3
+                    className="text-xl font-semibold mb-1.5"
+                    style={{ color: 'var(--text-heading)', letterSpacing: '-0.01em' }}
+                  >
+                    {d.title}
+                  </h3>
+                  <p
+                    className="text-xs font-bold mb-3 uppercase"
+                    style={{ color: '#16A34A', letterSpacing: '0.04em' }}
+                  >
+                    {d.savings}
+                  </p>
+                  <p
+                    className="text-sm leading-relaxed mb-6 flex-1"
+                    style={{ color: 'var(--text-muted)' }}
+                  >
+                    {d.beat}
+                  </p>
+
+                  <div
+                    className="flex items-center justify-between pt-4 border-t"
+                    style={{ borderColor: 'var(--border)' }}
+                  >
+                    <span
+                      className="inline-flex items-center gap-2 text-sm font-semibold"
+                      style={{ color: 'var(--accent)' }}
+                    >
+                      <span aria-hidden="true">▶</span>
+                      Watch {d.length} demo
+                    </span>
+                    <span
+                      className="transition-transform duration-300 group-hover:translate-x-1"
+                      style={{ color: 'var(--accent)' }}
+                    >
+                      →
+                    </span>
+                  </div>
+                </div>
+              </a>
+            ))}
+          </div>
+
+          <p className="text-center mt-12 text-sm" style={{ color: 'var(--text-muted)' }}>
+            Like one of these?{' '}
+            <Link href="/project-runner" className="link-accent underline underline-offset-2">
+              Wire it up for your business →
+            </Link>
+          </p>
+        </div>
+      </section>
+
+      <div className="section-divider" />
 
       {/* Meet Your AI Company */}
       <section data-reveal>
@@ -439,6 +657,11 @@ export default function HomePage() {
 
       <div className="section-divider" />
 
+      {/* Newsletter — Zero Payroll */}
+      <NewsletterSection />
+
+      <div className="section-divider" />
+
       {/* Project Runner Status Mock — second product mock */}
       <section className="py-20 px-4 sm:px-6" data-reveal>
         <div className="max-w-3xl mx-auto">
@@ -646,55 +869,8 @@ export default function HomePage() {
 
       <div className="section-divider" />
 
-      {/* Free Tool Callout */}
-      <section className="py-16 px-4 sm:px-6" data-reveal>
-        <div className="max-w-3xl mx-auto">
-          <Link href="/tools/proposal-drafter" className="block">
-            <div
-              className="rounded-2xl p-8 transition-all group card-glow"
-              style={{
-                background: 'var(--bg-card)',
-                border: '1px solid var(--border)',
-                boxShadow: 'var(--shadow-card)',
-              }}
-            >
-              <div className="flex flex-col sm:flex-row items-start sm:items-center gap-6">
-                <div
-                  className="w-12 h-12 rounded-xl flex items-center justify-center flex-shrink-0"
-                  style={{ background: 'var(--accent-subtle)', border: '1px solid rgba(199,101,72,0.18)' }}
-                >
-                  <ZapIcon size={22} color="var(--accent)" />
-                </div>
-                <div className="flex-1">
-                  <div
-                    className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-semibold mb-3"
-                    style={{
-                      background: 'var(--accent-subtle)',
-                      border: '1px solid rgba(199,101,72,0.25)',
-                      color: 'var(--accent)',
-                      fontFamily: 'var(--font-mono)',
-                    }}
-                  >
-                    Free Tool · Launching This Week
-                  </div>
-                  <h3
-                    className="text-lg font-semibold mb-2 transition-colors"
-                    style={{
-                      fontFamily: 'var(--font-display)',
-                      color: 'var(--text-heading)',
-                    }}
-                  >
-                    AI Proposal Drafter for Contractors
-                  </h3>
-                  <p className="text-sm" style={{ color: 'var(--text-muted)' }}>
-                    Five fields in. A polished, branded proposal out. 30 seconds. Get early access →
-                  </p>
-                </div>
-              </div>
-            </div>
-          </Link>
-        </div>
-      </section>
+      {/* AI Proposal Drafter — Early Access Form */}
+      <ProposalDrafterSignup />
 
       <div className="section-divider" />
 
