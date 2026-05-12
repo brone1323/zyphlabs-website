@@ -2,6 +2,8 @@ import Link from 'next/link'
 import Hero from '@/components/Hero'
 import PortfolioCard from '@/components/PortfolioCard'
 import { portfolioItems } from '@/lib/portfolioData'
+import NewsletterSection from '@/components/NewsletterSection'
+import ProposalDrafterSignup from '@/components/ProposalDrafterSignup'
 
 const niches = [
   {
@@ -122,6 +124,69 @@ const testimonials = [
       "Our old Shopify store was set up by a freelancer who disappeared. Zyph Labs rebuilt it, runs it, and handles all the technical stuff. Our conversion rate went up 40%.",
     name: 'Anika P.',
     role: 'Founder, Lumina Glow',
+  },
+]
+
+const demoTiles = [
+  {
+    slug: 'field-staff',
+    icon: '🔧',
+    iconBg: 'linear-gradient(135deg, rgba(251,191,36,0.22), rgba(245,158,11,0.10))',
+    glow: 'rgba(251,191,36,0.20)',
+    title: 'Field Staff',
+    savings: '5–8 hrs/wk · for tech, PM & bookkeeper',
+    beat: 'Tech finishes job, talks 30 seconds — service report, customer email, invoice, follow-up all done before they reach the truck.',
+    length: '48s',
+  },
+  {
+    slug: 'salesperson',
+    icon: '💼',
+    iconBg: 'linear-gradient(135deg, rgba(79,70,229,0.22), rgba(67,56,202,0.10))',
+    glow: 'rgba(79,70,229,0.20)',
+    title: 'Salesperson',
+    savings: '8–12 hrs/wk · for sales, manager & owner',
+    beat: 'Lead arrives 11pm Saturday. Agent qualifies, books Monday 9am — before the rep wakes up.',
+    length: '50s',
+  },
+  {
+    slug: 'bookkeeping',
+    icon: '📊',
+    iconBg: 'linear-gradient(135deg, rgba(16,185,129,0.22), rgba(5,150,105,0.10))',
+    glow: 'rgba(16,185,129,0.20)',
+    title: 'Bookkeeping',
+    savings: '8–12 hrs/wk · for field, books & owner',
+    beat: 'Field tech voice update → agent detects billing milestone → invoice queued for bookkeeper approval. Cash in motion same-day.',
+    length: '50s',
+  },
+  {
+    slug: 'marketer',
+    icon: '📣',
+    iconBg: 'linear-gradient(135deg, rgba(236,72,153,0.22), rgba(190,24,93,0.10))',
+    glow: 'rgba(236,72,153,0.20)',
+    title: 'Marketer',
+    savings: '10–15 hrs/wk · for marketing, owner & sales',
+    beat: 'Owner records 2-min memo. Agent returns 5 social posts (with images), email blast, and blog draft — all in their voice.',
+    length: '50s',
+  },
+  {
+    slug: 'project-manager',
+    icon: '📋',
+    iconBg: 'linear-gradient(135deg, rgba(30,64,175,0.22), rgba(29,78,216,0.10))',
+    glow: 'rgba(30,64,175,0.20)',
+    title: 'Project Manager',
+    savings: '10–15 hrs/wk · for PM, GC & owner',
+    beat: 'Foreman reports a slip. Agent reschedules trades, drafts client update, prevents the cascade.',
+    length: '52s',
+  },
+  {
+    slug: 'ceo',
+    icon: '👔',
+    iconBg: 'linear-gradient(135deg, rgba(139,92,246,0.22), rgba(124,58,237,0.10))',
+    glow: 'rgba(139,92,246,0.20)',
+    title: 'CEO / Owner',
+    savings: '10–15 hrs/wk · for CEO, EA & ops mgr',
+    beat: 'Tom asks "what matters today?" Agent replies in chat with the brief + tappable chips for cash, projects, and 12-wk forecast.',
+    length: '55s',
   },
 ]
 
@@ -407,6 +472,16 @@ export default function HomePage() {
           </div>
         </div>
       </section>
+
+      <div className="section-divider" />
+
+      {/* Zero Payroll Newsletter */}
+      <NewsletterSection />
+
+      <div className="section-divider" />
+
+      {/* AI Proposal Drafter — Early Access Form */}
+      <ProposalDrafterSignup />
 
       <div className="section-divider" />
 
