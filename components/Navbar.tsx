@@ -35,14 +35,23 @@ export default function Navbar() {
               ZYPH <span className="gradient-text">LABS</span>
             </span>
           </Link>
-          <Link
-            href="/assessment"
-            className="inline-flex items-center gap-2 bg-gradient-to-r from-[#6c5ce7] to-[#00cec9] text-white font-semibold rounded-lg px-5 py-2.5 text-sm hover:scale-[1.02] active:scale-[0.98] transition-transform"
-            style={{ fontFamily: 'Space Grotesk, sans-serif' }}
-          >
-            <span className="text-[#ffd166]">⚡</span>
-            Free Assessment
-          </Link>
+          <div className="flex items-center gap-3 sm:gap-5">
+            <Link
+              href="/resources"
+              className="hidden sm:inline-flex text-sm font-medium text-white/80 hover:text-white transition-colors"
+              style={{ fontFamily: 'Space Grotesk, sans-serif' }}
+            >
+              Resources
+            </Link>
+            <Link
+              href="/assessment"
+              className="inline-flex items-center gap-2 bg-gradient-to-r from-[#6c5ce7] to-[#00cec9] text-white font-semibold rounded-lg px-5 py-2.5 text-sm hover:scale-[1.02] active:scale-[0.98] transition-transform"
+              style={{ fontFamily: 'Space Grotesk, sans-serif' }}
+            >
+              <span className="text-[#ffd166]">⚡</span>
+              Free Assessment
+            </Link>
+          </div>
         </div>
       </div>
     </nav>

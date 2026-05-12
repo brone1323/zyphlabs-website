@@ -480,6 +480,55 @@ export default function HomePage() {
 
       <div className="section-divider" />
 
+      {/* Resources for service business owners */}
+      <section className="py-24 px-4 sm:px-6 relative">
+        <div className="max-w-6xl mx-auto">
+          <div className="text-center mb-14">
+            <div className="inline-block text-xs uppercase tracking-[0.2em] text-[#00cec9] font-semibold mb-3" style={{ fontFamily: 'Space Grotesk, sans-serif' }}>
+              Resources for service business owners
+            </div>
+            <h2 className="text-4xl sm:text-5xl font-bold text-white mb-3" style={{ fontFamily: 'Space Grotesk, sans-serif' }}>
+              Start where you are.
+            </h2>
+            <p className="text-white/70 max-w-2xl mx-auto">
+              Free tools, a 10-minute Level assessment, a community, and a path to a Level 4 system. Use what helps.
+            </p>
+          </div>
+
+          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-5">
+            <Link href="/starter-kit" className="group relative rounded-2xl border border-white/10 bg-white/[0.03] hover:bg-white/[0.06] hover:border-white/20 p-6 transition-all">
+              <div className="text-2xl mb-3">🎁</div>
+              <div className="text-xs uppercase tracking-wider text-[#00cec9] font-semibold mb-2" style={{ fontFamily: 'Space Grotesk, sans-serif' }}>Free download</div>
+              <div className="text-white font-semibold text-lg mb-1.5">$0 AI Starter Kit</div>
+              <div className="text-white/60 text-sm">10 free Level-1 tools with honest notes on what each does — and doesn&apos;t — do.</div>
+            </Link>
+
+            <Link href="/level-assessment" className="group relative rounded-2xl border border-white/10 bg-white/[0.03] hover:bg-white/[0.06] hover:border-white/20 p-6 transition-all">
+              <div className="text-2xl mb-3">🎯</div>
+              <div className="text-xs uppercase tracking-wider text-[#ffd166] font-semibold mb-2" style={{ fontFamily: 'Space Grotesk, sans-serif' }}>10 minutes</div>
+              <div className="text-white font-semibold text-lg mb-1.5">Find your Level</div>
+              <div className="text-white/60 text-sm">Where is your business on the AI adoption map? Get a clear answer plus what to do next.</div>
+            </Link>
+
+            <Link href="/resources" className="group relative rounded-2xl border border-white/10 bg-white/[0.03] hover:bg-white/[0.06] hover:border-white/20 p-6 transition-all">
+              <div className="text-2xl mb-3">📚</div>
+              <div className="text-xs uppercase tracking-wider text-[#6c5ce7] font-semibold mb-2" style={{ fontFamily: 'Space Grotesk, sans-serif' }}>All in one place</div>
+              <div className="text-white font-semibold text-lg mb-1.5">Resources hub</div>
+              <div className="text-white/60 text-sm">Newsletter, starter kit, assessment, community, booking — all of it, one page.</div>
+            </Link>
+
+            <Link href="/book" className="group relative rounded-2xl border border-white/10 bg-gradient-to-br from-[#6c5ce7]/15 to-[#00cec9]/10 hover:from-[#6c5ce7]/20 hover:to-[#00cec9]/15 hover:border-white/20 p-6 transition-all">
+              <div className="text-2xl mb-3">⚡</div>
+              <div className="text-xs uppercase tracking-wider text-[#00cec9] font-semibold mb-2" style={{ fontFamily: 'Space Grotesk, sans-serif' }}>Ready for Level 4?</div>
+              <div className="text-white font-semibold text-lg mb-1.5">Book a conversation</div>
+              <div className="text-white/60 text-sm">See what a full agentic system looks like for your specific business.</div>
+            </Link>
+          </div>
+        </div>
+      </section>
+
+      <div className="section-divider" />
+
       {/* AI Proposal Drafter — Early Access Form */}
       <ProposalDrafterSignup />
 
