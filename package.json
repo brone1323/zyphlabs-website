@@ -12,6 +12,7 @@
     "@gsap/react": "^2.1.1",
     "@paypal/react-paypal-js": "^9.1.0",
     "@stripe/stripe-js": "^4.0.0",
+    "@vercel/blob": "^0.27.3",
     "clsx": "^2.1.1",
     "gsap": "^3.12.5",
     "lenis": "^1.1.13",
@@ -20,8 +21,7 @@
     "react-dom": "^18",
     "resend": "^6.10.0",
     "stripe": "^16.0.0",
-    "three": "^0.168.0",
-    "@vercel/blob": "^0.27.0"
+    "three": "^0.168.0"
   },
   "devDependencies": {
     "@types/node": "^20",
