@@ -56,11 +56,11 @@ const resources = [
   {
     eyebrow: 'Community',
     title: 'Join the Community',
-    desc: 'Service business owners swapping AI wins, failures, and shortcuts. Link coming soon — add your name to get the invite.',
-    cta: 'Coming soon — TBD',
-    href: null,
-    external: false,
-    color: 'var(--text-muted)',
+    desc: 'Service business owners figuring out AI — together. Real questions, real answers, no pitches.',
+    cta: 'Open Facebook group →',
+    href: 'https://www.facebook.com/groups/25740721172271075/',
+    external: true,
+    color: '#1877F2',
     icon: '🤝',
   },
 ]

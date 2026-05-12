@@ -687,7 +687,15 @@ export default function StarterKitPdfPage() {
               <div className="cta-url">zeropayroll.substack.com <span className="cta-arrow">→</span></div>
             </div>
 
-            {/* CTA 3: Book a Conversation */}
+            {/* CTA 3: Join the community */}
+            <div className="cta-card">
+              <div className="cta-label">Private group</div>
+              <div className="cta-title">Join the community.</div>
+              <div className="cta-desc">Service business owners figuring out AI — together. Real questions, real answers, no pitches.</div>
+              <div className="cta-url">facebook.com/groups/25740721172271075 <span className="cta-arrow">→</span></div>
+            </div>
+
+            {/* CTA 4: Book a Conversation */}
             <div className="cta-card">
               <div className="cta-label">Ready for Level 4?</div>
               <div className="cta-title">Book a conversation.</div>
