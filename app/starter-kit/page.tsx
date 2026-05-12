@@ -76,6 +76,8 @@ const tools = [
   },
 ]
 
+const PDF_URL = '/zero-payroll-starter-kit.pdf'
+
 export default function StarterKitPage() {
   const [firstName, setFirstName] = useState('')
   const [email, setEmail] = useState('')
@@ -99,6 +101,13 @@ export default function StarterKitPage() {
         setStatus('error')
       } else {
         setStatus('success')
+        // Trigger download after successful DB capture
+        const a = document.createElement('a')
+        a.href = PDF_URL
+        a.download = 'zero-payroll-starter-kit.pdf'
+        document.body.appendChild(a)
+        a.click()
+        document.body.removeChild(a)
       }
     } catch {
       setErrorMsg('Network error. Please try again.')
@@ -188,15 +197,25 @@ export default function StarterKitPage() {
               </p>
 
               {status === 'success' ? (
-                <div
-                  className="py-4 px-6 rounded-xl text-sm font-medium"
-                  style={{
-                    background: 'rgba(87,161,72,0.10)',
-                    border: '1px solid rgba(87,161,72,0.25)',
-                    color: '#3A7A32',
-                  }}
-                >
-                  Check your inbox — the PDF is on its way.
+                <div>
+                  <div
+                    className="py-4 px-6 rounded-xl text-sm font-medium mb-4"
+                    style={{
+                      background: 'rgba(87,161,72,0.10)',
+                      border: '1px solid rgba(87,161,72,0.25)',
+                      color: '#3A7A32',
+                    }}
+                  >
+                    Download starting — check your downloads folder.
+                  </div>
+                  <a
+                    href={PDF_URL}
+                    download="zero-payroll-starter-kit.pdf"
+                    className="btn-secondary w-full py-3 text-sm text-center inline-block"
+                    style={{ textDecoration: 'none' }}
+                  >
+                    Download again →
+                  </a>
                 </div>
               ) : (
                 <form onSubmit={handleSubmit} className="space-y-3">
@@ -244,6 +263,18 @@ export default function StarterKitPage() {
                   {errorMsg}
                 </p>
               )}
+
+              <p className="mt-5 text-xs text-center" style={{ color: 'var(--text-muted)' }}>
+                Or{' '}
+                <a
+                  href={PDF_URL}
+                  download="zero-payroll-starter-kit.pdf"
+                  style={{ color: 'var(--accent)', textDecoration: 'underline' }}
+                >
+                  download directly
+                </a>{' '}
+                — no email required.
+              </p>
             </div>
           </div>
         </div>
