@@ -1,565 +1,229 @@
-import Link from 'next/link'
-import Hero from '@/components/Hero'
-import PortfolioCard from '@/components/PortfolioCard'
-import { portfolioItems } from '@/lib/portfolioData'
-import NewsletterSection from '@/components/NewsletterSection'
-import ProposalDrafterSignup from '@/components/ProposalDrafterSignup'
+import type { Metadata } from 'next'
 
-const niches = [
+export const metadata: Metadata = {
+  title: 'ZyphLabs CleanAgent',
+  description:
+    'CleanAgent automation demos for missed leads, lead generation, admin overload, purchasing, cash visibility, and project risk.',
+}
+
+const problemVideos = [
   {
-    name: 'Contractors & Trades',
-    slug: 'contractors',
-    icon: '🔨',
-    desc: 'Lead-generating websites for roofers, HVAC, plumbers, electricians, builders, and more.',
-    from: 149,
-    color: '#f39c12',
+    label: 'Sales problem',
+    title: 'Stop missed calls from becoming missed jobs.',
+    description:
+      'The agent answers, captures the details, books the estimate, and keeps the conversation moving while your team is busy.',
+    poster: '/videos/problems/lead-response.jpg',
+    src: '/videos/problems/lead-response.mp4',
+    accent: 'from-sky-500/20 to-cyan-400/10',
   },
   {
-    name: 'E-Commerce Stores',
-    slug: 'ecommerce',
-    icon: '🛍️',
-    desc: 'Shopify stores that sell — set up, launched, and maintained so you can focus on your products.',
-    from: 199,
-    color: '#00cec9',
+    label: 'Lead generation',
+    title: 'Keep marketing moving when the business gets busy.',
+    description:
+      'The agent builds campaigns, uses testimonials and project photos, and turns scattered ideas into scheduled lead-generation work.',
+    poster: '/videos/problems/lead-generation.jpg',
+    src: '/videos/problems/lead-generation.mp4',
+    accent: 'from-violet-500/20 to-fuchsia-400/10',
   },
   {
-    name: 'Realtors & Real Estate',
-    slug: 'real-estate',
-    icon: '🏠',
-    desc: 'Professional real estate sites that capture buyers and sellers on autopilot.',
-    from: 179,
-    color: '#6c5ce7',
+    label: 'Owner bottleneck',
+    title: 'Get email, scheduling, and follow-up off your desk.',
+    description:
+      'The agent finds the action items, drafts replies, moves drawings to estimating, and keeps admin from stealing the day.',
+    poster: '/videos/problems/admin-overload.jpg',
+    src: '/videos/problems/admin-overload.mp4',
+    accent: 'from-emerald-500/20 to-teal-400/10',
   },
   {
-    name: 'Law Firms & Attorneys',
-    slug: 'law-firms',
-    icon: '⚖️',
-    desc: 'Authoritative law firm websites that establish credibility and fill your consultation calendar.',
-    from: 199,
-    color: '#0984e3',
+    label: 'Margin leak',
+    title: 'Stop chasing suppliers and guessing on material costs.',
+    description:
+      'The agent reviews drawings, requests pricing, compares suppliers, and flags cost or delivery issues before orders are placed.',
+    poster: '/videos/problems/buying-waste.jpg',
+    src: '/videos/problems/buying-waste.mp4',
+    accent: 'from-amber-500/20 to-orange-400/10',
+  },
+  {
+    label: 'Cash visibility',
+    title: 'Keep payroll, billing, and completed work visible.',
+    description:
+      'The agent records site hours, sends payroll details, and flags completed milestones so invoicing does not lag behind the work.',
+    poster: '/videos/problems/cash-billing.jpg',
+    src: '/videos/problems/cash-billing.mp4',
+    accent: 'from-blue-500/20 to-indigo-400/10',
+  },
+  {
+    label: 'Project risk',
+    title: 'Know what needs attention before it gets expensive.',
+    description:
+      'The agent checks schedule, labor, material costs, billing, and risk so managers can act before small issues become real losses.',
+    poster: '/videos/problems/project-risk.jpg',
+    src: '/videos/problems/project-risk.mp4',
+    accent: 'from-rose-500/20 to-red-400/10',
   },
 ]
 
-const steps = [
-  {
-    num: '01',
-    title: 'You Order',
-    desc: 'Pick your niche, build tier, and hosting plan. One checkout — no back-and-forth quoting.',
-    icon: '🛒',
-  },
-  {
-    num: '02',
-    title: 'We Onboard You',
-    desc: 'Fill out a short questionnaire to share your brand assets, content, and goals — takes about 15 minutes.',
-    icon: '📋',
-  },
-  {
-    num: '03',
-    title: 'We Build It',
-    desc: 'Custom design and development. You review a preview and approve before anything goes live.',
-    icon: '⚙️',
-  },
-  {
-    num: '04',
-    title: 'We Deploy & Host',
-    desc: 'We configure your domain, SSL, and hosting. Your site goes live — we handle everything.',
-    icon: '🚀',
-  },
-  {
-    num: '05',
-    title: 'We Maintain It',
-    desc: "Ongoing hosting, security, backups, and content updates. We're your web team, permanently.",
-    icon: '🛡️',
-  },
-]
-
-const whyCards = [
-  {
-    icon: '⚡',
-    title: 'Live in 7–14 Days',
-    desc: 'From order to live site in under two weeks. No lengthy discovery phases or endless revision cycles.',
-  },
-  {
-    icon: '🔒',
-    title: 'Zero Technical Headaches',
-    desc: 'We handle hosting, SSL, DNS, domain setup, and maintenance. You never touch a cPanel or server.',
-  },
-  {
-    icon: '♻️',
-    title: 'Recurring Revenue Model',
-    desc: "Your site keeps working for you month after month. We keep it running — you focus on your business.",
-  },
-  {
-    icon: '💳',
-    title: 'One Simple Checkout',
-    desc: 'Build fee + hosting plan in a single Stripe checkout. Cards, Apple Pay, Google Pay accepted.',
-  },
-  {
-    icon: '🎯',
-    title: 'Built for Your Niche',
-    desc: 'Not a generic template. Every site is tailored to the specific needs of your industry.',
-  },
-  {
-    icon: '📞',
-    title: 'Real Support',
-    desc: 'Email support included. Priority plans get 24hr response time and a dedicated point of contact.',
-  },
-]
-
-const testimonials = [
-  {
-    quote:
-      "I used to lose bids because clients checked my website and it looked old. Now they call me already sold. Zyph Labs built and launched it in 10 days — I didn't do a thing.",
-    name: 'Marcus T.',
-    role: 'Owner, Summit Roofing Co.',
-  },
-  {
-    quote:
-      "As a realtor I needed something professional but had no time to manage it. Zyph Labs built the site AND hosts it. When I need a photo changed I just email them. It's incredible.",
-    name: 'Sarah M.',
-    role: 'Realtor, Apex Property Group',
-  },
-  {
-    quote:
-      "Our old Shopify store was set up by a freelancer who disappeared. Zyph Labs rebuilt it, runs it, and handles all the technical stuff. Our conversion rate went up 40%.",
-    name: 'Anika P.',
-    role: 'Founder, Lumina Glow',
-  },
-]
-
-const demoTiles = [
-  {
-    slug: 'field-staff',
-    icon: '🔧',
-    iconBg: 'linear-gradient(135deg, rgba(251,191,36,0.22), rgba(245,158,11,0.10))',
-    glow: 'rgba(251,191,36,0.20)',
-    title: 'Field Staff',
-    savings: '5–8 hrs/wk · for tech, PM & bookkeeper',
-    beat: 'Tech finishes job, talks 30 seconds — service report, customer email, invoice, follow-up all done before they reach the truck.',
-    length: '48s',
-  },
-  {
-    slug: 'salesperson',
-    icon: '💼',
-    iconBg: 'linear-gradient(135deg, rgba(79,70,229,0.22), rgba(67,56,202,0.10))',
-    glow: 'rgba(79,70,229,0.20)',
-    title: 'Salesperson',
-    savings: '8–12 hrs/wk · for sales, manager & owner',
-    beat: 'Lead arrives 11pm Saturday. Agent qualifies, books Monday 9am — before the rep wakes up.',
-    length: '50s',
-  },
-  {
-    slug: 'bookkeeping',
-    icon: '📊',
-    iconBg: 'linear-gradient(135deg, rgba(16,185,129,0.22), rgba(5,150,105,0.10))',
-    glow: 'rgba(16,185,129,0.20)',
-    title: 'Bookkeeping',
-    savings: '8–12 hrs/wk · for field, books & owner',
-    beat: 'Field tech voice update → agent detects billing milestone → invoice queued for bookkeeper approval. Cash in motion same-day.',
-    length: '50s',
-  },
-  {
-    slug: 'marketer',
-    icon: '📣',
-    iconBg: 'linear-gradient(135deg, rgba(236,72,153,0.22), rgba(190,24,93,0.10))',
-    glow: 'rgba(236,72,153,0.20)',
-    title: 'Marketer',
-    savings: '10–15 hrs/wk · for marketing, owner & sales',
-    beat: 'Owner records 2-min memo. Agent returns 5 social posts (with images), email blast, and blog draft — all in their voice.',
-    length: '50s',
-  },
-  {
-    slug: 'project-manager',
-    icon: '📋',
-    iconBg: 'linear-gradient(135deg, rgba(30,64,175,0.22), rgba(29,78,216,0.10))',
-    glow: 'rgba(30,64,175,0.20)',
-    title: 'Project Manager',
-    savings: '10–15 hrs/wk · for PM, GC & owner',
-    beat: 'Foreman reports a slip. Agent reschedules trades, drafts client update, prevents the cascade.',
-    length: '52s',
-  },
-  {
-    slug: 'ceo',
-    icon: '👔',
-    iconBg: 'linear-gradient(135deg, rgba(139,92,246,0.22), rgba(124,58,237,0.10))',
-    glow: 'rgba(139,92,246,0.20)',
-    title: 'CEO / Owner',
-    savings: '10–15 hrs/wk · for CEO, EA & ops mgr',
-    beat: 'Tom asks "what matters today?" Agent replies in chat with the brief + tappable chips for cash, projects, and 12-wk forecast.',
-    length: '55s',
-  },
+const chatTopics = [
+  'social media',
+  'reception',
+  'assistant work',
+  'purchasing',
+  'bookkeeping',
+  'project visibility',
+  'pricing',
+  'setup',
 ]
 
 export default function HomePage() {
   return (
-    <div className="relative">
-      {/* Hero */}
-      <Hero />
-
-      {/* Who We Serve */}
-      <section className="py-24 px-4 sm:px-6 max-w-7xl mx-auto">
-        <div className="text-center mb-16">
-          <p className="text-[#6c5ce7] text-sm font-semibold uppercase tracking-widest mb-3">
-            Who We Serve
+    <div className="min-h-screen bg-[#050713] text-white">
+      <section className="relative overflow-hidden px-5 pb-14 pt-16 sm:px-6 lg:px-8 lg:pb-20 lg:pt-24">
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(108,92,231,0.28),transparent_32%),radial-gradient(circle_at_top_right,rgba(0,206,201,0.18),transparent_35%)]" />
+        <div className="relative mx-auto max-w-6xl text-center">
+          <p className="text-xs font-semibold uppercase tracking-[0.28em] text-[#00cec9]">
+            ZyphLabs CleanAgent
           </p>
-          <h2
-            className="text-4xl md:text-5xl font-bold text-white mb-4"
+          <h1
+            className="mx-auto mt-5 max-w-5xl text-4xl font-bold leading-tight sm:text-5xl lg:text-7xl"
             style={{ fontFamily: 'Space Grotesk, sans-serif' }}
           >
-            Pick your industry.<br />
-            <span className="gradient-text">We handle the rest.</span>
-          </h2>
-          <p className="text-[#8888aa] max-w-xl mx-auto">
-            Niche-built websites with pricing designed for real small businesses — not agency budgets.
+            Are you looking to automate your workflow to lower costs and
+            increase sales?
+          </h1>
+          <p className="mx-auto mt-6 max-w-3xl text-base leading-8 text-white/70 sm:text-lg">
+            Watch the short demos below. Each one shows a real phone-style
+            workflow between a customer, owner, or manager and an AI agent.
           </p>
-        </div>
-
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-          {niches.map((niche) => (
-            <Link
-              key={niche.slug}
-              href={`/services/${niche.slug}`}
-              className="glass card-glow p-7 flex flex-col group"
+          <div className="mt-9 flex flex-col items-center justify-center gap-3 sm:flex-row">
+            <a
+              href="https://calendly.com/zyphlabs/15min"
+              target="_blank"
+              rel="noreferrer"
+              className="inline-flex min-h-12 items-center justify-center rounded-lg bg-[#00cec9] px-6 text-sm font-black text-[#041014] transition hover:-translate-y-0.5 hover:bg-white focus:outline-none focus:ring-4 focus:ring-[#00cec9]/30"
             >
-              <div
-                className="w-12 h-12 rounded-xl flex items-center justify-center text-2xl mb-5 flex-shrink-0"
-                style={{ background: `${niche.color}20`, border: `1px solid ${niche.color}40` }}
+              Book your free Business AI assessment today
+            </a>
+            <a
+              href="/leads"
+              className="inline-flex min-h-12 items-center justify-center rounded-lg border border-white/15 px-6 text-sm font-bold text-white transition hover:-translate-y-0.5 hover:border-white/35 hover:bg-white/10 focus:outline-none focus:ring-4 focus:ring-white/15"
+            >
+              View lead packages
+            </a>
+          </div>
+        </div>
+      </section>
+
+      <section className="px-5 py-12 sm:px-6 lg:px-8 lg:py-20">
+        <div className="mx-auto max-w-7xl">
+          <div className="mb-10 max-w-3xl">
+            <p className="text-xs font-semibold uppercase tracking-[0.25em] text-[#6c5ce7]">
+              Start with the problem
+            </p>
+            <h2
+              className="mt-4 text-3xl font-bold leading-tight text-white sm:text-5xl"
+              style={{ fontFamily: 'Space Grotesk, sans-serif' }}
+            >
+              CleanAgent handles the work that costs you leads, margin, and
+              owner time.
+            </h2>
+          </div>
+
+          <div className="grid gap-6 lg:grid-cols-2">
+            {problemVideos.map((video) => (
+              <article
+                key={video.src}
+                className={`overflow-hidden rounded-2xl border border-white/10 bg-gradient-to-br ${video.accent} p-4 shadow-2xl shadow-black/25 transition hover:-translate-y-1 hover:border-white/25 sm:p-5`}
               >
-                {niche.icon}
-              </div>
-              <h3
-                className="text-lg font-semibold text-white mb-2 group-hover:text-[#a29bfe] transition-colors"
-                style={{ fontFamily: 'Space Grotesk, sans-serif' }}
-              >
-                {niche.name}
-              </h3>
-              <p className="text-sm text-[#8888aa] leading-relaxed mb-5 flex-1">{niche.desc}</p>
-              <div className="flex items-center justify-between">
-                <span className="text-sm text-white">
-                  From{' '}
-                  <span className="font-semibold text-[#a29bfe]">${niche.from}</span>
-                </span>
-                <span className="text-[#6c5ce7] group-hover:translate-x-1 transition-transform text-lg">
-                  →
-                </span>
-              </div>
-            </Link>
-          ))}
-        </div>
-      </section>
-
-      <div className="section-divider" />
-
-      {/* Frictionless Promise */}
-      <section className="py-24 px-4 sm:px-6">
-        <div className="max-w-7xl mx-auto">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
-            {/* Left: problem */}
-            <div>
-              <p className="text-[#6c5ce7] text-sm font-semibold uppercase tracking-widest mb-3">
-                The Problem
-              </p>
-              <h2
-                className="text-4xl font-bold text-white mb-6"
-                style={{ fontFamily: 'Space Grotesk, sans-serif' }}
-              >
-                Most freelancers deliver a zip file and disappear.
-              </h2>
-              <p className="text-[#8888aa] leading-relaxed mb-4">
-                You hired someone on Fiverr, got your files, and then spent three weeks trying to figure
-                out Bluehost, getting an SSL error, wondering why your site loads in 8 seconds on mobile,
-                and emailing someone who never responds.
-              </p>
-              <p className="text-[#8888aa] leading-relaxed">
-                That's friction. It's the norm in this industry — and it's exactly what we eliminate.
-              </p>
-            </div>
-
-            {/* Right: comparison table */}
-            <div className="glass p-6 rounded-2xl">
-              <div className="grid grid-cols-3 gap-4 text-xs text-[#8888aa] uppercase tracking-wide mb-4 pb-3 border-b border-white/8">
-                <span>Feature</span>
-                <span className="text-center">Typical Freelancer</span>
-                <span className="text-center text-[#a29bfe]">Zyph Labs</span>
-              </div>
-              {[
-                ['What you get', 'Files (zip)', 'Live website'],
-                ['Hosting', 'Figure it out', 'Managed ✓'],
-                ['SSL/Security', 'Not included', 'Included ✓'],
-                ['Domain setup', 'Not included', 'We do it ✓'],
-                ['Ongoing support', 'None', 'Monthly plan ✓'],
-                ['Updates/changes', 'Buy another gig', 'Included in plan ✓'],
-              ].map(([feature, bad, good]) => (
-                <div
-                  key={feature}
-                  className="grid grid-cols-3 gap-4 py-3 border-b border-white/5 text-sm items-center"
-                >
-                  <span className="text-[#ccccdd]">{feature}</span>
-                  <span className="text-center text-[#555577]">{bad}</span>
-                  <span className="text-center text-[#00cec9] font-medium">{good}</span>
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <div className="section-divider" />
-
-      {/* How It Works */}
-      <section className="py-24 px-4 sm:px-6">
-        <div className="max-w-7xl mx-auto">
-          <div className="text-center mb-16">
-            <p className="text-[#6c5ce7] text-sm font-semibold uppercase tracking-widest mb-3">
-              How It Works
-            </p>
-            <h2
-              className="text-4xl md:text-5xl font-bold text-white mb-4"
-              style={{ fontFamily: 'Space Grotesk, sans-serif' }}
-            >
-              From order to live site —<br />
-              <span className="gradient-text">we handle every step.</span>
-            </h2>
-          </div>
-
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-6">
-            {steps.map((step, i) => (
-              <div key={step.num} className="relative">
-                {/* Connector line */}
-                {i < steps.length - 1 && (
-                  <div className="hidden lg:block absolute top-8 left-[calc(100%_-_12px)] w-6 h-0.5 bg-gradient-to-r from-[#6c5ce7]/40 to-transparent z-10" />
-                )}
-                <div className="glass p-6 h-full">
-                  <div className="text-2xl mb-4">{step.icon}</div>
-                  <div
-                    className="text-xs font-bold text-[#6c5ce7] mb-2"
-                    style={{ fontFamily: 'Space Grotesk, sans-serif' }}
-                  >
-                    {step.num}
-                  </div>
-                  <h3
-                    className="text-base font-semibold text-white mb-2"
-                    style={{ fontFamily: 'Space Grotesk, sans-serif' }}
-                  >
-                    {step.title}
-                  </h3>
-                  <p className="text-xs text-[#8888aa] leading-relaxed">{step.desc}</p>
-                </div>
-              </div>
-            ))}
-          </div>
-
-          <div className="text-center mt-10">
-            <Link href="/how-it-works" className="btn-secondary inline-block px-8 py-3">
-              Learn more about the process →
-            </Link>
-          </div>
-        </div>
-      </section>
-
-      <div className="section-divider" />
-
-      {/* See Our Work */}
-      <section className="py-24 px-4 sm:px-6">
-        <div className="max-w-7xl mx-auto">
-          <div className="text-center mb-16">
-            <p className="text-[#6c5ce7] text-sm font-semibold uppercase tracking-widest mb-3">
-              Our Work
-            </p>
-            <h2
-              className="text-4xl md:text-5xl font-bold text-white mb-4"
-              style={{ fontFamily: 'Space Grotesk, sans-serif' }}
-            >
-              Example sites<br />
-              <span className="gradient-text">we've built.</span>
-            </h2>
-            <p className="text-[#8888aa] max-w-xl mx-auto">
-              Every site is custom-designed for its niche, fully deployed, and maintained by our team.
-              No templates. No abandoned freelancers.
-            </p>
-          </div>
-
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
-            {[
-              portfolioItems.find((i) => i.id === 'vanguard-roofing')!,
-              portfolioItems.find((i) => i.id === 'velvet-petal')!,
-              portfolioItems.find((i) => i.id === 'meridian-luxury-realty')!,
-              portfolioItems.find((i) => i.id === 'ashford-drake')!,
-            ].map((item) => (
-              <PortfolioCard key={item.id} item={item} />
-            ))}
-          </div>
-
-          <div className="text-center mt-12">
-            <Link href="/portfolio" className="btn-primary inline-block px-10 py-4 text-base">
-              Browse All Example Sites →
-            </Link>
-          </div>
-        </div>
-      </section>
-
-      <div className="section-divider" />
-
-      {/* Why Zyph Labs */}
-      <section className="py-24 px-4 sm:px-6">
-        <div className="max-w-7xl mx-auto">
-          <div className="text-center mb-16">
-            <p className="text-[#6c5ce7] text-sm font-semibold uppercase tracking-widest mb-3">
-              Why Zyph Labs
-            </p>
-            <h2
-              className="text-4xl md:text-5xl font-bold text-white"
-              style={{ fontFamily: 'Space Grotesk, sans-serif' }}
-            >
-              Built for business owners,<br />
-              <span className="gradient-text">not developers.</span>
-            </h2>
-          </div>
-
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            {whyCards.map((card) => (
-              <div key={card.title} className="glass card-glow p-7">
-                <div className="text-3xl mb-4">{card.icon}</div>
-                <h3
-                  className="text-lg font-semibold text-white mb-2"
-                  style={{ fontFamily: 'Space Grotesk, sans-serif' }}
-                >
-                  {card.title}
-                </h3>
-                <p className="text-sm text-[#8888aa] leading-relaxed">{card.desc}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      <div className="section-divider" />
-
-      {/* Testimonials */}
-      <section className="py-24 px-4 sm:px-6">
-        <div className="max-w-7xl mx-auto">
-          <div className="text-center mb-16">
-            <p className="text-[#6c5ce7] text-sm font-semibold uppercase tracking-widest mb-3">
-              Client Stories
-            </p>
-            <h2
-              className="text-4xl font-bold text-white"
-              style={{ fontFamily: 'Space Grotesk, sans-serif' }}
-            >
-              What our clients say
-            </h2>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            {testimonials.map((t) => (
-              <div key={t.name} className="glass p-8 flex flex-col">
-                <div className="flex gap-0.5 mb-5">
-                  {[...Array(5)].map((_, i) => (
-                    <span key={i} className="text-[#f39c12] text-lg">★</span>
-                  ))}
-                </div>
-                <p className="text-[#ccccdd] text-sm leading-relaxed flex-1 mb-6 italic">
-                  "{t.quote}"
-                </p>
-                <div>
-                  <p className="text-white font-semibold text-sm" style={{ fontFamily: 'Space Grotesk, sans-serif' }}>
-                    {t.name}
+                <div className="mb-4">
+                  <p className="text-xs font-bold uppercase tracking-[0.22em] text-[#00cec9]">
+                    {video.label}
                   </p>
-                  <p className="text-[#8888aa] text-xs mt-0.5">{t.role}</p>
+                  <h3
+                    className="mt-3 text-xl font-bold leading-snug text-white sm:text-2xl"
+                    style={{ fontFamily: 'Space Grotesk, sans-serif' }}
+                  >
+                    {video.title}
+                  </h3>
+                  <p className="mt-3 text-sm leading-7 text-white/68">
+                    {video.description}
+                  </p>
                 </div>
-              </div>
+                <div className="relative overflow-hidden rounded-xl border border-white/10 bg-black">
+                  <video
+                    className="aspect-video w-full bg-black object-cover"
+                    controls
+                    playsInline
+                    preload="metadata"
+                    poster={video.poster}
+                  >
+                    <source src={video.src} type="video/mp4" />
+                  </video>
+                </div>
+                <a
+                  href="https://calendly.com/zyphlabs/15min"
+                  target="_blank"
+                  rel="noreferrer"
+                  className="mt-4 inline-flex min-h-11 w-full items-center justify-center rounded-lg bg-white px-5 text-sm font-black text-[#050713] transition hover:bg-[#00cec9]"
+                >
+                  Book a call to learn more
+                </a>
+              </article>
             ))}
           </div>
         </div>
       </section>
 
-      <div className="section-divider" />
-
-      {/* Zero Payroll Newsletter */}
-      <NewsletterSection />
-
-      <div className="section-divider" />
-
-      {/* Resources for service business owners */}
-      <section className="py-24 px-4 sm:px-6 relative">
-        <div className="max-w-6xl mx-auto">
-          <div className="text-center mb-14">
-            <div className="inline-block text-xs uppercase tracking-[0.2em] text-[#00cec9] font-semibold mb-3" style={{ fontFamily: 'Space Grotesk, sans-serif' }}>
-              Resources for service business owners
-            </div>
-            <h2 className="text-4xl sm:text-5xl font-bold text-white mb-3" style={{ fontFamily: 'Space Grotesk, sans-serif' }}>
-              Start where you are.
+      <section className="border-t border-white/10 px-5 py-14 sm:px-6 lg:px-8 lg:py-20">
+        <div className="mx-auto grid max-w-6xl gap-8 lg:grid-cols-[0.85fr_1.15fr] lg:items-start">
+          <div>
+            <p className="text-xs font-semibold uppercase tracking-[0.25em] text-[#00cec9]">
+              Live AI chat
+            </p>
+            <h2
+              className="mt-4 text-3xl font-bold leading-tight text-white sm:text-4xl"
+              style={{ fontFamily: 'Space Grotesk, sans-serif' }}
+            >
+              CleanAgent bot answers from the full offer.
             </h2>
-            <p className="text-white/70 max-w-2xl mx-auto">
-              Free tools, a 10-minute Level assessment, a community, and a path to a Level 4 system. Use what helps.
+            <p className="mt-4 text-base leading-8 text-white/68">
+              Ask about social media, reception, assistant work, purchasing,
+              bookkeeping, project visibility, pricing, contact, setup, or what
+              to automate first.
             </p>
           </div>
 
-          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-5">
-            <Link href="/starter-kit" className="group relative rounded-2xl border border-white/10 bg-white/[0.03] hover:bg-white/[0.06] hover:border-white/20 p-6 transition-all">
-              <div className="text-2xl mb-3">🎁</div>
-              <div className="text-xs uppercase tracking-wider text-[#00cec9] font-semibold mb-2" style={{ fontFamily: 'Space Grotesk, sans-serif' }}>Free download</div>
-              <div className="text-white font-semibold text-lg mb-1.5">$0 AI Starter Kit</div>
-              <div className="text-white/60 text-sm">10 free Level-1 tools with honest notes on what each does — and doesn&apos;t — do.</div>
-            </Link>
-
-            <Link href="/level-assessment" className="group relative rounded-2xl border border-white/10 bg-white/[0.03] hover:bg-white/[0.06] hover:border-white/20 p-6 transition-all">
-              <div className="text-2xl mb-3">🎯</div>
-              <div className="text-xs uppercase tracking-wider text-[#ffd166] font-semibold mb-2" style={{ fontFamily: 'Space Grotesk, sans-serif' }}>10 minutes</div>
-              <div className="text-white font-semibold text-lg mb-1.5">Find your Level</div>
-              <div className="text-white/60 text-sm">Where is your business on the AI adoption map? Get a clear answer plus what to do next.</div>
-            </Link>
-
-            <Link href="/resources" className="group relative rounded-2xl border border-white/10 bg-white/[0.03] hover:bg-white/[0.06] hover:border-white/20 p-6 transition-all">
-              <div className="text-2xl mb-3">📚</div>
-              <div className="text-xs uppercase tracking-wider text-[#6c5ce7] font-semibold mb-2" style={{ fontFamily: 'Space Grotesk, sans-serif' }}>All in one place</div>
-              <div className="text-white font-semibold text-lg mb-1.5">Resources hub</div>
-              <div className="text-white/60 text-sm">Newsletter, starter kit, assessment, community, booking — all of it, one page.</div>
-            </Link>
-
-            <Link href="/book" className="group relative rounded-2xl border border-white/10 bg-gradient-to-br from-[#6c5ce7]/15 to-[#00cec9]/10 hover:from-[#6c5ce7]/20 hover:to-[#00cec9]/15 hover:border-white/20 p-6 transition-all">
-              <div className="text-2xl mb-3">⚡</div>
-              <div className="text-xs uppercase tracking-wider text-[#00cec9] font-semibold mb-2" style={{ fontFamily: 'Space Grotesk, sans-serif' }}>Ready for Level 4?</div>
-              <div className="text-white font-semibold text-lg mb-1.5">Book a conversation</div>
-              <div className="text-white/60 text-sm">See what a full agentic system looks like for your specific business.</div>
-            </Link>
+          <div className="rounded-2xl border border-white/10 bg-white/[0.04] p-5 shadow-2xl shadow-black/20">
+            <div className="rounded-xl border border-white/10 bg-black/25 p-4">
+              <p className="rounded-xl bg-white/10 p-4 text-sm leading-7 text-white/78">
+                Hi, I understand the CleanAgent services on this page. Ask what
+                to automate first, or ask about {chatTopics.join(', ')}.
+              </p>
+              <div className="mt-4 flex flex-wrap gap-2">
+                {chatTopics.map((topic) => (
+                  <span
+                    key={topic}
+                    className="rounded-full border border-white/10 px-3 py-1.5 text-xs font-semibold text-white/70"
+                  >
+                    {topic}
+                  </span>
+                ))}
+              </div>
+            </div>
+            <div className="mt-4 grid gap-3 sm:grid-cols-[1fr_auto]">
+              <input
+                type="text"
+                placeholder="Ask what to automate first..."
+                className="min-h-12 rounded-lg border border-white/10 bg-white px-4 text-sm text-slate-950 outline-none"
+                aria-label="Ask ZyphLabs"
+              />
+              <a
+                href="mailto:alex@zyphlabs.com?subject=CleanAgent%20question"
+                className="inline-flex min-h-12 items-center justify-center rounded-lg bg-[#6c5ce7] px-6 text-sm font-black text-white transition hover:bg-[#00cec9] hover:text-[#041014]"
+              >
+                Ask
+              </a>
+            </div>
           </div>
-        </div>
-      </section>
-
-      <div className="section-divider" />
-
-      {/* AI Proposal Drafter — Early Access Form */}
-      <ProposalDrafterSignup />
-
-      <div className="section-divider" />
-
-      {/* Final CTA */}
-      <section className="py-28 px-4 sm:px-6 relative overflow-hidden">
-        <div className="absolute inset-0 radial-glow opacity-50" />
-        <div className="max-w-3xl mx-auto text-center relative z-10">
-          <h2
-            className="text-4xl md:text-5xl font-bold text-white mb-6"
-            style={{ fontFamily: 'Space Grotesk, sans-serif' }}
-          >
-            Ready to stop worrying about your website?
-          </h2>
-          <p className="text-[#8888aa] text-lg mb-10">
-            Pick your niche, choose your tier, and check out in minutes.
-            Your site will be live within two weeks — managed by us, forever.
-          </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Link href="/services/contractors" className="btn-primary text-base px-10 py-4 inline-block">
-              View All Packages
-            </Link>
-            <Link href="/hosting" className="btn-secondary text-base px-10 py-4 inline-block">
-              Explore Hosting Plans
-            </Link>
-          </div>
-          <p className="text-[#444466] text-sm mt-8">
-            Questions? Email us at{' '}
-            <span className="text-[#a29bfe]">alex@zyphlabs.com</span>
-          </p>
         </div>
       </section>
     </div>
