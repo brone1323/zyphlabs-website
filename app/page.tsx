@@ -1,231 +1,261 @@
 import type { Metadata } from 'next'
 
 export const metadata: Metadata = {
-  title: 'ZyphLabs CleanAgent',
+  title: 'Zyph Labs | Websites That Help You Win More Business',
   description:
-    'CleanAgent automation demos for missed leads, lead generation, admin overload, purchasing, cash visibility, and project risk.',
+    'Modern, fast, conversion-focused websites for businesses that want to look better, move faster, and win more customers.',
 }
 
-const problemVideos = [
+const benefits = [
   {
-    label: 'Sales problem',
-    title: 'Stop missed calls from becoming missed jobs.',
+    number: '01',
+    title: 'Built to convert',
     description:
-      'The agent answers, captures the details, books the estimate, and keeps the conversation moving while your team is busy.',
-    poster: '/videos/problems/lead-response.jpg',
-    src: '/videos/problems/lead-response.mp4',
-    accent: 'from-sky-500/20 to-cyan-400/10',
+      'Clear messaging, strong calls to action, and a structure designed to turn visitors into real conversations.',
   },
   {
-    label: 'Lead generation',
-    title: 'Keep marketing moving when the business gets busy.',
+    number: '02',
+    title: 'Built for every screen',
     description:
-      'The agent builds campaigns, uses testimonials and project photos, and turns scattered ideas into scheduled lead-generation work.',
-    poster: '/videos/problems/lead-generation.jpg',
-    src: '/videos/problems/lead-generation.mp4',
-    accent: 'from-violet-500/20 to-fuchsia-400/10',
+      'A polished experience on phones, tablets, laptops, and large displays — without the cramped mobile feel.',
   },
   {
-    label: 'Owner bottleneck',
-    title: 'Get email, scheduling, and follow-up off your desk.',
+    number: '03',
+    title: 'Built to move fast',
     description:
-      'The agent finds the action items, drafts replies, moves drawings to estimating, and keeps admin from stealing the day.',
-    poster: '/videos/problems/admin-overload.jpg',
-    src: '/videos/problems/admin-overload.mp4',
-    accent: 'from-emerald-500/20 to-teal-400/10',
-  },
-  {
-    label: 'Margin leak',
-    title: 'Stop chasing suppliers and guessing on material costs.',
-    description:
-      'The agent reviews drawings, requests pricing, compares suppliers, and flags cost or delivery issues before orders are placed.',
-    poster: '/videos/problems/buying-waste.jpg',
-    src: '/videos/problems/buying-waste.mp4',
-    accent: 'from-amber-500/20 to-orange-400/10',
-  },
-  {
-    label: 'Cash visibility',
-    title: 'Keep payroll, billing, and completed work visible.',
-    description:
-      'The agent records site hours, sends payroll details, and flags completed milestones so invoicing does not lag behind the work.',
-    poster: '/videos/problems/cash-billing.jpg',
-    src: '/videos/problems/cash-billing.mp4',
-    accent: 'from-blue-500/20 to-indigo-400/10',
-  },
-  {
-    label: 'Project risk',
-    title: 'Know what needs attention before it gets expensive.',
-    description:
-      'The agent checks schedule, labor, material costs, billing, and risk so managers can act before small issues become real losses.',
-    poster: '/videos/problems/project-risk.jpg',
-    src: '/videos/problems/project-risk.mp4',
-    accent: 'from-rose-500/20 to-red-400/10',
+      'Lean pages, modern code, and focused content so customers can understand what you do immediately.',
   },
 ]
 
-const chatTopics = [
-  'social media',
-  'reception',
-  'assistant work',
-  'purchasing',
-  'bookkeeping',
-  'project visibility',
-  'pricing',
-  'setup',
+const services = [
+  'New business websites',
+  'Website redesigns',
+  'Landing pages',
+  'Lead generation systems',
+  'AI automations',
+  'Custom software',
 ]
 
 export default function HomePage() {
   return (
-    <div className="min-h-screen bg-[#050713] text-white">
-      <section className="relative overflow-hidden px-5 pb-14 pt-16 sm:px-6 lg:px-8 lg:pb-20 lg:pt-24">
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(108,92,231,0.28),transparent_32%),radial-gradient(circle_at_top_right,rgba(0,206,201,0.18),transparent_35%)]" />
-        <div className="relative mx-auto max-w-6xl text-center">
-          <p className="text-xs font-semibold uppercase tracking-[0.28em] text-[#00cec9]">
-            ZyphLabs CleanAgent
-          </p>
-          <h1
-            className="mx-auto mt-5 max-w-5xl text-4xl font-bold leading-tight sm:text-5xl lg:text-7xl"
-            style={{ fontFamily: 'Space Grotesk, sans-serif' }}
+    <main className="min-h-screen overflow-hidden bg-[#07090d] text-white">
+      <header className="absolute inset-x-0 top-0 z-30">
+        <div className="mx-auto flex max-w-7xl items-center justify-between px-5 py-5 sm:px-6 lg:px-8">
+          <a
+            href="/"
+            className="text-lg font-black tracking-[-0.04em] text-white sm:text-xl"
+            aria-label="Zyph Labs home"
           >
-            Are you looking to automate your workflow to lower costs and
-            increase sales?
-          </h1>
-          <p className="mx-auto mt-6 max-w-3xl text-base leading-8 text-white/70 sm:text-lg">
-            Watch the short demos below. Each one shows a real phone-style
-            workflow between a customer, owner, or manager and an AI agent.
-          </p>
-          <div className="mt-9 flex flex-col items-center justify-center gap-3 sm:flex-row">
+            ZYPH<span className="text-[#8ef3dc]">LABS</span>
+          </a>
+
+          <div className="flex items-center gap-3">
+            <a
+              href="#services"
+              className="hidden text-sm font-semibold text-white/60 transition hover:text-white sm:inline"
+            >
+              What we do
+            </a>
             <a
               href="https://calendly.com/zyphlabs/15min"
               target="_blank"
               rel="noreferrer"
-              className="inline-flex min-h-12 items-center justify-center rounded-lg bg-[#00cec9] px-6 text-sm font-black text-[#041014] transition hover:-translate-y-0.5 hover:bg-white focus:outline-none focus:ring-4 focus:ring-[#00cec9]/30"
+              className="inline-flex min-h-10 items-center justify-center rounded-full border border-white/15 bg-white/[0.05] px-4 text-sm font-bold text-white backdrop-blur transition hover:border-white/30 hover:bg-white/10"
             >
-              Book your free Business AI assessment today
+              Start a project
             </a>
-            <a
-              href="/leads"
-              className="inline-flex min-h-12 items-center justify-center rounded-lg border border-white/15 px-6 text-sm font-bold text-white transition hover:-translate-y-0.5 hover:border-white/35 hover:bg-white/10 focus:outline-none focus:ring-4 focus:ring-white/15"
+          </div>
+        </div>
+      </header>
+
+      <section className="relative isolate flex min-h-[92svh] items-center px-5 pb-16 pt-28 sm:px-6 sm:pb-20 sm:pt-32 lg:px-8">
+        <div className="absolute inset-0 -z-20 bg-[#07090d]" />
+        <div className="absolute left-1/2 top-[-22rem] -z-10 h-[46rem] w-[46rem] -translate-x-1/2 rounded-full bg-[#375dfb]/20 blur-[110px] sm:h-[58rem] sm:w-[58rem]" />
+        <div className="absolute bottom-[-14rem] right-[-12rem] -z-10 h-[32rem] w-[32rem] rounded-full bg-[#34d7b7]/15 blur-[110px]" />
+
+        <div className="mx-auto w-full max-w-7xl">
+          <div className="max-w-5xl">
+            <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/[0.05] px-3 py-2 text-xs font-bold uppercase tracking-[0.16em] text-white/65 backdrop-blur sm:text-sm">
+              <span className="h-2 w-2 rounded-full bg-[#8ef3dc] shadow-[0_0_20px_rgba(142,243,220,.9)]" />
+              Modern websites for growing businesses
+            </div>
+
+            <h1
+              className="max-w-5xl text-[clamp(3.2rem,11vw,8.6rem)] font-black leading-[0.86] tracking-[-0.075em] text-white"
+              style={{ fontFamily: 'Space Grotesk, sans-serif' }}
             >
-              View lead packages
-            </a>
+              Get a new website today.
+              <span className="mt-2 block bg-gradient-to-r from-[#8ef3dc] via-[#8ab6ff] to-[#cba6ff] bg-clip-text text-transparent">
+                Get more business tomorrow.
+              </span>
+            </h1>
+
+            <p className="mt-7 max-w-2xl text-base leading-7 text-white/62 sm:mt-9 sm:text-lg sm:leading-8 lg:text-xl">
+              We build fast, modern websites that make your business look
+              established, explain your value clearly, and give customers an
+              obvious reason to contact you.
+            </p>
+
+            <div className="mt-8 flex flex-col gap-3 sm:mt-10 sm:flex-row sm:items-center">
+              <a
+                href="https://calendly.com/zyphlabs/15min"
+                target="_blank"
+                rel="noreferrer"
+                className="group inline-flex min-h-14 items-center justify-center gap-3 rounded-full bg-white px-7 text-base font-black text-[#07090d] transition duration-300 hover:-translate-y-0.5 hover:bg-[#8ef3dc] sm:min-h-16 sm:px-8"
+              >
+                Get my new website
+                <span className="transition-transform duration-300 group-hover:translate-x-1">
+                  →
+                </span>
+              </a>
+              <a
+                href="#why"
+                className="inline-flex min-h-14 items-center justify-center rounded-full border border-white/12 px-7 text-sm font-bold text-white/75 transition hover:border-white/25 hover:bg-white/[0.05] hover:text-white sm:min-h-16"
+              >
+                See why Zyph Labs
+              </a>
+            </div>
+
+            <div className="mt-8 flex flex-wrap gap-x-6 gap-y-2 text-xs font-semibold uppercase tracking-[0.12em] text-white/35 sm:mt-10 sm:text-sm">
+              <span>Responsive</span>
+              <span>Fast</span>
+              <span>SEO-ready</span>
+              <span>Conversion-focused</span>
+            </div>
           </div>
         </div>
       </section>
 
-      <section className="px-5 py-12 sm:px-6 lg:px-8 lg:py-20">
+      <section id="why" className="border-y border-white/8 bg-white/[0.025] px-5 py-16 sm:px-6 sm:py-20 lg:px-8 lg:py-28">
         <div className="mx-auto max-w-7xl">
-          <div className="mb-10 max-w-3xl">
-            <p className="text-xs font-semibold uppercase tracking-[0.25em] text-[#6c5ce7]">
-              Start with the problem
+          <div className="grid gap-10 lg:grid-cols-[0.8fr_1.2fr] lg:gap-20">
+            <div>
+              <p className="text-xs font-black uppercase tracking-[0.2em] text-[#8ef3dc]">
+                Why it works
+              </p>
+              <h2
+                className="mt-4 max-w-xl text-4xl font-black leading-[0.95] tracking-[-0.055em] sm:text-5xl lg:text-6xl"
+                style={{ fontFamily: 'Space Grotesk, sans-serif' }}
+              >
+                Your website should make selling easier.
+              </h2>
+              <p className="mt-5 max-w-lg text-base leading-8 text-white/55 sm:text-lg">
+                Most business websites have too much text, too many choices,
+                and no clear next step. We simplify the experience around what
+                customers actually need to decide.
+              </p>
+            </div>
+
+            <div className="grid gap-px overflow-hidden rounded-3xl border border-white/10 bg-white/10 sm:grid-cols-3">
+              {benefits.map((benefit) => (
+                <article
+                  key={benefit.number}
+                  className="min-h-[260px] bg-[#0b0e14] p-6 sm:min-h-[330px] sm:p-7 lg:p-8"
+                >
+                  <p className="text-xs font-black tracking-[0.18em] text-[#8ef3dc]">
+                    {benefit.number}
+                  </p>
+                  <h3 className="mt-16 text-2xl font-black tracking-[-0.04em] sm:mt-24">
+                    {benefit.title}
+                  </h3>
+                  <p className="mt-4 text-sm leading-7 text-white/48 sm:text-base">
+                    {benefit.description}
+                  </p>
+                </article>
+              ))}
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="services" className="px-5 py-16 sm:px-6 sm:py-20 lg:px-8 lg:py-28">
+        <div className="mx-auto max-w-7xl">
+          <div className="grid gap-10 lg:grid-cols-2 lg:items-end">
+            <div>
+              <p className="text-xs font-black uppercase tracking-[0.2em] text-[#8ab6ff]">
+                More than a website
+              </p>
+              <h2
+                className="mt-4 max-w-2xl text-4xl font-black leading-[0.95] tracking-[-0.055em] sm:text-5xl lg:text-6xl"
+                style={{ fontFamily: 'Space Grotesk, sans-serif' }}
+              >
+                Start with the website. Add technology when it earns its place.
+              </h2>
+            </div>
+            <p className="max-w-xl text-base leading-8 text-white/55 sm:text-lg lg:justify-self-end">
+              Zyph Labs can also connect lead generation, AI automation, and
+              custom software behind the site. But the homepage stays simple:
+              one strong message, one clear next step.
             </p>
-            <h2
-              className="mt-4 text-3xl font-bold leading-tight text-white sm:text-5xl"
-              style={{ fontFamily: 'Space Grotesk, sans-serif' }}
-            >
-              CleanAgent handles the work that costs you leads, margin, and
-              owner time.
-            </h2>
           </div>
 
-          <div className="grid gap-6 lg:grid-cols-2">
-            {problemVideos.map((video) => (
-              <article
-                key={video.src}
-                className={`overflow-hidden rounded-2xl border border-white/10 bg-gradient-to-br ${video.accent} p-4 shadow-2xl shadow-black/25 transition hover:-translate-y-1 hover:border-white/25 sm:p-5`}
+          <div className="mt-12 grid gap-3 sm:grid-cols-2 lg:mt-16 lg:grid-cols-3">
+            {services.map((service) => (
+              <div
+                key={service}
+                className="group flex min-h-24 items-center justify-between rounded-2xl border border-white/10 bg-white/[0.025] px-5 py-5 transition duration-300 hover:-translate-y-1 hover:border-white/20 hover:bg-white/[0.05] sm:min-h-28 sm:px-6"
               >
-                <div className="mb-4">
-                  <p className="text-xs font-bold uppercase tracking-[0.22em] text-[#00cec9]">
-                    {video.label}
-                  </p>
-                  <h3
-                    className="mt-3 text-xl font-bold leading-snug text-white sm:text-2xl"
-                    style={{ fontFamily: 'Space Grotesk, sans-serif' }}
-                  >
-                    {video.title}
-                  </h3>
-                  <p className="mt-3 text-sm leading-7 text-white/68">
-                    {video.description}
-                  </p>
-                </div>
-                <div className="relative overflow-hidden rounded-xl border border-white/10 bg-black">
-                  <video
-                    className="aspect-video w-full bg-black object-cover"
-                    controls
-                    playsInline
-                    preload="metadata"
-                    poster={video.poster}
-                  >
-                    <source src={video.src} type="video/mp4" />
-                  </video>
-                </div>
-                <a
-                  href="https://calendly.com/zyphlabs/15min"
-                  target="_blank"
-                  rel="noreferrer"
-                  className="mt-4 inline-flex min-h-11 w-full items-center justify-center rounded-lg bg-white px-5 text-sm font-black text-[#050713] transition hover:bg-[#00cec9]"
-                >
-                  Book a call to learn more
-                </a>
-              </article>
+                <span className="text-lg font-bold tracking-[-0.025em] sm:text-xl">
+                  {service}
+                </span>
+                <span className="text-xl text-white/25 transition group-hover:translate-x-1 group-hover:text-[#8ef3dc]">
+                  ↗
+                </span>
+              </div>
             ))}
           </div>
         </div>
       </section>
 
-      <section className="border-t border-white/10 px-5 py-14 sm:px-6 lg:px-8 lg:py-20">
-        <div className="mx-auto grid max-w-6xl gap-8 lg:grid-cols-[0.85fr_1.15fr] lg:items-start">
-          <div>
-            <p className="text-xs font-semibold uppercase tracking-[0.25em] text-[#00cec9]">
-              Live AI chat
+      <section className="px-5 pb-5 sm:px-6 sm:pb-6 lg:px-8 lg:pb-8">
+        <div className="relative mx-auto max-w-7xl overflow-hidden rounded-[2rem] border border-white/10 bg-white px-6 py-14 text-[#07090d] sm:px-10 sm:py-20 lg:px-16 lg:py-24">
+          <div className="absolute -right-20 -top-20 h-72 w-72 rounded-full bg-[#8ef3dc]/35 blur-3xl" />
+          <div className="absolute -bottom-28 left-1/3 h-72 w-72 rounded-full bg-[#8ab6ff]/25 blur-3xl" />
+
+          <div className="relative max-w-4xl">
+            <p className="text-xs font-black uppercase tracking-[0.2em] text-black/45">
+              Ready when you are
             </p>
             <h2
-              className="mt-4 text-3xl font-bold leading-tight text-white sm:text-4xl"
+              className="mt-4 text-4xl font-black leading-[0.9] tracking-[-0.065em] sm:text-6xl lg:text-7xl"
               style={{ fontFamily: 'Space Grotesk, sans-serif' }}
             >
-              CleanAgent bot answers from the full offer.
+              Your next customer is already looking.
             </h2>
-            <p className="mt-4 text-base leading-8 text-white/68">
-              Ask about social media, reception, assistant work, purchasing,
-              bookkeeping, project visibility, pricing, contact, setup, or what
-              to automate first.
+            <p className="mt-6 max-w-2xl text-base leading-8 text-black/58 sm:text-lg">
+              Give them a website that makes choosing you easy.
             </p>
-          </div>
-
-          <div className="rounded-2xl border border-white/10 bg-white/[0.04] p-5 shadow-2xl shadow-black/20">
-            <div className="rounded-xl border border-white/10 bg-black/25 p-4">
-              <p className="rounded-xl bg-white/10 p-4 text-sm leading-7 text-white/78">
-                Hi, I understand the CleanAgent services on this page. Ask what
-                to automate first, or ask about {chatTopics.join(', ')}.
-              </p>
-              <div className="mt-4 flex flex-wrap gap-2">
-                {chatTopics.map((topic) => (
-                  <span
-                    key={topic}
-                    className="rounded-full border border-white/10 px-3 py-1.5 text-xs font-semibold text-white/70"
-                  >
-                    {topic}
-                  </span>
-                ))}
-              </div>
-            </div>
-            <div className="mt-4 grid gap-3 sm:grid-cols-[1fr_auto]">
-              <input
-                type="text"
-                placeholder="Ask what to automate first..."
-                className="min-h-12 rounded-lg border border-white/10 bg-white px-4 text-sm text-slate-950 outline-none"
-                aria-label="Ask ZyphLabs"
-              />
-              <a
-                href="mailto:alex@zyphlabs.com?subject=CleanAgent%20question"
-                className="inline-flex min-h-12 items-center justify-center rounded-lg bg-[#6c5ce7] px-6 text-sm font-black text-white transition hover:bg-[#00cec9] hover:text-[#041014]"
-              >
-                Ask
-              </a>
-            </div>
+            <a
+              href="https://calendly.com/zyphlabs/15min"
+              target="_blank"
+              rel="noreferrer"
+              className="mt-8 inline-flex min-h-14 items-center justify-center gap-3 rounded-full bg-[#07090d] px-7 text-base font-black text-white transition hover:-translate-y-0.5 hover:bg-[#17213d] sm:min-h-16 sm:px-8"
+            >
+              Get a new website
+              <span>→</span>
+            </a>
           </div>
         </div>
       </section>
-    </div>
+
+      <footer className="px-5 py-8 sm:px-6 lg:px-8">
+        <div className="mx-auto flex max-w-7xl flex-col gap-4 text-sm text-white/35 sm:flex-row sm:items-center sm:justify-between">
+          <p>© {new Date().getFullYear()} Zyph Labs</p>
+          <div className="flex flex-wrap gap-5">
+            <a href="/leads" className="transition hover:text-white">
+              Lead generation
+            </a>
+            <a
+              href="https://calendly.com/zyphlabs/15min"
+              target="_blank"
+              rel="noreferrer"
+              className="transition hover:text-white"
+            >
+              Contact
+            </a>
+          </div>
+        </div>
+      </footer>
+    </main>
   )
 }
